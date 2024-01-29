@@ -50,14 +50,20 @@ export default function SideBar({ children }) {
         <Divider />
         <List>
           <h3>Tools Header</h3>
-          {['C&P', 'Tool2', 'About/Contact'].map((text, index) => (
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/cost-and-pricing">
+              <ListItemText primary="C&P" />
+            </ListItemButton>
+          </ListItem>
+
+          {/* {['C&P', 'Tool2', 'About/Contact'].map((text, index) => (
             // Tools Header does not need to be a button, should make bold and add divider
             <ListItem key={text} disablePadding>
               <ListItemButton component={Link} to="/about">
                 <ListItemText primary={text} />
               </ListItemButton>
             </ListItem>
-          ))}
+          ))} */}
         </List>
         <Divider />
       </Drawer>

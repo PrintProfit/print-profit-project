@@ -14,6 +14,7 @@ import Nav from '../Nav/Nav';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 import AboutPage from '../AboutPage/AboutPage';
+import CostAndPricing from '../CostAndPricing/CostAndPricing';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
@@ -62,6 +63,11 @@ function App() {
               <UserPage />
             </SideBar>
             {/* <UserPage /> */}
+          </ProtectedRoute>
+          <ProtectedRoute exact path="/cost-and-pricing">
+            <SideBar>
+              <CostAndPricing />
+            </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute
