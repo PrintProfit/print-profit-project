@@ -12,7 +12,7 @@ const userRouter = require('./routes/user.router');
 
 // Express Middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('build'));
 
 // Passport Session Configuration
