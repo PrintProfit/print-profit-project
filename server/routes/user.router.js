@@ -96,4 +96,60 @@ router.get('/company', (req, res) => {
     });
 });
 
+router.get('/pending/user', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+  SELECT "user"."id" as "user_id",
+  "user"."email" as "email",
+  "user"."name" as "user_name",
+  "user"."is_approved" as "is_approved",
+  "user"."last_login" as "last_login",
+  "pending_user_company"."name" as "pending_company_name",
+  "pending_user_company"."id" as "pending_company_id"
+      FROM "user"
+  INNER JOIN "pending_user_company"
+      ON "user"."id" = "pending_user_company"."id"
+  WHERE "is_approved" = FALSE; 
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all users that are pending', err);
+      res.sendStatus(500);
+    });
+});
+
+router.get('/approved/user', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+  SELECT "user"."id" as "user_id",
+  "user"."email" as "email",
+  "user"."name" as "user_name",
+  "user"."is_approved" as "is_approved",
+  "user"."last_login" as "last_login",
+  "company"."name" as "company_name",
+  "company"."id" as "company_id"
+      FROM "user"
+  INNER JOIN "company"
+      ON "user"."company_id" = "company"."id"
+  WHERE "is_approved" = TRUE;
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all users that are approved', err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
