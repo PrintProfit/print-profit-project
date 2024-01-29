@@ -29,8 +29,17 @@ export function DataTable({ data, columns }) {
   return (
     <Table>
       <TableHead>
+        {/*
+        This is how you get the header groups in tanstack tables. It's needed
+        to get the header groups in general, but it's pretty likely that the
+        table won't actually support having multiple header groups.
+        */}
         {table.getHeaderGroups().map((group) => (
           <TableRow key={group.id}>
+            {/*
+            This is how you get the headers within a group for tanstack tables.
+            We can just map them into table cells.
+            */}
             {group.headers.map((header) => (
               <TableCell key={header.id}>
                 {header.isPlaceholder ||
@@ -44,6 +53,9 @@ export function DataTable({ data, columns }) {
         ))}
       </TableHead>
       <TableBody>
+        {/*
+        This is how we get each row in tanstack tables.
+        */}
         {table.getRowModel().rows.map((row) => (
           <TableRow key={row.id}>
             {row.getVisibleCells().map((cell) => (
