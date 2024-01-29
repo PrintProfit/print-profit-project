@@ -20,7 +20,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', (req, res, next) => {
   // not right names yet
   const email = req.body.email;
-  const name = req.body.username;
+  const name = req.body.name;
   const password = encryptLib.encryptPassword(req.body.password);
 
   const queryText = `INSERT INTO "user" (email, name, password)
@@ -30,8 +30,8 @@ router.post('/register', (req, res, next) => {
     .query(queryText, [email, name, password])
     .then((result) => {
       // ID IS HERE!
-      console.log('New user Id:', result.rows[0].user_id);
-      const createdUserId = result.rows[0].user_id;
+      console.log('New user Id:', result.rows[0].id);
+      const createdUserId = result.rows[0].id;
 
       // Now handle the pending_user_company reference:
       const insertNewUserQuery = `
@@ -40,7 +40,7 @@ router.post('/register', (req, res, next) => {
         VALUES
         ($1, $2);
     `;
-      // not right names yet
+
       const insertNewUserValues = [createdUserId, req.body.companyName];
 
       pool.query(insertNewUserQuery, insertNewUserValues)
