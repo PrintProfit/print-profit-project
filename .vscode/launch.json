@@ -5,13 +5,13 @@
       "type": "node",
       "request": "attach",
       "name": "Attach",
-      "port": 5001
+      "port": 5001,
     },
     {
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/server/server.js"
-    }
-  ]
+      "program": "${workspaceFolder}/server/server.js",
+    },
+  ],
 }
