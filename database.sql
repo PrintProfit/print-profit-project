@@ -17,7 +17,7 @@ CREATE TABLE "company" (
 	"name" VARCHAR(100) UNIQUE NOT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT NOT NULL
+	"updated_by" INT 
 );
 
 CREATE TABLE "user" (
@@ -33,7 +33,7 @@ CREATE TABLE "user" (
 	"last_login" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT NOT NULL
+	"updated_by" INT
 );
 
 CREATE TABLE "pending_user_company" (
@@ -42,7 +42,7 @@ CREATE TABLE "pending_user_company" (
 	"name" VARCHAR(100) DEFAULT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT NOT NULL
+	"updated_by" INT
 );
 
 CREATE TABLE "quote" (
@@ -51,7 +51,7 @@ CREATE TABLE "quote" (
 	"name" VARCHAR(100),
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT NOT NULL
+	"updated_by" INT 
 );
 
 CREATE TABLE "product" (
@@ -64,7 +64,7 @@ CREATE TABLE "product" (
 	"estimated_hours" INT,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT NOT NULL
+	"updated_by" INT 
 );
 
 CREATE TABLE "cost" (
@@ -74,7 +74,7 @@ CREATE TABLE "cost" (
 	"value" FLOAT(8) NOT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT NOT NULL
+	"updated_by" INT 
 );
 
 SET TIMEZONE = 'America/Chicago'; 
