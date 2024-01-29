@@ -1,3 +1,13 @@
 useTabs: false
 singleQuote: true
 trailingComma: all
+
+overrides:
+  - files:
+      - .vscode/*.json
+    options:
+      parser: jsonc
+  - files:
+      - .hintrc
+    options:
+      parser: json
