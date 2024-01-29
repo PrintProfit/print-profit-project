@@ -8,6 +8,9 @@
   "organizeImports": {
     "enabled": true
   },
+  "files": {
+    "ignore": ["*.json", "*.jsonc"]
+  },
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
@@ -15,6 +18,11 @@
   "javascript": {
     "formatter": {
       "quoteStyle": "single"
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": false
     }
   },
   "linter": {
