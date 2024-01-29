@@ -58,8 +58,15 @@ export function DataTable({ data, columns }) {
         */}
         {table.getRowModel().rows.map((row) => (
           <TableRow key={row.id}>
+            {/*
+            This is how we get the cells via tanstack tables
+            */}
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id}>
+                {/*
+                flexRender is what renders the cell
+                i don't know 100% how this works honestly
+                */}
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
