@@ -2,9 +2,11 @@
 parallel = true
 
 [pre-commit.commands.biome]
-run = "npx biome check --apply --no-errors-on-unmatched --files-ignore-unknown=true {staged_files} && git update-index --again"
+run = "npx biome check --apply --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}"
 glob = "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+stage_fixed = true
 
 [pre-commit.commands.prettier]
 run = "npx prettier --write {staged_files}"
 glob = "*.{css,yml,uaml,md,html}"
+stage_fixed = true
