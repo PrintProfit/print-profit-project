@@ -1,0 +1,10 @@
+*.cjs
+*.cts
+*.js
+*.json
+*.jsonc
+*.jsx
+*.mjs
+*.mts
+*.ts
+*.tsx
