@@ -16,7 +16,7 @@ function AdminPage() {
     <div className="adminPage">
       <div>
         <p>This about page is for admin to read!</p>
-        <p>{user[0].name}</p>
+        <p>{user.name}</p>
       </div>
 
       <div className="adminPendingTable">
