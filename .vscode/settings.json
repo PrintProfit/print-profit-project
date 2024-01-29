@@ -1,4 +1,12 @@
 {
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
@@ -15,6 +23,10 @@
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
   },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
@@ -22,6 +34,9 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "git.branchProtection": ["main"]
 }
