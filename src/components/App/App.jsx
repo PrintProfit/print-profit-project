@@ -18,6 +18,7 @@ import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
+import SideBar from '../SideBar/SideBar';
 import UserPage from '../UserPage/UserPage';
 
 import './App.css';
@@ -34,7 +35,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Nav />
+        {/* <Nav /> */}
         <Switch>
           {/* Visiting localhost:5173 will redirect to localhost:5173/home */}
           <Redirect exact from="/" to="/home" />
@@ -57,7 +58,8 @@ function App() {
             exact
             path="/user"
           >
-            <UserPage />
+            <SideBar />
+            {/* <UserPage /> */}
           </ProtectedRoute>
 
           <ProtectedRoute
@@ -106,7 +108,6 @@ function App() {
             <h1>404</h1>
           </Route>
         </Switch>
-        <Footer />
       </div>
     </Router>
   );
