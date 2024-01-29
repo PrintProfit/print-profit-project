@@ -2,6 +2,9 @@ useTabs: false
 singleQuote: true
 trailingComma: all
 
+plugins:
+  - prettier-plugin-pkg
+
 overrides:
   - files:
       - .vscode/*.json
