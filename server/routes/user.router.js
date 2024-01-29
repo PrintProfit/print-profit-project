@@ -36,12 +36,16 @@ router.post('/register', (req, res, next) => {
       // Now handle the pending_user_company reference:
       const insertNewUserQuery = `
       INSERT INTO "pending_user_company"
-        ("user_id", "name")
+        ("user_id", "name", "updated_by")
         VALUES
-        ($1, $2);
+        ($1, $2, $3);
     `;
 
-      const insertNewUserValues = [createdUserId, req.body.companyName];
+      const insertNewUserValues = [
+        createdUserId,
+        req.body.companyName,
+        createdUserId,
+      ];
 
       pool.query(insertNewUserQuery, insertNewUserValues)
 
