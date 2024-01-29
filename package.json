@@ -32,6 +32,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
     "lefthook": "^1.6.1",
     "nodemon": "^3.0.3",
     "prettier": "^3.2.4",
