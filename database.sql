@@ -24,7 +24,7 @@ CREATE TABLE "user" (
 	"id" SERIAL PRIMARY KEY,
 	"email" VARCHAR(100) UNIQUE NOT NULL,
 	"name" VARCHAR(200),
-	"company_id" INT REFERENCES "company" NOT NULL,
+	"company_id" INT REFERENCES "company" DEFAULT NULL,
 	"password" VARCHAR(100) NOT NULL,
 	"is_admin" BOOLEAN DEFAULT FALSE,
 	"is_company_admin" BOOLEAN DEFAULT FALSE,
@@ -39,7 +39,7 @@ CREATE TABLE "user" (
 CREATE TABLE "pending_user_company" (
 	"id" SERIAL PRIMARY KEY,
 	"user_id" INT REFERENCES "user" NOT NULL,
-	"name" VARCHAR(100),
+	"name" VARCHAR(100) DEFAULT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_by" INT NOT NULL
