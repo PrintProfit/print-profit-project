@@ -15,7 +15,7 @@ import UserPage from '../UserPage/UserPage';
 
 const drawerWidth = 240;
 
-export default function SideBar() {
+export default function SideBar({ children }) {
   const HandleSideBarNav = (e) => {
     console.log('SideBar Nav Clicked');
     console.log('e.target:', e.target);
@@ -65,7 +65,7 @@ export default function SideBar() {
         component="main"
         sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
       >
-        <UserPage />
+        {children}
       </Box>
     </Box>
   );

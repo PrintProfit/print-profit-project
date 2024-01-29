@@ -58,7 +58,9 @@ function App() {
             exact
             path="/user"
           >
-            <SideBar />
+            <SideBar>
+              <UserPage />
+            </SideBar>
             {/* <UserPage /> */}
           </ProtectedRoute>
 
