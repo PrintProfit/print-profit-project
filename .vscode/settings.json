@@ -1,4 +1,12 @@
 {
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
@@ -15,6 +23,10 @@
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
   },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
   "[typescript]": {
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
@@ -22,5 +34,22 @@
   "[typescriptreact]": {
     "editor.defaultFormatter": "biomejs.biome",
     "editor.tabSize": 2
-  }
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "autoimport.doubleQuotes": false,
+  "autoimport.useSemiColon": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "files.insertFinalNewline": true,
+  "git.autofetch": true,
+  "git.branchProtection": ["main"],
+  "javascript.format.semicolons": "insert",
+  "turboConsoleLog.addSemicolonInTheEnd": true,
+  "typescript.format.semicolons": "insert",
+  "vite.autoStart": false,
+  "vite.devCommand": "npm run client"
 }
