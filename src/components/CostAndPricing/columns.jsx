@@ -1,5 +1,7 @@
 // @ts-check
 
+// these are the "columns" that are always present.
+
 /** @type {import("@tanstack/react-table").ColumnDef<Product>[]} */
 export const staticColumns = [
   { accessorKey: 'name', header: 'Name' },
