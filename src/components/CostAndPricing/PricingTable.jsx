@@ -27,5 +27,9 @@ export function PricingTable({ quote }) {
     );
   }, [quote.products]);
 
+  useEffect(() => {
+    setColumns([...staticColumns, ...dynamicColumns]);
+  }, [dynamicColumns]);
+
   return <DataTable data={quote.products} columns={columns} />;
 }
