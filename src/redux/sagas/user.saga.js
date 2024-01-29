@@ -24,8 +24,28 @@ function* fetchUser() {
   }
 }
 
+// This will grab all the users for admin page
+function* fetchAdminUsers() {
+  // console.log('action.payload', action.payload);
+  try {
+    const pendingUserResponse = yield axios.get('/api/user/pending/user');
+    const approvedUseResponse = yield axios.get('/api/user/approved/user');
+    yield put({
+      type: 'SET_PENDING_USERS',
+      payload: pendingUserResponse.data,
+    });
+    yield put({
+      type: 'SET_APPROVED_USERS',
+      payload: approvedUseResponse.data,
+    });
+  } catch (error) {
+    console.log('fetchAdminUsers error:', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
+  yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
 }
 
 export default userSaga;
