@@ -33,7 +33,7 @@ If you would like to name your database something else, you will need to change 
 ## Development Setup Instructions
 
 - Run `npm install`.
-    - Be sure to take stock of `package.json` to see which dependencies you'll need to add.
+  - Be sure to take stock of `package.json` to see which dependencies you'll need to add.
 - Create a `.env` file at the root of the project and paste this line into the file:
 
 ```plaintext
