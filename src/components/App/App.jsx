@@ -8,12 +8,10 @@ import {
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import Footer from '../Footer/Footer';
-import Nav from '../Nav/Nav';
-
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 import AboutPage from '../AboutPage/AboutPage';
+import AdminPage from '../AdminPage/AdminPage';
 import CostAndPricing from '../CostAndPricing/CostAndPricing';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
@@ -22,6 +20,8 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import SideBar from '../SideBar/SideBar';
 import UserPage from '../UserPage/UserPage';
 
+import ToolThree from '../ToolThree/ToolThree';
+import ToolTwo from '../ToolTwo/ToolTwo';
 import './App.css';
 
 function App() {
@@ -47,23 +47,40 @@ function App() {
             exact
             path="/about"
           >
-            <AboutPage />
+            <SideBar>
+              <AboutPage />
+            </SideBar>
           </Route>
 
           {/* For protected routes, the view could show one of several things on the same route.
             Visiting localhost:5173/user will show the UserPage if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:5173/user */}
-          <ProtectedRoute
-            // logged in shows UserPage else shows LoginPage
-            exact
-            path="/user"
-          >
+
+          <ProtectedRoute exact path="/user">
             <SideBar>
               <UserPage />
             </SideBar>
-            {/* <UserPage /> */}
           </ProtectedRoute>
+
+          <ProtectedRoute exact path="/admin">
+            <SideBar>
+              <AdminPage />
+            </SideBar>
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/tool-two">
+            <SideBar>
+              <ToolTwo />
+            </SideBar>
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/tool-three">
+            <SideBar>
+              <ToolThree />
+            </SideBar>
+          </ProtectedRoute>
+
           <ProtectedRoute exact path="/cost-and-pricing">
             <SideBar>
               <CostAndPricing />
