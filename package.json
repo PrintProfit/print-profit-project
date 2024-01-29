@@ -22,6 +22,7 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.15.6",
+    "@tanstack/react-table": "^8.11.7",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",
     "cookie-session": "^2.1.0",
