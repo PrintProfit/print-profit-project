@@ -38,5 +38,18 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "git.branchProtection": ["main"]
+  "autoimport.doubleQuotes": false,
+  "autoimport.useSemiColon": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "files.insertFinalNewline": true,
+  "git.autofetch": true,
+  "git.branchProtection": ["main"],
+  "javascript.format.semicolons": "insert",
+  "turboConsoleLog.addSemicolonInTheEnd": true,
+  "typescript.format.semicolons": "insert",
+  "vite.autoStart": false,
+  "vite.devCommand": "npm run client"
 }
