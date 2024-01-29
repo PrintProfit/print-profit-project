@@ -1,7 +1,10 @@
+import { PricingTable } from './PricingTable';
+import { quote as sampleQuote } from './sample-data';
+
 export default function CostAndPricing() {
   return (
     <div>
-      <h1>Cost and Pricing</h1>
+      <PricingTable quote={sampleQuote} />
     </div>
   );
 }
