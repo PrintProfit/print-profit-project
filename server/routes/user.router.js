@@ -18,15 +18,42 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
 router.post('/register', (req, res, next) => {
-  const username = req.body.username;
+  // not right names yet
+  const email = req.body.email;
+  const name = req.body.username;
   const password = encryptLib.encryptPassword(req.body.password);
 
-  const queryText = `INSERT INTO "user" (username, password)
-    VALUES ($1, $2) RETURNING id`;
+  const queryText = `INSERT INTO "user" (email, name, password)
+    VALUES ($1, $2, $3) RETURNING id`;
+
   pool
-    .query(queryText, [username, password])
-    .then(() => res.sendStatus(201))
+    .query(queryText, [email, name, password])
+    .then((result) => {
+      // ID IS HERE!
+      console.log('New user Id:', result.rows[0].user_id);
+      const createdUserId = result.rows[0].user_id;
+
+      // Now handle the pending_user_company reference:
+      const insertNewUserQuery = `
+      INSERT INTO "pending_user_company"
+        ("user_id", "name")
+        VALUES
+        ($1, $2);
+    `;
+      // not right names yet
+      const insertNewUserValues = [createdUserId, req.body.companyName];
+
+      pool.query(insertNewUserQuery, insertNewUserValues)
+
+      .then(() => res.sendStatus(201));
+    })
     .catch((err) => {
+      // catch for second query
+      console.log('2nd register query fails', err);
+      res.sendStatus(500);
+    })
+    .catch((err) => {
+      // catch for first query
       console.log('User registration failed: ', err);
       res.sendStatus(500);
     });
@@ -45,6 +72,24 @@ router.post('/logout', (req, res) => {
   // Use passport's built-in method to log out the user
   req.logout();
   res.sendStatus(200);
+});
+
+router.get('/company', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+    SELECT * FROM "company";
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all company names', err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;
