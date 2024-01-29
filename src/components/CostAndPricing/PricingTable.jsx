@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { DataTable } from './DataTable';
+import { staticColumns } from './columns';
 
 /** @typedef {import('@tanstack/react-table').ColumnDef<Product>[]} ProductColumn */
 
@@ -14,7 +15,7 @@ export function PricingTable({ quote }) {
   const [dynamicColumns, setDynamicColumns] = useState([]);
 
   /** @type {[ProductColumn, import('react').Dispatch<ProductColumn>]} */
-  const [columns, setColumns] = useState([...dynamicColumns]);
+  const [columns, setColumns] = useState([...staticColumns, ...dynamicColumns]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: Rule breaks on this code
   useEffect(() => {
