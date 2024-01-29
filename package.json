@@ -32,6 +32,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@vitejs/plugin-react": "^4.2.1",
+    "lefthook": "^1.6.1",
     "nodemon": "^3.0.3",
     "vite": "^5.0.12",
     "vitest": "^1.2.2"
