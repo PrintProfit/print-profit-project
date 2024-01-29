@@ -15,7 +15,7 @@ function AdminPage() {
   return (
     <div className="adminPage">
       <div>
-        <p>This about page is for admin to read!</p>
+        <h1>This about page is for admin to read!</h1>
         <p>{user[0].name}</p>
       </div>
 
