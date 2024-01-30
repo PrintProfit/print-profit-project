@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import Grid from '../Grid/HomeGrid';
 
 function UserPage() {
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.currentUser);
 
   return (
     <>

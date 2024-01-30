@@ -6,10 +6,16 @@ import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
 function AdminPage() {
   const dispatch = useDispatch();
 
-  const user = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user.currentUser);
+  const pendingUsers = useSelector((store) => store.user.pendingUserReducer);
+  const approvedUsers = useSelector((store) => store.user.approvedUserReducer);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
+  });
+
+  useEffect(() => {
+    dispatch({ type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE' });
   });
 
   return (
@@ -22,17 +28,19 @@ function AdminPage() {
       <div className="adminPendingTable">
         <h2>Pending Users</h2>
 
-        <thead>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Company Name</th>
-          <th>Last Login</th>
-          <th>Status</th>
-          <th>Delete</th>
-        </thead>
+        <tr>
+          <thead>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Company Name</th>
+            <th>Last Login</th>
+            <th>Status</th>
+            <th>Delete</th>
+          </thead>
+        </tr>
 
         <tbody>
-          {user.map((pendingUser) => {
+          {pendingUsers.map((pendingUser) => {
             return (
               <div key={pendingUser.id}>
                 <PendingAdminTable pendingUser={pendingUser} />
@@ -44,18 +52,19 @@ function AdminPage() {
 
       <div className="adminUserTable">
         <h2>Approved Users</h2>
-
-        <thead>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Company Name</th>
-          <th>Last Login</th>
-          <th>Status</th>
-          <th>Delete</th>
-        </thead>
+        <tr>
+          <thead>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Company Name</th>
+            <th>Last Login</th>
+            <th>Status</th>
+            <th>Delete</th>
+          </thead>
+        </tr>
 
         <tbody>
-          {user.map((approvedUser) => {
+          {approvedUsers.map((approvedUser) => {
             return (
               <div key={approvedUser.id}>
                 <ApprovedAdminTable approvedUser={approvedUser} />
