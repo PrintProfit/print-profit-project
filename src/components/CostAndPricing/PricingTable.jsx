@@ -1,7 +1,7 @@
 // @ts-check
 
 import { DataTable } from './DataTable';
-import { DynamicCostCell } from './cells';
+import { ConsistentNumericCell, DynamicCostCell } from './cells';
 
 /** @typedef {import('@tanstack/react-table').ColumnDef<Product>[]} ProductColumn */
 
@@ -15,12 +15,56 @@ export function PricingTable({ quote, setQuote }) {
   // what these objects are.
 
   /** @type {ProductColumn} */
-  const staticColumns = [
+  const consistentColumns = [
     { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'quantity', header: 'Quantity' },
-    { accessorKey: 'selling_price', header: 'Selling Price' },
-    { accessorKey: 'total_selling_price', header: 'Total Selling Price' },
-    { accessorKey: 'estimated_hours', header: 'Estimated Hours' },
+    {
+      accessorKey: 'quantity',
+      header: 'Quantity',
+      cell: ({ getValue, row }) => (
+        <ConsistentNumericCell
+          getValue={getValue}
+          setQuote={setQuote}
+          productIndex={row.index}
+          accessorKey="quantity"
+        />
+      ),
+    },
+    {
+      accessorKey: 'selling_price',
+      header: 'Selling Price',
+      cell: ({ getValue, row }) => (
+        <ConsistentNumericCell
+          getValue={getValue}
+          setQuote={setQuote}
+          productIndex={row.index}
+          accessorKey="selling_price"
+        />
+      ),
+    },
+    {
+      accessorKey: 'total_selling_price',
+      header: 'Total Selling Price',
+      cell: ({ getValue, row }) => (
+        <ConsistentNumericCell
+          getValue={getValue}
+          setQuote={setQuote}
+          productIndex={row.index}
+          accessorKey="total_selling_price"
+        />
+      ),
+    },
+    {
+      accessorKey: 'estimated_hours',
+      header: 'Estimated Hours',
+      cell: ({ getValue, row }) => (
+        <ConsistentNumericCell
+          getValue={getValue}
+          setQuote={setQuote}
+          productIndex={row.index}
+          accessorKey="estimated_hours"
+        />
+      ),
+    },
   ];
 
   /**
@@ -55,7 +99,7 @@ export function PricingTable({ quote, setQuote }) {
    * All the columns the table uses.
    * This *should* get recalculated on rerenders.
    */
-  const columns = [...staticColumns, ...dynamicColumns];
+  const columns = [...consistentColumns, ...dynamicColumns];
 
   // The data table isn't a particularly generic component, but it's separated
   // from here so that it can be where the hook is used. That should ensure that
