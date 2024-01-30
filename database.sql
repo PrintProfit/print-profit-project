@@ -4,7 +4,12 @@
 -- Otherwise you will have errors!
 
 -- database name is "print_profit"
-
+DROP TRIGGER IF EXISTS "on_user_update" ON "user";
+DROP TRIGGER IF EXISTS "on_company_update" ON "company";
+DROP TRIGGER IF EXISTS "pending_user_company" ON "pending_user_company";
+DROP TRIGGER IF EXISTS "on_quote_update" ON "quote";
+DROP TRIGGER IF EXISTS "on_product_update" ON "product";
+DROP TRIGGER IF EXISTS "on_cost_update" ON "cost";
 DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS "company";
 DROP TABLE IF EXISTS "pending_user_company";
@@ -76,5 +81,43 @@ CREATE TABLE "cost" (
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_by" INT 
 );
+
+CREATE FUNCTION set_updated_at_to_now()
+RETURNS TRIGGER AS $$
+BEGIN
+	NEW.updated_at = NOW();
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER on_user_update
+BEFORE UPDATE ON "user"
+FOR EACH ROW
+EXECUTE PROCEDURE set_updated_at_to_now();
+
+CREATE TRIGGER on_company_update
+BEFORE UPDATE ON "company"
+FOR EACH ROW
+EXECUTE PROCEDURE set_updated_at_to_now();
+
+CREATE TRIGGER on_pending_user_company_update
+BEFORE UPDATE ON "pending_user_company"
+FOR EACH ROW
+EXECUTE PROCEDURE set_updated_at_to_now();
+
+CREATE TRIGGER on_quote_update
+BEFORE UPDATE ON "quote"
+FOR EACH ROW
+EXECUTE PROCEDURE set_updated_at_to_now();
+
+CREATE TRIGGER on_product_update
+BEFORE UPDATE ON "product"
+FOR EACH ROW
+EXECUTE PROCEDURE set_updated_at_to_now();
+
+CREATE TRIGGER on_cost_update
+BEFORE UPDATE ON "cost"
+FOR EACH ROW
+EXECUTE PROCEDURE set_updated_at_to_now();
 
 SET TIMEZONE = 'America/Chicago'; 
