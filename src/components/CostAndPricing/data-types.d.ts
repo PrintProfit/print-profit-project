@@ -18,3 +18,5 @@ interface Quote {
   name: string;
   products: Product[];
 }
+
+type ProductColumnDef = import('@tanstack/react-table').ColumnDef<Product>;
