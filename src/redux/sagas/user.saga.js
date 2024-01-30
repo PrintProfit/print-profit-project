@@ -24,12 +24,13 @@ function* fetchUser() {
   }
 }
 
-// This will grab all the users for admin page
+// This will grab all the users and company for admin page
 function* fetchAdminUsers() {
   // console.log('action.payload', action.payload);
   try {
-    const pendingUserResponse = yield axios.get('/api/user/pending/user');
-    const approvedUseResponse = yield axios.get('/api/user/approved/user');
+    const pendingUserResponse = yield axios.get('/api/user/pending');
+    const approvedUseResponse = yield axios.get('/api/user/approved');
+    const companyResponse = yield axios.get('/api/user/company');
     yield put({
       type: 'SET_PENDING_USERS',
       payload: pendingUserResponse.data,
@@ -37,6 +38,10 @@ function* fetchAdminUsers() {
     yield put({
       type: 'SET_APPROVED_USERS',
       payload: approvedUseResponse.data,
+    });
+    yield put({
+      type: 'SET_COMPANY_LIST',
+      payload: companyResponse.data,
     });
   } catch (error) {
     console.log('fetchAdminUsers error:', error);
@@ -49,7 +54,7 @@ function* approveUser(action) {
   try {
     const response = yield axios({
       method: 'PUT',
-      url: '/api/user/approve/user',
+      url: '/api/user/approve',
       data: action.payload,
     });
     yield put({
