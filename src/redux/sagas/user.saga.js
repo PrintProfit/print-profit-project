@@ -45,7 +45,7 @@ function* fetchAdminUsers() {
 
 // put route to approve user to /api/user/approve/user
 function* approveUser(action) {
-  console.log('action.payload', action.payload);
+  // console.log('action.payload', action.payload);
   try {
     const response = yield axios({
       method: 'PUT',
@@ -60,10 +60,27 @@ function* approveUser(action) {
   }
 }
 
+function* softDeleteUser(action) {
+  // console.log('action.payload', action.payload);
+  try {
+    const response = yield axios({
+      method: 'PUT',
+      url: '/api/user/delete/soft',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
+    });
+  } catch (error) {
+    console.log('Unable to put soft delete to server', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
   yield takeLatest('SAGA_APPROVE_USER', approveUser);
+  yield takeLatest('SAGA_SOFT_DELETE_USER', softDeleteUser);
 }
 
 export default userSaga;
