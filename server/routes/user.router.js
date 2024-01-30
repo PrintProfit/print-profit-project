@@ -78,6 +78,7 @@ router.post('/logout', (req, res) => {
   res.sendStatus(200);
 });
 
+// Gets all companys from company table
 router.get('/company', (req, res) => {
   // console.log('im in company route');
 
@@ -96,6 +97,7 @@ router.get('/company', (req, res) => {
     });
 });
 
+// Gets all pending users
 router.get('/pending/user', (req, res) => {
   // console.log('im in company route');
 
@@ -124,6 +126,7 @@ router.get('/pending/user', (req, res) => {
     });
 });
 
+// Gets all of the approved users
 router.get('/approved/user', (req, res) => {
   // console.log('im in company route');
 
@@ -148,6 +151,25 @@ router.get('/approved/user', (req, res) => {
     })
     .catch((err) => {
       console.log('ERROR: Get all users that are approved', err);
+      res.sendStatus(500);
+    });
+});
+
+router.put('/approve/user', (req, res) => {
+  const sqlText = `
+  UPDATE "user"
+    SET "is_approved" = TRUE, "updated_by" = $1
+  WHERE "id" = $2;
+        `;
+
+  const insertValue = [req.user.id, req.body.pendingUserId];
+  pool
+    .query(sqlText, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('Error in user.router /approve/user PUT,', err);
       res.sendStatus(500);
     });
 });
