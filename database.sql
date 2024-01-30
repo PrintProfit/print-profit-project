@@ -5,19 +5,20 @@
 
 -- database name is "print_profit"
 
+DROP TABLE IF EXISTS "pending_user_company";
+DROP TABLE IF EXISTS "cost";
+DROP TABLE IF EXISTS "product";
+DROP TABLE IF EXISTS "quote";
 DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS "company";
-DROP TABLE IF EXISTS "pending_user_company";
-DROP TABLE IF EXISTS "quote";
-DROP TABLE IF EXISTS "product";
-DROP TABLE IF EXISTS "cost";
+
 
 CREATE TABLE "company" (
 	"id" SERIAL PRIMARY KEY,
 	"name" VARCHAR(100) UNIQUE NOT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT 
+	"updated_by" INT
 );
 
 CREATE TABLE "user" (

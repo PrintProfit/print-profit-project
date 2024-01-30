@@ -18,15 +18,46 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
 router.post('/register', (req, res, next) => {
-  const username = req.body.username;
+  // not right names yet
+  const email = req.body.email;
+  const name = req.body.name;
   const password = encryptLib.encryptPassword(req.body.password);
 
-  const queryText = `INSERT INTO "user" (username, password)
-    VALUES ($1, $2) RETURNING id`;
+  const queryText = `INSERT INTO "user" (email, name, password)
+    VALUES ($1, $2, $3) RETURNING id`;
+
   pool
-    .query(queryText, [username, password])
-    .then(() => res.sendStatus(201))
+    .query(queryText, [email, name, password])
+    .then((result) => {
+      // ID IS HERE!
+      console.log('New user Id:', result.rows[0].id);
+      const createdUserId = result.rows[0].id;
+
+      // Now handle the pending_user_company reference:
+      const insertNewUserQuery = `
+      INSERT INTO "pending_user_company"
+        ("user_id", "name", "updated_by")
+        VALUES
+        ($1, $2, $3);
+    `;
+
+      const insertNewUserValues = [
+        createdUserId,
+        req.body.companyName,
+        createdUserId,
+      ];
+
+      pool.query(insertNewUserQuery, insertNewUserValues)
+
+      .then(() => res.sendStatus(201));
+    })
     .catch((err) => {
+      // catch for second query
+      console.log('2nd register query fails', err);
+      res.sendStatus(500);
+    })
+    .catch((err) => {
+      // catch for first query
       console.log('User registration failed: ', err);
       res.sendStatus(500);
     });
@@ -45,6 +76,80 @@ router.post('/logout', (req, res) => {
   // Use passport's built-in method to log out the user
   req.logout();
   res.sendStatus(200);
+});
+
+router.get('/company', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+    SELECT * FROM "company";
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all company names', err);
+      res.sendStatus(500);
+    });
+});
+
+router.get('/pending/user', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+  SELECT "user"."id" as "user_id",
+  "user"."email" as "email",
+  "user"."name" as "user_name",
+  "user"."is_approved" as "is_approved",
+  "user"."last_login" as "last_login",
+  "pending_user_company"."name" as "pending_company_name",
+  "pending_user_company"."id" as "pending_company_id"
+      FROM "user"
+  INNER JOIN "pending_user_company"
+      ON "user"."id" = "pending_user_company"."id"
+  WHERE "is_approved" = FALSE; 
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all users that are pending', err);
+      res.sendStatus(500);
+    });
+});
+
+router.get('/approved/user', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+  SELECT "user"."id" as "user_id",
+  "user"."email" as "email",
+  "user"."name" as "user_name",
+  "user"."is_approved" as "is_approved",
+  "user"."last_login" as "last_login",
+  "company"."name" as "company_name",
+  "company"."id" as "company_id"
+      FROM "user"
+  INNER JOIN "company"
+      ON "user"."company_id" = "company"."id"
+  WHERE "is_approved" = TRUE;
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all users that are approved', err);
+      res.sendStatus(500);
+    });
 });
 
 module.exports = router;
