@@ -11,14 +11,14 @@ const currentUser = (state = {}, action) => {
   }
 };
 
-const pendingUserReducer = (state = {}, action) => {
+const pendingUserReducer = (state = [], action) => {
   if (action.type === 'SET_PENDING_USERS') {
     return action.payload;
   }
   return state;
 };
 
-const approvedUserReducer = (state = {}, action) => {
+const approvedUserReducer = (state = [], action) => {
   if (action.type === 'SET_APPROVED_USERS') {
     return action.payload;
   }

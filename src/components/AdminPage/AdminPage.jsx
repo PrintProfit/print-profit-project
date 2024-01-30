@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ApprovedAdminTable from '../ApprovedAdminTable/ApprovedAdminTable';
 import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
+import './adminPage.css';
 
 function AdminPage() {
   const dispatch = useDispatch();
@@ -10,69 +11,73 @@ function AdminPage() {
   const pendingUsers = useSelector((store) => store.user.pendingUserReducer);
   const approvedUsers = useSelector((store) => store.user.approvedUserReducer);
 
-  useEffect(() => {
-    dispatch({ type: 'FETCH_USER' });
-  });
+  // useEffect(() => {
+  //   dispatch({ type: 'FETCH_USER' });
+  // }, [dispatch]);
 
   useEffect(() => {
     dispatch({ type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE' });
-  });
+  }, [dispatch]);
+
+  console.log('pending', pendingUsers);
+
+  console.log('approved', approvedUsers);
 
   return (
-    <div className="adminPage">
+    <div>
       <div>
         <h1>This about page is for admin to read!</h1>
         <p>{user.name}</p>
       </div>
 
-      <div className="adminPendingTable">
-        <h2>Pending Users</h2>
-
-        <tr>
-          <thead>
+      <h2>Pending Users</h2>
+      <table>
+        <thead>
+          <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Company Name</th>
             <th>Last Login</th>
             <th>Status</th>
             <th>Delete</th>
-          </thead>
-        </tr>
+          </tr>
+        </thead>
 
         <tbody>
           {pendingUsers.map((pendingUser) => {
             return (
-              <div key={pendingUser.id}>
-                <PendingAdminTable pendingUser={pendingUser} />
-              </div>
+              <PendingAdminTable
+                key={pendingUser.user_id}
+                pendingUser={pendingUser}
+              />
             );
           })}
         </tbody>
-      </div>
+      </table>
 
-      <div className="adminUserTable">
-        <h2>Approved Users</h2>
-        <tr>
-          <thead>
+      <h2>Approved Users</h2>
+      <table>
+        <thead>
+          <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Company Name</th>
             <th>Last Login</th>
             <th>Status</th>
             <th>Delete</th>
-          </thead>
-        </tr>
-
+          </tr>
+        </thead>
         <tbody>
           {approvedUsers.map((approvedUser) => {
             return (
-              <div key={approvedUser.id}>
-                <ApprovedAdminTable approvedUser={approvedUser} />
-              </div>
+              <ApprovedAdminTable
+                key={approvedUser.user_id}
+                approvedUser={approvedUser}
+              />
             );
           })}
         </tbody>
-      </div>
+      </table>
     </div>
   );
 }

@@ -43,9 +43,27 @@ function* fetchAdminUsers() {
   }
 }
 
+// put route to approve user to /api/user/approve/user
+function* approveUser(action) {
+  console.log('action.payload', action.payload);
+  try {
+    const response = yield axios({
+      method: 'PUT',
+      url: '/api/user/approve/user',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
+    });
+  } catch (error) {
+    console.log('Unable to put approval to server', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
+  yield takeLatest('SAGA_APPROVE_USER', approveUser);
 }
 
 export default userSaga;
