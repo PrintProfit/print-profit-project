@@ -6,7 +6,7 @@ import { ConsistentNumericCell, DynamicCostCell } from './cells';
 /**
  * @param {object} props
  * @param {Quote} props.quote
- * @param {import('react').Dispatch<import('react').SetStateAction<Quote>>} props.setQuote
+ * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote
  */
 export function PricingTable({ quote, setQuote }) {
   // The @type JSDoc comments here are to get VSCode to understand

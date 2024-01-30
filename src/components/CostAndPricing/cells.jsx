@@ -8,10 +8,10 @@ import { useEffect, useState } from 'react';
  * @template {(string|number)} T
  * @param {Object} props
  * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
- * @param {import("react").Dispatch<import("react").SetStateAction<Quote>>} props.setQuote the setter for the entire quote
+ * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote the setter for the entire quote
  * @param {number} props.productIndex the index of the product in the quote.
  * @param {number} props.costIndex the index of the cost in the product.
- * @returns {import('react').ReactNode}
+ * @returns {JSX.Element}
  */
 export function DynamicCostCell({
   getValue,
@@ -57,10 +57,10 @@ export function DynamicCostCell({
  * @template {(string|number)} T
  * @param {Object} props
  * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
- * @param {import("react").Dispatch<import("react").SetStateAction<Quote>>} props.setQuote the setter for the entire quote
+ * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote the setter for the entire quote
  * @param {number} props.productIndex the index of the product in the quote.
  * @param {("quantity"|"selling_price"|"total_selling_price"|"estimated_hours")} props.accessorKey the key for the property in the product being modified.
- * @returns {import('react').ReactNode}
+ * @returns {JSX.Element}
  */
 export function ConsistentNumericCell({
   getValue,
