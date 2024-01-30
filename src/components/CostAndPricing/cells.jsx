@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
  * A component that renders editable cells with dynamic costs
  * @template {(string|number)} T
  * @param {Object} props
- * @param {import("@tanstack/react-table").Getter<T>} props.getValue
- * @param {import("react").Dispatch<import("react").SetStateAction<Quote>>} props.setQuote
- * @param {number} props.productIndex
- * @param {number} props.costIndex
- * @returns {JSX.Element}
+ * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
+ * @param {import("react").Dispatch<import("react").SetStateAction<Quote>>} props.setQuote the setter for the entire quote
+ * @param {number} props.productIndex the index of the product in the quote.
+ * @param {number} props.costIndex the index of the cost in the product.
+ * @returns {import('react').ReactNode}
  */
 export function DynamicCostCell({
   getValue,
@@ -23,7 +23,12 @@ export function DynamicCostCell({
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  // onBlur is called when the input loses focus.
+  /**
+   * onBlur is called when the input loses focus.
+   * It updates the quote with the new value, using an immer produce function
+   * to simplify state updates.
+   * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
+   */
   const onBlur = () => {
     setQuote(
       produce((/** @type {Quote} */ draft) => {
@@ -32,6 +37,7 @@ export function DynamicCostCell({
     );
   };
 
+  // This useEffect comes from tanstack table examples. I'm not 100% sure it's actually needed.
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
@@ -50,11 +56,11 @@ export function DynamicCostCell({
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
  * @template {(string|number)} T
  * @param {Object} props
- * @param {import("@tanstack/react-table").Getter<T>} props.getValue
- * @param {import("react").Dispatch<import("react").SetStateAction<Quote>>} props.setQuote
- * @param {number} props.productIndex
- * @param {("quantity"|"selling_price"|"total_selling_price"|"estimated_hours")} props.accessorKey
- * @returns {JSX.Element}
+ * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
+ * @param {import("react").Dispatch<import("react").SetStateAction<Quote>>} props.setQuote the setter for the entire quote
+ * @param {number} props.productIndex the index of the product in the quote.
+ * @param {("quantity"|"selling_price"|"total_selling_price"|"estimated_hours")} props.accessorKey the key for the property in the product being modified.
+ * @returns {import('react').ReactNode}
  */
 export function ConsistentNumericCell({
   getValue,
@@ -66,8 +72,12 @@ export function ConsistentNumericCell({
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  // onBlur is called when the input loses focus.
-  const onBlur = () => {
+  /**
+   * onBlur is called when the input loses focus.
+   * It updates the quote with the new value, using an immer produce function
+   * to simplify state updates.
+   * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
+   */ const onBlur = () => {
     setQuote(
       produce((/** @type {Quote} */ draft) => {
         draft.products[productIndex][accessorKey] = Number(value);
