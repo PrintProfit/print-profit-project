@@ -30,7 +30,7 @@ CREATE TABLE "user" (
 	"id" SERIAL PRIMARY KEY,
 	"email" VARCHAR(100) UNIQUE NOT NULL,
 	"name" VARCHAR(200),
-	"company_id" INT REFERENCES "company" DEFAULT NULL ON DELETE CASCADE,
+	"company_id" INT REFERENCES "company" ON DELETE CASCADE DEFAULT NULL,
 	"password" VARCHAR(100) NOT NULL,
 	"is_admin" BOOLEAN DEFAULT FALSE,
 	"is_company_admin" BOOLEAN DEFAULT FALSE,
@@ -44,7 +44,7 @@ CREATE TABLE "user" (
 
 CREATE TABLE "pending_user_company" (
 	"id" SERIAL PRIMARY KEY,
-	"user_id" INT REFERENCES "user" NOT NULL ON DELETE CASCADE,
+	"user_id" INT REFERENCES "user" ON DELETE CASCADE NOT NULL,
 	"name" VARCHAR(100) DEFAULT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -53,7 +53,7 @@ CREATE TABLE "pending_user_company" (
 
 CREATE TABLE "quote" (
 	"id" SERIAL PRIMARY KEY,
-	"user_id" INT REFERENCES "user" NOT NULL ON DELETE CASCADE,
+	"user_id" INT REFERENCES "user" ON DELETE CASCADE NOT NULL,
 	"name" VARCHAR(100),
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
@@ -62,7 +62,7 @@ CREATE TABLE "quote" (
 
 CREATE TABLE "product" (
 	"id" SERIAL PRIMARY KEY,
-	"quote_id" INT REFERENCES "quote" NOT NULL ON DELETE CASCADE,
+	"quote_id" INT REFERENCES "quote" ON DELETE CASCADE NOT NULL,
 	"name" VARCHAR(100),
 	"quantity" INT,
 	"selling_price_per_unit" FLOAT(8) DEFAULT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE "product" (
 
 CREATE TABLE "cost" (
 	"id" SERIAL PRIMARY KEY,
-	"product_id" INT REFERENCES "product" NOT NULL ON DELETE CASCADE,
+	"product_id" INT REFERENCES "product" ON DELETE CASCADE NOT NULL,
 	"name" VARCHAR(100),
 	"value" FLOAT(8) NOT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
