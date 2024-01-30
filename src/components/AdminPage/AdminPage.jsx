@@ -9,6 +9,7 @@ function AdminPage() {
   const user = useSelector((store) => store.user.currentUser);
   const pendingUsers = useSelector((store) => store.user.pendingUserReducer);
   const approvedUsers = useSelector((store) => store.user.approvedUserReducer);
+  const companyList = useSelector((store) => store.user.companyList);
 
   // useEffect(() => {
   //   dispatch({ type: 'FETCH_USER' });
@@ -18,9 +19,9 @@ function AdminPage() {
     dispatch({ type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE' });
   }, [dispatch]);
 
-  console.log('pending', pendingUsers);
+  // console.log('pending', pendingUsers);
 
-  console.log('approved', approvedUsers);
+  // console.log('approved', approvedUsers);
 
   return (
     <div>
@@ -29,7 +30,7 @@ function AdminPage() {
         <p>{user.name}</p>
       </div>
 
-      <h2>Pending Users</h2>
+      <h2>Pending Users || {pendingUsers.length}</h2>
       <table>
         <thead>
           <tr>
@@ -54,7 +55,7 @@ function AdminPage() {
         </tbody>
       </table>
 
-      <h2>Approved Users</h2>
+      <h2>Approved Users || {approvedUsers.length}</h2>
       <table>
         <thead>
           <tr>
@@ -77,6 +78,10 @@ function AdminPage() {
           })}
         </tbody>
       </table>
+
+      {companyList.map((company) => {
+        return <p>{company.name}</p>;
+      })}
     </div>
   );
 }

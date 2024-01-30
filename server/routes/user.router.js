@@ -104,7 +104,7 @@ router.get('/company', (req, res) => {
 });
 
 // Gets all pending users
-router.get('/pending/user', (req, res) => {
+router.get('/pending', (req, res) => {
   // console.log('im in company route');
 
   const query = `
@@ -133,7 +133,7 @@ router.get('/pending/user', (req, res) => {
 });
 
 // Gets all of the approved users
-router.get('/approved/user', (req, res) => {
+router.get('/approved', (req, res) => {
   // console.log('im in company route');
 
   const query = `
@@ -161,7 +161,7 @@ router.get('/approved/user', (req, res) => {
     });
 });
 
-router.put('/approve/user', (req, res) => {
+router.put('/approve', (req, res) => {
   const sqlText = `
   UPDATE "user"
     SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = 1
