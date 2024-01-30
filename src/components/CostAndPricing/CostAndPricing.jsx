@@ -7,7 +7,7 @@ export default function CostAndPricing() {
 
   return (
     <div>
-      <PricingTable quote={quote} />
+      <PricingTable quote={quote} setQuote={setQuote} />
     </div>
   );
 }

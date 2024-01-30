@@ -8,8 +8,9 @@ import { staticColumns } from './columns';
 /**
  * @param {object} props
  * @param {Quote} props.quote
+ * @param {import('react').Dispatch<import('react').SetStateAction<Quote>>} props.setQuote
  */
-export function PricingTable({ quote }) {
+export function PricingTable({ quote, setQuote }) {
   // The @type JSDoc comments here are to get VSCode to understand
   // what these objects are.
 
