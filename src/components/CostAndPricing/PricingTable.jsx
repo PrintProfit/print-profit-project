@@ -3,8 +3,6 @@
 import { DataTable } from './DataTable';
 import { ConsistentNumericCell, DynamicCostCell } from './cells';
 
-/** @typedef {import('@tanstack/react-table').ColumnDef<Product>[]} ProductColumn */
-
 /**
  * @param {object} props
  * @param {Quote} props.quote
@@ -21,7 +19,7 @@ export function PricingTable({ quote, setQuote }) {
    * need to be defined as a part of this component so that the quote setter
    * can get passed down to the cells.
    *
-   * @type {ProductColumn}
+   * @type {ProductColumnDef[]}
    */
   const consistentColumns = [
     { accessorKey: 'name', header: 'Name' },
@@ -86,7 +84,7 @@ export function PricingTable({ quote, setQuote }) {
    * {@link https://react.dev/learn/you-might-not-need-an-effect You Might Not Need an Effect}
    * page suggests that this should be avoidable, and that this can be done
    * during rendering.
-   * @type {ProductColumn}
+   * @type {ProductColumnDef[]}
    */
   const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
     accessorFn: (row) => row.costs[index].value,

@@ -15,7 +15,7 @@ import {
 /**
  * @param {object} props
  * @param {Product[]} props.data
- * @param {import('@tanstack/react-table').ColumnDef<Product>[]} props.columns
+ * @param {ProductColumnDef[]} props.columns
  */
 export function DataTable({ data, columns }) {
   const table = useReactTable({
