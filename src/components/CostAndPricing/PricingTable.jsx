@@ -1,6 +1,7 @@
 // @ts-check
 
 import { DataTable } from './DataTable';
+import { DynamicCostCell } from './cells';
 import { staticColumns } from './columns';
 
 /** @typedef {import('@tanstack/react-table').ColumnDef<Product>[]} ProductColumn */
@@ -30,6 +31,16 @@ export function PricingTable({ quote, setQuote }) {
   const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
     accessorFn: (row) => row.costs[index].value,
     header: cost.name,
+    cell: ({ getValue, row }) => {
+      return (
+        <DynamicCostCell
+          getValue={getValue}
+          setQuote={setQuote}
+          productIndex={row.index}
+          costIndex={index}
+        />
+      );
+    },
   }));
 
   /**
