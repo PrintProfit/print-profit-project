@@ -87,6 +87,10 @@ router.get('/', (req, res) => {
 // }
 
 // POST new quote
+
+// PUT quote req.body will look the same, but each object (quote, product, and cost) will additionally have an id
+
+// POST quotes route
 router.post('/', async (req, res) => {
   let connection;
 
@@ -172,5 +176,46 @@ router.post('/', async (req, res) => {
     res.sendStatus(500);
   }
 });
+// end POST route
+
+// PUT route to edit quote
+router.put('/', async (req, res) => {
+  let connection;
+  console.log('req.body from put route: ', req.body);
+  try {
+    // Establishes a longstanding connection to our database:
+    connection = await pool.connect();
+
+    // BEGIN the SQL Transaction:
+    await connection.query('BEGIN;');
+
+    const editQuoteQuery = `
+    UPDATE "quote"
+      SET "name" = $1
+      WHERE "id" = $2 and "user_id" = $3;
+    `;
+    const editQuoteValues = [
+      req.body.name,
+      req.body.quote_id,
+      req.body.user_id,
+    ];
+    await connection.query(editQuoteQuery, editQuoteValues);
+
+    const editProductQuery = `
+    UPDATE "product"
+      SET "name" = $1, "quantity" = $2, "selling_price_per_unit" = $3, "total_selling_price" = $4, "estimated_hours" = $5
+      WHERE "id" = $3 and "user_id" = $3;
+    `;
+
+    const quoteProductArray = req.body.quote;
+    console.log('quote post req.body.quote:', quoteProductArray);
+  } catch (err) {
+    console.log('Error editing quote: ', err);
+    connection.query('ROLLBACK;');
+    connection.release();
+    res.sendStatus(500);
+  }
+});
+// END PUT route to edit quote
 
 module.exports = router;
