@@ -14,7 +14,15 @@ export function PricingTable({ quote, setQuote }) {
   // The @type JSDoc comments here are to get VSCode to understand
   // what these objects are.
 
-  /** @type {ProductColumn} */
+  /**
+   * Consistent columns that are always present.
+   *
+   * While I'd prefer having these defined in a completely separate file, they
+   * need to be defined as a part of this component so that the quote setter
+   * can get passed down to the cells.
+   *
+   * @type {ProductColumn}
+   */
   const consistentColumns = [
     { accessorKey: 'name', header: 'Name' },
     {
