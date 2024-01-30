@@ -11,7 +11,13 @@ const router = express.Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
-  res.send(req.user);
+
+  // soft delete, this will prevent soft deleted users to login
+  if (req.user.is_removed === false) {
+    res.send(req.user);
+  } else {
+    res.sendStatus(403);
+  }
 });
 
 // Handles POST request with new user data
