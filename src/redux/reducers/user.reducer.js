@@ -11,6 +11,13 @@ const currentUser = (state = {}, action) => {
   }
 };
 
+const profilePageUser = (state = {}, action) => {
+  if (action.type === 'SET_PROFILE_PAGE_USER') {
+    return action.payload;
+  }
+  return state;
+};
+
 const pendingUserReducer = (state = [], action) => {
   if (action.type === 'SET_PENDING_USERS') {
     return action.payload;
@@ -36,6 +43,7 @@ const companyList = (state = [], action) => {
 // state.user.blank
 export default combineReducers({
   currentUser,
+  profilePageUser,
   pendingUserReducer,
   approvedUserReducer,
   companyList,

@@ -199,4 +199,34 @@ router.put('/delete/soft', (req, res) => {
     });
 });
 
+router.get('/profile/page', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+  SELECT "user"."id" as "user_id",
+  "user"."email" as "email",
+  "user"."name" as "user_name",
+  "user"."is_approved" as "is_approved",
+  "user"."last_login" as "last_login",
+  "company"."name" as "company_name",
+  "company"."id" as "company_id"
+      FROM "user"
+  INNER JOIN "company"
+      ON "user"."company_id" = "company"."id"
+  WHERE "user"."id" = $1 AND "is_removed" = FALSE;
+  `;
+
+  const sqlValues = [req.user.id];
+
+  pool
+    .query(query, sqlValues)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all users for profile page', err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
