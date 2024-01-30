@@ -6,10 +6,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const drawerWidth = 240;
 
 export default function AppBarHeader() {
+  const history = useHistory();
   const [anchorEl, setAnchorEl] = useState(null);
   // Check below link for info
   // https://mui.com/material-ui/react-app-bar/
@@ -20,6 +22,14 @@ export default function AppBarHeader() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleNavigationToMyAccountPage = () => {
+    history.push('/my-account-page');
+  };
+  const handleLogOut = () => {
+    // TODO: Add log out functionality
+    history.push('/my-account-page');
   };
 
   return (
@@ -57,8 +67,9 @@ export default function AppBarHeader() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={handleNavigationToMyAccountPage}>
+              My account
+            </MenuItem>
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
         </Toolbar>

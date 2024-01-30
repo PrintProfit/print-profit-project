@@ -21,6 +21,7 @@ import RegisterPage from '../RegisterPage/RegisterPage';
 import SideBar from '../SideBar/SideBar';
 import UserPage from '../UserPage/UserPage';
 
+import MyAccountPage from '../MyAccountPage/MyAccountPage';
 import ToolThree from '../ToolThree/ToolThree';
 import ToolTwo from '../ToolTwo/ToolTwo';
 import './App.css';
@@ -95,6 +96,13 @@ function App() {
             <AppBarHeader />
             <SideBar>
               <CostAndPricing />
+            </SideBar>
+          </ProtectedRoute>
+
+          <ProtectedRoute exact path="/my-account-page">
+            <AppBarHeader />
+            <SideBar>
+              <MyAccountPage />
             </SideBar>
           </ProtectedRoute>
 
