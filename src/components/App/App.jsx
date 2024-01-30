@@ -12,6 +12,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 
 import AboutPage from '../AboutPage/AboutPage';
 import AdminPage from '../AdminPage/AdminPage';
+import AppBarHeader from '../AppBarHeader/AppBarHeader';
 import CostAndPricing from '../CostAndPricing/CostAndPricing';
 import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
@@ -47,6 +48,7 @@ function App() {
             exact
             path="/about"
           >
+            <AppBarHeader />
             <SideBar>
               <AboutPage />
             </SideBar>
@@ -58,30 +60,39 @@ function App() {
             Even though it seems like they are different pages, the user is always on localhost:5173/user */}
 
           <ProtectedRoute exact path="/user">
+            <AppBarHeader />
+
             <SideBar>
               <UserPage />
             </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/admin">
+            <AppBarHeader />
+
             <SideBar>
               <AdminPage />
             </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-two">
+            <AppBarHeader />
+
             <SideBar>
               <ToolTwo />
             </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-three">
+            <AppBarHeader />
+
             <SideBar>
               <ToolThree />
             </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/cost-and-pricing">
+            <AppBarHeader />
             <SideBar>
               <CostAndPricing />
             </SideBar>
