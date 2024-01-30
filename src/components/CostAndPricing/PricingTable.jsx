@@ -2,7 +2,6 @@
 
 import { DataTable } from './DataTable';
 import { DynamicCostCell } from './cells';
-import { staticColumns } from './columns';
 
 /** @typedef {import('@tanstack/react-table').ColumnDef<Product>[]} ProductColumn */
 
@@ -14,6 +13,15 @@ import { staticColumns } from './columns';
 export function PricingTable({ quote, setQuote }) {
   // The @type JSDoc comments here are to get VSCode to understand
   // what these objects are.
+
+  /** @type {ProductColumn} */
+  const staticColumns = [
+    { accessorKey: 'name', header: 'Name' },
+    { accessorKey: 'quantity', header: 'Quantity' },
+    { accessorKey: 'selling_price', header: 'Selling Price' },
+    { accessorKey: 'total_selling_price', header: 'Total Selling Price' },
+    { accessorKey: 'estimated_hours', header: 'Estimated Hours' },
+  ];
 
   /**
    * The dynamic columns that the table uses. They're generated from the frist
