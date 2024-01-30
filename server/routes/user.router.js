@@ -11,7 +11,13 @@ const router = express.Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
-  res.send(req.user);
+
+  // soft delete, this will prevent soft deleted users to login
+  if (req.user.is_removed === false) {
+    res.send(req.user);
+  } else {
+    res.sendStatus(403);
+  }
 });
 
 // Handles POST request with new user data
@@ -112,7 +118,7 @@ router.get('/pending/user', (req, res) => {
       FROM "user"
   INNER JOIN "pending_user_company"
       ON "user"."id" = "pending_user_company"."id"
-  WHERE "is_approved" = FALSE; 
+  WHERE "is_approved" = FALSE AND "is_removed" = FALSE; 
   `;
 
   pool
@@ -141,7 +147,7 @@ router.get('/approved/user', (req, res) => {
       FROM "user"
   INNER JOIN "company"
       ON "user"."company_id" = "company"."id"
-  WHERE "is_approved" = TRUE;
+  WHERE "is_approved" = TRUE AND "is_removed" = FALSE;
   `;
 
   pool
@@ -158,7 +164,7 @@ router.get('/approved/user', (req, res) => {
 router.put('/approve/user', (req, res) => {
   const sqlText = `
   UPDATE "user"
-    SET "is_approved" = TRUE, "updated_by" = $1
+    SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = 1
   WHERE "id" = $2;
         `;
 
@@ -170,6 +176,25 @@ router.put('/approve/user', (req, res) => {
     })
     .catch((err) => {
       console.log('Error in user.router /approve/user PUT,', err);
+      res.sendStatus(500);
+    });
+});
+
+router.put('/delete/soft', (req, res) => {
+  const sqlText = `
+  UPDATE "user"
+    SET "is_removed" = TRUE, "updated_by" = $1
+  WHERE "id" = $2;
+        `;
+
+  const insertValue = [req.user.id, req.body.aboutToBeDeletedUser];
+  pool
+    .query(sqlText, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('Error in user.router /delete/soft PUT,', err);
       res.sendStatus(500);
     });
 });

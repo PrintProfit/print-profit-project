@@ -23,10 +23,12 @@ function ApprovedAdminPage({ approvedUser }) {
 
   const deleteUser = () => {
     console.log('deleting approved');
-    // dispatch({
-    //     type: 'SAGA_FETCH_LEVEL_ENEMY',
-    //     payload: params
-    // });
+    dispatch({
+      type: 'SAGA_SOFT_DELETE_USER',
+      payload: {
+        aboutToBeDeletedUser: approvedUser.user_id,
+      },
+    });
   };
 
   return (

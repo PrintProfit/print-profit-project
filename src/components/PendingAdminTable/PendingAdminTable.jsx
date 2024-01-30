@@ -43,10 +43,12 @@ function PendingAdminPage({ pendingUser }) {
 
   const deleteUser = (params) => {
     console.log('deleiting pending');
-    // dispatch({
-    //     type: 'SAGA_FETCH_LEVEL_ENEMY',
-    //     payload: params
-    // });
+    dispatch({
+      type: 'SAGA_SOFT_DELETE_USER',
+      payload: {
+        aboutToBeDeletedUser: pendingUser.user_id,
+      },
+    });
   };
 
   return (
@@ -58,6 +60,11 @@ function PendingAdminPage({ pendingUser }) {
       <td>
         <button type="button" onClick={handleApprovalClickOpen}>
           Approve
+        </button>
+      </td>
+      <td>
+        <button type="button" onClick={() => handleDeleteClickOpen()}>
+          Delete
         </button>
       </td>
 
@@ -82,12 +89,6 @@ function PendingAdminPage({ pendingUser }) {
           <Button onClick={handleApprovalClose}>Close</Button>
         </DialogActions>
       </Dialog>
-
-      <td>
-        <button type="button" onClick={() => handleDeleteClickOpen()}>
-          Delete
-        </button>
-      </td>
 
       <Dialog
         open={openDelete}
