@@ -11,6 +11,8 @@ const drawerWidth = 240;
 
 export default function AppBarHeader() {
   const [anchorEl, setAnchorEl] = useState(null);
+  // Check below link for info
+  // https://mui.com/material-ui/react-app-bar/
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
