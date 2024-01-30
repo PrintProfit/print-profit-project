@@ -60,57 +60,56 @@ function PendingAdminPage({ pendingUser }) {
           Approve
         </button>
       </td>
-      <Fragment>
-        <Dialog
-          open={openApproval}
-          onClose={handleApprovalClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {'Are you sure you want to approve this account?'}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              This action cannot be undone.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={approveUser} autoFocus>
-              Approve
-            </Button>
-            <Button onClick={handleApprovalClose}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      </Fragment>
+
+      <Dialog
+        open={openApproval}
+        onClose={handleApprovalClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Are you sure you want to approve this account?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={approveUser} autoFocus>
+            Approve
+          </Button>
+          <Button onClick={handleApprovalClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
+
       <td>
         <button type="button" onClick={() => handleDeleteClickOpen()}>
           Delete
         </button>
       </td>
-      <Fragment>
-        <Dialog
-          open={openDelete}
-          onClose={handleDeleteClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {'Are you sure you want to delete this account?'}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              This action cannot be undone. Please be careful!
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={deleteUser} autoFocus>
-              Delete
-            </Button>
-            <Button onClick={handleDeleteClose}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      </Fragment>
+
+      <Dialog
+        open={openDelete}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Are you sure you want to delete this account?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This action cannot be undone. Please be careful!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={deleteUser} autoFocus>
+            Delete
+          </Button>
+          <Button onClick={handleDeleteClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </tr>
   );
 }

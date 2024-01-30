@@ -41,29 +41,28 @@ function ApprovedAdminPage({ approvedUser }) {
           Delete
         </button>
       </td>
-      <Fragment>
-        <Dialog
-          open={openDelete}
-          onClose={handleDeleteClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">
-            {'Are you sure you want to delete this account?'}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              This action cannot be undone. Please be careful!
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={deleteUser} autoFocus>
-              Delete
-            </Button>
-            <Button onClick={handleDeleteClose}>Close</Button>
-          </DialogActions>
-        </Dialog>
-      </Fragment>
+
+      <Dialog
+        open={openDelete}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {'Are you sure you want to delete this account?'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This action cannot be undone. Please be careful!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={deleteUser} autoFocus>
+            Delete
+          </Button>
+          <Button onClick={handleDeleteClose}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </tr>
   );
 }
