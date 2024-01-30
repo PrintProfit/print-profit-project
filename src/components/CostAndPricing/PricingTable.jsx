@@ -1,6 +1,5 @@
 // @ts-check
 
-import { useEffect, useState } from 'react';
 import { DataTable } from './DataTable';
 import { staticColumns } from './columns';
 
@@ -14,29 +13,29 @@ export function PricingTable({ quote }) {
   // The @type JSDoc comments here are to get VSCode to understand
   // what these objects are.
 
-  /** @type {[ProductColumn, import('react').Dispatch<ProductColumn>]} */
-  const [dynamicColumns, setDynamicColumns] = useState([]);
+  /**
+   * The dynamic columns that the table uses. They're generated from the frist
+   * product's costs.
+   * This will most likely break when interacting with the server, since
+   * there'll be a period of time where the quote is empty. I'll deal with that
+   * when connecting this up to the server though.
+   *
+   * Originally, this was wrapped in a useEffect, but the react docs's
+   * {@link https://react.dev/learn/you-might-not-need-an-effect You Might Not Need an Effect}
+   * page suggests that this should be avoidable, and that this can be done
+   * during rendering.
+   * @type {ProductColumn}
+   */
+  const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
+    accessorFn: (row) => row.costs[index].value,
+    header: cost.name,
+  }));
 
-  /** @type {[ProductColumn, import('react').Dispatch<ProductColumn>]} */
-  const [columns, setColumns] = useState([...staticColumns, ...dynamicColumns]);
-
-  // This is a somewhat awkward, but functional way to set the dynamic columns correctly.
-  // I suspect it will break a bit when the server actually gets used, and I don't know if
-  // editing works correctly with it.
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Rule breaks on this code
-  useEffect(() => {
-    setDynamicColumns(
-      quote.products[0].costs.map((cost, index) => ({
-        accessorFn: (row) => row.costs[index].value,
-        header: cost.name,
-      })),
-    );
-  }, [quote.products]);
-
-  // This sets the columns that the data table actually uses.
-  useEffect(() => {
-    setColumns([...staticColumns, ...dynamicColumns]);
-  }, [dynamicColumns]);
+  /**
+   * All the columns the table uses.
+   * This *should* get recalculated on rerenders.
+   */
+  const columns = [...staticColumns, ...dynamicColumns];
 
   // The data table isn't a particularly generic component, but it's separated
   // from here so that it can be where the hook is used. That should ensure that
