@@ -188,27 +188,65 @@ router.put('/', async (req, res) => {
 
     // BEGIN the SQL Transaction:
     await connection.query('BEGIN;');
-
+    // QUOTE PUT
     const editQuoteQuery = `
     UPDATE "quote"
       SET "name" = $1
       WHERE "id" = $2 and "user_id" = $3;
     `;
+    // 👆 checks to make sure that quote_id and user_id both match: users may only edit their own quotes (for now)
     const editQuoteValues = [
       req.body.name,
       req.body.quote_id,
       req.body.user_id,
     ];
+    // first query makes updates to quote table
     await connection.query(editQuoteQuery, editQuoteValues);
+    // END QUOTE PUT route
 
+    // PRODUCT(S) PUT route
     const editProductQuery = `
-    UPDATE "product"
-      SET "name" = $1, "quantity" = $2, "selling_price_per_unit" = $3, "total_selling_price" = $4, "estimated_hours" = $5
-      WHERE "id" = $3 and "user_id" = $3;
+      UPDATE "product"
+        SET "name" = $1, "quantity" = $2, "selling_price_per_unit" = $3, "total_selling_price" = $4, "estimated_hours" = $5, updated_by = $6
+        WHERE "id" = $7 and "user_id" = $6;
     `;
-
     const quoteProductArray = req.body.quote;
     console.log('quote post req.body.quote:', quoteProductArray);
+
+    // loops over array of product values to update table
+    for (product of quoteProductArray) {
+      const editProductValues = [
+        product.name,
+        product.quantity,
+        product.selling_price_per_unit,
+        product.total_selling_price,
+        product.estimated_hours,
+        // user id gets inserted into the "updated_by" column
+        req.body.user_id,
+        product.id,
+        // we re-use req.body.user_id for the sql query's "WHERE" clause => users may ONLY edit quotes that they themselves created
+        req.body.user_id,
+      ];
+      // actual query to update the product tables
+      await connection.query(editProductQuery, editProductValues);
+      //
+      const editCostQuery = `
+        UPDATE "cost"
+          SET "name" = $1, "value" = $2
+          WHERE "id" = $3;
+     `;
+      // nested loop goes over each cost in the given product and updates the corresponding values in the cost table
+      for (cost of product.costs) {
+        const editCostValues = [cost.name, cost.value, cost.id];
+        await connection.query(editCostQuery, editCostValues);
+      } // END COST(S) PUT
+    } // END PRODUCT(S) PUT
+    // END QUOTE PUT
+
+    // if all edits are successful, commit those changes to the table
+    connection.query('COMMIT;');
+    // and end connection
+    connection.release();
   } catch (err) {
     console.log('Error editing quote: ', err);
     connection.query('ROLLBACK;');
