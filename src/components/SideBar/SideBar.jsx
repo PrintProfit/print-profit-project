@@ -1,38 +1,35 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { IconButton } from '@mui/material';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const drawerWidth = 240;
 
 export default function SideBar({ children }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const history = useHistory();
+
+  const handleNavigationHome = () => {
+    history.push('/user');
+  };
+
+  const handleMenu = (event) => {
+    console.log('handleMenu');
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    console.log('handleMenu');
+    setAnchorEl(null);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-      >
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" noWrap component="div">
-            Tabs go here for C&P
-          </Typography>
-          <IconButton>
-            <AccountCircleIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
       <Drawer
         sx={{
           width: drawerWidth,
@@ -45,8 +42,12 @@ export default function SideBar({ children }) {
         variant="permanent"
         anchor="left"
       >
-        <Toolbar />
+        <div style={{ cursor: 'pointer' }}>
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: Will change to logo will deal with later */}
+          <h1 onClick={handleNavigationHome}>BRING ME HOME</h1>
+        </div>
         <Divider />
+
         <List>
           <h3>Tools Header</h3>
           <ListItem disablePadding>
