@@ -6,7 +6,7 @@ import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
 function AdminPage() {
   const dispatch = useDispatch();
 
-  const user = useSelector((store) => store.user.userReducer);
+  const user = useSelector((store) => store.user.currentUser);
   const pendingUsers = useSelector((store) => store.user.pendingUserReducer);
   const approvedUsers = useSelector((store) => store.user.approvedUserReducer);
 
