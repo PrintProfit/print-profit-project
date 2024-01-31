@@ -1,5 +1,10 @@
 // @ts-check
-import { Paper, TableCell, Unstable_Grid2 as Grid } from '@mui/material';
+import {
+  Paper,
+  TableCell,
+  Unstable_Grid2 as Grid,
+  styled,
+} from '@mui/material';
 import {
   flexRender,
   getCoreRowModel,
@@ -21,7 +26,7 @@ export function DataTable({ data, columns }) {
   // This will be arranged the way it's supposed to later, but for now,
   // I can make this faster with normal tables.
   return (
-    <Paper>
+    <Paper sx={{ flexGrow: 1 }}>
       <Grid container>
         {/*
         This is how you get the header groups in tanstack tables. It's needed
@@ -68,3 +73,9 @@ export function DataTable({ data, columns }) {
     </Paper>
   );
 }
+
+const GridHeaderCell = styled(TableCell)(({ theme }) => ({
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  flexGrow: 1,
+}));
