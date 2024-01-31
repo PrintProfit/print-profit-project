@@ -40,7 +40,8 @@ export function DynamicCostCell({
   }, [initialValue]);
 
   return (
-    <input
+    <Input
+      size="small"
       value={value}
       // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
@@ -84,7 +85,8 @@ export function ConsistentNumericCell({
   }, [initialValue]);
 
   return (
-    <input
+    <Input
+      size="small"
       value={value}
       // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
