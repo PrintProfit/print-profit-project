@@ -1,9 +1,10 @@
+import { Box } from '@mui/material';
 import { PricingTab } from './PricingTab';
 
 export default function CostAndPricing() {
   return (
-    <div>
+    <Box sx={{ padding: '3rem' }}>
       <PricingTab />
-    </div>
+    </Box>
   );
 }
