@@ -17,32 +17,53 @@ export const staticColumns = [
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const calculatedCosts = [
   {
+    id: 'creditCardFee',
     accessorFn: calc.creditCardFee,
     header: 'Credit Card Fee',
     cell: DollarCell,
+    footer: ({ table }) =>
+      table
+        .getCoreRowModel()
+        .rows.reduce((sum, row) => sum + row.getValue('creditCardFee'), 0),
   },
   {
+    id: 'totalVariableCosts',
     accessorFn: calc.totalVariableCosts,
     header: 'Total Variable Costs',
     cell: DollarCell,
+    footer: ({ table }) =>
+      table
+        .getCoreRowModel()
+        .rows.reduce((sum, row) => sum + row.getValue('totalVariableCosts'), 0),
   },
 ];
 
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const contributionColumns = [
   {
+    id: 'contributionDollars',
     accessorFn: calc.contribution,
     header: 'Contribution $',
     cell: DollarCell,
+    // This happens to work, but it's not how the spreadsheet calculates it.
+    footer: ({ table }) =>
+      table
+        .getCoreRowModel()
+        .rows.reduce(
+          (sum, row) => sum + row.getValue('contributionDollars'),
+          0,
+        ),
   },
   {
     accessorFn: calc.contributionMargin,
     header: 'Contribution %',
     cell: PercentCell,
+    footer: 'TODO',
   },
   {
     accessorFn: calc.contributionPerHour,
     header: 'Contribution / Hr',
     cell: DollarCell,
+    footer: 'TODO',
   },
 ];
