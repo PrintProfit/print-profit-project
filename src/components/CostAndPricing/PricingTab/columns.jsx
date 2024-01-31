@@ -20,7 +20,9 @@ export const calculatedCosts = [
     header: 'Credit Card Fee',
   },
   {
-    accessorFn: (row) => row.costs.reduce((acc, cost) => acc + cost.value, 0),
+    accessorFn: (row) =>
+      row.costs.reduce((acc, cost) => acc + cost.value, 0) +
+      row.total_selling_price * CREDIT_CARD_FEE,
     header: 'Total Variable Costs',
   },
 ];
