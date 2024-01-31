@@ -50,3 +50,7 @@ export interface ProductNameCellProps {
 export interface DollarCellProps {
   readonly getValue: Getter<number>;
 }
+
+export interface PercentCellProps {
+  readonly getValue: Getter<number>;
+}

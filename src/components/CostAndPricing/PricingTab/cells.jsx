@@ -133,3 +133,12 @@ export function DollarCell({ getValue }) {
   const value = getValue();
   return `$${value.toFixed(2)}`;
 }
+
+/**
+ * @param {import('./prop-types').PercentCellProps} props
+ */
+export function PercentCell({ getValue }) {
+  const value = getValue();
+  const percent = Number(value) * 100;
+  return `${percent.toFixed(2)}%`;
+}

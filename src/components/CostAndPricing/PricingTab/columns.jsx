@@ -1,7 +1,7 @@
 // @ts-check
 
 import * as calc from './calculations';
-import { DollarCell } from './cells';
+import { DollarCell, PercentCell } from './cells';
 
 // these are the "columns" that are always present.
 
@@ -38,13 +38,7 @@ export const contributionColumns = [
   {
     accessorFn: calc.contributionMargin,
     header: 'Contribution %',
-    cell: ({ getValue }) => {
-      /** @type {number} */
-      // @ts-ignore
-      const value = getValue();
-      const percent = Number(value) * 100;
-      return `${percent.toFixed(2)}%`;
-    },
+    cell: PercentCell,
   },
   {
     accessorFn: calc.contributionPerHour,
