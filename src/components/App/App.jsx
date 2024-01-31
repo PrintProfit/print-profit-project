@@ -20,6 +20,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import SideBar from '../SideBar/SideBar';
 import UserPage from '../UserPage/UserPage';
+import WaitingPage from '../WaitingPage/WaitingPage';
 
 import MyAccountPage from '../MyAccountPage/MyAccountPage';
 import ToolThree from '../ToolThree/ToolThree';
@@ -30,6 +31,7 @@ function App() {
   const dispatch = useDispatch();
 
   const user = useSelector((store) => store.user.currentUser);
+  console.log(user);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
@@ -53,6 +55,10 @@ function App() {
             <SideBar>
               <AboutPage />
             </SideBar>
+          </Route>
+
+          <Route exact path="/waiting-page">
+            <WaitingPage />
           </Route>
 
           {/* For protected routes, the view could show one of several things on the same route.
@@ -115,6 +121,8 @@ function App() {
           </ProtectedRoute>
 
           <Route exact path="/login">
+            {/* TODO: change user.id to user.is_approved in order to
+            only allow approved users */}
             {user.id ? (
               // If the user is already logged in,
               // redirect to the /user page
