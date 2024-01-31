@@ -1,7 +1,10 @@
 // @ts-check
 import {
   Paper,
+  TableBody,
   TableCell,
+  TableHead,
+  TableRow,
   Unstable_Grid2 as Grid,
   styled,
 } from '@mui/material';
@@ -28,47 +31,61 @@ export function DataTable({ data, columns }) {
   return (
     <Paper sx={{ flexGrow: 1 }}>
       <Grid container>
-        {/*
-        This is how you get the header groups in tanstack tables. It's needed
-        to get the header groups in general, but it's pretty likely that the
-        table won't actually support having multiple header groups.
-        */}
-        {table.getHeaderGroups().map((group) => (
-          <Grid container direction="column" key={group.id}>
-            {/*
-            This is how you get the headers within a group for tanstack tables.
-            We can just map them into table cells.
+        <Grid container component={TableHead}>
+          {/*
+            This is how you get the header groups in tanstack tables. It's needed
+            to get the header groups in general, but it's pretty likely that the
+            table won't actually support having multiple header groups.
             */}
-            {group.headers.map((header) => (
-              <TableCell key={header.id}>
-                {header.isPlaceholder ||
-                  flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-              </TableCell>
-            ))}
-          </Grid>
-        ))}
-        {/*
-        This is how we get each row in tanstack tables.
-        */}
-        {table.getRowModel().rows.map((row) => (
-          <Grid container direction="column" key={row.id}>
-            {/*
-            This is how we get the cells via tanstack tables
-            */}
-            {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
-                {/*
-                flexRender is what renders the cell
-                i don't know 100% how this works honestly
+          {table.getHeaderGroups().map((group) => (
+            <Grid
+              container
+              direction="column"
+              component={TableRow}
+              key={group.id}
+            >
+              {/*
+                This is how you get the headers within a group for tanstack tables.
+                We can just map them into table cells.
                 */}
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
-          </Grid>
-        ))}
+              {group.headers.map((header) => (
+                <TableCell key={header.id}>
+                  {header.isPlaceholder ||
+                    flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                </TableCell>
+              ))}
+            </Grid>
+          ))}
+        </Grid>
+        <Grid container component={TableBody}>
+          {/*
+            This is how we get each row in tanstack tables.
+            */}
+          {table.getRowModel().rows.map((row) => (
+            <Grid
+              container
+              direction="column"
+              component={TableRow}
+              key={row.id}
+            >
+              {/*
+                This is how we get the cells via tanstack tables
+                */}
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {/*
+                    flexRender is what renders the cell
+                    i don't know 100% how this works honestly
+                    */}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </Grid>
+          ))}
+        </Grid>
       </Grid>
     </Paper>
   );
