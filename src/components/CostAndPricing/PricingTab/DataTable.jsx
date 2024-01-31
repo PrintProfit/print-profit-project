@@ -1,11 +1,5 @@
 // @ts-check
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Paper, TableCell, Unstable_Grid2 as Grid } from '@mui/material';
 import {
   flexRender,
   getCoreRowModel,
@@ -27,15 +21,15 @@ export function DataTable({ data, columns }) {
   // This will be arranged the way it's supposed to later, but for now,
   // I can make this faster with normal tables.
   return (
-    <Table>
-      <TableHead>
+    <Paper>
+      <Grid container>
         {/*
         This is how you get the header groups in tanstack tables. It's needed
         to get the header groups in general, but it's pretty likely that the
         table won't actually support having multiple header groups.
         */}
         {table.getHeaderGroups().map((group) => (
-          <TableRow key={group.id}>
+          <Grid container direction="column" key={group.id}>
             {/*
             This is how you get the headers within a group for tanstack tables.
             We can just map them into table cells.
@@ -49,15 +43,13 @@ export function DataTable({ data, columns }) {
                   )}
               </TableCell>
             ))}
-          </TableRow>
+          </Grid>
         ))}
-      </TableHead>
-      <TableBody>
         {/*
         This is how we get each row in tanstack tables.
         */}
         {table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
+          <Grid container direction="column" key={row.id}>
             {/*
             This is how we get the cells via tanstack tables
             */}
@@ -70,9 +62,9 @@ export function DataTable({ data, columns }) {
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
-          </TableRow>
+          </Grid>
         ))}
-      </TableBody>
-    </Table>
+      </Grid>
+    </Paper>
   );
 }
