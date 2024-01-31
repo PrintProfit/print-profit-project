@@ -22,8 +22,17 @@ export const calculatedCosts = [
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const contributionColumns = [
   { accessorFn: calc.contribution, header: 'Contribution $' },
-  // This one *really* needs some formatting
-  { accessorFn: calc.contributionMargin, header: 'Contribution %' },
+  {
+    accessorFn: calc.contributionMargin,
+    header: 'Contribution %',
+    cell: ({ getValue }) => {
+      /** @type {number} */
+      // @ts-ignore
+      const value = getValue();
+      const percent = Number(value) * 100;
+      return `${percent.toFixed(2)}%`;
+    },
+  },
   // Also, this one needs numbers truncated a bit
   { accessorFn: calc.contributionPerHour, header: 'Contribution / Hr' },
 ];
