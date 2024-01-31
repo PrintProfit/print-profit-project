@@ -89,12 +89,15 @@ router.get('/company', (req, res) => {
   // console.log('im in company route');
 
   const query = `
-    SELECT * FROM "company";
+  SELECT "name" FROM "company";
   `;
 
   pool
     .query(query)
     .then((result) => {
+      const companyArray = [];
+      console.log('rows', result.rows);
+      companyArray.push(result.rows.name);
       res.send(result.rows);
     })
     .catch((err) => {
@@ -164,11 +167,11 @@ router.get('/approved', (req, res) => {
 router.put('/approve', (req, res) => {
   const sqlText = `
   UPDATE "user"
-    SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = 1
-  WHERE "id" = $2;
+    SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = $2
+  WHERE "id" = $3;
         `;
 
-  const insertValue = [req.user.id, req.body.pendingUserId];
+  const insertValue = [req.user.id, req.body.companyId, req.body.pendingUserId];
   pool
     .query(sqlText, insertValue)
     .then((result) => {
@@ -236,7 +239,7 @@ router.post('/company', (req, res) => {
   INSERT INTO "company" 
   ("name", "updated_by")
   VALUES
-  ('$1', $2);
+  ($1, $2);
       `;
   const insertValue = [req.body.companyName, req.user.id];
 
