@@ -9,7 +9,7 @@ import { PricingTab } from './PricingTab';
  */
 export default function CostAndPricing() {
   return (
-    <Box sx={{ padding: '3rem' }}>
+    <Box>
       <PricingTab />
     </Box>
   );
