@@ -6,7 +6,7 @@ import {
   DynamicCostCell,
   ProductNameCell,
 } from './cells';
-import { calculatedColumns } from './columns';
+import { calculatedCosts } from './columns';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -118,11 +118,7 @@ export function PricingTable({ quote, setQuote }) {
    * All the columns the table uses.
    * This *should* get recalculated on rerenders.
    */
-  const columns = [
-    ...consistentColumns,
-    ...dynamicColumns,
-    ...calculatedColumns,
-  ];
+  const columns = [...consistentColumns, ...dynamicColumns, ...calculatedCosts];
 
   // The data table isn't a particularly generic component, but it's separated
   // from here so that it can be where the hook is used. That should ensure that

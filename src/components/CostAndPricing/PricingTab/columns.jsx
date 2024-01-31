@@ -14,7 +14,7 @@ export const staticColumns = [
 const CREDIT_CARD_FEE = 0.03;
 
 /** @type {import("./data-types").ProductColumnDef[]} */
-export const calculatedColumns = [
+export const calculatedCosts = [
   {
     accessorFn: (row) => row.total_selling_price * CREDIT_CARD_FEE,
     header: 'Credit Card Fee',
