@@ -40,7 +40,7 @@ export default function AppBarHeader() {
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
           <Typography variant="h6" noWrap component="div">
-            Tabs go here for C&P
+            {/* Text for AppBar Goes here */}
           </Typography>
           <IconButton
             size="large"
