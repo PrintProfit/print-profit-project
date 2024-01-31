@@ -72,18 +72,6 @@ export function PricingTable({ quote, setQuote }) {
         />
       ),
     },
-    {
-      accessorKey: 'estimated_hours',
-      header: 'Estimated Hours',
-      cell: ({ getValue, row }) => (
-        <ConsistentNumericCell
-          getValue={getValue}
-          setQuote={setQuote}
-          productIndex={row.index}
-          accessorKey="estimated_hours"
-        />
-      ),
-    },
   ];
 
   /**
@@ -115,10 +103,33 @@ export function PricingTable({ quote, setQuote }) {
   }));
 
   /**
+   * This has to be separated out from some other columns, since while it's
+   * editable, it's below some calculated costs.
+   * @type {import('./data-types').ProductColumnDef}
+   */
+  const estimatedHoursColumn = {
+    accessorKey: 'estimated_hours',
+    header: 'Estimated Hours',
+    cell: ({ getValue, row }) => (
+      <ConsistentNumericCell
+        getValue={getValue}
+        setQuote={setQuote}
+        productIndex={row.index}
+        accessorKey="estimated_hours"
+      />
+    ),
+  };
+
+  /**
    * All the columns the table uses.
    * This *should* get recalculated on rerenders.
    */
-  const columns = [...consistentColumns, ...dynamicColumns, ...calculatedCosts];
+  const columns = [
+    ...consistentColumns,
+    ...dynamicColumns,
+    ...calculatedCosts,
+    estimatedHoursColumn,
+  ];
 
   // The data table isn't a particularly generic component, but it's separated
   // from here so that it can be where the hook is used. That should ensure that
