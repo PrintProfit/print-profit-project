@@ -114,6 +114,12 @@ export function PricingTable({ quote, setQuote }) {
         costIndex={index}
       />
     ),
+    // I don't really like this, but accessing things through the table won't work.
+    footer: () =>
+      quote.products.reduce(
+        (sum, product) => sum + product.costs[index].value,
+        0,
+      ),
   }));
 
   /**
