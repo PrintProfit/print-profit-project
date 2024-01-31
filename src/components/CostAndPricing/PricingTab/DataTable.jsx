@@ -96,7 +96,7 @@ export function DataTable({ data, columns }) {
               key={group.id}
             >
               {group.headers.map((footer) => (
-                <TableCell size="small" key={footer.id}>
+                <TableCell sx={{ flexGrow: 1 }} size="small" key={footer.id}>
                   {flexRender(
                     footer.column.columnDef.footer,
                     footer.getContext(),
