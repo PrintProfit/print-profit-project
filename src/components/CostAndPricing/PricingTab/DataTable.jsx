@@ -1,8 +1,10 @@
 // @ts-check
 import {
   Paper,
+  Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   Unstable_Grid2 as Grid,
@@ -27,8 +29,8 @@ export function DataTable({ data, columns }) {
   // This will be arranged the way it's supposed to later, but for now,
   // I can make this faster with normal tables.
   return (
-    <Paper sx={{ flexGrow: 1 }}>
-      <Grid container>
+    <TableContainer component={Paper}>
+      <Grid container component={Table}>
         <Grid container component={TableHead}>
           {/*
             This is how you get the header groups in tanstack tables. It's needed
@@ -85,7 +87,7 @@ export function DataTable({ data, columns }) {
           ))}
         </Grid>
       </Grid>
-    </Paper>
+    </TableContainer>
   );
 }
 
