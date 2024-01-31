@@ -50,7 +50,7 @@ export function DataTable({ data, columns }) {
                 We can just map them into table cells.
                 */}
               {group.headers.map((header) => (
-                <TableCell sx={{ flexGrow: 1 }} key={header.id}>
+                <TableCell sx={{ flexGrow: 1 }} size="small" key={header.id}>
                   {header.isPlaceholder ||
                     flexRender(
                       header.column.columnDef.header,
@@ -76,7 +76,7 @@ export function DataTable({ data, columns }) {
                 This is how we get the cells via tanstack tables
                 */}
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell size="small" key={cell.id}>
                   {/*
                     flexRender is what renders the cell
                     i don't know 100% how this works honestly
@@ -96,7 +96,7 @@ export function DataTable({ data, columns }) {
               key={group.id}
             >
               {group.headers.map((footer) => (
-                <TableCell key={footer.id}>
+                <TableCell size="small" key={footer.id}>
                   {flexRender(
                     footer.column.columnDef.footer,
                     footer.getContext(),
