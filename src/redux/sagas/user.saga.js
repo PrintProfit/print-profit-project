@@ -24,6 +24,20 @@ function* fetchUser() {
   }
 }
 
+// Grabs current user that inner joins with company table
+function* fetchProfilePageUser() {
+  // console.log('action.payload', action.payload);
+  try {
+    const profilePageUserResponse = yield axios.get('/api/user/profile/page');
+    yield put({
+      type: 'SET_PROFILE_PAGE_USER',
+      payload: profilePageUserResponse.data,
+    });
+  } catch (error) {
+    console.log('fetchProfilePageUser error:', error);
+  }
+}
+
 // This will grab all the users and company for admin page
 function* fetchAdminUsers() {
   // console.log('action.payload', action.payload);
@@ -86,6 +100,7 @@ function* userSaga() {
   yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
   yield takeLatest('SAGA_APPROVE_USER', approveUser);
   yield takeLatest('SAGA_SOFT_DELETE_USER', softDeleteUser);
+  yield takeLatest('SAGA_FETCH_PROFILE_PAGE_USER', fetchProfilePageUser);
 }
 
 export default userSaga;
