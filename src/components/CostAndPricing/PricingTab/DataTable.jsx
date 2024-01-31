@@ -47,7 +47,7 @@ export function DataTable({ data, columns }) {
                 We can just map them into table cells.
                 */}
               {group.headers.map((header) => (
-                <TableCell key={header.id}>
+                <TableCell sx={{ flexGrow: 1 }} key={header.id}>
                   {header.isPlaceholder ||
                     flexRender(
                       header.column.columnDef.header,
@@ -90,7 +90,7 @@ export function DataTable({ data, columns }) {
 }
 
 const GridHeaderCell = styled(TableCell)(({ theme }) => ({
-  padding: theme.spacing(1),
-  textAlign: 'center',
+  // padding: theme.spacing(1),
+  // textAlign: 'center',
   flexGrow: 1,
 }));
