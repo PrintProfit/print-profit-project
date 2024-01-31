@@ -32,7 +32,8 @@ export const contributionColumns = [
   {
     accessorFn: (row) =>
       row.total_selling_price -
-      row.costs.reduce((acc, cost) => acc + cost.value, 0),
+      row.costs.reduce((acc, cost) => acc + cost.value, 0) -
+      row.total_selling_price * CREDIT_CARD_FEE,
     header: 'Contribution $',
   },
 ];
