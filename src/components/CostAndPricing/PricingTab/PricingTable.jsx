@@ -6,7 +6,7 @@ import {
   DynamicCostCell,
   ProductNameCell,
 } from './cells';
-import { calculatedCosts } from './columns';
+import { calculatedCosts, contributionColumns } from './columns';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -129,6 +129,7 @@ export function PricingTable({ quote, setQuote }) {
     ...dynamicColumns,
     ...calculatedCosts,
     estimatedHoursColumn,
+    ...contributionColumns,
   ];
 
   // The data table isn't a particularly generic component, but it's separated

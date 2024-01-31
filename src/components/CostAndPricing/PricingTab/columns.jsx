@@ -24,3 +24,13 @@ export const calculatedCosts = [
     header: 'Total Variable Costs',
   },
 ];
+
+/** @type {import("./data-types").ProductColumnDef[]} */
+export const contributionColumns = [
+  {
+    accessorFn: (row) =>
+      row.total_selling_price -
+      row.costs.reduce((acc, cost) => acc + cost.value, 0),
+    header: 'Contribution $',
+  },
+];
