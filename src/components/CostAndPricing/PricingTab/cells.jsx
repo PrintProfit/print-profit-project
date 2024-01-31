@@ -70,7 +70,8 @@ export function ConsistentNumericCell({
    * It updates the quote with the new value, using an immer produce function
    * to simplify state updates.
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
-   */ const onBlur = () => {
+   */
+  const onBlur = () => {
     setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex][accessorKey] = Number(value);
@@ -99,16 +100,25 @@ export function ProductNameCell({ getValue, setQuote, productIndex }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  useEffect(() => {
+  // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
+  const onBlur = () => {
     setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex].name = value;
       }),
     );
-  });
+  };
+
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  return <Input value={value} onChange={(e) => setValue(e.target.value)} />;
+  return (
+    <Input
+      size="small"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={onBlur}
+    />
+  );
 }
