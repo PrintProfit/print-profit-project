@@ -35,6 +35,7 @@ export function PricingTable({ quote, setQuote }) {
           productIndex={row.index}
         />
       ),
+      footer: 'Total',
     },
     {
       accessorKey: 'quantity',

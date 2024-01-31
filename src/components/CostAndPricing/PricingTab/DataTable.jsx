@@ -5,6 +5,7 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableFooter,
   TableHead,
   TableRow,
   Unstable_Grid2 as Grid,
@@ -81,6 +82,25 @@ export function DataTable({ data, columns }) {
                     i don't know 100% how this works honestly
                     */}
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </Grid>
+          ))}
+        </Grid>
+        <Grid container component={TableFooter}>
+          {table.getFooterGroups().map((group) => (
+            <Grid
+              container
+              direction="column"
+              component={TableRow}
+              key={group.id}
+            >
+              {group.headers.map((footer) => (
+                <TableCell key={footer.id}>
+                  {flexRender(
+                    footer.column.columnDef.footer,
+                    footer.getContext(),
+                  )}
                 </TableCell>
               ))}
             </Grid>
