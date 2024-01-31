@@ -1,7 +1,11 @@
 // @ts-check
 
 import { DataTable } from './DataTable';
-import { ConsistentNumericCell, DynamicCostCell } from './cells';
+import {
+  ConsistentNumericCell,
+  DynamicCostCell,
+  ProductNameCell,
+} from './cells';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -20,7 +24,17 @@ export function PricingTable({ quote, setQuote }) {
    * @type {import('./data-types').ProductColumnDef[]}
    */
   const consistentColumns = [
-    { accessorKey: 'name', header: 'Name' },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      cell: ({ getValue, row }) => (
+        <ProductNameCell
+          getValue={getValue}
+          setQuote={setQuote}
+          productIndex={row.index}
+        />
+      ),
+    },
     {
       accessorKey: 'quantity',
       header: 'Quantity',

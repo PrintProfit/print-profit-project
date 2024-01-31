@@ -37,3 +37,12 @@ export interface DataTableProps {
   readonly data: Product[];
   readonly columns: ProductColumnDef[];
 }
+
+export interface ProductNameCellProps {
+  /** the getValue function from tanstack tables */
+  readonly getValue: Getter<string>;
+  /** the setter for the entire quote */
+  readonly setQuote: Dispatch<SetStateAction<Quote>>;
+  /** the index of the product in the quote. */
+  readonly productIndex: number;
+}

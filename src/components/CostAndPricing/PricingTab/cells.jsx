@@ -1,5 +1,6 @@
 // @ts-check
 
+import { Input } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 
@@ -89,4 +90,25 @@ export function ConsistentNumericCell({
       onBlur={onBlur}
     />
   );
+}
+
+/**
+ * @param {import('./prop-types').ProductNameCellProps} props
+ */
+export function ProductNameCell({ getValue, setQuote, productIndex }) {
+  const initialValue = getValue();
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        draft.products[productIndex].name = value;
+      }),
+    );
+  });
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return <Input value={value} onChange={(e) => setValue(e.target.value)} />;
 }
