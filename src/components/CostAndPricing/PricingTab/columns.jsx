@@ -22,4 +22,6 @@ export const calculatedCosts = [
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const contributionColumns = [
   { accessorFn: calc.contribution, header: 'Contribution $' },
+  // This one *really* needs some formatting
+  { accessorFn: calc.contributionMargin, header: 'Contribution %' },
 ];

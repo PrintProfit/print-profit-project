@@ -35,3 +35,11 @@ export function totalVariableCosts(product) {
 export function contribution(product) {
   return product.total_selling_price - totalVariableCosts(product);
 }
+
+/**
+ * @param {import("./data-types").Product} product
+ * @returns {number}
+ */
+export function contributionMargin(product) {
+  return contribution(product) / product.total_selling_price;
+}
