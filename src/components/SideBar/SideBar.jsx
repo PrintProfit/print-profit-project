@@ -78,7 +78,12 @@ export default function SideBar({ children }) {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{
+          flexGrow: 1,
+          bgcolor: 'background.default',
+          p: 3,
+          paddingTop: '64px',
+        }}
       >
         {children}
       </Box>
