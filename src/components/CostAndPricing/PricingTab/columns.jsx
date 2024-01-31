@@ -2,7 +2,7 @@
 
 // these are the "columns" that are always present.
 
-/** @type {import("@tanstack/react-table").ColumnDef<Product>[]} */
+/** @type {import("./data-types").ProductColumnDef[]} */
 export const staticColumns = [
   { accessorKey: 'name', header: 'Name' },
   { accessorKey: 'quantity', header: 'Quantity' },

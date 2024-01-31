@@ -1,16 +1,13 @@
 // @ts-check
 
+import { Input } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 
 /**
  * A component that renders editable cells with dynamic costs
  * @template {(string|number)} T
- * @param {Object} props
- * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
- * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote the setter for the entire quote
- * @param {number} props.productIndex the index of the product in the quote.
- * @param {number} props.costIndex the index of the cost in the product.
+ * @param {import('./prop-types').DynamicCostCellProps<T>} props
  * @returns {JSX.Element}
  */
 export function DynamicCostCell({
@@ -31,7 +28,7 @@ export function DynamicCostCell({
    */
   const onBlur = () => {
     setQuote(
-      produce((/** @type {Quote} */ draft) => {
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex].costs[costIndex].value = Number(value);
       }),
     );
@@ -43,7 +40,8 @@ export function DynamicCostCell({
   }, [initialValue]);
 
   return (
-    <input
+    <Input
+      size="small"
       value={value}
       // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
@@ -55,11 +53,7 @@ export function DynamicCostCell({
 /**
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
  * @template {(string|number)} T
- * @param {Object} props
- * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
- * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote the setter for the entire quote
- * @param {number} props.productIndex the index of the product in the quote.
- * @param {("quantity"|"selling_price"|"total_selling_price"|"estimated_hours")} props.accessorKey the key for the property in the product being modified.
+ * @param {import('./prop-types').ConsistentNumericCellProps<T>} props
  * @returns {JSX.Element}
  */
 export function ConsistentNumericCell({
@@ -77,9 +71,10 @@ export function ConsistentNumericCell({
    * It updates the quote with the new value, using an immer produce function
    * to simplify state updates.
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
-   */ const onBlur = () => {
+   */
+  const onBlur = () => {
     setQuote(
-      produce((/** @type {Quote} */ draft) => {
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex][accessorKey] = Number(value);
       }),
     );
@@ -90,9 +85,40 @@ export function ConsistentNumericCell({
   }, [initialValue]);
 
   return (
-    <input
+    <Input
+      size="small"
       value={value}
       // @ts-ignore
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={onBlur}
+    />
+  );
+}
+
+/**
+ * @param {import('./prop-types').ProductNameCellProps} props
+ */
+export function ProductNameCell({ getValue, setQuote, productIndex }) {
+  const initialValue = getValue();
+  const [value, setValue] = useState(initialValue);
+
+  // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
+  const onBlur = () => {
+    setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        draft.products[productIndex].name = value;
+      }),
+    );
+  };
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return (
+    <Input
+      size="small"
+      value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
     />

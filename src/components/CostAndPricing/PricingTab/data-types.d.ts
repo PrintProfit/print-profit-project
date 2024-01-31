@@ -1,11 +1,13 @@
 // I need this
 
-interface Cost {
+import type { ColumnDef } from '@tanstack/react-table';
+
+export interface Cost {
   name: string;
   value: number;
 }
 
-interface Product {
+export interface Product {
   name: string;
   quantity: number;
   selling_price: number;
@@ -14,9 +16,9 @@ interface Product {
   costs: Cost[];
 }
 
-interface Quote {
+export interface Quote {
   name: string;
   products: Product[];
 }
 
-type ProductColumnDef = import('@tanstack/react-table').ColumnDef<Product>;
+export type ProductColumnDef = ColumnDef<Product>;

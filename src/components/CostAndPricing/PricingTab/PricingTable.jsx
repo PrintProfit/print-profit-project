@@ -1,12 +1,14 @@
 // @ts-check
 
 import { DataTable } from './DataTable';
-import { ConsistentNumericCell, DynamicCostCell } from './cells';
+import {
+  ConsistentNumericCell,
+  DynamicCostCell,
+  ProductNameCell,
+} from './cells';
 
 /**
- * @param {object} props
- * @param {Quote} props.quote
- * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote
+ * @param {import('./prop-types').PricingTableProps} props
  */
 export function PricingTable({ quote, setQuote }) {
   // The @type JSDoc comments here are to get VSCode to understand
@@ -19,10 +21,20 @@ export function PricingTable({ quote, setQuote }) {
    * need to be defined as a part of this component so that the quote setter
    * can get passed down to the cells.
    *
-   * @type {ProductColumnDef[]}
+   * @type {import('./data-types').ProductColumnDef[]}
    */
   const consistentColumns = [
-    { accessorKey: 'name', header: 'Name' },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+      cell: ({ getValue, row }) => (
+        <ProductNameCell
+          getValue={getValue}
+          setQuote={setQuote}
+          productIndex={row.index}
+        />
+      ),
+    },
     {
       accessorKey: 'quantity',
       header: 'Quantity',
@@ -84,7 +96,7 @@ export function PricingTable({ quote, setQuote }) {
    * {@link https://react.dev/learn/you-might-not-need-an-effect You Might Not Need an Effect}
    * page suggests that this should be avoidable, and that this can be done
    * during rendering.
-   * @type {ProductColumnDef[]}
+   * @type {import('./data-types').ProductColumnDef[]}
    */
   const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
     accessorFn: (row) => row.costs[index].value,

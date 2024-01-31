@@ -1,6 +1,6 @@
 // @ts-check
 
-/** @type {Quote} */
+/** @type {import("./data-types").Quote} */
 export const quote = {
   name: 'Prime Swag',
   products: [

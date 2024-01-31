@@ -1,10 +1,14 @@
 // @ts-check
 import {
+  Paper,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
+  Unstable_Grid2 as Grid,
+  styled,
 } from '@mui/material';
 import {
   flexRender,
@@ -13,9 +17,7 @@ import {
 } from '@tanstack/react-table';
 
 /**
- * @param {object} props
- * @param {Product[]} props.data
- * @param {ProductColumnDef[]} props.columns
+ * @param {import('./prop-types').DataTableProps} props
  */
 export function DataTable({ data, columns }) {
   const table = useReactTable({
@@ -27,52 +29,70 @@ export function DataTable({ data, columns }) {
   // This will be arranged the way it's supposed to later, but for now,
   // I can make this faster with normal tables.
   return (
-    <Table>
-      <TableHead>
-        {/*
-        This is how you get the header groups in tanstack tables. It's needed
-        to get the header groups in general, but it's pretty likely that the
-        table won't actually support having multiple header groups.
-        */}
-        {table.getHeaderGroups().map((group) => (
-          <TableRow key={group.id}>
-            {/*
-            This is how you get the headers within a group for tanstack tables.
-            We can just map them into table cells.
+    <TableContainer component={Paper}>
+      <Grid container component={Table}>
+        <Grid container component={TableHead}>
+          {/*
+            This is how you get the header groups in tanstack tables. It's needed
+            to get the header groups in general, but it's pretty likely that the
+            table won't actually support having multiple header groups.
             */}
-            {group.headers.map((header) => (
-              <TableCell key={header.id}>
-                {header.isPlaceholder ||
-                  flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableHead>
-      <TableBody>
-        {/*
-        This is how we get each row in tanstack tables.
-        */}
-        {table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
-            {/*
-            This is how we get the cells via tanstack tables
-            */}
-            {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
-                {/*
-                flexRender is what renders the cell
-                i don't know 100% how this works honestly
+          {table.getHeaderGroups().map((group) => (
+            <Grid
+              container
+              direction="column"
+              component={TableRow}
+              key={group.id}
+            >
+              {/*
+                This is how you get the headers within a group for tanstack tables.
+                We can just map them into table cells.
                 */}
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+              {group.headers.map((header) => (
+                <TableCell sx={{ flexGrow: 1 }} key={header.id}>
+                  {header.isPlaceholder ||
+                    flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                </TableCell>
+              ))}
+            </Grid>
+          ))}
+        </Grid>
+        <Grid container component={TableBody}>
+          {/*
+            This is how we get each row in tanstack tables.
+            */}
+          {table.getRowModel().rows.map((row) => (
+            <Grid
+              container
+              direction="column"
+              component={TableRow}
+              key={row.id}
+            >
+              {/*
+                This is how we get the cells via tanstack tables
+                */}
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {/*
+                    flexRender is what renders the cell
+                    i don't know 100% how this works honestly
+                    */}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </Grid>
+          ))}
+        </Grid>
+      </Grid>
+    </TableContainer>
   );
 }
+
+const GridHeaderCell = styled(TableCell)(({ theme }) => ({
+  // padding: theme.spacing(1),
+  // textAlign: 'center',
+  flexGrow: 1,
+}));
