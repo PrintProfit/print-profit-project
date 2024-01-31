@@ -6,10 +6,11 @@
 -- database name is "print_profit"
 DROP TRIGGER IF EXISTS "on_user_update" ON "user";
 DROP TRIGGER IF EXISTS "on_company_update" ON "company";
-DROP TRIGGER IF EXISTS "pending_user_company" ON "pending_user_company";
+DROP TRIGGER IF EXISTS "on_pending_user_company_update" ON "pending_user_company";
 DROP TRIGGER IF EXISTS "on_quote_update" ON "quote";
 DROP TRIGGER IF EXISTS "on_product_update" ON "product";
 DROP TRIGGER IF EXISTS "on_cost_update" ON "cost";
+DROP FUNCTION IF EXISTS "set_updated_at_to_now";
 DROP TABLE IF EXISTS "pending_user_company";
 DROP TABLE IF EXISTS "cost";
 DROP TABLE IF EXISTS "product";
@@ -21,6 +22,7 @@ DROP TABLE IF EXISTS "company";
 CREATE TABLE "company" (
 	"id" SERIAL PRIMARY KEY,
 	"name" VARCHAR(100) UNIQUE NOT NULL,
+	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_by" INT
@@ -55,6 +57,7 @@ CREATE TABLE "quote" (
 	"id" SERIAL PRIMARY KEY,
 	"user_id" INT REFERENCES "user" ON DELETE CASCADE NOT NULL,
 	"name" VARCHAR(100),
+	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_by" INT 
@@ -68,6 +71,7 @@ CREATE TABLE "product" (
 	"selling_price_per_unit" FLOAT(8) DEFAULT NULL,
 	"total_selling_price" FLOAT(8) DEFAULT NULL,
 	"estimated_hours" INT,
+	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_by" INT 
@@ -78,6 +82,7 @@ CREATE TABLE "cost" (
 	"product_id" INT REFERENCES "product" ON DELETE CASCADE NOT NULL,
 	"name" VARCHAR(100),
 	"value" FLOAT(8) NOT NULL,
+	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_by" INT 
