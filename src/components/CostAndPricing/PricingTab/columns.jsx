@@ -1,6 +1,7 @@
 // @ts-check
 
 import * as calc from './calculations';
+import { DollarCell } from './cells';
 
 // these are the "columns" that are always present.
 
@@ -15,13 +16,25 @@ export const staticColumns = [
 
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const calculatedCosts = [
-  { accessorFn: calc.creditCardFee, header: 'Credit Card Fee' },
-  { accessorFn: calc.totalVariableCosts, header: 'Total Variable Costs' },
+  {
+    accessorFn: calc.creditCardFee,
+    header: 'Credit Card Fee',
+    cell: DollarCell,
+  },
+  {
+    accessorFn: calc.totalVariableCosts,
+    header: 'Total Variable Costs',
+    cell: DollarCell,
+  },
 ];
 
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const contributionColumns = [
-  { accessorFn: calc.contribution, header: 'Contribution $' },
+  {
+    accessorFn: calc.contribution,
+    header: 'Contribution $',
+    cell: DollarCell,
+  },
   {
     accessorFn: calc.contributionMargin,
     header: 'Contribution %',
@@ -33,6 +46,9 @@ export const contributionColumns = [
       return `${percent.toFixed(2)}%`;
     },
   },
-  // Also, this one needs numbers truncated a bit
-  { accessorFn: calc.contributionPerHour, header: 'Contribution / Hr' },
+  {
+    accessorFn: calc.contributionPerHour,
+    header: 'Contribution / Hr',
+    cell: DollarCell,
+  },
 ];

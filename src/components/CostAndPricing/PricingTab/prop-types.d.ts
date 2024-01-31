@@ -46,3 +46,7 @@ export interface ProductNameCellProps {
   /** the index of the product in the quote. */
   readonly productIndex: number;
 }
+
+export interface DollarCellProps {
+  readonly getValue: Getter<number>;
+}

@@ -124,3 +124,12 @@ export function ProductNameCell({ getValue, setQuote, productIndex }) {
     />
   );
 }
+
+/**
+ * Cell for non-editable values of money (ex. derived amounts)
+ * @param {import('./prop-types').DollarCellProps} props
+ */
+export function DollarCell({ getValue }) {
+  const value = getValue();
+  return `$${value.toFixed(2)}`;
+}
