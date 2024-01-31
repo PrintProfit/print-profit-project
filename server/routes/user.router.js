@@ -229,4 +229,26 @@ router.get('/profile/page', (req, res) => {
     });
 });
 
+router.post('/company', (req, res) => {
+  // console.log('req.body', req.body);
+
+  const insertQuery = `
+  INSERT INTO "company" 
+  ("name", "updated_by")
+  VALUES
+  ('$1', $2);
+      `;
+  const insertValue = [req.body.companyName, req.user.id];
+
+  pool
+    .query(insertQuery, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('err in company post route', err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
