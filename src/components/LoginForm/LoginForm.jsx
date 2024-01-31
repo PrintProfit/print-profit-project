@@ -23,6 +23,13 @@ function LoginForm() {
     }
   }; // end login
 
+  /**
+   * TODO: Will need to handle what happens if a user tries to login but is not approved
+   */
+  // const handleUnapprovedUserRegistration = () => {
+
+  // }
+
   return (
     <form className="formPanel" onSubmit={login}>
       <h2>Login</h2>
