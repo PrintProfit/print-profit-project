@@ -48,6 +48,10 @@ export function PricingTable({ quote, setQuote }) {
           accessorKey="quantity"
         />
       ),
+      footer: ({ table }) =>
+        table
+          .getCoreRowModel()
+          .rows.reduce((sum, row) => sum + row.getValue('quantity'), 0),
     },
     {
       accessorKey: 'selling_price',
@@ -60,6 +64,10 @@ export function PricingTable({ quote, setQuote }) {
           accessorKey="selling_price"
         />
       ),
+      footer: ({ table }) =>
+        table
+          .getCoreRowModel()
+          .rows.reduce((sum, row) => sum + row.getValue('selling_price'), 0),
     },
     {
       accessorKey: 'total_selling_price',
@@ -72,6 +80,13 @@ export function PricingTable({ quote, setQuote }) {
           accessorKey="total_selling_price"
         />
       ),
+      footer: ({ table }) =>
+        table
+          .getCoreRowModel()
+          .rows.reduce(
+            (sum, row) => sum + row.getValue('total_selling_price'),
+            0,
+          ),
     },
   ];
 
@@ -91,16 +106,14 @@ export function PricingTable({ quote, setQuote }) {
   const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
     accessorFn: (row) => row.costs[index].value,
     header: cost.name,
-    cell: ({ getValue, row }) => {
-      return (
-        <DynamicCostCell
-          getValue={getValue}
-          setQuote={setQuote}
-          productIndex={row.index}
-          costIndex={index}
-        />
-      );
-    },
+    cell: ({ getValue, row }) => (
+      <DynamicCostCell
+        getValue={getValue}
+        setQuote={setQuote}
+        productIndex={row.index}
+        costIndex={index}
+      />
+    ),
   }));
 
   /**
