@@ -24,4 +24,6 @@ export const contributionColumns = [
   { accessorFn: calc.contribution, header: 'Contribution $' },
   // This one *really* needs some formatting
   { accessorFn: calc.contributionMargin, header: 'Contribution %' },
+  // Also, this one needs numbers truncated a bit
+  { accessorFn: calc.contributionPerHour, header: 'Contribution / Hr' },
 ];

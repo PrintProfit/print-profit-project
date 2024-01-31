@@ -43,3 +43,11 @@ export function contribution(product) {
 export function contributionMargin(product) {
   return contribution(product) / product.total_selling_price;
 }
+
+/**
+ * @param {import("./data-types").Product} product
+ * @returns {number}
+ */
+export function contributionPerHour(product) {
+  return contribution(product) / product.estimated_hours;
+}
