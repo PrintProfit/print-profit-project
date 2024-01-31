@@ -6,6 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 const drawerWidth = 240;
@@ -16,6 +17,7 @@ export default function AppBarHeader() {
   // Check below link for info
   // https://mui.com/material-ui/react-app-bar/
 
+  const dispatch = useDispatch();
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -28,8 +30,9 @@ export default function AppBarHeader() {
     history.push('/my-account-page');
   };
   const handleLogOut = () => {
-    // TODO: Add log out functionality
-    history.push('/my-account-page');
+    dispatch({ type: 'LOGOUT' });
+
+    history.push('/home');
   };
 
   return (
@@ -70,7 +73,7 @@ export default function AppBarHeader() {
             <MenuItem onClick={handleNavigationToMyAccountPage}>
               My account
             </MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
+            <MenuItem onClick={handleLogOut}>Logout</MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>
