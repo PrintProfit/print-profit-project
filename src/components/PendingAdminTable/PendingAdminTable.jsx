@@ -32,26 +32,20 @@ function PendingAdminPage({ pendingUser }) {
 
     console.log('approving user', companyInput);
 
-    for (let i = 0; i < companyList.length; i++) {
-      // const element = companyList[i];
-
-      if (companyList[i].name === companyInput) {
-        // console.log('you matched', i);
-
-        let companyId = i;
-
-        companyId += 1;
-
-        dispatch({
-          type: 'SAGA_APPROVE_USER',
-          payload: {
-            pendingUserId: pendingUser.user_id,
-            companyId: companyId,
-          },
-        });
-      } else if (companyList[i].name !== companyInput) {
-        console.log('hi');
-      }
+    // This should do what that for loop was trying to do
+    // findIndex returns -1 when the item is not found
+    const companyIndex = companyList.findIndex((c) => c.name === companyInput);
+    if (companyIndex >= 0) {
+      const companyId = companyIndex + 1;
+      dispatch({
+        type: 'SAGA_APPROVE_USER',
+        payload: {
+          pendingUserId: pendingUser.user_id,
+          companyId: companyId,
+        },
+      });
+    } else {
+      console.log('company not found');
     }
 
     // dispatch({
