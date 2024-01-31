@@ -191,14 +191,14 @@ router.put('/', async (req, res) => {
     // QUOTE PUT
     const editQuoteQuery = `
     UPDATE "quote"
-      SET "name" = $1
+      SET "name" = $1, "updated_by" = $3
       WHERE "id" = $2 and "user_id" = $3;
     `;
     // 👆 checks to make sure that quote_id and user_id both match: users may only edit their own quotes (for now)
     const editQuoteValues = [
-      req.body.name,
-      req.body.quote_id,
-      req.body.user_id,
+      req.body.name, // $1
+      req.body.quote_id, // $2
+      req.body.user_id, // $3
     ];
     // first query makes updates to quote table
     await connection.query(editQuoteQuery, editQuoteValues);
@@ -216,28 +216,31 @@ router.put('/', async (req, res) => {
     // loops over array of product values to update table
     for (product of quoteProductArray) {
       const editProductValues = [
-        product.name,
-        product.quantity,
-        product.selling_price_per_unit,
-        product.total_selling_price,
-        product.estimated_hours,
-        // user id gets inserted into the "updated_by" column
-        req.body.user_id,
-        product.id,
+        product.name, //$1
+        product.quantity, //$2
+        product.selling_price_per_unit, //$3
+        product.total_selling_price, //$4
+        product.estimated_hours, //$5
+        req.body.user_id, // $6 - user id gets inserted into the "updated_by" column
         // we re-use req.body.user_id for the sql query's "WHERE" clause => users may ONLY edit quotes that they themselves created
-        req.body.user_id,
+        product.id, // $7
       ];
       // actual query to update the product tables
       await connection.query(editProductQuery, editProductValues);
-      //
+      // COST(S) PUT route
       const editCostQuery = `
         UPDATE "cost"
-          SET "name" = $1, "value" = $2
-          WHERE "id" = $3;
+          SET "name" = $1, "value" = $2, "updated_by" = $4
+          WHERE "id" = $3 AND "user_id" = $4;
      `;
       // nested loop goes over each cost in the given product and updates the corresponding values in the cost table
       for (cost of product.costs) {
-        const editCostValues = [cost.name, cost.value, cost.id];
+        const editCostValues = [
+          cost.name, // $1
+          cost.value, // $2
+          cost.id, // $3
+          req.body.user_id,
+        ]; // $4
         await connection.query(editCostQuery, editCostValues);
       } // END COST(S) PUT
     } // END PRODUCT(S) PUT
@@ -256,4 +259,73 @@ router.put('/', async (req, res) => {
 });
 // END PUT route to edit quote
 
+// PUT route to soft-delete quote/product/cost
+router.put('/remove', async (req, res) => {
+  let connection;
+  console.log('req.body from soft-delete quote route: ', req.body);
+  try {
+    // Establishes a longstanding connection to our database:
+    connection = await pool.connect();
+
+    // BEGIN the SQL Transaction:
+    await connection.query('BEGIN;');
+    // QUOTE SOFT-DELETE
+    const removeQuoteQuery = `
+        UPDATE "quote"
+        SET "is_removed" = $1
+        WHERE "id" = $2 and "user_id" = $3;
+        `;
+    // 👆 checks to make sure that quote_id and user_id both match: users may only soft-delete their own quotes (for now)
+    const removeQuoteValues = [
+      req.body.remove_quote,
+      req.body.quote_id,
+      req.body.user_id,
+    ];
+    await connection.query(removeQuoteQuery, removeQuoteValues);
+    // END QUOTE SOFT_DELETE route
+
+    // PRODUCT(S) SOFT-DELETE route
+    const removeProductQuery = `
+      UPDATE "product"
+      SET "is_removed" = $1, "updated_by" = $3
+      WHERE "id" = $2 and "user_id" = $3;
+       `;
+    const quoteProductArray = req.body.quote;
+    console.log('quote post req.body.quote:', quoteProductArray);
+
+    for (product of quoteProductArray) {
+      const removeProductValues = [
+        product.remove_product, // $1
+        product.id, // $2
+        req.body.user_id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
+      ];
+      await connection.query(removeProductQuery, removeProductValues);
+      // COST SOFT-DELETE route
+      const removeCostQuery = `
+    UPDATE "product"
+    SET "is_removed" = $1, "updated_by" = $3
+    WHERE "id" = $2 and "user_id" = $3;
+    `;
+      for (cost of product.costs) {
+        const removeCostValues = [
+          cost.remove_cost, // $1
+          cost.id, // $2
+          req.body.user_id,
+        ]; // $3
+        await connection.query(removeCostQuery, removeCostValues);
+      } // END COST SOFT-DELETE
+    } // END PRODUCT SOFT-DELETE
+    // END QUOTE SOFT-DELETE
+
+    // if all removes are successful, commit those changes to the table
+    connection.query('COMMIT;');
+    // and end connection
+    connection.release();
+  } catch (err) {
+    console.log('Error removing quote: ', err);
+    connection.query('ROLLBACK;');
+    connection.release();
+    res.sendStatus(500);
+  }
+});
 module.exports = router;
