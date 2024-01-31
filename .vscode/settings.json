@@ -42,7 +42,7 @@
   "autoimport.useSemiColon": true,
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit",
-    "source.organizeImports": "explicit",
+    "source.organizeImports.biome": "explicit",
   },
   "files.insertFinalNewline": true,
   "git.autofetch": true,
