@@ -6,11 +6,7 @@ import { useEffect, useState } from 'react';
 /**
  * A component that renders editable cells with dynamic costs
  * @template {(string|number)} T
- * @param {Object} props
- * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
- * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote the setter for the entire quote
- * @param {number} props.productIndex the index of the product in the quote.
- * @param {number} props.costIndex the index of the cost in the product.
+ * @param {import('./prop-types').DynamicCostCellProps<T>} props
  * @returns {JSX.Element}
  */
 export function DynamicCostCell({
@@ -31,7 +27,7 @@ export function DynamicCostCell({
    */
   const onBlur = () => {
     setQuote(
-      produce((/** @type {Quote} */ draft) => {
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex].costs[costIndex].value = Number(value);
       }),
     );
@@ -55,11 +51,7 @@ export function DynamicCostCell({
 /**
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
  * @template {(string|number)} T
- * @param {Object} props
- * @param {import("@tanstack/react-table").Getter<T>} props.getValue the getValue function from tanstack tables
- * @param {React.Dispatch<React.SetStateAction<Quote>>} props.setQuote the setter for the entire quote
- * @param {number} props.productIndex the index of the product in the quote.
- * @param {("quantity"|"selling_price"|"total_selling_price"|"estimated_hours")} props.accessorKey the key for the property in the product being modified.
+ * @param {import('./prop-types').ConsistentNumericCellProps<T>} props
  * @returns {JSX.Element}
  */
 export function ConsistentNumericCell({
@@ -79,7 +71,7 @@ export function ConsistentNumericCell({
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */ const onBlur = () => {
     setQuote(
-      produce((/** @type {Quote} */ draft) => {
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex][accessorKey] = Number(value);
       }),
     );

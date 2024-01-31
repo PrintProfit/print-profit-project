@@ -15,9 +15,7 @@ import {
 } from '@tanstack/react-table';
 
 /**
- * @param {object} props
- * @param {Product[]} props.data
- * @param {ProductColumnDef[]} props.columns
+ * @param {import('./prop-types').DataTableProps} props
  */
 export function DataTable({ data, columns }) {
   const table = useReactTable({
