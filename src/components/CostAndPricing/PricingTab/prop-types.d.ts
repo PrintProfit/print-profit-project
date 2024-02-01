@@ -1,4 +1,4 @@
-import type { Getter } from '@tanstack/react-table';
+import type { Getter, Row, Table } from '@tanstack/react-table';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Product, ProductColumnDef, Quote } from './data-types';
 
@@ -41,10 +41,10 @@ export interface DataTableProps {
 export interface ProductNameCellProps {
   /** the getValue function from tanstack tables */
   readonly getValue: Getter<string>;
-  /** the setter for the entire quote */
-  readonly setQuote: Dispatch<SetStateAction<Quote>>;
-  /** the index of the product in the quote. */
-  readonly productIndex: number;
+  /** the table the cell is in */
+  readonly table: Table<Product>;
+  /** the row the cell is in */
+  readonly row: Row<Product>;
 }
 
 export interface DollarCellProps {

@@ -98,15 +98,15 @@ export function ConsistentNumericCell({
 /**
  * @param {import('./prop-types').ProductNameCellProps} props
  */
-export function ProductNameCell({ getValue, setQuote, productIndex }) {
+export function ProductNameCell({ getValue, table, row }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
-    setQuote(
+    table.options.meta.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[productIndex].name = value;
+        draft.products[row.index].name = value;
       }),
     );
   };

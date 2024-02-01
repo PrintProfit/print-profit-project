@@ -39,13 +39,7 @@ export function PricingTable({ quote, setQuote }) {
     {
       accessorKey: 'name',
       header: 'Name',
-      cell: ({ getValue, row }) => (
-        <ProductNameCell
-          getValue={getValue}
-          setQuote={setQuote}
-          productIndex={row.index}
-        />
-      ),
+      cell: ProductNameCell,
       footer: 'Total',
     },
     {
