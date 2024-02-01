@@ -55,12 +55,11 @@ export function PricingTable({ quote, setQuote }) {
         row={row}
       />
     ),
-    footer: ({ table }) => {
+    aggregationFn: 'sum',
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const total = rows.reduce(
-        (sum, row) => sum + row.getValue(`dynamic-cost-${cost.name}`),
-        0,
-      );
+      const total = aggregate(`dynamic-cost-${cost.name}`, [], rows);
       return `$${total.toFixed(2)}`;
     },
   }));
