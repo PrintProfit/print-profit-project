@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -95,7 +95,10 @@ export function TotalsTable({ quote, table }) {
  */
 function TotalsTableRow({ table, column }) {
   // It might be better to use the footer here
-  const aggregate = useCallback(table.getColumn(column).getAggregationFn(), []);
+  const aggregate = useMemo(
+    () => table.getColumn(column).getAggregationFn(),
+    [column, table.getColumn],
+  );
   const { rows } = table.getCoreRowModel();
   const total = aggregate(column, [], rows);
 
