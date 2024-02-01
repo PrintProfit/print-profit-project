@@ -95,10 +95,9 @@ router.get('/company', (req, res) => {
   pool
     .query(query)
     .then((result) => {
-      const companyArray = [];
-      console.log('rows', result.rows);
-      companyArray.push(result.rows.name);
-      res.send(result.rows);
+      const companyArray = result.rows.map((row) => row.name);
+      console.log('companyarray', companyArray);
+      res.send(companyArray);
     })
     .catch((err) => {
       console.log('ERROR: Get all company names', err);

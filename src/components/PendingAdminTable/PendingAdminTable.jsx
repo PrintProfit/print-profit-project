@@ -15,26 +15,28 @@ function PendingAdminPage({ pendingUser }) {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  console.log('company list', companyList);
+  // console.log('company list', companyList);
 
-  const [openApproval, setApprovalOpen] = useState(false);
+  const [openApproval, setOpenApproval] = useState(false);
 
   const handleApprovalClickOpen = () => {
-    setApprovalOpen(true);
+    setOpenApproval(true);
   };
 
   const handleApprovalClose = () => {
-    setApprovalOpen(false);
+    setOpenApproval(false);
   };
 
   const approveUser = (companyInput) => {
-    setApprovalOpen(false);
+    setOpenApproval(false);
 
     console.log('approving user', companyInput);
 
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
-    const companyIndex = companyList.findIndex((c) => c.name === companyInput);
+    const companyIndex = companyList.findIndex(
+      (company) => company === companyInput,
+    );
     if (companyIndex >= 0) {
       const companyId = companyIndex + 1;
       dispatch({
@@ -56,16 +58,16 @@ function PendingAdminPage({ pendingUser }) {
     // });
   };
 
-  const company = ['prime', 'not', 'fordor', 'facebook'];
+  // const company = ['prime', 'not', 'fordor', 'facebook'];
 
-  const [openDelete, setDeleteOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
   const handleDeleteClickOpen = () => {
-    setDeleteOpen(true);
+    setOpenDelete(true);
   };
 
   const handleDeleteClose = () => {
-    setDeleteOpen(false);
+    setOpenDelete(false);
   };
 
   const deleteUser = (params) => {
@@ -118,7 +120,7 @@ function PendingAdminPage({ pendingUser }) {
           </DialogContentText>
           <Autocomplete
             sx={{ m: 1, width: 500 }}
-            options={company}
+            options={companyList}
             getOptionLabel={(option) => option}
             // disableCloseOnSelect
             renderInput={(params) => (
