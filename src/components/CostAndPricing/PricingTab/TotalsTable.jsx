@@ -25,6 +25,9 @@ export function TotalsTable({ quote, table }) {
     table.getColumn('total_selling_price').getAggregationFn(),
     [],
   );
+  const dynamicCostIds = quote.products[0].costs.map(
+    (cost) => `dynamic-cost-${cost.name}`,
+  );
 
   return (
     <TableContainer component={Paper}>
@@ -63,6 +66,9 @@ export function TotalsTable({ quote, table }) {
               />
             </TableCell>
           </TableRow>
+          {dynamicCostIds.map((column) => (
+            <TotalsTableRow key={column} table={table} column={column} />
+          ))}
           <TotalsTableRow table={table} column="creditCardFee" />
           <TotalsTableRow table={table} column="totalVariableCosts" />
           <TotalsTableRow table={table} column="estimated_hours" />
