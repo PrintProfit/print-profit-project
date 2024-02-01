@@ -1,12 +1,11 @@
 // Supports weights 200-900
 import '@fontsource-variable/source-sans-3';
 import { createTheme } from '@mui/material';
-import { green, purple } from '@mui/material/colors';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: purple[500],
+      main: '#5CCD8B',
     },
     secondary: {
       main: '#FFC107',
