@@ -45,14 +45,7 @@ export function PricingTable({ quote, setQuote }) {
     {
       accessorKey: 'quantity',
       header: 'Quantity',
-      cell: ({ getValue, row }) => (
-        <ConsistentNumericCell
-          getValue={getValue}
-          setQuote={setQuote}
-          productIndex={row.index}
-          accessorKey="quantity"
-        />
-      ),
+      cell: ConsistentNumericCell,
       footer: ({ table }) => {
         const { rows } = table.getCoreRowModel();
         return rows.reduce((sum, row) => sum + row.getValue('quantity'), 0);
@@ -61,14 +54,7 @@ export function PricingTable({ quote, setQuote }) {
     {
       accessorKey: 'selling_price',
       header: 'Selling Price',
-      cell: ({ getValue, row }) => (
-        <ConsistentNumericCell
-          getValue={getValue}
-          setQuote={setQuote}
-          productIndex={row.index}
-          accessorKey="selling_price"
-        />
-      ),
+      cell: ConsistentNumericCell,
       footer: ({ table }) => {
         const { rows } = table.getCoreRowModel();
         const sellingPrice = rows.reduce(
@@ -81,14 +67,7 @@ export function PricingTable({ quote, setQuote }) {
     {
       accessorKey: 'total_selling_price',
       header: 'Total Selling Price',
-      cell: ({ getValue, row }) => (
-        <ConsistentNumericCell
-          getValue={getValue}
-          setQuote={setQuote}
-          productIndex={row.index}
-          accessorKey="total_selling_price"
-        />
-      ),
+      cell: ConsistentNumericCell,
       footer: ({ table }) => {
         const { rows } = table.getCoreRowModel();
         const totalSellingPrice = rows.reduce(
@@ -144,14 +123,7 @@ export function PricingTable({ quote, setQuote }) {
   const estimatedHoursColumn = {
     accessorKey: 'estimated_hours',
     header: 'Estimated Hours',
-    cell: ({ getValue, row }) => (
-      <ConsistentNumericCell
-        getValue={getValue}
-        setQuote={setQuote}
-        productIndex={row.index}
-        accessorKey="estimated_hours"
-      />
-    ),
+    cell: ConsistentNumericCell,
     footer: ({ table }) => {
       const { rows } = table.getCoreRowModel();
       return rows.reduce(

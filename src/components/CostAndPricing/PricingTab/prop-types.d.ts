@@ -1,4 +1,4 @@
-import type { Getter, Row, Table } from '@tanstack/react-table';
+import type { Column, Getter, Row, Table } from '@tanstack/react-table';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Product, ProductColumnDef, Quote } from './data-types';
 
@@ -16,16 +16,12 @@ export interface DynamicCostCellProps<T> {
 export interface ConsistentNumericCellProps<T> {
   /** the getValue function from tanstack tables */
   readonly getValue: Getter<T>;
-  /** the setter for the entire quote */
-  readonly setQuote: Dispatch<SetStateAction<Quote>>;
-  /** the index of the product in the quote. */
-  readonly productIndex: number;
-  /** the key for the property in the product being modified. */
-  readonly accessorKey:
-    | 'quantity'
-    | 'selling_price'
-    | 'total_selling_price'
-    | 'estimated_hours';
+  /** the table the cell is in */
+  readonly table: Table<Product>;
+  /** the row the cell is in */
+  readonly row: Row<Product>;
+  /** the column the cell is in */
+  readonly column: Column<Product>;
 }
 
 export interface PricingTableProps {

@@ -56,12 +56,7 @@ export function DynamicCostCell({
  * @param {import('./prop-types').ConsistentNumericCellProps<T>} props
  * @returns {JSX.Element}
  */
-export function ConsistentNumericCell({
-  getValue,
-  setQuote,
-  productIndex,
-  accessorKey,
-}) {
+export function ConsistentNumericCell({ getValue, table, row, column }) {
   /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -73,9 +68,9 @@ export function ConsistentNumericCell({
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
   const onBlur = () => {
-    setQuote(
+    table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[productIndex][accessorKey] = Number(value);
+        draft.products[row.index][column.id] = Number(value);
       }),
     );
   };
