@@ -12,12 +12,13 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { DynamicCostCell } from './cells';
 import {
-  ConsistentNumericCell,
-  DynamicCostCell,
-  ProductNameCell,
-} from './cells';
-import { calculatedCosts, contributionColumns } from './columns';
+  calculatedCosts,
+  consistentColumns,
+  contributionColumns,
+  estimatedHoursColumn,
+} from './columns';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -25,59 +26,6 @@ import { calculatedCosts, contributionColumns } from './columns';
 export function PricingTable({ quote, setQuote }) {
   // The @type JSDoc comments here are to get VSCode to understand
   // what these objects are.
-
-  /**
-   * Consistent columns that are always present.
-   *
-   * While I'd prefer having these defined in a completely separate file, they
-   * need to be defined as a part of this component so that the quote setter
-   * can get passed down to the cells.
-   *
-   * @type {import('./data-types').ProductColumnDef[]}
-   */
-  const consistentColumns = [
-    {
-      accessorKey: 'name',
-      header: 'Name',
-      cell: ProductNameCell,
-      footer: 'Total',
-    },
-    {
-      accessorKey: 'quantity',
-      header: 'Quantity',
-      cell: ConsistentNumericCell,
-      footer: ({ table }) => {
-        const { rows } = table.getCoreRowModel();
-        return rows.reduce((sum, row) => sum + row.getValue('quantity'), 0);
-      },
-    },
-    {
-      accessorKey: 'selling_price',
-      header: 'Selling Price',
-      cell: ConsistentNumericCell,
-      footer: ({ table }) => {
-        const { rows } = table.getCoreRowModel();
-        const sellingPrice = rows.reduce(
-          (sum, row) => sum + row.getValue('selling_price'),
-          0,
-        );
-        return `$${sellingPrice.toFixed(2)}`;
-      },
-    },
-    {
-      accessorKey: 'total_selling_price',
-      header: 'Total Selling Price',
-      cell: ConsistentNumericCell,
-      footer: ({ table }) => {
-        const { rows } = table.getCoreRowModel();
-        const totalSellingPrice = rows.reduce(
-          (sum, row) => sum + row.getValue('total_selling_price'),
-          0,
-        );
-        return `$${totalSellingPrice.toFixed(2)}`;
-      },
-    },
-  ];
 
   /**
    * The dynamic columns that the table uses. They're generated from the frist
@@ -114,24 +62,6 @@ export function PricingTable({ quote, setQuote }) {
       return `$${total.toFixed(2)}`;
     },
   }));
-
-  /**
-   * This has to be separated out from some other columns, since while it's
-   * editable, it's below some calculated costs.
-   * @type {import('./data-types').ProductColumnDef}
-   */
-  const estimatedHoursColumn = {
-    accessorKey: 'estimated_hours',
-    header: 'Estimated Hours',
-    cell: ConsistentNumericCell,
-    footer: ({ table }) => {
-      const { rows } = table.getCoreRowModel();
-      return rows.reduce(
-        (sum, row) => sum + row.getValue('estimated_hours'),
-        0,
-      );
-    },
-  };
 
   /**
    * All the columns the table uses.

@@ -1,17 +1,59 @@
 // @ts-check
 
 import * as calc from './calculations';
-import { DollarCell, PercentCell } from './cells';
+import {
+  ConsistentNumericCell,
+  DollarCell,
+  PercentCell,
+  ProductNameCell,
+} from './cells';
 
-// these are the "columns" that are always present.
-
-/** @type {import("./data-types").ProductColumnDef[]} */
-export const staticColumns = [
-  { accessorKey: 'name', header: 'Name' },
-  { accessorKey: 'quantity', header: 'Quantity' },
-  { accessorKey: 'selling_price', header: 'Selling Price' },
-  { accessorKey: 'total_selling_price', header: 'Total Selling Price' },
-  { accessorKey: 'estimated_hours', header: 'Estimated Hours' },
+/**
+ * Consistent columns that are always present.
+ * @type {import("./data-types").ProductColumnDef[]}
+ */
+export const consistentColumns = [
+  {
+    accessorKey: 'name',
+    header: 'Name',
+    cell: ProductNameCell,
+    footer: 'Total',
+  },
+  {
+    accessorKey: 'quantity',
+    header: 'Quantity',
+    cell: ConsistentNumericCell,
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      return rows.reduce((sum, row) => sum + row.getValue('quantity'), 0);
+    },
+  },
+  {
+    accessorKey: 'selling_price',
+    header: 'Selling Price',
+    cell: ConsistentNumericCell,
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const sellingPrice = rows.reduce(
+        (sum, row) => sum + row.getValue('selling_price'),
+        0,
+      );
+      return `$${sellingPrice.toFixed(2)}`;
+    },
+  },
+  {
+    accessorKey: 'total_selling_price',
+    header: 'Total Selling Price',
+    cell: ConsistentNumericCell,
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const totalSellingPrice = rows.reduce(
+        (sum, row) => sum + row.getValue('total_selling_price'),
+        0,
+      );
+      return `$${totalSellingPrice.toFixed(2)}`;
+    },
+  },
 ];
 
 /** @type {import("./data-types").ProductColumnDef[]} */
@@ -45,6 +87,21 @@ export const calculatedCosts = [
     },
   },
 ];
+
+/**
+ * This has to be separated out from some other columns, since while it's
+ * editable, it's below some calculated costs.
+ * @type {import('./data-types').ProductColumnDef}
+ */
+export const estimatedHoursColumn = {
+  accessorKey: 'estimated_hours',
+  header: 'Estimated Hours',
+  cell: ConsistentNumericCell,
+  footer: ({ table }) => {
+    const { rows } = table.getCoreRowModel();
+    return rows.reduce((sum, row) => sum + row.getValue('estimated_hours'), 0);
+  },
+};
 
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const contributionColumns = [
