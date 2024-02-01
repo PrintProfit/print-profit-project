@@ -1,8 +1,10 @@
 // @ts-check
 
 import {
+  Input,
   Paper,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableHead,
@@ -28,6 +30,23 @@ export function TotalsTable({ quote }) {
             <TableCell>Price on price/item</TableCell>
           </TableRow>
         </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>TODO</TableCell>
+            <TableCell>
+              <Input
+                value={manualPrice}
+                onChange={(e) => setManualPrice(Number(e.target.value))}
+              />
+            </TableCell>
+            <TableCell>
+              <Input
+                value={pricePerItem}
+                onChange={(e) => setPricePerItem(Number(e.target.value))}
+              />
+            </TableCell>
+          </TableRow>
+        </TableBody>
       </Table>
     </TableContainer>
   );
