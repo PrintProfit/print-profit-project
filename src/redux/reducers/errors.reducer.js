@@ -12,6 +12,8 @@ const loginMessage = (state = '', action) => {
       return "Oops! The username and password didn't match. Try again!";
     case 'LOGIN_FAILED_NO_CODE':
       return 'Oops! Something went wrong! Is the server running?';
+    case 'LOGIN_FAILED_PASSWORDS_DONT_MATCH':
+      return `Oops! The username and password didn't match. Try again!`;
     default:
       return state;
   }
@@ -27,6 +29,8 @@ const registrationMessage = (state = '', action) => {
       return 'Choose a username and password!';
     case 'REGISTRATION_FAILED':
       return "Oops! That didn't work. The username might already be taken. Try again!";
+    case 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH':
+      return `Oops! The username and password didn't match. Try again!`;
     default:
       return state;
   }
