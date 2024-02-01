@@ -32,14 +32,6 @@ export const consistentColumns = [
     accessorKey: 'selling_price',
     header: 'Selling Price',
     cell: ConsistentNumericCell,
-    footer: ({ table }) => {
-      const { rows } = table.getCoreRowModel();
-      const sellingPrice = rows.reduce(
-        (sum, row) => sum + row.getValue('selling_price'),
-        0,
-      );
-      return `$${sellingPrice.toFixed(2)}`;
-    },
   },
   {
     accessorKey: 'total_selling_price',
