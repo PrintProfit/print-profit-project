@@ -38,12 +38,30 @@ function* fetchProfilePageUser() {
   }
 }
 
+// user saving changes to users info
+function* userEditingInfo(action) {
+  // console.log('action.payload', action.payload);
+  try {
+    const response = yield axios({
+      method: 'PUT',
+      url: '/api/user/edit/info',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_PROFILE_PAGE_USER',
+    });
+  } catch (error) {
+    console.log('Unable to put edited user info to server', error);
+  }
+}
+
 // This will grab all the users and company for admin page
 function* fetchAdminUsers() {
   // console.log('action.payload', action.payload);
   try {
     const pendingUserResponse = yield axios.get('/api/user/pending');
     const approvedUseResponse = yield axios.get('/api/user/approved');
+    const archivedResponse = yield axios.get('/api/user/archived');
     const companyResponse = yield axios.get('/api/user/company');
     yield put({
       type: 'SET_PENDING_USERS',
@@ -56,6 +74,10 @@ function* fetchAdminUsers() {
     yield put({
       type: 'SET_COMPANY_LIST',
       payload: companyResponse.data,
+    });
+    yield put({
+      type: 'SET_ARCHIVED_USERS',
+      payload: archivedResponse.data,
     });
   } catch (error) {
     console.log('fetchAdminUsers error:', error);
@@ -79,6 +101,7 @@ function* approveUser(action) {
   }
 }
 
+// admin to soft delete user
 function* softDeleteUser(action) {
   // console.log('action.payload', action.payload);
   try {
@@ -95,8 +118,9 @@ function* softDeleteUser(action) {
   }
 }
 
+// if admin has new company, this will post new company to table
 function* postNewCompany(action) {
-  console.log('action', action.payloaad);
+  // console.log('action', action.payloaad);
   try {
     const companyResponse = yield axios({
       method: 'POST',
@@ -119,6 +143,23 @@ function* postNewCompany(action) {
   }
 }
 
+// admin route to hard delete archived users
+function* hardDeleteUser(action) {
+  // console.log('action.payload', action.payload);
+  try {
+    const response = yield axios({
+      method: 'DELETE',
+      url: '/api/user/delete/archived',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
+    });
+  } catch (error) {
+    console.log('Unable to hard delete user from server', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
@@ -126,6 +167,8 @@ function* userSaga() {
   yield takeLatest('SAGA_SOFT_DELETE_USER', softDeleteUser);
   yield takeLatest('SAGA_FETCH_PROFILE_PAGE_USER', fetchProfilePageUser);
   yield takeLatest('SAGA_POST_NEW_COMPANY', postNewCompany);
+  yield takeLatest('SAGA_HARD_DELETE_USER', hardDeleteUser);
+  yield takeLatest('SAGA_EDIT_USERS_INFO', userEditingInfo);
 }
 
 export default userSaga;

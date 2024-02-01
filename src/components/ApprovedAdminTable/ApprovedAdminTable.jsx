@@ -11,18 +11,20 @@ import DialogTitle from '@mui/material/DialogTitle';
 function ApprovedAdminPage({ approvedUser }) {
   const dispatch = useDispatch();
 
-  const [openDelete, setDeleteOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
+  // Opens Delete Dialog
   const handleDeleteClickOpen = () => {
-    setDeleteOpen(true);
+    setOpenDelete(true);
   };
 
+  // Closes Delete Dialog
   const handleDeleteClose = () => {
-    setDeleteOpen(false);
+    setOpenDelete(false);
   };
 
+  // sends dispatch to soft delete the user
   const deleteUser = () => {
-    console.log('deleting approved');
     dispatch({
       type: 'SAGA_SOFT_DELETE_USER',
       payload: {

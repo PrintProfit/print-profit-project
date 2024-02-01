@@ -15,12 +15,11 @@ function PendingAdminPage({ pendingUser }) {
   const dispatch = useDispatch();
 
   const companyList = useSelector((store) => store.user.companyList);
-
-  // console.log('company list', companyList);
+  const archivedUser = useSelector((store) => store.user.archivedUserReducer);
 
   const [newCompanyInput, setNewCompanyInput] = useState('');
-
   const [openApproval, setOpenApproval] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
   // Opens Approval dialog
   const handleApprovalClickOpen = () => {
@@ -36,8 +35,6 @@ function PendingAdminPage({ pendingUser }) {
   const approveUser = (companyInput) => {
     setOpenApproval(false);
 
-    console.log('approving user', companyInput);
-
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
     const companyIndex = companyList.findIndex(
@@ -45,8 +42,6 @@ function PendingAdminPage({ pendingUser }) {
     );
     if (companyIndex >= 0) {
       const companyId = companyIndex + 1;
-
-      console.log('company id', companyId);
 
       dispatch({
         type: 'SAGA_APPROVE_USER',
@@ -60,8 +55,6 @@ function PendingAdminPage({ pendingUser }) {
 
       const newCompanyId = companyList.length + 1;
 
-      // console.log('newCompanyId', newCompanyId);
-
       dispatch({
         type: 'SAGA_POST_NEW_COMPANY',
         payload: {
@@ -72,8 +65,6 @@ function PendingAdminPage({ pendingUser }) {
       });
     }
   };
-
-  const [openDelete, setOpenDelete] = useState(false);
 
   // Opens Delete Dialog
   const handleDeleteClickOpen = () => {
@@ -87,7 +78,6 @@ function PendingAdminPage({ pendingUser }) {
 
   // Sends dispatch to delete the user
   const deleteUser = (params) => {
-    console.log('deleiting pending');
     dispatch({
       type: 'SAGA_SOFT_DELETE_USER',
       payload: {
@@ -165,13 +155,11 @@ function PendingAdminPage({ pendingUser }) {
                   name: `Add "${inputValue}"`,
                 });
               }
-
               return filtered;
             }}
             selectOnFocus
             clearOnBlur
             handleHomeEndKeys
-            // id="free-solo-with-text-demo"
             options={companyList}
             getOptionLabel={(option) => {
               // Value selected with enter, right from the input
@@ -194,7 +182,6 @@ function PendingAdminPage({ pendingUser }) {
                 autoFocus
                 required
                 margin="dense"
-                // id="name"
                 name="text"
                 type="text"
                 label="Company Name Here"
