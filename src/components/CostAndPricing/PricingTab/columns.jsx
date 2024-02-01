@@ -58,7 +58,19 @@ export const contributionColumns = [
     accessorFn: calc.contributionMargin,
     header: 'Contribution %',
     cell: PercentCell,
-    footer: 'TODO',
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const totalContribution = rows.reduce(
+        (sum, row) => sum + row.getValue('contributionDollars'),
+        0,
+      );
+      const totalSellingPrice = rows.reduce(
+        (sum, row) => sum + row.getValue('total_selling_price'),
+        0,
+      );
+      const percent = totalContribution / totalSellingPrice;
+      return `${(percent * 100).toFixed(2)}%`;
+    },
   },
   {
     accessorFn: calc.contributionPerHour,
