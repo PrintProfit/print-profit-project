@@ -94,6 +94,7 @@ export function TotalsTable({ quote, table }) {
  * @param {import('./prop-types').TotalsTableRowProps} props
  */
 function TotalsTableRow({ table, column }) {
+  // It might be better to use the footer here
   const aggregate = table.getColumn(column).getAggregationFn();
   const { rows } = table.getCoreRowModel();
   const total = aggregate(column, [], rows);
