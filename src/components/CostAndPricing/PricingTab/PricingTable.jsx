@@ -59,10 +59,10 @@ export function PricingTable({ quote, setQuote }) {
           accessorKey="quantity"
         />
       ),
-      footer: ({ table }) =>
-        table
-          .getCoreRowModel()
-          .rows.reduce((sum, row) => sum + row.getValue('quantity'), 0),
+      footer: ({ table }) => {
+        const { rows } = table.getCoreRowModel();
+        return rows.reduce((sum, row) => sum + row.getValue('quantity'), 0);
+      },
     },
     {
       accessorKey: 'selling_price',
@@ -75,10 +75,14 @@ export function PricingTable({ quote, setQuote }) {
           accessorKey="selling_price"
         />
       ),
-      footer: ({ table }) =>
-        table
-          .getCoreRowModel()
-          .rows.reduce((sum, row) => sum + row.getValue('selling_price'), 0),
+      footer: ({ table }) => {
+        const { rows } = table.getCoreRowModel();
+        const sellingPrice = rows.reduce(
+          (sum, row) => sum + row.getValue('selling_price'),
+          0,
+        );
+        return `$${sellingPrice.toFixed(2)}`;
+      },
     },
     {
       accessorKey: 'total_selling_price',
@@ -91,13 +95,14 @@ export function PricingTable({ quote, setQuote }) {
           accessorKey="total_selling_price"
         />
       ),
-      footer: ({ table }) =>
-        table
-          .getCoreRowModel()
-          .rows.reduce(
-            (sum, row) => sum + row.getValue('total_selling_price'),
-            0,
-          ),
+      footer: ({ table }) => {
+        const { rows } = table.getCoreRowModel();
+        const totalSellingPrice = rows.reduce(
+          (sum, row) => sum + row.getValue('total_selling_price'),
+          0,
+        );
+        return `$${totalSellingPrice.toFixed(2)}`;
+      },
     },
   ];
 
