@@ -203,6 +203,26 @@ router.put('/delete/soft', (req, res) => {
     });
 });
 
+// recovers the user the admin clicked
+router.put('/recover', (req, res) => {
+  const sqlText = `
+  UPDATE "user"
+    SET "is_removed" = FALSE, "updated_by" = $1
+  WHERE "id" = $2;
+        `;
+
+  const insertValue = [req.user.id, req.body.aboutToBeRecoveredUser];
+  pool
+    .query(sqlText, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('Error in user.router /recover PUT,', err);
+      res.sendStatus(500);
+    });
+});
+
 // Gets the user that is logged in for the profile page
 router.get('/profile/page', (req, res) => {
   // console.log('im in company route');
@@ -263,7 +283,7 @@ router.delete('/delete/archived', (req, res) => {
     WHERE "id" = $1;
     `;
 
-  const insertValue = [req.body.archivedUserId];
+  const insertValue = [req.body.aboutToBeDeletedUser];
 
   pool
     .query(sqlText, insertValue)

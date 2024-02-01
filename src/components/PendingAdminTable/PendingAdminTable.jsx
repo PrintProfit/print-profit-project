@@ -15,7 +15,6 @@ function PendingAdminPage({ pendingUser }) {
   const dispatch = useDispatch();
 
   const companyList = useSelector((store) => store.user.companyList);
-  const archivedUser = useSelector((store) => store.user.archivedUserReducer);
 
   const [newCompanyInput, setNewCompanyInput] = useState('');
   const [openApproval, setOpenApproval] = useState(false);

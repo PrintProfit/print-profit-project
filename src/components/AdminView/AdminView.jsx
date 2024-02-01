@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AdminArchivedUsers from '../AdminArchivedUsers/AdminArchivedUsers';
 import ApprovedAdminTable from '../ApprovedAdminTable/ApprovedAdminTable';
 import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
+
 export default function AdminView() {
   const user = useSelector((store) => store.user.currentUser);
   const pendingUsers = useSelector((store) => store.user.pendingUserReducer);
@@ -65,10 +66,6 @@ export default function AdminView() {
           })}
         </tbody>
       </table>
-
-      {/* {companyList.map((company) => {
-        return <p key={company.id}>{company.name}</p>;
-      })} */}
     </div>
   );
 }
