@@ -9,7 +9,7 @@ const userStrategy = require('../strategies/user.strategy');
 const router = express.Router();
 
 // GET all quotes
-router.get('/', (req, res) => {
+router.get('/:id', (req, res) => {
   const query = `
   SELECT q.name as "quote_name", q.user_id, q.inserted_at as "quote_inserted_at", q.updated_at as "quote_updated_at", q.updated_by as "quote.updated_by", p.name as "product_name", p.quantity as "product_quantity", p.selling_price_per_unit as "product_selling_price_per_unit", p.total_selling_price, p.estimated_hours, c.name as "cost_input_name", c.value
   FROM "quote" q
@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
   INNER JOIN "cost" AS c ON p.id = c.product_id
   WHERE "user".company_id = $1
   ;`;
-  console.log('req.params from quote get router', req.params.id);
+  console.log('req.params.id', req.params.id);
   const values = [req.params.id];
   pool
     .query(query, values)
