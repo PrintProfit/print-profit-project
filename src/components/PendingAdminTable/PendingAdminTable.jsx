@@ -1,14 +1,15 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Autocomplete, TextField } from '@mui/material';
+const filter = createFilterOptions();
 
 function PendingAdminPage({ pendingUser }) {
   const dispatch = useDispatch();
@@ -16,6 +17,8 @@ function PendingAdminPage({ pendingUser }) {
   const companyList = useSelector((store) => store.user.companyList);
 
   // console.log('company list', companyList);
+
+  const [newCompanyInput, setNewCompanyInput] = useState('');
 
   const [openApproval, setOpenApproval] = useState(false);
 
@@ -38,28 +41,35 @@ function PendingAdminPage({ pendingUser }) {
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
     const companyIndex = companyList.findIndex(
-      (company) => company === companyInput,
+      (company) => company.name === companyInput,
     );
     if (companyIndex >= 0) {
       const companyId = companyIndex + 1;
 
       console.log('company id', companyId);
-      // dispatch({
-      //   type: 'SAGA_APPROVE_USER',
-      //   payload: {
-      //     pendingUserId: pendingUser.user_id,
-      //     companyId: companyId,
-      //   },
-      // });
+
+      dispatch({
+        type: 'SAGA_APPROVE_USER',
+        payload: {
+          pendingUserId: pendingUser.user_id,
+          companyId: companyId,
+        },
+      });
     } else {
       console.log('company not found');
 
-      // dispatch({
-      //   type: 'SAGA_APPROVE_USER',
-      //   payload: {
-      //     pendingUserId: pendingUser.user_id,
-      //   },
-      // });
+      const newCompanyId = companyList.length + 1;
+
+      // console.log('newCompanyId', newCompanyId);
+
+      dispatch({
+        type: 'SAGA_POST_NEW_COMPANY',
+        payload: {
+          pendingUserId: pendingUser.user_id,
+          newCompanyName: companyInput,
+          companyId: newCompanyId,
+        },
+      });
     }
   };
 
@@ -126,22 +136,71 @@ function PendingAdminPage({ pendingUser }) {
             with.
           </DialogContentText>
           <Autocomplete
-            sx={{ m: 1, width: 500 }}
+            value={newCompanyInput}
+            onChange={(event, newValue) => {
+              if (typeof newValue === 'string') {
+                setNewCompanyInput({
+                  name: newValue,
+                });
+              } else if (newValue?.inputValue) {
+                // Create a new value from the user input
+                setNewCompanyInput({
+                  name: newValue.inputValue,
+                });
+              } else {
+                setNewCompanyInput(newValue);
+              }
+            }}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
+
+              const { inputValue } = params;
+              // Suggest the creation of a new value
+              const isExisting = options.some(
+                (option) => inputValue === option.name,
+              );
+              if (inputValue !== '' && !isExisting) {
+                filtered.push({
+                  inputValue,
+                  name: `Add "${inputValue}"`,
+                });
+              }
+
+              return filtered;
+            }}
+            selectOnFocus
+            clearOnBlur
+            handleHomeEndKeys
+            // id="free-solo-with-text-demo"
             options={companyList}
-            getOptionLabel={(option) => option}
-            // disableCloseOnSelect
+            getOptionLabel={(option) => {
+              // Value selected with enter, right from the input
+              if (typeof option === 'string') {
+                return option;
+              }
+              // Add "xxx" option created dynamically
+              if (option.inputValue) {
+                return option.inputValue;
+              }
+              // Regular option
+              return option.name;
+            }}
+            renderOption={(props, option) => <li {...props}>{option.name}</li>}
+            sx={{ width: 300 }}
+            freeSolo
             renderInput={(params) => (
               <TextField
                 {...params}
-                variant="outlined"
+                autoFocus
+                required
+                margin="dense"
                 // id="name"
-                value={pendingUser.pending_company_name || 'Company name here'}
                 name="text"
                 type="text"
-                label="Company name here"
-                placeholder={
-                  pendingUser.pending_company_name || 'Company name here'
-                }
+                label="Company Name Here"
+                placeholder={pendingUser.pending_company_name || ''}
+                fullWidth
+                variant="standard"
               />
             )}
           />

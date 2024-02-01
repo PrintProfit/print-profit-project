@@ -96,8 +96,9 @@ router.get('/company', (req, res) => {
     .query(query)
     .then((result) => {
       // Creates array of all of the company names in strings
-      const companyArray = result.rows.map((row) => row.name);
-      res.send(companyArray);
+      // const companyArray = result.rows.map((row) => row.name);
+      // res.send(companyArray);
+      res.send(result.rows);
     })
     .catch((err) => {
       console.log('ERROR: Get all company names', err);
@@ -240,7 +241,7 @@ router.post('/company', (req, res) => {
   VALUES
   ($1, $2);
       `;
-  const insertValue = [req.body.companyName, req.user.id];
+  const insertValue = [req.body.newCompanyName, req.user.id];
 
   pool
     .query(insertQuery, insertValue)
