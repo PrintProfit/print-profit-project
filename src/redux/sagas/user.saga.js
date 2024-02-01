@@ -118,6 +118,23 @@ function* softDeleteUser(action) {
   }
 }
 
+// admin to recover user
+function* recoverUser(action) {
+  // console.log('action.payload', action.payload);
+  try {
+    const response = yield axios({
+      method: 'PUT',
+      url: '/api/user/recover',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
+    });
+  } catch (error) {
+    console.log('Unable to put recover to server', error);
+  }
+}
+
 // if admin has new company, this will post new company to table
 function* postNewCompany(action) {
   // console.log('action', action.payloaad);
@@ -165,6 +182,7 @@ function* userSaga() {
   yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
   yield takeLatest('SAGA_APPROVE_USER', approveUser);
   yield takeLatest('SAGA_SOFT_DELETE_USER', softDeleteUser);
+  yield takeLatest('SAGA_RECOVER_USER', recoverUser);
   yield takeLatest('SAGA_FETCH_PROFILE_PAGE_USER', fetchProfilePageUser);
   yield takeLatest('SAGA_POST_NEW_COMPANY', postNewCompany);
   yield takeLatest('SAGA_HARD_DELETE_USER', hardDeleteUser);

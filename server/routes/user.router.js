@@ -120,7 +120,7 @@ router.get('/pending', (req, res) => {
       FROM "user"
   INNER JOIN "pending_user_company"
       ON "user"."id" = "pending_user_company"."id"
-  WHERE "is_approved" = FALSE AND "is_removed" = FALSE; 
+  WHERE "user"."is_approved" = FALSE AND "user"."is_removed" = FALSE; 
   `;
 
   pool
@@ -149,7 +149,7 @@ router.get('/approved', (req, res) => {
       FROM "user"
   INNER JOIN "company"
       ON "user"."company_id" = "company"."id"
-  WHERE "is_approved" = TRUE AND "is_removed" = FALSE;
+  WHERE "user"."is_approved" = TRUE AND "user"."is_removed" = FALSE;
   `;
 
   pool
@@ -203,6 +203,26 @@ router.put('/delete/soft', (req, res) => {
     });
 });
 
+// recovers the user the admin clicked
+router.put('/recover', (req, res) => {
+  const sqlText = `
+  UPDATE "user"
+    SET "is_removed" = FALSE, "updated_by" = $1
+  WHERE "id" = $2;
+        `;
+
+  const insertValue = [req.user.id, req.body.aboutToBeRecoveredUser];
+  pool
+    .query(sqlText, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('Error in user.router /recover PUT,', err);
+      res.sendStatus(500);
+    });
+});
+
 // Gets the user that is logged in for the profile page
 router.get('/profile/page', (req, res) => {
   // console.log('im in company route');
@@ -218,7 +238,7 @@ router.get('/profile/page', (req, res) => {
       FROM "user"
   INNER JOIN "company"
       ON "user"."company_id" = "company"."id"
-  WHERE "user"."id" = $1 AND "is_removed" = FALSE;
+  WHERE "user"."id" = $1 AND "user"."is_removed" = FALSE;
   `;
 
   const sqlValues = [req.user.id];
@@ -263,7 +283,7 @@ router.delete('/delete/archived', (req, res) => {
     WHERE "id" = $1;
     `;
 
-  const insertValue = [req.body.archivedUserId];
+  const insertValue = [req.body.aboutToBeDeletedUser];
 
   pool
     .query(sqlText, insertValue)
@@ -291,7 +311,7 @@ router.get('/archived', (req, res) => {
       FROM "user"
   INNER JOIN "pending_user_company"
       ON "user"."id" = "pending_user_company"."id"
-  WHERE "is_removed" = TRUE;
+  WHERE "user"."is_removed" = TRUE;
   `;
 
   pool
