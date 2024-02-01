@@ -120,6 +120,8 @@ export function PricingTable({ quote, setQuote }) {
    * @type {import('./data-types').ProductColumnDef[]}
    */
   const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
+    // The ID is how we can use getValue for calculations.
+    id: `dynamic-cost-${cost.name}`,
     accessorFn: (row) => row.costs[index].value,
     header: cost.name,
     cell: ({ getValue, row }) => (
@@ -130,12 +132,14 @@ export function PricingTable({ quote, setQuote }) {
         costIndex={index}
       />
     ),
-    // I don't really like this, but accessing things through the table won't work.
-    footer: () =>
-      quote.products.reduce(
-        (sum, product) => sum + product.costs[index].value,
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const total = rows.reduce(
+        (sum, row) => sum + row.getValue(`dynamic-cost-${cost.name}`),
         0,
-      ),
+      );
+      return `$${total.toFixed(2)}`;
+    },
   }));
 
   /**
