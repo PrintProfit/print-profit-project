@@ -38,12 +38,10 @@ export const consistentColumns = [
     header: 'Total Selling Price',
     cell: ConsistentNumericCell,
     aggregationFn: 'sum',
-    footer: ({ table }) => {
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalSellingPrice = rows.reduce(
-        (sum, row) => sum + row.getValue('total_selling_price'),
-        0,
-      );
+      const totalSellingPrice = aggregate('total_selling_price', [], rows);
       return `$${totalSellingPrice.toFixed(2)}`;
     },
   },
