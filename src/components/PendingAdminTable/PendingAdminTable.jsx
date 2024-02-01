@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '@mui/material/Button';
@@ -8,39 +8,74 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { Autocomplete, TextField } from '@mui/material';
+
 function PendingAdminPage({ pendingUser }) {
   const dispatch = useDispatch();
 
-  const [openApproval, setApprovalOpen] = useState(false);
+  const companyList = useSelector((store) => store.user.companyList);
 
+  // console.log('company list', companyList);
+
+  const [openApproval, setOpenApproval] = useState(false);
+
+  // Opens Approval dialog
   const handleApprovalClickOpen = () => {
-    setApprovalOpen(true);
+    setOpenApproval(true);
   };
 
+  // Closes Approval Dialog
   const handleApprovalClose = () => {
-    setApprovalOpen(false);
+    setOpenApproval(false);
   };
 
-  const approveUser = () => {
-    console.log('approving user');
-    dispatch({
-      type: 'SAGA_APPROVE_USER',
-      payload: {
-        pendingUserId: pendingUser.user_id,
-      },
-    });
+  // conditonally sends approval dispatch
+  const approveUser = (companyInput) => {
+    setOpenApproval(false);
+
+    console.log('approving user', companyInput);
+
+    // This should do what that for loop was trying to do
+    // findIndex returns -1 when the item is not found
+    const companyIndex = companyList.findIndex(
+      (company) => company === companyInput,
+    );
+    if (companyIndex >= 0) {
+      const companyId = companyIndex + 1;
+
+      console.log('company id', companyId);
+      // dispatch({
+      //   type: 'SAGA_APPROVE_USER',
+      //   payload: {
+      //     pendingUserId: pendingUser.user_id,
+      //     companyId: companyId,
+      //   },
+      // });
+    } else {
+      console.log('company not found');
+
+      // dispatch({
+      //   type: 'SAGA_APPROVE_USER',
+      //   payload: {
+      //     pendingUserId: pendingUser.user_id,
+      //   },
+      // });
+    }
   };
 
-  const [openDelete, setDeleteOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
 
+  // Opens Delete Dialog
   const handleDeleteClickOpen = () => {
-    setDeleteOpen(true);
+    setOpenDelete(true);
   };
 
+  // Closes Delete Dialog
   const handleDeleteClose = () => {
-    setDeleteOpen(false);
+    setOpenDelete(false);
   };
 
+  // Sends dispatch to delete the user
   const deleteUser = (params) => {
     console.log('deleiting pending');
     dispatch({
@@ -68,28 +103,56 @@ function PendingAdminPage({ pendingUser }) {
         </button>
       </td>
 
+      {/* Approval Dialog */}
       <Dialog
         open={openApproval}
         onClose={handleApprovalClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        PaperProps={{
+          component: 'form',
+          onSubmit: (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const companyInput = formJson.text;
+            console.log(companyInput);
+            approveUser(companyInput);
+          },
+        }}
       >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to approve this account?'}
-        </DialogTitle>
+        <DialogTitle>Are you sure you want to approve this user?</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            This action cannot be undone.
+          <DialogContentText>
+            Please select the correct company that this user will be using this
+            with.
           </DialogContentText>
+          <Autocomplete
+            sx={{ m: 1, width: 500 }}
+            options={companyList}
+            getOptionLabel={(option) => option}
+            // disableCloseOnSelect
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                // id="name"
+                value={pendingUser.pending_company_name || 'Company name here'}
+                name="text"
+                type="text"
+                label="Company name here"
+                placeholder={
+                  pendingUser.pending_company_name || 'Company name here'
+                }
+              />
+            )}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={approveUser} autoFocus>
-            Approve
-          </Button>
-          <Button onClick={handleApprovalClose}>Close</Button>
+          <Button type="submit">Approve</Button>
+          <Button onClick={handleApprovalClose}>Cancel</Button>
         </DialogActions>
       </Dialog>
 
+      {/* Delete Dialog */}
       <Dialog
         open={openDelete}
         onClose={handleDeleteClose}
@@ -108,7 +171,7 @@ function PendingAdminPage({ pendingUser }) {
           <Button onClick={deleteUser} autoFocus>
             Delete
           </Button>
-          <Button onClick={handleDeleteClose}>Close</Button>
+          <Button onClick={handleDeleteClose}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </tr>

@@ -95,12 +95,29 @@ function* softDeleteUser(action) {
   }
 }
 
+function* postNewCompany(action) {
+  console.log('action', action.payloaad);
+  try {
+    const response = yield axios({
+      method: 'POST',
+      url: '/api/user/company',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
+    });
+  } catch (error) {
+    console.log('Unable to posting new company to server', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
   yield takeLatest('SAGA_APPROVE_USER', approveUser);
   yield takeLatest('SAGA_SOFT_DELETE_USER', softDeleteUser);
   yield takeLatest('SAGA_FETCH_PROFILE_PAGE_USER', fetchProfilePageUser);
+  yield takeLatest('SAGA_POST_NEW_COMPANY', postNewCompany);
 }
 
 export default userSaga;

@@ -89,13 +89,15 @@ router.get('/company', (req, res) => {
   // console.log('im in company route');
 
   const query = `
-    SELECT * FROM "company";
+  SELECT "name" FROM "company";
   `;
 
   pool
     .query(query)
     .then((result) => {
-      res.send(result.rows);
+      // Creates array of all of the company names in strings
+      const companyArray = result.rows.map((row) => row.name);
+      res.send(companyArray);
     })
     .catch((err) => {
       console.log('ERROR: Get all company names', err);
@@ -164,11 +166,11 @@ router.get('/approved', (req, res) => {
 router.put('/approve', (req, res) => {
   const sqlText = `
   UPDATE "user"
-    SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = 1
-  WHERE "id" = $2;
+    SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = $2
+  WHERE "id" = $3;
         `;
 
-  const insertValue = [req.user.id, req.body.pendingUserId];
+  const insertValue = [req.user.id, req.body.companyId, req.body.pendingUserId];
   pool
     .query(sqlText, insertValue)
     .then((result) => {
@@ -225,6 +227,28 @@ router.get('/profile/page', (req, res) => {
     })
     .catch((err) => {
       console.log('ERROR: Get all users for profile page', err);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/company', (req, res) => {
+  // console.log('req.body', req.body);
+
+  const insertQuery = `
+  INSERT INTO "company" 
+  ("name", "updated_by")
+  VALUES
+  ($1, $2);
+      `;
+  const insertValue = [req.body.companyName, req.user.id];
+
+  pool
+    .query(insertQuery, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('err in company post route', err);
       res.sendStatus(500);
     });
 });

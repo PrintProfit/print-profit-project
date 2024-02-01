@@ -79,9 +79,9 @@ function AdminPage() {
         </tbody>
       </table>
 
-      {companyList.map((company) => {
-        return <p>{company.name}</p>;
-      })}
+      {/* {companyList.map((company) => {
+        return <p key={company.id}>{company.name}</p>;
+      })} */}
     </div>
   );
 }
