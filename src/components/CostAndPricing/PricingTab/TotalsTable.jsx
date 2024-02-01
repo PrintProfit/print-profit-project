@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -19,6 +19,12 @@ export function TotalsTable({ quote, table }) {
   const [contributionPercent, setContributionPercent] = useState(0);
   const [manualPrice, setManualPrice] = useState(0);
   const [pricePerItem, setPricePerItem] = useState(0);
+
+  // the total selling price's aggregation function
+  const getTotalSellingPrice = useCallback(
+    table.getColumn('total_selling_price').getAggregationFn(),
+    [],
+  );
 
   return (
     <TableContainer component={Paper}>
@@ -33,7 +39,17 @@ export function TotalsTable({ quote, table }) {
         <TableBody>
           {/* Total Selling Price Row */}
           <TableRow>
-            <TableCell>TODO</TableCell>
+            <TableCell>
+              $
+              {(
+                getTotalSellingPrice(
+                  'total_selling_price',
+                  [],
+                  table.getCoreRowModel().rows,
+                ) /
+                (1 - contributionPercent / 100)
+              ).toFixed(2)}
+            </TableCell>
             <TableCell>
               <Input
                 value={manualPrice}

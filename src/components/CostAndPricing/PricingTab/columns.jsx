@@ -37,6 +37,7 @@ export const consistentColumns = [
     accessorKey: 'total_selling_price',
     header: 'Total Selling Price',
     cell: ConsistentNumericCell,
+    aggregationFn: 'sum',
     footer: ({ table }) => {
       const { rows } = table.getCoreRowModel();
       const totalSellingPrice = rows.reduce(
