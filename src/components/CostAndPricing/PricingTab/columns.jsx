@@ -21,10 +21,14 @@ export const calculatedCosts = [
     accessorFn: calc.creditCardFee,
     header: 'Credit Card Fee',
     cell: DollarCell,
-    footer: ({ table }) =>
-      table
-        .getCoreRowModel()
-        .rows.reduce((sum, row) => sum + row.getValue('creditCardFee'), 0),
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const totalCreditCardFee = rows.reduce(
+        (sum, row) => sum + row.getValue('creditCardFee'),
+        0,
+      );
+      return `$${totalCreditCardFee.toFixed(2)}`;
+    },
   },
   {
     id: 'totalVariableCosts',
