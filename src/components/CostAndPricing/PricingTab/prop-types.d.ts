@@ -29,6 +29,10 @@ export interface PricingTableProps {
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }
 
+export interface TotalsTableProps {
+  readonly quote: Quote;
+}
+
 export interface ProductNameCellProps {
   /** the getValue function from tanstack tables */
   readonly getValue: Getter<string>;
