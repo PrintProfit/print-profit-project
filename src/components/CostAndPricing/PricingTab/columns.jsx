@@ -76,6 +76,18 @@ export const contributionColumns = [
     accessorFn: calc.contributionPerHour,
     header: 'Contribution / Hr',
     cell: DollarCell,
-    footer: 'TODO',
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const totalContribution = rows.reduce(
+        (sum, row) => sum + row.getValue('contributionDollars'),
+        0,
+      );
+      const totalHours = rows.reduce(
+        (sum, row) => sum + row.getValue('estimated_hours'),
+        0,
+      );
+      const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
+      return `$${perHour.toFixed(2)}`;
+    },
   },
 ];
