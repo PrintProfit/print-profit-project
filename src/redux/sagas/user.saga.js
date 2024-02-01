@@ -98,16 +98,24 @@ function* softDeleteUser(action) {
 function* postNewCompany(action) {
   console.log('action', action.payloaad);
   try {
-    const response = yield axios({
+    const companyResponse = yield axios({
       method: 'POST',
       url: '/api/user/company',
+      data: action.payload,
+    });
+    const approveResponse = yield axios({
+      method: 'PUT',
+      url: '/api/user/approve',
       data: action.payload,
     });
     yield put({
       type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
     });
   } catch (error) {
-    console.log('Unable to posting new company to server', error);
+    console.log(
+      'Unable to posting new company and updating user compa to server',
+      error,
+    );
   }
 }
 
