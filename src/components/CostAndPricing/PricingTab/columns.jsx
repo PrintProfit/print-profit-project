@@ -31,10 +31,14 @@ export const calculatedCosts = [
     accessorFn: calc.totalVariableCosts,
     header: 'Total Variable Costs',
     cell: DollarCell,
-    footer: ({ table }) =>
-      table
-        .getCoreRowModel()
-        .rows.reduce((sum, row) => sum + row.getValue('totalVariableCosts'), 0),
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const totalVariableCosts = rows.reduce(
+        (sum, row) => sum + row.getValue('totalVariableCosts'),
+        0,
+      );
+      return `$${totalVariableCosts.toFixed(2)}`;
+    },
   },
 ];
 
@@ -46,13 +50,14 @@ export const contributionColumns = [
     header: 'Contribution $',
     cell: DollarCell,
     // This happens to work, but it's not how the spreadsheet calculates it.
-    footer: ({ table }) =>
-      table
-        .getCoreRowModel()
-        .rows.reduce(
-          (sum, row) => sum + row.getValue('contributionDollars'),
-          0,
-        ),
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      const totalContribution = rows.reduce(
+        (sum, row) => sum + row.getValue('contributionDollars'),
+        0,
+      );
+      return `$${totalContribution.toFixed(2)}`;
+    },
   },
   {
     accessorFn: calc.contributionMargin,
