@@ -84,9 +84,9 @@ export function PricingTable({ quote, setQuote }) {
     },
   });
 
-  // The data table isn't a particularly generic component, but it's separated
-  // from here so that it can be where the hook is used. That should ensure that
-  // the table gets rerendered when the columns change.
+  // This is sorta awkward, but it's so far the best way I've found to get the
+  // table to have the correct layout. Most libraries lack a way to get cells
+  // by data field, which is what our rows are.
   return (
     <TableContainer component={Paper}>
       <Table size="small">
