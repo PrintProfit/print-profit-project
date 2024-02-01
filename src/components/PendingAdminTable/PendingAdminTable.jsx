@@ -19,14 +19,17 @@ function PendingAdminPage({ pendingUser }) {
 
   const [openApproval, setOpenApproval] = useState(false);
 
+  // Opens Approval dialog
   const handleApprovalClickOpen = () => {
     setOpenApproval(true);
   };
 
+  // Closes Approval Dialog
   const handleApprovalClose = () => {
     setOpenApproval(false);
   };
 
+  // conditonally sends approval dispatch
   const approveUser = (companyInput) => {
     setOpenApproval(false);
 
@@ -39,37 +42,40 @@ function PendingAdminPage({ pendingUser }) {
     );
     if (companyIndex >= 0) {
       const companyId = companyIndex + 1;
-      dispatch({
-        type: 'SAGA_APPROVE_USER',
-        payload: {
-          pendingUserId: pendingUser.user_id,
-          companyId: companyId,
-        },
-      });
+
+      console.log('company id', companyId);
+      // dispatch({
+      //   type: 'SAGA_APPROVE_USER',
+      //   payload: {
+      //     pendingUserId: pendingUser.user_id,
+      //     companyId: companyId,
+      //   },
+      // });
     } else {
       console.log('company not found');
+
+      // dispatch({
+      //   type: 'SAGA_APPROVE_USER',
+      //   payload: {
+      //     pendingUserId: pendingUser.user_id,
+      //   },
+      // });
     }
-
-    // dispatch({
-    //   type: 'SAGA_APPROVE_USER',
-    //   payload: {
-    //     pendingUserId: pendingUser.user_id,
-    //   },
-    // });
   };
-
-  // const company = ['prime', 'not', 'fordor', 'facebook'];
 
   const [openDelete, setOpenDelete] = useState(false);
 
+  // Opens Delete Dialog
   const handleDeleteClickOpen = () => {
     setOpenDelete(true);
   };
 
+  // Closes Delete Dialog
   const handleDeleteClose = () => {
     setOpenDelete(false);
   };
 
+  // Sends dispatch to delete the user
   const deleteUser = (params) => {
     console.log('deleiting pending');
     dispatch({
@@ -97,6 +103,7 @@ function PendingAdminPage({ pendingUser }) {
         </button>
       </td>
 
+      {/* Approval Dialog */}
       <Dialog
         open={openApproval}
         onClose={handleApprovalClose}
@@ -145,6 +152,7 @@ function PendingAdminPage({ pendingUser }) {
         </DialogActions>
       </Dialog>
 
+      {/* Delete Dialog */}
       <Dialog
         open={openDelete}
         onClose={handleDeleteClose}

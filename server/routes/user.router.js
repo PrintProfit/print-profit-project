@@ -95,8 +95,8 @@ router.get('/company', (req, res) => {
   pool
     .query(query)
     .then((result) => {
+      // Creates array of all of the company names in strings
       const companyArray = result.rows.map((row) => row.name);
-      console.log('companyarray', companyArray);
       res.send(companyArray);
     })
     .catch((err) => {
