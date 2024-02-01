@@ -79,6 +79,7 @@ export function PricingTable({ quote, setQuote }) {
     data: quote.products,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    // The meta option is how we can pass the setQuote function to the cells.
     meta: {
       setQuote,
     },
