@@ -1,6 +1,17 @@
 // @ts-check
 
-import { DataTable } from './DataTable';
+import {
+  Paper,
+  Table,
+  TableCell,
+  TableContainer,
+  TableRow,
+} from '@mui/material';
+import {
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import {
   ConsistentNumericCell,
   DynamicCostCell,
@@ -156,8 +167,53 @@ export function PricingTable({ quote, setQuote }) {
     ...contributionColumns,
   ];
 
+  const table = useReactTable({
+    data: quote.products,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
+
   // The data table isn't a particularly generic component, but it's separated
   // from here so that it can be where the hook is used. That should ensure that
   // the table gets rerendered when the columns change.
-  return <DataTable data={quote.products} columns={columns} />;
+  return (
+    <TableContainer component={Paper}>
+      <Table size="small">
+        {table.getAllFlatColumns().map((col) => (
+          <TableRow key={col.id}>
+            <TableCell variant="head">
+              {flexRender(
+                col.columnDef.header,
+                table
+                  .getFlatHeaders()
+                  .find((h) => h.id === col.id)
+                  .getContext(),
+              )}
+            </TableCell>
+            {table.getCoreRowModel().rows.map((row) => (
+              <TableCell key={row.id}>
+                {flexRender(
+                  col.columnDef.cell,
+                  row
+                    .getAllCells()
+                    .find((cell) => cell.column.id === col.id)
+                    .getContext(),
+                )}
+              </TableCell>
+            ))}
+            <TableCell variant="footer">
+              {flexRender(
+                col.columnDef.footer,
+                table
+                  .getFooterGroups()
+                  .flatMap((g) => g.headers)
+                  .find((h) => h.id === col.id)
+                  .getContext(),
+              )}
+            </TableCell>
+          </TableRow>
+        ))}
+      </Table>
+    </TableContainer>
+  );
 }
