@@ -32,6 +32,13 @@ const approvedUserReducer = (state = [], action) => {
   return state;
 };
 
+const archivedUserReducer = (state = [], action) => {
+  if (action.type === 'SET_ARCHIVED_USERS') {
+    return action.payload;
+  }
+  return state;
+};
+
 const companyList = (state = [], action) => {
   if (action.type === 'SET_COMPANY_LIST') {
     return action.payload;
@@ -46,5 +53,6 @@ export default combineReducers({
   profilePageUser,
   pendingUserReducer,
   approvedUserReducer,
+  archivedUserReducer,
   companyList,
 });

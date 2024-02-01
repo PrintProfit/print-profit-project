@@ -24,7 +24,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
 router.post('/register', (req, res, next) => {
-  // not right names yet
   const email = req.body.email;
   const name = req.body.name;
   const password = encryptLib.encryptPassword(req.body.password);
@@ -164,6 +163,7 @@ router.get('/approved', (req, res) => {
     });
 });
 
+// approves the user that the admin clicked
 router.put('/approve', (req, res) => {
   const sqlText = `
   UPDATE "user"
@@ -183,6 +183,7 @@ router.put('/approve', (req, res) => {
     });
 });
 
+// soft deletes the user the admin clicked
 router.put('/delete/soft', (req, res) => {
   const sqlText = `
   UPDATE "user"
@@ -202,6 +203,7 @@ router.put('/delete/soft', (req, res) => {
     });
 });
 
+// Gets the user that is logged in for the profile page
 router.get('/profile/page', (req, res) => {
   // console.log('im in company route');
 
@@ -250,6 +252,87 @@ router.post('/company', (req, res) => {
     })
     .catch((err) => {
       console.log('err in company post route', err);
+      res.sendStatus(500);
+    });
+});
+
+// hard deletes users that are in the archived table
+router.delete('/delete/archived', (req, res) => {
+  const sqlText = `
+  DELETE FROM "user"
+    WHERE "id" = $1;
+    `;
+
+  const insertValue = [req.body.archivedUserId];
+
+  pool
+    .query(sqlText, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('Error in user.router DELETE, deleting account', err);
+      res.sendStatus(500);
+    });
+});
+
+// Gets all users that have been soft delete
+router.get('/archived', (req, res) => {
+  // console.log('im in company route');
+
+  const query = `
+  SELECT "user"."id" as "user_id",
+  "user"."email" as "email",
+  "user"."name" as "user_name",
+  "user"."is_approved" as "is_approved",
+  "user"."last_login" as "last_login",
+  "pending_user_company"."name" as "pending_company_name",
+  "pending_user_company"."id" as "pending_company_id"
+      FROM "user"
+  INNER JOIN "pending_user_company"
+      ON "user"."id" = "pending_user_company"."id"
+  WHERE "is_removed" = TRUE;
+  `;
+
+  pool
+    .query(query)
+    .then((result) => {
+      res.send(result.rows);
+    })
+    .catch((err) => {
+      console.log('ERROR: Get all users that are archived', err);
+      res.sendStatus(500);
+    });
+});
+
+// user saving changes to users info in DB
+router.put('/edit/info', (req, res) => {
+  const newEmailInput = req.body.newEmailInput;
+  const newNameInput = req.body.newNameInput;
+  const newPasswordInput = encryptLib.encryptPassword(
+    req.body.newPasswordInput,
+  );
+
+  const sqlText = `
+  UPDATE "user"
+  SET "email" = $1, "name" = $2, "password" = $3, "updated_by" = $4
+WHERE "id" = $4;
+        `;
+
+  const insertValue = [
+    newEmailInput,
+    newNameInput,
+    newPasswordInput,
+    req.user.id,
+  ];
+
+  pool
+    .query(sqlText, insertValue)
+    .then((result) => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('Error in user.router /edit/info PUT,', err);
       res.sendStatus(500);
     });
 });
