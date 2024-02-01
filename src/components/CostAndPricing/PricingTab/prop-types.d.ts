@@ -31,6 +31,7 @@ export interface PricingTableProps {
 
 export interface TotalsTableProps {
   readonly quote: Quote;
+  readonly table: Table<Product>;
 }
 
 export interface ProductNameCellProps {

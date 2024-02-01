@@ -15,7 +15,7 @@ import { useState } from 'react';
 /**
  * @param {import("./prop-types").TotalsTableProps} props
  */
-export function TotalsTable({ quote }) {
+export function TotalsTable({ quote, table }) {
   const [contributionPercent, setContributionPercent] = useState(0);
   const [manualPrice, setManualPrice] = useState(0);
   const [pricePerItem, setPricePerItem] = useState(0);
