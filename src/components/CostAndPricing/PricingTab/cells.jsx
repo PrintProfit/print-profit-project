@@ -10,15 +10,12 @@ import { useEffect, useState } from 'react';
  * @param {import('./prop-types').DynamicCostCellProps<T>} props
  * @returns {JSX.Element}
  */
-export function DynamicCostCell({
-  getValue,
-  setQuote,
-  productIndex,
-  costIndex,
-}) {
+export function DynamicCostCell({ getValue, costIndex, table, row }) {
   /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
+
+  const productIndex = row.index;
 
   /**
    * onBlur is called when the input loses focus.
@@ -27,7 +24,7 @@ export function DynamicCostCell({
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
   const onBlur = () => {
-    setQuote(
+    table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex].costs[costIndex].value = Number(value);
       }),
@@ -56,12 +53,7 @@ export function DynamicCostCell({
  * @param {import('./prop-types').ConsistentNumericCellProps<T>} props
  * @returns {JSX.Element}
  */
-export function ConsistentNumericCell({
-  getValue,
-  setQuote,
-  productIndex,
-  accessorKey,
-}) {
+export function ConsistentNumericCell({ getValue, table, row, column }) {
   /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
@@ -73,9 +65,9 @@ export function ConsistentNumericCell({
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
   const onBlur = () => {
-    setQuote(
+    table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[productIndex][accessorKey] = Number(value);
+        draft.products[row.index][column.id] = Number(value);
       }),
     );
   };
@@ -98,15 +90,15 @@ export function ConsistentNumericCell({
 /**
  * @param {import('./prop-types').ProductNameCellProps} props
  */
-export function ProductNameCell({ getValue, setQuote, productIndex }) {
+export function ProductNameCell({ getValue, table, row }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
-    setQuote(
+    table.options.meta.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[productIndex].name = value;
+        draft.products[row.index].name = value;
       }),
     );
   };
@@ -123,4 +115,22 @@ export function ProductNameCell({ getValue, setQuote, productIndex }) {
       onBlur={onBlur}
     />
   );
+}
+
+/**
+ * Cell for non-editable values of money (ex. derived amounts)
+ * @param {import('./prop-types').DollarCellProps} props
+ */
+export function DollarCell({ getValue }) {
+  const value = getValue();
+  return `$${value.toFixed(2)}`;
+}
+
+/**
+ * @param {import('./prop-types').PercentCellProps} props
+ */
+export function PercentCell({ getValue }) {
+  const value = getValue();
+  const percent = Number(value) * 100;
+  return `${percent.toFixed(2)}%`;
 }
