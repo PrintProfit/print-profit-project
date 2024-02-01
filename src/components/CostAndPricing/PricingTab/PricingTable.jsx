@@ -45,12 +45,12 @@ export function PricingTable({ quote, setQuote }) {
     id: `dynamic-cost-${cost.name}`,
     accessorFn: (row) => row.costs[index].value,
     header: cost.name,
-    cell: ({ getValue, row }) => (
+    cell: ({ getValue, row, table }) => (
       <DynamicCostCell
         getValue={getValue}
-        setQuote={setQuote}
-        productIndex={row.index}
         costIndex={index}
+        table={table}
+        row={row}
       />
     ),
     footer: ({ table }) => {

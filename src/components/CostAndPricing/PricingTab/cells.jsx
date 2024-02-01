@@ -10,15 +10,12 @@ import { useEffect, useState } from 'react';
  * @param {import('./prop-types').DynamicCostCellProps<T>} props
  * @returns {JSX.Element}
  */
-export function DynamicCostCell({
-  getValue,
-  setQuote,
-  productIndex,
-  costIndex,
-}) {
+export function DynamicCostCell({ getValue, costIndex, table, row }) {
   /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
+
+  const productIndex = row.index;
 
   /**
    * onBlur is called when the input loses focus.
@@ -27,7 +24,7 @@ export function DynamicCostCell({
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
   const onBlur = () => {
-    setQuote(
+    table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex].costs[costIndex].value = Number(value);
       }),
