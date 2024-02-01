@@ -1,6 +1,6 @@
 import type { Column, Getter, Row, Table } from '@tanstack/react-table';
 import type { Dispatch, SetStateAction } from 'react';
-import type { Product, ProductColumnDef, Quote } from './data-types';
+import type { Product, Quote } from './data-types';
 
 export interface DynamicCostCellProps<T> {
   /** the getValue function from tanstack tables */
@@ -27,11 +27,6 @@ export interface ConsistentNumericCellProps<T> {
 export interface PricingTableProps {
   readonly quote: Quote;
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
-}
-
-export interface DataTableProps {
-  readonly data: Product[];
-  readonly columns: ProductColumnDef[];
 }
 
 export interface ProductNameCellProps {
