@@ -183,6 +183,9 @@ export function PricingTable({ quote, setQuote }) {
     data: quote.products,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    meta: {
+      setQuote,
+    },
   });
 
   // The data table isn't a particularly generic component, but it's separated
