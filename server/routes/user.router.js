@@ -120,7 +120,7 @@ router.get('/pending', (req, res) => {
       FROM "user"
   INNER JOIN "pending_user_company"
       ON "user"."id" = "pending_user_company"."id"
-  WHERE "is_approved" = FALSE AND "is_removed" = FALSE; 
+  WHERE "user"."is_approved" = FALSE AND "user"."is_removed" = FALSE; 
   `;
 
   pool
@@ -149,7 +149,7 @@ router.get('/approved', (req, res) => {
       FROM "user"
   INNER JOIN "company"
       ON "user"."company_id" = "company"."id"
-  WHERE "is_approved" = TRUE AND "is_removed" = FALSE;
+  WHERE "user"."is_approved" = TRUE AND "user"."is_removed" = FALSE;
   `;
 
   pool
@@ -238,7 +238,7 @@ router.get('/profile/page', (req, res) => {
       FROM "user"
   INNER JOIN "company"
       ON "user"."company_id" = "company"."id"
-  WHERE "user"."id" = $1 AND "is_removed" = FALSE;
+  WHERE "user"."id" = $1 AND "user"."is_removed" = FALSE;
   `;
 
   const sqlValues = [req.user.id];
@@ -311,7 +311,7 @@ router.get('/archived', (req, res) => {
       FROM "user"
   INNER JOIN "pending_user_company"
       ON "user"."id" = "pending_user_company"."id"
-  WHERE "is_removed" = TRUE;
+  WHERE "user"."is_removed" = TRUE;
   `;
 
   pool
