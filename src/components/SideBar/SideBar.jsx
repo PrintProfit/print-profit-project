@@ -9,6 +9,9 @@ import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 const drawerWidth = 240;
+/**
+ * TODO: Create Style for all List and ListItems in the SideBar
+ */
 
 export default function SideBar({ children }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -44,31 +47,30 @@ export default function SideBar({ children }) {
       >
         <div style={{ cursor: 'pointer' }}>
           {/* biome-ignore lint/a11y/useKeyWithClickEvents: Will change to logo will deal with later */}
-          <h1 onClick={handleNavigationHome}>BRING ME HOME</h1>
+          <h1 onClick={handleNavigationHome}>HOME</h1>
         </div>
-        <Divider />
 
-        <List>
+        <List sx={{ height: '100%' }}>
           <h3>Tools Header</h3>
-          <ListItem disablePadding>
+          <ListItem sx={{ height: '20%' }} disablePadding>
             <ListItemButton component={Link} to="/cost-and-pricing">
               <ListItemText primary="C&P" />
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          <ListItem sx={{ height: '20%' }} disablePadding>
             <ListItemButton component={Link} to="/tool-two">
               <ListItemText primary="Tool 2" />
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          <ListItem sx={{ height: '20%' }} disablePadding>
             <ListItemButton component={Link} to="/tool-three">
               <ListItemText primary="Tool 3" />
             </ListItemButton>
           </ListItem>
 
-          <ListItem disablePadding>
+          <ListItem sx={{ height: '20%' }} disablePadding>
             <ListItemButton component={Link} to="/about">
               <ListItemText primary="About/Contact" />
             </ListItemButton>
