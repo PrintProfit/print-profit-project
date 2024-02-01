@@ -63,6 +63,9 @@ export function TotalsTable({ quote, table }) {
               />
             </TableCell>
           </TableRow>
+          <TotalsTableRow table={table} column="creditCardFee" />
+          <TotalsTableRow table={table} column="totalVariableCosts" />
+          <TotalsTableRow table={table} column="estimated_hours" />
           {/* Contribution Margin Row */}
           <TableRow>
             <TableCell>
@@ -77,5 +80,23 @@ export function TotalsTable({ quote, table }) {
         </TableBody>
       </Table>
     </TableContainer>
+  );
+}
+
+/**
+ * Used for rows which have three columns that have the same value
+ * @param {import('./prop-types').TotalsTableRowProps} props
+ */
+function TotalsTableRow({ table, column }) {
+  const aggregate = table.getColumn(column).getAggregationFn();
+  const { rows } = table.getCoreRowModel();
+  const total = aggregate(column, [], rows);
+
+  return (
+    <TableRow>
+      <TableCell>{total}</TableCell>
+      <TableCell>{total}</TableCell>
+      <TableCell>{total}</TableCell>
+    </TableRow>
   );
 }

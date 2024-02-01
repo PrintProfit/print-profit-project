@@ -34,6 +34,11 @@ export interface TotalsTableProps {
   readonly table: Table<Product>;
 }
 
+export interface TotalsTableRowProps {
+  readonly table: Table<Product>;
+  readonly column: string;
+}
+
 export interface ProductNameCellProps {
   /** the getValue function from tanstack tables */
   readonly getValue: Getter<string>;
