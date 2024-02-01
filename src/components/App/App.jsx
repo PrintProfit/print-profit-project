@@ -31,7 +31,6 @@ function App() {
   const dispatch = useDispatch();
 
   const user = useSelector((store) => store.user.currentUser);
-  console.log(user);
 
   useEffect(() => {
     dispatch({ type: 'FETCH_USER' });
