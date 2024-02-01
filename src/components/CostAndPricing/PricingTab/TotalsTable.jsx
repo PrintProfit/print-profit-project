@@ -31,6 +31,7 @@ export function TotalsTable({ quote, table }) {
           </TableRow>
         </TableHead>
         <TableBody>
+          {/* Total Selling Price Row */}
           <TableRow>
             <TableCell>TODO</TableCell>
             <TableCell>
@@ -45,6 +46,17 @@ export function TotalsTable({ quote, table }) {
                 onChange={(e) => setPricePerItem(Number(e.target.value))}
               />
             </TableCell>
+          </TableRow>
+          {/* Contribution Margin Row */}
+          <TableRow>
+            <TableCell>
+              <Input
+                value={contributionPercent}
+                onChange={(e) => setContributionPercent(Number(e.target.value))}
+              />
+            </TableCell>
+            <TableCell>TODO</TableCell>
+            <TableCell>TODO</TableCell>
           </TableRow>
         </TableBody>
       </Table>
