@@ -158,10 +158,13 @@ export function PricingTable({ quote, setQuote }) {
         accessorKey="estimated_hours"
       />
     ),
-    footer: ({ table }) =>
-      table
-        .getCoreRowModel()
-        .rows.reduce((sum, row) => sum + row.getValue('estimated_hours'), 0),
+    footer: ({ table }) => {
+      const { rows } = table.getCoreRowModel();
+      return rows.reduce(
+        (sum, row) => sum + row.getValue('estimated_hours'),
+        0,
+      );
+    },
   };
 
   /**
