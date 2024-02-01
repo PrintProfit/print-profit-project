@@ -95,7 +95,7 @@ export function TotalsTable({ quote, table }) {
  */
 function TotalsTableRow({ table, column }) {
   // It might be better to use the footer here
-  const aggregate = table.getColumn(column).getAggregationFn();
+  const aggregate = useCallback(table.getColumn(column).getAggregationFn(), []);
   const { rows } = table.getCoreRowModel();
   const total = aggregate(column, [], rows);
 
