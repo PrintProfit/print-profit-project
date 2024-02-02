@@ -114,6 +114,8 @@ function ContributionRows({
   totalVariableCosts,
 }) {
   // FIXME - All negative numbers show up after the dollar sign.
+  const manualContribution = manualPrice - totalVariableCosts;
+
   return (
     <>
       {/* Contribution Row */}
@@ -121,13 +123,18 @@ function ContributionRows({
         <TableCell>
           ${(profitMarginTotalPrice - totalVariableCosts).toFixed(2)}
         </TableCell>
-        <TableCell>${(manualPrice - totalVariableCosts).toFixed(2)}</TableCell>
+        <TableCell>${manualContribution.toFixed(2)}</TableCell>
         <TableCell>${(pricePerItem - totalVariableCosts).toFixed(2)}</TableCell>
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
         <TableCell>{marginInput}</TableCell>
-        <TableCell>TODO</TableCell>
+        <TableCell>
+          {manualPrice === 0 ||
+            (manualContribution / manualPrice).toLocaleString(undefined, {
+              style: 'percent',
+            })}
+        </TableCell>
         <TableCell>TODO</TableCell>
       </TableRow>
       {/* Contribution Per Hour Row */}
