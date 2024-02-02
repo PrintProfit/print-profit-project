@@ -11,6 +11,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
+import { produce } from 'immer';
 import { useCallback, useMemo, useState } from 'react';
 
 /**
@@ -62,12 +63,30 @@ export function TotalsTable({ quote, setQuote, table }) {
               <Input
                 value={manualPrice}
                 onChange={(e) => setManualPrice(Number(e.target.value))}
+                onBlur={() => {
+                  setQuote(
+                    produce(
+                      (/** @type {import('./data-types').Quote} */ draft) => {
+                        draft.manualPrice = manualPrice;
+                      },
+                    ),
+                  );
+                }}
               />
             </TableCell>
             <TableCell>
               <Input
                 value={pricePerItem}
                 onChange={(e) => setPricePerItem(Number(e.target.value))}
+                onBlur={() => {
+                  setQuote(
+                    produce(
+                      (/** @type {import('./data-types').Quote} */ draft) => {
+                        draft.pricePerItem = pricePerItem;
+                      },
+                    ),
+                  );
+                }}
               />
             </TableCell>
           </TableRow>
@@ -90,6 +109,15 @@ export function TotalsTable({ quote, setQuote, table }) {
                   onChange={(e) =>
                     setContributionPercent(Number(e.target.value))
                   }
+                  onBlur={() => {
+                    setQuote(
+                      produce(
+                        (/** @type {import('./data-types').Quote} */ draft) => {
+                          draft.contributionPercent = contributionPercent;
+                        },
+                      ),
+                    );
+                  }}
                 />
               ),
             }}
