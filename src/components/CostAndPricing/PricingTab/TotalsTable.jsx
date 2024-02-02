@@ -73,6 +73,12 @@ export function TotalsTable({ quote, table }) {
           <TotalsTableRow table={table} column="creditCardFee" />
           <TotalsTableRow table={table} column="totalVariableCosts" />
           <TotalsTableRow table={table} column="estimated_hours" />
+          {/* Contribution Row */}
+          <TableRow>
+            <TableCell>TODO</TableCell>
+            <TableCell>TODO</TableCell>
+            <TableCell>TODO</TableCell>
+          </TableRow>
           {/* Contribution Margin Row */}
           <TableRow>
             <TableCell>
@@ -81,6 +87,12 @@ export function TotalsTable({ quote, table }) {
                 onChange={(e) => setContributionPercent(Number(e.target.value))}
               />
             </TableCell>
+            <TableCell>TODO</TableCell>
+            <TableCell>TODO</TableCell>
+          </TableRow>
+          {/* Contribution Per Hour Row */}
+          <TableRow>
+            <TableCell>TODO</TableCell>
             <TableCell>TODO</TableCell>
             <TableCell>TODO</TableCell>
           </TableRow>
