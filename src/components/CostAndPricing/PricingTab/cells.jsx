@@ -23,12 +23,13 @@ import { useEffect, useState } from 'react';
  * @param {import('./prop-types').DynamicCostCellProps<T>} props
  * @returns {JSX.Element}
  */
-export function DynamicCostCell({ getValue, costIndex, table, row }) {
+export function DynamicCostCell({ getValue, table, row, column }) {
   /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
   const productIndex = row.index;
+  const costIndex = column.columnDef.meta?.costIndex;
 
   /**
    * onBlur is called when the input loses focus.
@@ -53,6 +54,7 @@ export function DynamicCostCell({ getValue, costIndex, table, row }) {
     <Input
       size="small"
       startAdornment={<InputAdornment position="start">$</InputAdornment>}
+      inputMode="decimal"
       value={value}
       // @ts-ignore
       onChange={(e) => setValue(e.target.value)}

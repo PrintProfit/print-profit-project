@@ -48,14 +48,7 @@ export function PricingTable({ quote, setQuote }) {
     id: `dynamic-cost-${cost.name}`,
     accessorFn: (row) => row.costs[index].value,
     header: cost.name,
-    cell: ({ getValue, row, table }) => (
-      <DynamicCostCell
-        getValue={getValue}
-        costIndex={index}
-        table={table}
-        row={row}
-      />
-    ),
+    cell: DynamicCostCell,
     aggregationFn: 'sum',
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
@@ -65,6 +58,9 @@ export function PricingTable({ quote, setQuote }) {
         style: 'currency',
         currency: 'USD',
       });
+    },
+    meta: {
+      costIndex: index,
     },
   }));
 

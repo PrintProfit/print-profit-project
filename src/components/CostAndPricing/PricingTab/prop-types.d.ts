@@ -5,12 +5,12 @@ import type { Product, Quote } from './data-types';
 export interface DynamicCostCellProps<T> {
   /** the getValue function from tanstack tables */
   readonly getValue: Getter<T>;
-  /** the index of the cost in the product. */
-  readonly costIndex: number;
   /** the table the cell is in */
   readonly table: Table<Product>;
   /** the row the cell is in */
   readonly row: Row<Product>;
+  /** the column the cell is in */
+  readonly column: Column<Product>;
 }
 
 export interface ConsistentNumericCellProps<T> {
