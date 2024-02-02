@@ -243,6 +243,14 @@ export function AddProductCell({ table }) {
     setProductName('');
   };
 
+  /**
+   * @param {import('react').FormEvent<HTMLFormElement>} e
+   */
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    closeDialog();
+  };
+
   return (
     <>
       <Tooltip title="Add Product" arrow>
@@ -254,19 +262,26 @@ export function AddProductCell({ table }) {
           <Add fontSize="small" />
         </IconButton>
       </Tooltip>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        PaperProps={{
+          component: 'form',
+          onSubmit: handleSubmit,
+        }}
+      >
         <DialogTitle>Product Name</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please specify the name of the new cost.
+            Please specify the name of the new product.
           </DialogContentText>
           <TextField
             autoFocus
             required
             margin="dense"
-            id="costName"
-            name="costName"
-            label="Cost Name"
+            id="productName"
+            name="productName"
+            label="Product Name"
             fullWidth
             value={productName}
             onChange={(e) => setProductName(e.target.value)}
@@ -274,7 +289,7 @@ export function AddProductCell({ table }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={closeDialog}>Cancel</Button>
-          <Button type="submit">Add Cost</Button>
+          <Button type="submit">Add Product</Button>
         </DialogActions>
       </Dialog>
     </>
