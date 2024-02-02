@@ -246,7 +246,7 @@ router.get('/profile/page', (req, res) => {
   pool
     .query(query, sqlValues)
     .then((result) => {
-      res.send(result.rows);
+      res.send(result.rows[0]);
     })
     .catch((err) => {
       console.log('ERROR: Get all users for profile page', err);
