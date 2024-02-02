@@ -236,6 +236,12 @@ export function AddCostHeader({ table }) {
  */
 export function AddProductCell({ table }) {
   const [open, setOpen] = useState(false);
+  const [productName, setProductName] = useState('');
+
+  const closeDialog = () => {
+    setOpen(false);
+    setProductName('');
+  };
 
   return (
     <>
@@ -250,6 +256,26 @@ export function AddProductCell({ table }) {
       </Tooltip>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Product Name</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please specify the name of the new cost.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="costName"
+            name="costName"
+            label="Cost Name"
+            fullWidth
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button type="submit">Add Cost</Button>
+        </DialogActions>
       </Dialog>
     </>
   );
