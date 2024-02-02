@@ -6,8 +6,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import React, { Fragment, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 function ArchivedAdminPage({ archivedUser }) {
   const dispatch = useDispatch();
@@ -58,7 +58,7 @@ function ArchivedAdminPage({ archivedUser }) {
 
   return (
     <TableRow>
-      <TableCell component="th" scope="row">
+      <TableCell variant="head" scope="row">
         {archivedUser.user_name}
       </TableCell>
       <TableCell align="center">{archivedUser.email}</TableCell>
