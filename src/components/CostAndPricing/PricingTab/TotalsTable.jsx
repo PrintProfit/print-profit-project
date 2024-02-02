@@ -114,6 +114,7 @@ function ContributionRows({
   totalVariableCosts,
 }) {
   const manualContribution = manualPrice - totalVariableCosts;
+  const perItemContrib = pricePerItem - totalVariableCosts;
 
   return (
     <>
@@ -132,7 +133,7 @@ function ContributionRows({
           })}
         </TableCell>
         <TableCell>
-          {(pricePerItem - totalVariableCosts).toLocaleString(undefined, {
+          {perItemContrib.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
           })}
@@ -147,7 +148,11 @@ function ContributionRows({
               style: 'percent',
             })}
         </TableCell>
-        <TableCell>TODO</TableCell>
+        <TableCell>
+          {perItemContrib.toLocaleString(undefined, {
+            style: 'percent',
+          })}
+        </TableCell>
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
