@@ -113,7 +113,7 @@ function ContributionRows({
   profitMarginTotalPrice,
   totalVariableCosts,
 }) {
-  const manualContribution = manualPrice - totalVariableCosts;
+  const manualContrib = manualPrice - totalVariableCosts;
   const perItemContrib = pricePerItem - totalVariableCosts;
 
   return (
@@ -127,7 +127,7 @@ function ContributionRows({
           )}
         </TableCell>
         <TableCell>
-          {manualContribution.toLocaleString(undefined, {
+          {manualContrib.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
           })}
@@ -143,10 +143,9 @@ function ContributionRows({
       <TableRow>
         <TableCell>{marginInput}</TableCell>
         <TableCell>
-          {manualPrice === 0 ||
-            (manualContribution / manualPrice).toLocaleString(undefined, {
-              style: 'percent',
-            })}
+          {(manualContrib / manualPrice).toLocaleString(undefined, {
+            style: 'percent',
+          })}
         </TableCell>
         <TableCell>
           {perItemContrib.toLocaleString(undefined, {
