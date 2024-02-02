@@ -89,7 +89,7 @@ function PendingAdminPage({ pendingUser }) {
 
   return (
     <TableRow>
-      <TableCell component="th" scope="row">
+      <TableCell variant="head" scope="row">
         {pendingUser.user_name}
       </TableCell>
       <TableCell align="center">{pendingUser.email}</TableCell>
