@@ -1,3 +1,8 @@
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import { useDispatch, useSelector } from 'react-redux';
 import ArchivedAdminTable from '../ArchivedAdminTable/ArchivedAdminTable';
 
@@ -6,18 +11,18 @@ export default function AdminArchivedUsers() {
 
   return (
     <>
-      <h2>Archived Users || {archivedUsers.length}</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Last Login</th>
-            <th>Status</th>
-            <th>Delete</th>
-          </tr>
-        </thead>
-        <tbody>
+      <h2>Archived Users {archivedUsers.length}</h2>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell align="center">Email</TableCell>
+            <TableCell align="center">Last Login</TableCell>
+            <TableCell align="center">Status</TableCell>
+            <TableCell align="center">Delete</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {archivedUsers.map((archivedUser) => {
             return (
               <ArchivedAdminTable
@@ -26,8 +31,8 @@ export default function AdminArchivedUsers() {
               />
             );
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </>
   );
 }
