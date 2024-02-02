@@ -1,3 +1,6 @@
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -26,46 +29,41 @@ function LoginForm() {
   /**
    * TODO: Will need to handle what happens if a user tries to login but is not approved
    */
-  // const handleUnapprovedUserRegistration = () => {
-
-  // }
 
   return (
-    <form className="formPanel" onSubmit={login}>
-      <h2>Login</h2>
-      {errors.loginMessage && (
-        <h3 className="alert" role="alert">
-          {errors.loginMessage}
-        </h3>
-      )}
-      <div>
-        <label htmlFor="email">
-          Email:
-          <input
+    <Box>
+      <form className="formPanel" onSubmit={login}>
+        <h2>Login</h2>
+        {errors.loginMessage && (
+          <h3 className="alert" role="alert">
+            {errors.loginMessage}
+          </h3>
+        )}
+        <Box sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}>
+          <TextField
+            id="email"
             type="text"
-            name="email"
-            required
+            label="e-mail"
+            variant="outlined"
             value={email}
+            required
             onChange={(event) => setEmail(event.target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
-          <input
+          <TextField
+            id="password"
             type="password"
-            name="password"
-            required
+            label="password"
+            variant="outlined"
             value={password}
+            required
             onChange={(event) => setPassword(event.target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <input className="btn" type="submit" name="submit" value="Log In" />
-      </div>
-    </form>
+        </Box>
+        <Button onClick={login} variant="contained">
+          Login
+        </Button>
+      </form>
+    </Box>
   );
 }
 

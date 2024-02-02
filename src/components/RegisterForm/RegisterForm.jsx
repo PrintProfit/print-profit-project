@@ -35,7 +35,7 @@ function RegisterForm() {
 
   return (
     <form className="formPanel" onSubmit={registerUser}>
-      <h2>Register</h2>
+      <h2>Enter your information to become a member!</h2>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
           {errors.registrationMessage}
@@ -95,45 +95,13 @@ function RegisterForm() {
           onChange={(event) => setConfirmedPassword(event.target.value)}
         />
       </Box>
-      {/*
       <div>
-        <label htmlFor="name">
-          Name:
-          <input
-            type="text"
-            name="name"
-            value={name}
-            required
-            onChange={(event) => setName(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="companyName">
-          Company Name:
-          <input
-            type="text"
-            name="companyName"
-            value={companyName}
-            required
-            onChange={(event) => setCompanyName(event.target.value)}
-          />
-        </label>
-      </div>
-      <div>
-        <label htmlFor="password">
-          Password:
-          <input
-            type="password"
-            name="password"
-            value={password}
-            required
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </label>
-      </div> */}
-      <div>
-        <Button type="submit" name="submit" value="Register">
+        <Button
+          variant="contained"
+          type="submit"
+          name="submit"
+          value="Register"
+        >
           Register
         </Button>
       </div>
