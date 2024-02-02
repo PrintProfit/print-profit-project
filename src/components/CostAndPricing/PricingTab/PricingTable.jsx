@@ -60,7 +60,10 @@ export function PricingTable({ quote, setQuote }) {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
       const total = aggregate(`dynamic-cost-${cost.name}`, [], rows);
-      return `$${total.toFixed(2)}`;
+      return total.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   }));
 

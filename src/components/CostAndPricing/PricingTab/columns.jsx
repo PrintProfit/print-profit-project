@@ -44,7 +44,10 @@ export const consistentColumns = [
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
       const totalSellingPrice = aggregate('total_selling_price', [], rows);
-      return `$${totalSellingPrice.toFixed(2)}`;
+      return totalSellingPrice.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
 ];
@@ -61,7 +64,10 @@ export const calculatedCosts = [
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
       const totalCreditCardFee = aggregate('creditCardFee', [], rows);
-      return `$${totalCreditCardFee.toFixed(2)}`;
+      return totalCreditCardFee.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
   {
@@ -74,7 +80,10 @@ export const calculatedCosts = [
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
       const totalVariableCosts = aggregate('totalVariableCosts', [], rows);
-      return `$${totalVariableCosts.toFixed(2)}`;
+      return totalVariableCosts.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
 ];
@@ -109,7 +118,10 @@ export const contributionColumns = [
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
       const totalContribution = aggregate('contributionDollars', [], rows);
-      return `$${totalContribution.toFixed(2)}`;
+      return totalContribution.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
   {
@@ -135,7 +147,9 @@ export const contributionColumns = [
         rows,
       );
       const percent = totalContribution / totalSellingPrice;
-      return `${(percent * 100).toFixed(2)}%`;
+      return percent.toLocaleString(undefined, {
+        style: 'percent',
+      });
     },
   },
   {
@@ -158,7 +172,10 @@ export const contributionColumns = [
       );
       const totalHours = aggregateEstimatedHours('estimated_hours', [], rows);
       const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
-      return `$${perHour.toFixed(2)}`;
+      return perHour.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
 ];
