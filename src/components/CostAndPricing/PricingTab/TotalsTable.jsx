@@ -79,39 +79,64 @@ export function TotalsTable({ quote, table }) {
           <TotalsTableRow table={table} column="creditCardFee" />
           <TotalsTableRow table={table} column="totalVariableCosts" />
           <TotalsTableRow table={table} column="estimated_hours" />
-          {/* Contribution Row */}
-          <TableRow>
-            {/* FIXME These cells put the dollar sign before negative numbers */}
-            <TableCell>
-              ${(getCMTotalSellingPrice() - getTotalVariableCosts()).toFixed(2)}
-            </TableCell>
-            <TableCell>
-              ${(manualPrice - getTotalVariableCosts()).toFixed(2)}
-            </TableCell>
-            <TableCell>
-              ${(pricePerItem - getTotalVariableCosts()).toFixed(2)}
-            </TableCell>
-          </TableRow>
-          {/* Contribution Margin Row */}
-          <TableRow>
-            <TableCell>
-              <Input
-                value={contributionPercent}
-                onChange={(e) => setContributionPercent(Number(e.target.value))}
-              />
-            </TableCell>
-            <TableCell>TODO</TableCell>
-            <TableCell>TODO</TableCell>
-          </TableRow>
-          {/* Contribution Per Hour Row */}
-          <TableRow>
-            <TableCell>TODO</TableCell>
-            <TableCell>TODO</TableCell>
-            <TableCell>TODO</TableCell>
-          </TableRow>
+          {/* This is  */}
+          <ContributionRows
+            profitMarginTotalPrice={getCMTotalSellingPrice()}
+            totalVariableCosts={getTotalVariableCosts()}
+            state={{ manualPrice, pricePerItem }}
+            slots={{
+              marginInput: (
+                <Input
+                  value={contributionPercent}
+                  onChange={(e) =>
+                    setContributionPercent(Number(e.target.value))
+                  }
+                />
+              ),
+            }}
+          />
         </TableBody>
       </Table>
     </TableContainer>
+  );
+}
+
+/**
+ * All the contribution-related components.
+ * Their calculations are very closely related, so this component calculates
+ * them all.
+ * @param {import('./prop-types').ContributionRowsProps} props
+ */
+function ContributionRows({
+  slots: { marginInput },
+  state: { manualPrice, pricePerItem },
+  profitMarginTotalPrice,
+  totalVariableCosts,
+}) {
+  // FIXME - All negative numbers show up after the dollar sign.
+  return (
+    <>
+      {/* Contribution Row */}
+      <TableRow>
+        <TableCell>
+          ${(profitMarginTotalPrice - totalVariableCosts).toFixed(2)}
+        </TableCell>
+        <TableCell>${(manualPrice - totalVariableCosts).toFixed(2)}</TableCell>
+        <TableCell>${(pricePerItem - totalVariableCosts).toFixed(2)}</TableCell>
+      </TableRow>
+      {/* Contribution Margin Row */}
+      <TableRow>
+        <TableCell>{marginInput}</TableCell>
+        <TableCell>TODO</TableCell>
+        <TableCell>TODO</TableCell>
+      </TableRow>
+      {/* Contribution Per Hour Row */}
+      <TableRow>
+        <TableCell>TODO</TableCell>
+        <TableCell>TODO</TableCell>
+        <TableCell>TODO</TableCell>
+      </TableRow>
+    </>
   );
 }
 
