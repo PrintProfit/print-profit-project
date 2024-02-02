@@ -113,7 +113,6 @@ function ContributionRows({
   profitMarginTotalPrice,
   totalVariableCosts,
 }) {
-  // FIXME - All negative numbers show up after the dollar sign.
   const manualContribution = manualPrice - totalVariableCosts;
 
   return (
