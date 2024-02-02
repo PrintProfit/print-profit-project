@@ -10,7 +10,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { flexRender } from '@tanstack/react-table';
+import { useMemo, useState } from 'react';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -21,10 +22,6 @@ export function TotalsTable({ quote, table }) {
   const [pricePerItem, setPricePerItem] = useState(0);
 
   // the total selling price's aggregation function
-  const getTotalSellingPrice = useCallback(
-    table.getColumn('total_selling_price').getAggregationFn(),
-    [],
-  );
   const dynamicCostIds = quote.products[0].costs.map(
     (cost) => `dynamic-cost-${cost.name}`,
   );
@@ -43,15 +40,7 @@ export function TotalsTable({ quote, table }) {
           {/* Total Selling Price Row */}
           <TableRow>
             <TableCell>
-              $
-              {(
-                getTotalSellingPrice(
-                  'total_selling_price',
-                  [],
-                  table.getCoreRowModel().rows,
-                ) /
-                (1 - contributionPercent / 100)
-              ).toFixed(2)}
+              {flexRender(...getFooter(table, 'total_selling_price'))}
             </TableCell>
             <TableCell>
               <Input
@@ -94,19 +83,33 @@ export function TotalsTable({ quote, table }) {
  * @param {import('./prop-types').TotalsTableRowProps} props
  */
 function TotalsTableRow({ table, column }) {
-  // It might be better to use the footer here
-  const aggregate = useMemo(
-    () => table.getColumn(column).getAggregationFn(),
-    [column, table.getColumn],
+  // Attempt to cache the footer & context
+  const [footer, context] = useMemo(
+    () => getFooter(table, column),
+    [table, column],
   );
-  const { rows } = table.getCoreRowModel();
-  const total = aggregate(column, [], rows);
 
   return (
     <TableRow>
-      <TableCell>{total}</TableCell>
-      <TableCell>{total}</TableCell>
-      <TableCell>{total}</TableCell>
+      <TableCell>{flexRender(footer, context)}</TableCell>
+      <TableCell>{flexRender(footer, context)}</TableCell>
+      <TableCell>{flexRender(footer, context)}</TableCell>
     </TableRow>
   );
+}
+
+/**
+ * Gets the footer & context for a column, so it can be passed to flexRender.
+ * @template TData
+ * @param {import('@tanstack/react-table').Table<TData>} table
+ * @param {string} columnId
+ * @returns {Parameters<typeof flexRender>}
+ */
+function getFooter(table, columnId) {
+  const column = table.getColumn(columnId);
+  const footer = table
+    .getFooterGroups()
+    .flatMap((g) => g.headers)
+    .find((h) => h.id === columnId);
+  return [column.columnDef.footer, footer.getContext()];
 }
