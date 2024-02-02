@@ -16,7 +16,7 @@ import { useCallback, useMemo, useState } from 'react';
 /**
  * @param {import("./prop-types").TotalsTableProps} props
  */
-export function TotalsTable({ quote, table }) {
+export function TotalsTable({ quote, setQuote, table }) {
   const [contributionPercent, setContributionPercent] = useState(
     quote.contributionPercent,
   );

@@ -137,7 +137,7 @@ export function PricingTable({ quote, setQuote }) {
           ))}
         </Table>
       </TableContainer>
-      <TotalsTable quote={quote} table={table} />
+      <TotalsTable quote={quote} setQuote={setQuote} table={table} />
     </Stack>
   );
 }

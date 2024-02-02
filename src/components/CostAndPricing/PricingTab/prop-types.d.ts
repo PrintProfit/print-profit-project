@@ -32,6 +32,7 @@ export interface PricingTableProps {
 export interface TotalsTableProps {
   readonly quote: Quote;
   readonly table: Table<Product>;
+  readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }
 
 export interface TotalsTableRowProps {
