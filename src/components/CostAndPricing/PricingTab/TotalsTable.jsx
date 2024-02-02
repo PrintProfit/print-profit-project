@@ -2,6 +2,7 @@
 
 import {
   Input,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
@@ -61,6 +62,9 @@ export function TotalsTable({ quote, setQuote, table }) {
             <TableCell>${getCMTotalSellingPrice().toFixed(2)}</TableCell>
             <TableCell>
               <Input
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
                 value={manualPrice}
                 onChange={(e) => setManualPrice(Number(e.target.value))}
                 onBlur={() => {
@@ -76,6 +80,9 @@ export function TotalsTable({ quote, setQuote, table }) {
             </TableCell>
             <TableCell>
               <Input
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
                 value={pricePerItem}
                 onChange={(e) => setPricePerItem(Number(e.target.value))}
                 onBlur={() => {
@@ -105,6 +112,9 @@ export function TotalsTable({ quote, setQuote, table }) {
             slots={{
               marginInput: (
                 <Input
+                  endAdornment={
+                    <InputAdornment position="end">%</InputAdornment>
+                  }
                   value={contributionPercent}
                   onChange={(e) =>
                     setContributionPercent(Number(e.target.value))
