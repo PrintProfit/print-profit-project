@@ -26,6 +26,18 @@ export function TotalsTable({ quote, table }) {
     table.getColumn('totalVariableCosts').getAggregationFn(),
     [],
   );
+  const getTotalVariableCosts = useCallback(
+    /**
+     * @returns {number}
+     */
+    () =>
+      aggregateTotalVariableCosts(
+        'totalVariableCosts',
+        [],
+        table.getCoreRowModel().rows,
+      ),
+    [aggregateTotalVariableCosts, table],
+  );
   const dynamicCostIds = quote.products[0].costs.map(
     (cost) => `dynamic-cost-${cost.name}`,
   );
@@ -46,11 +58,7 @@ export function TotalsTable({ quote, table }) {
             <TableCell>
               $
               {(
-                aggregateTotalVariableCosts(
-                  'totalVariableCosts',
-                  [],
-                  table.getCoreRowModel().rows,
-                ) /
+                getTotalVariableCosts() /
                 (1 - contributionPercent / 100)
               ).toFixed(2)}
             </TableCell>
