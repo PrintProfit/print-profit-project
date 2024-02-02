@@ -1,12 +1,45 @@
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { Box } from '@mui/material';
+import Button from '@mui/material/Button';
+import { useHistory } from 'react-router-dom';
 export default function WaitingPage() {
-  /**
-   * The user will be forwarded to this page after they have registered, and before they have been approved by an admin.
-   */
-  // TODO: Add a message to the user that they will be approved by an admin before they can log in.
-  // TODO: There will probably need to be a back 2 home button
+  const history = useHistory();
+
   return (
     <div>
-      <h1>WaitingPage</h1>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'start',
+          alignItems: 'center',
+          height: '100vh',
+          border: 2,
+          borderColor: 'green',
+        }}
+      >
+        <h1>Thank you for Registering!</h1>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'primary.light',
+          }}
+        >
+          <p>Your Account should be approved in 24-48 hours.</p>
+          <p>
+            If you have any questions or pressing concerns, please contact here
+            (Link)
+          </p>
+          <p>Thank you for your Patience.</p>
+        </Box>
+        <Button onClick={() => history.push('/home')}>
+          <ArrowBackIosIcon />
+          <p>Home</p>
+        </Button>
+      </Box>
     </div>
   );
 }
