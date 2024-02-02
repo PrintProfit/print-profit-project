@@ -17,9 +17,11 @@ import { useCallback, useMemo, useState } from 'react';
  * @param {import("./prop-types").TotalsTableProps} props
  */
 export function TotalsTable({ quote, table }) {
-  const [contributionPercent, setContributionPercent] = useState(0);
-  const [manualPrice, setManualPrice] = useState(0);
-  const [pricePerItem, setPricePerItem] = useState(0);
+  const [contributionPercent, setContributionPercent] = useState(
+    quote.contributionPercent,
+  );
+  const [manualPrice, setManualPrice] = useState(quote.manualPrice);
+  const [pricePerItem, setPricePerItem] = useState(quote.pricePerItem);
 
   const aggregate = useCallback(
     /**
