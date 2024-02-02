@@ -121,10 +121,23 @@ function ContributionRows({
       {/* Contribution Row */}
       <TableRow>
         <TableCell>
-          ${(profitMarginTotalPrice - totalVariableCosts).toFixed(2)}
+          {(profitMarginTotalPrice - totalVariableCosts).toLocaleString(
+            undefined,
+            { style: 'currency', currency: 'USD' },
+          )}
         </TableCell>
-        <TableCell>${manualContribution.toFixed(2)}</TableCell>
-        <TableCell>${(pricePerItem - totalVariableCosts).toFixed(2)}</TableCell>
+        <TableCell>
+          {manualContribution.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+          })}
+        </TableCell>
+        <TableCell>
+          {(pricePerItem - totalVariableCosts).toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+          })}
+        </TableCell>
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
