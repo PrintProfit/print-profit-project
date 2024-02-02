@@ -235,5 +235,22 @@ export function AddCostHeader({ table }) {
  * @param {import('./prop-types').AddProductCellProps} props
  */
 export function AddProductCell({ table }) {
-  return <>hi</>;
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Tooltip title="Add Product" arrow>
+        <IconButton
+          onClick={() => setOpen(true)}
+          aria-label="Add Product"
+          size="small"
+        >
+          <Add fontSize="small" />
+        </IconButton>
+      </Tooltip>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Product Name</DialogTitle>
+      </Dialog>
+    </>
+  );
 }
