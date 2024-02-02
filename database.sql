@@ -57,6 +57,8 @@ CREATE TABLE "quote" (
 	"id" SERIAL PRIMARY KEY,
 	"user_id" INT REFERENCES "user" ON DELETE CASCADE NOT NULL,
 	"name" VARCHAR(100),
+	"manual_total_selling_price" FLOAT(8) DEFAULT NULL,
+	"manual_contribution_percent" INT DEFAULT NULL,
 	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

@@ -11,20 +11,74 @@ const router = express.Router();
 // GET all quotes
 router.get('/:id', (req, res) => {
   const query = `
-  SELECT q.name as "quote_name", q.user_id, q.inserted_at as "quote_inserted_at", q.updated_at as "quote_updated_at", q.updated_by as "quote.updated_by", p.name as "product_name", p.quantity as "product_quantity", p.selling_price_per_unit as "product_selling_price_per_unit", p.total_selling_price, p.estimated_hours, c.name as "cost_input_name", c.value
-  FROM "quote" q
-  INNER JOIN "user" on q.user_id = "user".id
-  INNER JOIN "product" AS p ON q.id = p.quote_id
-  INNER JOIN "cost" AS c ON p.id = c.product_id
-  WHERE "user".company_id = $1
-  ;`;
+  SELECT
+	json_build_object(
+		'quotes', json_agg(
+			json_build_object(
+				'quote_id',
+					q.id,
+				'quote_name',
+					q.name,
+				'user_id',
+					q.user_id,
+				'manual_total_selling_price',
+					q.manual_total_selling_price,
+				'manual_contribution_percent',
+					q.manual_contribution_percent,
+				'products',
+					products
+				)
+		)
+	) quotes
+	FROM quote q
+	left join (
+		select
+			quote_id,
+			json_agg(
+				json_build_object(
+				'product_id',
+					p.id,
+				'product_name',
+					p.name,
+				'product_quantity',
+					p.quantity,
+				'selling_price_per_unit',
+					p.selling_price_per_unit,
+				'total_selling_price',
+					p.total_selling_price,
+				'estimated_hours',
+					p.estimated_hours,
+				'costs',
+					costs
+				)
+			) products
+	FROM
+		product p
+		left join (
+		select
+			product_id,
+			json_agg(
+			json_build_object(
+				'name',
+					c.name,
+				'value',
+					c.value
+				)
+			) costs
+		 from cost c
+		group by 1
+	) c on p.id = c.product_id
+	group by quote_id
+) p on q.id = p.quote_id
+  	INNER JOIN "user" on q.user_id = "user".id
+  		WHERE "user".company_id = $1`;
   console.log('req.params.id', req.params.id);
   const values = [req.params.id];
   pool
     .query(query, values)
     .then((dbRes) => {
-      const quotesArray = dbRes.rows;
-      res.send(quotesArray);
+      console.log('dbRes.rows: ', dbRes.rows);
+      res.send(dbRes.rows);
     })
     .catch((dbErr) => {
       res.sendStatus(500);
@@ -36,6 +90,8 @@ router.get('/:id', (req, res) => {
 //  {
 //    user_id: 2,
 //    name: 'Prime Swag',
+//    manual_total_selling_price: 2000,
+//    manual_contribution_percent: 40,
 //    quote: [
 //      // 👇 FIRST ORDER (PRODUCT) IN QUOTE
 //              {
@@ -107,12 +163,17 @@ router.post('/', async (req, res) => {
     // QUOTE POST
     const quoteQuery = `
       INSERT INTO "quote"
-        ("user_id", "name")
+        ("user_id", "name", "manual_total_selling_price", "manual_contribution_percent")
         VALUES
-        ($1, $2)
+        ($1, $2, $3, $4)
         RETURNING "id";
      `;
-    const quoteValues = [req.body.user_id, req.body.name];
+    const quoteValues = [
+      req.body.user_id,
+      req.body.name,
+      req.body.manual_total_selling_price,
+      req.body.manual_contribution_percent,
+    ];
     // query returns id from the inserted quote
     const returnedQuoteIdRows = await connection.query(quoteQuery, quoteValues);
     // END QUOTE POST
@@ -191,14 +252,16 @@ router.put('/', async (req, res) => {
     // QUOTE PUT
     const editQuoteQuery = `
     UPDATE "quote"
-      SET "name" = $1, "updated_by" = $3
-      WHERE "id" = $2 and "user_id" = $3;
+      SET "name" = $1, "updated_by" = $2, "manual_total_selling_price" = $3, "manual_contribution_percent" = $4
+      WHERE "id" = $5 and "user_id" = $2;
     `;
     // 👆 checks to make sure that quote_id and user_id both match: users may only edit their own quotes (for now)
     const editQuoteValues = [
       req.body.name, // $1
-      req.body.quote_id, // $2
-      req.body.user_id, // $3
+      req.body.user_id, // $2
+      req.body.manual_total_selling_price, // $3
+      req.body.manual_contribution_percent, // $4
+      req.body.quote_id, // $5
     ];
     // first query makes updates to quote table
     await connection.query(editQuoteQuery, editQuoteValues);
@@ -328,4 +391,97 @@ router.put('/remove', async (req, res) => {
     res.sendStatus(500);
   }
 });
+
+// quoteArray = [
+//   // first quote
+//   {
+//   id: 1,
+//   name: 'Prime Swag',
+//   created_by: 1,
+//   manual_total_selling_price: 2000,
+//   manual_contribution_percent: 4,
+//   products: [
+//     // first product
+//     {
+//       id: 1,
+//       name: 'T-shirts',
+//       quantity: 100,
+//       selling_price_per_unit: 15,
+//       total_selling_price: 1500,
+//       estimated_hours: 6,
+//       costs: [
+//         // first cost input
+//         {
+//           id: 1,
+//           name: 'Garment',
+//           value: 400,
+//         },
+//         // second cost input
+//         {
+//           id: 2,
+//           name: 'Ink',
+//           value: 200,
+//         },
+//       ],
+//     },
+//     // second product
+//     {
+//       id: 2,
+//       name: 'Hoodies',
+//       quantity: 50,
+//       selling_price_per_unit: 30,
+//       total_selling_price: 1500,
+//       estimated_hours: 4,
+//       costs: [
+//         // first cost input
+//         {
+//           id: 3,
+//           name: 'Garment',
+//           value: 750,
+//         },
+//         // second cost input
+//         {
+//           id: 4,
+//           name: 'Ink',
+//           value: 100,
+//         },
+//       ],
+//     },
+//   ],
+// }];
+
+function formatQuotesObject(quoteRows) {
+  // need to account for MULTIPLE quotes==> array
+  const quote = {};
+
+  quote.id = quoteRows[0].quote_id;
+  quote.name = quoteRows[0].name;
+  quote.created_by = quoteRows[0].user_id;
+  quote.products = [];
+
+  for (const product of quote.products) {
+    quote.products.push({
+      id: product.product_id,
+      name: product.product_name,
+      quantity: product.product_quantity,
+      selling_price_per_unit: product.product_selling_price_per_unit,
+      total_selling_price: product.total_selling_price,
+      estimated_hours: product.estimated_hours,
+      costs: [],
+    });
+    for (const cost of product) {
+      costs.push({
+        id: cost.cost_id,
+        name: cost.cost_input_name,
+        value: cost.value,
+      });
+    }
+  }
+  return quote;
+}
+
+function formatQuotesIdArray(rows) {
+  const quoteArray = [];
+}
+
 module.exports = router;

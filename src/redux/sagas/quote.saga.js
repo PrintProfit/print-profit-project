@@ -11,9 +11,13 @@ function* getQuoteHistory(action) {
     });
     yield put({
       type: 'SET_QUOTE_HISTORY',
-      payload: response.data,
+      payload: response.data[0].quotes,
     });
-    console.log('response.data from getQuoteHistory sagaaa: ', response.data);
+    console.log(
+      'response.data[0].quotes from getQuoteHistory sagaaa: ',
+      response.data[0].quotes,
+    );
+    console.log('action.payload in Set Quote History call: ', action.payload);
   } catch (error) {
     console.log('Quote get request failed: ', error);
   }
