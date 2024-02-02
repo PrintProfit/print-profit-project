@@ -11,7 +11,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -22,6 +22,10 @@ export function TotalsTable({ quote, table }) {
   const [pricePerItem, setPricePerItem] = useState(0);
 
   // the total selling price's aggregation function
+  const getTotalSellingPrice = useCallback(
+    table.getColumn('total_selling_price').getAggregationFn(),
+    [],
+  );
   const dynamicCostIds = quote.products[0].costs.map(
     (cost) => `dynamic-cost-${cost.name}`,
   );
@@ -40,7 +44,15 @@ export function TotalsTable({ quote, table }) {
           {/* Total Selling Price Row */}
           <TableRow>
             <TableCell>
-              {flexRender(...getFooter(table, 'total_selling_price'))}
+              $
+              {(
+                getTotalSellingPrice(
+                  'total_selling_price',
+                  [],
+                  table.getCoreRowModel().rows,
+                ) /
+                (1 - contributionPercent / 100)
+              ).toFixed(2)}
             </TableCell>
             <TableCell>
               <Input
