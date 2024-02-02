@@ -21,9 +21,9 @@ export function TotalsTable({ quote, table }) {
   const [manualPrice, setManualPrice] = useState(0);
   const [pricePerItem, setPricePerItem] = useState(0);
 
-  // the total selling price's aggregation function
-  const getTotalSellingPrice = useCallback(
-    table.getColumn('total_selling_price').getAggregationFn(),
+  // the total variable costs aggregation function
+  const aggregateTotalVariableCosts = useCallback(
+    table.getColumn('totalVariableCosts').getAggregationFn(),
     [],
   );
   const dynamicCostIds = quote.products[0].costs.map(
@@ -41,13 +41,13 @@ export function TotalsTable({ quote, table }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* Total Selling Price Row */}
+          {/* Total Variable Costs Row */}
           <TableRow>
             <TableCell>
               $
               {(
-                getTotalSellingPrice(
-                  'total_selling_price',
+                aggregateTotalVariableCosts(
+                  'totalVariableCosts',
                   [],
                   table.getCoreRowModel().rows,
                 ) /
