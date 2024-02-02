@@ -11,7 +11,7 @@ const router = express.Router();
 // GET all quotes
 router.get('/:id', (req, res) => {
   const query = `
-  SELECT q.id as "quote_id", q.name as "quote_name", q.user_id, q.inserted_at as "quote_inserted_at", q.updated_at as "quote_updated_at", q.updated_by as "quote.updated_by", p.id as "product_id", p.name as "product_name", p.quantity as "product_quantity", p.selling_price_per_unit as "product_selling_price_per_unit", p.total_selling_price, p.estimated_hours, c.id as "cost_id", c.name as "cost_input_name", c.value
+  SELECT q.id as "quote_id", q.name as "quote_name", q.user_id, q.manual_total_selling_price, q.manual_contribution_percent, q.inserted_at as "quote_inserted_at", q.updated_at as "quote_updated_at", q.updated_by as "quote.updated_by", p.id as "product_id", p.name as "product_name", p.quantity as "product_quantity", p.selling_price_per_unit as "product_selling_price_per_unit", p.total_selling_price, p.estimated_hours, c.id as "cost_id", c.name as "cost_input_name", c.value
   FROM "quote" q
   INNER JOIN "user" on q.user_id = "user".id
   INNER JOIN "product" AS p ON q.id = p.quote_id
