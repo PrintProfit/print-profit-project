@@ -11,6 +11,7 @@ import {
   IconButton,
   Input,
   TextField,
+  Tooltip,
 } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
@@ -187,9 +188,15 @@ export function AddCostHeader({ table }) {
 
   return (
     <>
-      <IconButton onClick={() => setOpen(true)} aria-label="add" size="small">
-        <Add fontSize="small" />
-      </IconButton>
+      <Tooltip title="Add Cost" arrow>
+        <IconButton
+          onClick={() => setOpen(true)}
+          aria-label="Add Cost"
+          size="small"
+        >
+          <Add fontSize="small" />
+        </IconButton>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={closeDialog}
