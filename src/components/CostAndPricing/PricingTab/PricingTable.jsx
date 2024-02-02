@@ -16,6 +16,7 @@ import {
 import { TotalsTable } from './TotalsTable';
 import { DynamicCostCell } from './cells';
 import {
+  addDynamicCostColumn,
   calculatedCosts,
   consistentColumns,
   contributionColumns,
@@ -74,6 +75,7 @@ export function PricingTable({ quote, setQuote }) {
   const columns = [
     ...consistentColumns,
     ...dynamicColumns,
+    addDynamicCostColumn,
     ...calculatedCosts,
     estimatedHoursColumn,
     ...contributionColumns,

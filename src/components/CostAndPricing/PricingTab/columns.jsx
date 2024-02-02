@@ -1,5 +1,6 @@
 // @ts-check
 
+import { Button } from '@mui/material';
 import * as calc from './calculations';
 import {
   ConsistentNumericCell,
@@ -51,6 +52,24 @@ export const consistentColumns = [
     },
   },
 ];
+
+/**
+ * @type {import("./data-types").ProductColumnDef}
+ */
+export const addDynamicCostColumn = {
+  id: 'addDynamicCost',
+  header: ({ table }) => {
+    return (
+      <Button
+        onClick={() => {
+          console.log('Add dynamic costs clicked!');
+        }}
+      >
+        Add
+      </Button>
+    );
+  },
+};
 
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const calculatedCosts = [
