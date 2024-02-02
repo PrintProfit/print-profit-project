@@ -23,9 +23,11 @@ export const consistentColumns = [
     accessorKey: 'quantity',
     header: 'Quantity',
     cell: ConsistentNumericCell,
-    footer: ({ table }) => {
+    aggregationFn: 'sum',
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      return rows.reduce((sum, row) => sum + row.getValue('quantity'), 0);
+      return aggregate('quantity', [], rows);
     },
   },
   {
@@ -37,13 +39,15 @@ export const consistentColumns = [
     accessorKey: 'total_selling_price',
     header: 'Total Selling Price',
     cell: ConsistentNumericCell,
-    footer: ({ table }) => {
+    aggregationFn: 'sum',
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalSellingPrice = rows.reduce(
-        (sum, row) => sum + row.getValue('total_selling_price'),
-        0,
-      );
-      return `$${totalSellingPrice.toFixed(2)}`;
+      const totalSellingPrice = aggregate('total_selling_price', [], rows);
+      return totalSellingPrice.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
 ];
@@ -55,13 +59,15 @@ export const calculatedCosts = [
     accessorFn: calc.creditCardFee,
     header: 'Credit Card Fee',
     cell: DollarCell,
-    footer: ({ table }) => {
+    aggregationFn: 'sum',
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalCreditCardFee = rows.reduce(
-        (sum, row) => sum + row.getValue('creditCardFee'),
-        0,
-      );
-      return `$${totalCreditCardFee.toFixed(2)}`;
+      const totalCreditCardFee = aggregate('creditCardFee', [], rows);
+      return totalCreditCardFee.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
   {
@@ -69,13 +75,15 @@ export const calculatedCosts = [
     accessorFn: calc.totalVariableCosts,
     header: 'Total Variable Costs',
     cell: DollarCell,
-    footer: ({ table }) => {
+    aggregationFn: 'sum',
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalVariableCosts = rows.reduce(
-        (sum, row) => sum + row.getValue('totalVariableCosts'),
-        0,
-      );
-      return `$${totalVariableCosts.toFixed(2)}`;
+      const totalVariableCosts = aggregate('totalVariableCosts', [], rows);
+      return totalVariableCosts.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
 ];
@@ -89,9 +97,11 @@ export const estimatedHoursColumn = {
   accessorKey: 'estimated_hours',
   header: 'Estimated Hours',
   cell: ConsistentNumericCell,
-  footer: ({ table }) => {
+  aggregationFn: 'sum',
+  footer: ({ table, column }) => {
+    const aggregate = column.getAggregationFn();
     const { rows } = table.getCoreRowModel();
-    return rows.reduce((sum, row) => sum + row.getValue('estimated_hours'), 0);
+    return aggregate('estimated_hours', [], rows);
   },
 };
 
@@ -103,13 +113,15 @@ export const contributionColumns = [
     header: 'Contribution $',
     cell: DollarCell,
     // This happens to work, but it's not how the spreadsheet calculates it.
-    footer: ({ table }) => {
+    aggregationFn: 'sum',
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalContribution = rows.reduce(
-        (sum, row) => sum + row.getValue('contributionDollars'),
-        0,
-      );
-      return `$${totalContribution.toFixed(2)}`;
+      const totalContribution = aggregate('contributionDollars', [], rows);
+      return totalContribution.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
   {
@@ -118,16 +130,26 @@ export const contributionColumns = [
     cell: PercentCell,
     footer: ({ table }) => {
       const { rows } = table.getCoreRowModel();
-      const totalContribution = rows.reduce(
-        (sum, row) => sum + row.getValue('contributionDollars'),
-        0,
+      const aggregateContributionDollars = table
+        .getColumn('contributionDollars')
+        .getAggregationFn();
+      const aggregateTotalSellingPrice = table
+        .getColumn('total_selling_price')
+        .getAggregationFn();
+      const totalContribution = aggregateContributionDollars(
+        'contributionDollars',
+        [],
+        rows,
       );
-      const totalSellingPrice = rows.reduce(
-        (sum, row) => sum + row.getValue('total_selling_price'),
-        0,
+      const totalSellingPrice = aggregateTotalSellingPrice(
+        'total_selling_price',
+        [],
+        rows,
       );
       const percent = totalContribution / totalSellingPrice;
-      return `${(percent * 100).toFixed(2)}%`;
+      return percent.toLocaleString(undefined, {
+        style: 'percent',
+      });
     },
   },
   {
@@ -136,16 +158,24 @@ export const contributionColumns = [
     cell: DollarCell,
     footer: ({ table }) => {
       const { rows } = table.getCoreRowModel();
-      const totalContribution = rows.reduce(
-        (sum, row) => sum + row.getValue('contributionDollars'),
-        0,
+      const aggregateContribution = table
+        .getColumn('contributionDollars')
+        .getAggregationFn();
+      const aggregateEstimatedHours = table
+        .getColumn('estimated_hours')
+        .getAggregationFn();
+
+      const totalContribution = aggregateContribution(
+        'contributionDollars',
+        [],
+        rows,
       );
-      const totalHours = rows.reduce(
-        (sum, row) => sum + row.getValue('estimated_hours'),
-        0,
-      );
+      const totalHours = aggregateEstimatedHours('estimated_hours', [], rows);
       const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
-      return `$${perHour.toFixed(2)}`;
+      return perHour.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   },
 ];

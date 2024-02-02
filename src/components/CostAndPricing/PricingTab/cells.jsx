@@ -123,7 +123,10 @@ export function ProductNameCell({ getValue, table, row }) {
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
-  return `$${value.toFixed(2)}`;
+  return value.toLocaleString(undefined, {
+    style: 'currency',
+    currency: 'USD',
+  });
 }
 
 /**
@@ -131,6 +134,8 @@ export function DollarCell({ getValue }) {
  */
 export function PercentCell({ getValue }) {
   const value = getValue();
-  const percent = Number(value) * 100;
-  return `${percent.toFixed(2)}%`;
+  const percent = Number(value);
+  return percent.toLocaleString(undefined, {
+    style: 'percent',
+  });
 }

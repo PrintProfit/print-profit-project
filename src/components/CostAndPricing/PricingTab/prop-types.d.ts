@@ -1,5 +1,5 @@
 import type { Column, Getter, Row, Table } from '@tanstack/react-table';
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import type { Product, Quote } from './data-types';
 
 export interface DynamicCostCellProps<T> {
@@ -27,6 +27,29 @@ export interface ConsistentNumericCellProps<T> {
 export interface PricingTableProps {
   readonly quote: Quote;
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
+}
+
+export interface TotalsTableProps {
+  readonly quote: Quote;
+  readonly table: Table<Product>;
+}
+
+export interface TotalsTableRowProps {
+  readonly table: Table<Product>;
+  readonly column: string;
+}
+
+export interface ContributionRowsProps {
+  readonly slots: {
+    readonly marginInput: ReactNode;
+  };
+  readonly state: {
+    readonly manualPrice: number;
+    readonly pricePerItem: number;
+  };
+  readonly profitMarginTotalPrice: number;
+  readonly totalVariableCosts: number;
+  readonly estimatedTotalHours: number;
 }
 
 export interface ProductNameCellProps {

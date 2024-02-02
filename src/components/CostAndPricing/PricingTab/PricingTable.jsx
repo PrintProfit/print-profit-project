@@ -2,6 +2,7 @@
 
 import {
   Paper,
+  Stack,
   Table,
   TableCell,
   TableContainer,
@@ -12,6 +13,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { TotalsTable } from './TotalsTable';
 import { DynamicCostCell } from './cells';
 import {
   calculatedCosts,
@@ -53,13 +55,15 @@ export function PricingTable({ quote, setQuote }) {
         row={row}
       />
     ),
-    footer: ({ table }) => {
+    aggregationFn: 'sum',
+    footer: ({ table, column }) => {
+      const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const total = rows.reduce(
-        (sum, row) => sum + row.getValue(`dynamic-cost-${cost.name}`),
-        0,
-      );
-      return `$${total.toFixed(2)}`;
+      const total = aggregate(`dynamic-cost-${cost.name}`, [], rows);
+      return total.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
     },
   }));
 
@@ -89,43 +93,46 @@ export function PricingTable({ quote, setQuote }) {
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
   return (
-    <TableContainer component={Paper}>
-      <Table size="small">
-        {table.getAllFlatColumns().map((col) => (
-          <TableRow key={col.id}>
-            <TableCell variant="head">
-              {flexRender(
-                col.columnDef.header,
-                table
-                  .getFlatHeaders()
-                  .find((h) => h.id === col.id)
-                  .getContext(),
-              )}
-            </TableCell>
-            {table.getCoreRowModel().rows.map((row) => (
-              <TableCell key={row.id}>
+    <Stack direction="row" spacing={2}>
+      <TableContainer component={Paper}>
+        <Table size="small">
+          {table.getAllFlatColumns().map((col) => (
+            <TableRow key={col.id}>
+              <TableCell variant="head">
                 {flexRender(
-                  col.columnDef.cell,
-                  row
-                    .getAllCells()
-                    .find((cell) => cell.column.id === col.id)
+                  col.columnDef.header,
+                  table
+                    .getFlatHeaders()
+                    .find((h) => h.id === col.id)
                     .getContext(),
                 )}
               </TableCell>
-            ))}
-            <TableCell variant="footer">
-              {flexRender(
-                col.columnDef.footer,
-                table
-                  .getFooterGroups()
-                  .flatMap((g) => g.headers)
-                  .find((h) => h.id === col.id)
-                  .getContext(),
-              )}
-            </TableCell>
-          </TableRow>
-        ))}
-      </Table>
-    </TableContainer>
+              {table.getCoreRowModel().rows.map((row) => (
+                <TableCell key={row.id}>
+                  {flexRender(
+                    col.columnDef.cell,
+                    row
+                      .getAllCells()
+                      .find((cell) => cell.column.id === col.id)
+                      .getContext(),
+                  )}
+                </TableCell>
+              ))}
+              <TableCell variant="footer">
+                {flexRender(
+                  col.columnDef.footer,
+                  table
+                    .getFooterGroups()
+                    .flatMap((g) => g.headers)
+                    .find((h) => h.id === col.id)
+                    .getContext(),
+                )}
+              </TableCell>
+            </TableRow>
+          ))}
+        </Table>
+      </TableContainer>
+      <TotalsTable quote={quote} table={table} />
+    </Stack>
   );
 }
