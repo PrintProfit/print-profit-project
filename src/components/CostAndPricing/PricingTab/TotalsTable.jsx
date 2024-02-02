@@ -81,9 +81,16 @@ export function TotalsTable({ quote, table }) {
           <TotalsTableRow table={table} column="estimated_hours" />
           {/* Contribution Row */}
           <TableRow>
-            <TableCell>TODO</TableCell>
-            <TableCell>TODO</TableCell>
-            <TableCell>TODO</TableCell>
+            {/* FIXME These cells put the dollar sign before negative numbers */}
+            <TableCell>
+              ${(getCMTotalSellingPrice() - getTotalVariableCosts()).toFixed(2)}
+            </TableCell>
+            <TableCell>
+              ${(manualPrice - getTotalVariableCosts()).toFixed(2)}
+            </TableCell>
+            <TableCell>
+              ${(pricePerItem - getTotalVariableCosts()).toFixed(2)}
+            </TableCell>
           </TableRow>
           {/* Contribution Margin Row */}
           <TableRow>
