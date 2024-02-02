@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TotalsTable } from './TotalsTable';
-import { DynamicCostCell } from './cells';
+import { AddProductCell, DynamicCostCell } from './cells';
 import {
   addDynamicCostColumn,
   calculatedCosts,
@@ -98,7 +98,7 @@ export function PricingTable({ quote, setQuote }) {
     <Stack direction="row" spacing={2}>
       <TableContainer component={Paper}>
         <Table size="small">
-          {table.getAllFlatColumns().map((col) => (
+          {table.getAllFlatColumns().map((col, index) => (
             <TableRow key={col.id}>
               <TableCell variant="head">
                 {flexRender(
@@ -120,6 +120,9 @@ export function PricingTable({ quote, setQuote }) {
                   )}
                 </TableCell>
               ))}
+              <TableCell>
+                {index === 0 ? <AddProductCell table={table} /> : null}
+              </TableCell>
               <TableCell variant="footer">
                 {flexRender(
                   col.columnDef.footer,

@@ -234,4 +234,6 @@ export function AddCostHeader({ table }) {
 /**
  * @param {import('./prop-types').AddProductCellProps} props
  */
-export function AddProductCell({ table }) {}
+export function AddProductCell({ table }) {
+  return <>hi</>;
+}
