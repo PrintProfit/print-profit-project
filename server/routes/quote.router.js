@@ -329,59 +329,61 @@ router.put('/remove', async (req, res) => {
   }
 });
 
-quote = {
-  id: 1,
-  name: 'Prime Swag',
-  created_by: 1,
-  products: [
-    // first product
-    {
-      id: 1,
-      name: 'T-shirts',
-      quantity: 100,
-      selling_price_per_unit: 15,
-      total_selling_price: 1500,
-      estimated_hours: 6,
-      costs: [
-        // first cost input
-        {
-          id: 1,
-          name: 'Garment',
-          value: 400,
-        },
-        // second cost input
-        {
-          id: 2,
-          name: 'Ink',
-          value: 200,
-        },
-      ],
-    },
-    // second product
-    {
-      id: 2,
-      name: 'Hoodies',
-      quantity: 50,
-      selling_price_per_unit: 30,
-      total_selling_price: 1500,
-      estimated_hours: 4,
-      costs: [
-        // first cost input
-        {
-          id: 3,
-          name: 'Garment',
-          value: 750,
-        },
-        // second cost input
-        {
-          id: 4,
-          name: 'Ink',
-          value: 100,
-        },
-      ],
-    },
-  ],
-};
+// quoteArray = [
+//   // first quote
+//   {
+//   id: 1,
+//   name: 'Prime Swag',
+//   created_by: 1,
+//   products: [
+//     // first product
+//     {
+//       id: 1,
+//       name: 'T-shirts',
+//       quantity: 100,
+//       selling_price_per_unit: 15,
+//       total_selling_price: 1500,
+//       estimated_hours: 6,
+//       costs: [
+//         // first cost input
+//         {
+//           id: 1,
+//           name: 'Garment',
+//           value: 400,
+//         },
+//         // second cost input
+//         {
+//           id: 2,
+//           name: 'Ink',
+//           value: 200,
+//         },
+//       ],
+//     },
+//     // second product
+//     {
+//       id: 2,
+//       name: 'Hoodies',
+//       quantity: 50,
+//       selling_price_per_unit: 30,
+//       total_selling_price: 1500,
+//       estimated_hours: 4,
+//       costs: [
+//         // first cost input
+//         {
+//           id: 3,
+//           name: 'Garment',
+//           value: 750,
+//         },
+//         // second cost input
+//         {
+//           id: 4,
+//           name: 'Ink',
+//           value: 100,
+//         },
+//       ],
+//     },
+//   ],
+// }];
 
 function formatQuotesObject(quoteRows) {
   // need to account for MULTIPLE quotes==> array
@@ -411,6 +413,10 @@ function formatQuotesObject(quoteRows) {
     }
   }
   return quote;
+}
+
+function formatQuotesIdArray(rows) {
+  const quoteArray = [];
 }
 
 module.exports = router;
