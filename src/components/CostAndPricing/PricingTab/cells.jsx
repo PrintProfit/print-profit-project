@@ -1,6 +1,7 @@
 // @ts-check
 
-import { Button, Input } from '@mui/material';
+import { Add } from '@mui/icons-material';
+import { IconButton, Input } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 
@@ -145,12 +146,13 @@ export function PercentCell({ getValue }) {
  */
 export function AddCostHeader({ table }) {
   return (
-    <Button
+    <IconButton
       onClick={() => {
-        console.log('Add dynamic costs clicked!');
+        console.log('clicked');
       }}
+      aria-label="add"
     >
-      Add
-    </Button>
+      <Add />
+    </IconButton>
   );
 }
