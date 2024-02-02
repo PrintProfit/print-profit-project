@@ -52,7 +52,7 @@ export function PricingTable({ quote, setQuote }) {
     .map((name, index) => ({
       // The ID is how we can use getValue for calculations.
       id: `dynamic-cost-${name}`,
-      accessorFn: (row) => row.costs[index].value,
+      accessorFn: (row) => row.costs.find((cost) => cost.name === name)?.value,
       header: name,
       cell: DynamicCostCell,
       aggregationFn: 'sum',
