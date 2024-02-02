@@ -145,13 +145,21 @@ export function PercentCell({ getValue }) {
  * @param {import('./prop-types').AddCostHeaderProps} props
  */
 export function AddCostHeader({ table }) {
+  const addCost = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        for (const product of draft.products) {
+          product.costs.push({
+            name: 'New Cost',
+            value: 0,
+          });
+        }
+      }),
+    );
+  };
+
   return (
-    <IconButton
-      onClick={() => {
-        console.log('clicked');
-      }}
-      aria-label="add"
-    >
+    <IconButton onClick={addCost} aria-label="add">
       <Add />
     </IconButton>
   );
