@@ -41,28 +41,34 @@ export function PricingTable({ quote, setQuote }) {
    * {@link https://react.dev/learn/you-might-not-need-an-effect You Might Not Need an Effect}
    * page suggests that this should be avoidable, and that this can be done
    * during rendering.
+   *
+   * the `.flatMap` call gets the cost names for all the products, even if there aren't any.
+   * the `.filter` call removes duplicates names.
    * @type {import('./data-types').ProductColumnDef[]}
    */
-  const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
-    // The ID is how we can use getValue for calculations.
-    id: `dynamic-cost-${cost.name}`,
-    accessorFn: (row) => row.costs[index].value,
-    header: cost.name,
-    cell: DynamicCostCell,
-    aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      const total = aggregate(`dynamic-cost-${cost.name}`, [], rows);
-      return total.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
-    },
-    meta: {
-      costIndex: index,
-    },
-  }));
+  const dynamicColumns = quote.products
+    .flatMap((product) => product.costs.map((cost) => cost.name))
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .map((name, index) => ({
+      // The ID is how we can use getValue for calculations.
+      id: `dynamic-cost-${name}`,
+      accessorFn: (row) => row.costs[index].value,
+      header: name,
+      cell: DynamicCostCell,
+      aggregationFn: 'sum',
+      footer: ({ table, column }) => {
+        const aggregate = column.getAggregationFn();
+        const { rows } = table.getCoreRowModel();
+        const total = aggregate?.(`dynamic-cost-${name}`, [], rows);
+        return total.toLocaleString(undefined, {
+          style: 'currency',
+          currency: 'USD',
+        });
+      },
+      meta: {
+        costIndex: index,
+      },
+    }));
 
   /**
    * All the columns the table uses.
@@ -87,6 +93,19 @@ export function PricingTable({ quote, setQuote }) {
     },
   });
 
+  /**
+   * type-safe wrapper for flexRender
+   * @template {object} T
+   * @param {Parameters<typeof flexRender<T>>[0]} Comp
+   * @param {(Parameters<typeof flexRender<T>>[1]|undefined)} props
+   * @returns {ReturnType<typeof flexRender<T>>}
+   */
+  const safeFlexRender = (Comp, props) => {
+    if (Comp && props) {
+      return flexRender(Comp, props);
+    }
+  };
+
   // This is sorta awkward, but it's so far the best way I've found to get the
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
@@ -97,22 +116,22 @@ export function PricingTable({ quote, setQuote }) {
           {table.getAllFlatColumns().map((col, index) => (
             <TableRow key={col.id}>
               <TableCell variant="head">
-                {flexRender(
+                {safeFlexRender(
                   col.columnDef.header,
                   table
                     .getFlatHeaders()
                     .find((h) => h.id === col.id)
-                    .getContext(),
+                    ?.getContext(),
                 )}
               </TableCell>
               {table.getCoreRowModel().rows.map((row) => (
                 <TableCell key={row.id}>
-                  {flexRender(
+                  {safeFlexRender(
                     col.columnDef.cell,
                     row
                       .getAllCells()
                       .find((cell) => cell.column.id === col.id)
-                      .getContext(),
+                      ?.getContext(),
                   )}
                 </TableCell>
               ))}
@@ -120,13 +139,13 @@ export function PricingTable({ quote, setQuote }) {
                 {index === 0 ? <AddProductCell table={table} /> : null}
               </TableCell>
               <TableCell variant="footer">
-                {flexRender(
+                {safeFlexRender(
                   col.columnDef.footer,
                   table
                     .getFooterGroups()
                     .flatMap((g) => g.headers)
                     .find((h) => h.id === col.id)
-                    .getContext(),
+                    ?.getContext(),
                 )}
               </TableCell>
             </TableRow>

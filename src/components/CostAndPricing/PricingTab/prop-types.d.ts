@@ -1,28 +1,8 @@
-import type { Column, Getter, Row, Table } from '@tanstack/react-table';
+import type { CellContext, Getter, Row, Table } from '@tanstack/react-table';
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import type { Product, Quote } from './data-types';
 
-export interface DynamicCostCellProps<T> {
-  /** the getValue function from tanstack tables */
-  readonly getValue: Getter<T>;
-  /** the table the cell is in */
-  readonly table: Table<Product>;
-  /** the row the cell is in */
-  readonly row: Row<Product>;
-  /** the column the cell is in */
-  readonly column: Column<Product>;
-}
-
-export interface ConsistentNumericCellProps<T> {
-  /** the getValue function from tanstack tables */
-  readonly getValue: Getter<T>;
-  /** the table the cell is in */
-  readonly table: Table<Product>;
-  /** the row the cell is in */
-  readonly row: Row<Product>;
-  /** the column the cell is in */
-  readonly column: Column<Product>;
-}
+export type CellProps<TValue> = CellContext<Product, TValue>;
 
 export interface PricingTableProps {
   readonly quote: Quote;

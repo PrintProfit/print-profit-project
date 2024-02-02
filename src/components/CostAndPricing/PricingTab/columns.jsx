@@ -28,7 +28,7 @@ export const consistentColumns = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      return aggregate('quantity', [], rows);
+      return aggregate?.('quantity', [], rows);
     },
     meta: {
       inputMode: 'numeric',
@@ -51,7 +51,7 @@ export const consistentColumns = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalSellingPrice = aggregate('total_selling_price', [], rows);
+      const totalSellingPrice = aggregate?.('total_selling_price', [], rows);
       return totalSellingPrice.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
@@ -83,7 +83,7 @@ export const calculatedCosts = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalCreditCardFee = aggregate('creditCardFee', [], rows);
+      const totalCreditCardFee = aggregate?.('creditCardFee', [], rows);
       return totalCreditCardFee.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
@@ -99,7 +99,7 @@ export const calculatedCosts = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalVariableCosts = aggregate('totalVariableCosts', [], rows);
+      const totalVariableCosts = aggregate?.('totalVariableCosts', [], rows);
       return totalVariableCosts.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
@@ -121,7 +121,7 @@ export const estimatedHoursColumn = {
   footer: ({ table, column }) => {
     const aggregate = column.getAggregationFn();
     const { rows } = table.getCoreRowModel();
-    return aggregate('estimated_hours', [], rows);
+    return aggregate?.('estimated_hours', [], rows);
   },
 };
 
@@ -137,7 +137,7 @@ export const contributionColumns = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalContribution = aggregate('contributionDollars', [], rows);
+      const totalContribution = aggregate?.('contributionDollars', [], rows);
       return totalContribution.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
@@ -152,16 +152,16 @@ export const contributionColumns = [
       const { rows } = table.getCoreRowModel();
       const aggregateContributionDollars = table
         .getColumn('contributionDollars')
-        .getAggregationFn();
+        ?.getAggregationFn();
       const aggregateTotalSellingPrice = table
         .getColumn('total_selling_price')
-        .getAggregationFn();
-      const totalContribution = aggregateContributionDollars(
+        ?.getAggregationFn();
+      const totalContribution = aggregateContributionDollars?.(
         'contributionDollars',
         [],
         rows,
       );
-      const totalSellingPrice = aggregateTotalSellingPrice(
+      const totalSellingPrice = aggregateTotalSellingPrice?.(
         'total_selling_price',
         [],
         rows,
@@ -180,17 +180,17 @@ export const contributionColumns = [
       const { rows } = table.getCoreRowModel();
       const aggregateContribution = table
         .getColumn('contributionDollars')
-        .getAggregationFn();
+        ?.getAggregationFn();
       const aggregateEstimatedHours = table
         .getColumn('estimated_hours')
-        .getAggregationFn();
+        ?.getAggregationFn();
 
-      const totalContribution = aggregateContribution(
+      const totalContribution = aggregateContribution?.(
         'contributionDollars',
         [],
         rows,
       );
-      const totalHours = aggregateEstimatedHours('estimated_hours', [], rows);
+      const totalHours = aggregateEstimatedHours?.('estimated_hours', [], rows);
       const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
       return perHour.toLocaleString(undefined, {
         style: 'currency',

@@ -19,12 +19,10 @@ import { useEffect, useState } from 'react';
 
 /**
  * A component that renders editable cells with dynamic costs
- * @template {(string|number)} T
- * @param {import('./prop-types').DynamicCostCellProps<T>} props
+ * @param {import('./prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
 export function DynamicCostCell({ getValue, table, row, column }) {
-  /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -38,6 +36,9 @@ export function DynamicCostCell({ getValue, table, row, column }) {
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
   const onBlur = () => {
+    if (costIndex === undefined) {
+      throw new Error('costIndex is undefined');
+    }
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[productIndex].costs[costIndex].value = Number(value);
@@ -65,12 +66,10 @@ export function DynamicCostCell({ getValue, table, row, column }) {
 
 /**
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
- * @template {(string|number)} T
- * @param {import('./prop-types').ConsistentNumericCellProps<T>} props
+ * @param {import('./prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
 export function ConsistentNumericCell({ getValue, table, row, column }) {
-  /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
@@ -85,6 +84,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        // @ts-ignore
         draft.products[row.index][column.id] = Number(value);
       }),
     );
@@ -120,7 +120,7 @@ export function ProductNameCell({ getValue, table, row }) {
 
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
-    table.options.meta.setQuote(
+    table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         draft.products[row.index].name = value;
       }),

@@ -31,8 +31,8 @@ export function TotalsTable({ quote, setQuote, table }) {
      * @returns {number}
      */
     (column) => {
-      const aggregationFn = table.getColumn(column).getAggregationFn();
-      return aggregationFn(column, [], table.getCoreRowModel().rows);
+      const aggregationFn = table.getColumn(column)?.getAggregationFn();
+      return aggregationFn?.(column, [], table.getCoreRowModel().rows) || -1;
     },
     [table.getColumn, table.getCoreRowModel],
   );
@@ -250,5 +250,6 @@ function getFooter(table, columnId) {
     .getFooterGroups()
     .flatMap((g) => g.headers)
     .find((h) => h.id === columnId);
-  return [column.columnDef.footer, footer.getContext()];
+  // @ts-ignore
+  return [column.columnDef.footer, footer?.getContext()];
 }
