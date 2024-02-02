@@ -38,6 +38,10 @@ export function TotalsTable({ quote, table }) {
       ),
     [aggregateTotalVariableCosts, table],
   );
+  const getCMTotalSellingPrice = useCallback(
+    () => getTotalVariableCosts() / (1 - contributionPercent / 100),
+    [getTotalVariableCosts, contributionPercent],
+  );
   const dynamicCostIds = quote.products[0].costs.map(
     (cost) => `dynamic-cost-${cost.name}`,
   );
@@ -55,13 +59,7 @@ export function TotalsTable({ quote, table }) {
         <TableBody>
           {/* Total Variable Costs Row */}
           <TableRow>
-            <TableCell>
-              $
-              {(
-                getTotalVariableCosts() /
-                (1 - contributionPercent / 100)
-              ).toFixed(2)}
-            </TableCell>
+            <TableCell>${getCMTotalSellingPrice().toFixed(2)}</TableCell>
             <TableCell>
               <Input
                 value={manualPrice}
