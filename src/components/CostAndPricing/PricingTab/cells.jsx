@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Input } from '@mui/material';
+import { Button, Input } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 
@@ -138,4 +138,19 @@ export function PercentCell({ getValue }) {
   return percent.toLocaleString(undefined, {
     style: 'percent',
   });
+}
+
+/**
+ * @param {import('./prop-types').AddCostHeaderProps} props
+ */
+export function AddCostHeader({ table }) {
+  return (
+    <Button
+      onClick={() => {
+        console.log('Add dynamic costs clicked!');
+      }}
+    >
+      Add
+    </Button>
+  );
 }
