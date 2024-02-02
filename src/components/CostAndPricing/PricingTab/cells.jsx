@@ -72,11 +72,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  // Kinda hacky way to only show the dollar sign on the selling price & total
-  // selling price cells.
-  const showAdornment = ['total_selling_price', 'selling_price'].includes(
-    column.id,
-  );
+  const { meta } = column.columnDef;
 
   /**
    * onBlur is called when the input loses focus.
@@ -100,10 +96,11 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
     <Input
       size="small"
       startAdornment={
-        showAdornment ? (
-          <InputAdornment position="start">$</InputAdornment>
+        meta?.adornment ? (
+          <InputAdornment position="start">{meta.adornment}</InputAdornment>
         ) : undefined
       }
+      inputMode={meta?.inputMode}
       value={value}
       // @ts-ignore
       onChange={(e) => setValue(e.target.value)}

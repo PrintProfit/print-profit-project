@@ -30,11 +30,18 @@ export const consistentColumns = [
       const { rows } = table.getCoreRowModel();
       return aggregate('quantity', [], rows);
     },
+    meta: {
+      inputMode: 'numeric',
+    },
   },
   {
     accessorKey: 'selling_price',
     header: 'Selling Price',
     cell: ConsistentNumericCell,
+    meta: {
+      inputMode: 'decimal',
+      adornment: '$',
+    },
   },
   {
     accessorKey: 'total_selling_price',
@@ -49,6 +56,10 @@ export const consistentColumns = [
         style: 'currency',
         currency: 'USD',
       });
+    },
+    meta: {
+      inputMode: 'decimal',
+      adornment: '$',
     },
   },
 ];
