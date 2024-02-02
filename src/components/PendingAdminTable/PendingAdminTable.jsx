@@ -5,6 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -86,21 +88,27 @@ function PendingAdminPage({ pendingUser }) {
   };
 
   return (
-    <tr>
-      <td>{pendingUser.user_name}</td>
-      <td>{pendingUser.email}</td>
-      <td>{pendingUser.pending_company_name}</td>
-      <td>{pendingUser.last_login}</td>
-      <td>
-        <button type="button" onClick={handleApprovalClickOpen}>
+    <TableRow>
+      <TableCell variant="head" scope="row">
+        {pendingUser.user_name}
+      </TableCell>
+      <TableCell align="center">{pendingUser.email}</TableCell>
+      <TableCell align="center">{pendingUser.pending_company_name}</TableCell>
+      <TableCell align="center">{pendingUser.last_login}</TableCell>
+      <TableCell align="center">
+        <Button type="button" onClick={handleApprovalClickOpen}>
           Approve
-        </button>
-      </td>
-      <td>
-        <button type="button" onClick={() => handleDeleteClickOpen()}>
+        </Button>
+      </TableCell>
+      <TableCell align="center">
+        <Button
+          color="error"
+          type="button"
+          onClick={() => handleDeleteClickOpen()}
+        >
           Delete
-        </button>
-      </td>
+        </Button>
+      </TableCell>
 
       {/* Approval Dialog */}
       <Dialog
@@ -192,8 +200,12 @@ function PendingAdminPage({ pendingUser }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Approve</Button>
-          <Button onClick={handleApprovalClose}>Cancel</Button>
+          <Button variant="contained" type="submit">
+            Approve
+          </Button>
+          <Button sx={{ color: 'black' }} onClick={handleApprovalClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -213,13 +225,15 @@ function PendingAdminPage({ pendingUser }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={deleteUser} autoFocus>
+          <Button color="error" onClick={deleteUser} autoFocus>
             Delete
           </Button>
-          <Button onClick={handleDeleteClose}>Cancel</Button>
+          <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
-    </tr>
+    </TableRow>
   );
 }
 

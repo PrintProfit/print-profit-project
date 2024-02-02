@@ -1,12 +1,13 @@
-import React, { Fragment, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 function ArchivedAdminPage({ archivedUser }) {
   const dispatch = useDispatch();
@@ -56,20 +57,22 @@ function ArchivedAdminPage({ archivedUser }) {
   };
 
   return (
-    <tr>
-      <td>{archivedUser.user_name}</td>
-      <td>{archivedUser.email}</td>
-      <td>{archivedUser.last_login}</td>
-      <td>
-        <button type="button" onClick={handleRecoverClickOpen}>
+    <TableRow>
+      <TableCell variant="head" scope="row">
+        {archivedUser.user_name}
+      </TableCell>
+      <TableCell align="center">{archivedUser.email}</TableCell>
+      <TableCell align="center">{archivedUser.last_login}</TableCell>
+      <TableCell align="center">
+        <Button type="button" onClick={handleRecoverClickOpen}>
           Recover
-        </button>
-      </td>
-      <td>
-        <button type="button" onClick={handleDeleteClickOpen}>
+        </Button>
+      </TableCell>
+      <TableCell align="center">
+        <Button color="error" type="button" onClick={handleDeleteClickOpen}>
           Delete
-        </button>
-      </td>
+        </Button>
+      </TableCell>
 
       {/* Recover Dialog */}
       <Dialog
@@ -90,7 +93,9 @@ function ArchivedAdminPage({ archivedUser }) {
           <Button onClick={recoverUser} autoFocus>
             Recover
           </Button>
-          <Button onClick={handleRecoverClose}>Close</Button>
+          <Button sx={{ color: 'black' }} onClick={handleRecoverClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -110,13 +115,15 @@ function ArchivedAdminPage({ archivedUser }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={deleteUser} autoFocus>
+          <Button color="error" onClick={deleteUser} autoFocus>
             Delete
           </Button>
-          <Button onClick={handleDeleteClose}>Close</Button>
+          <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
-    </tr>
+    </TableRow>
   );
 }
 

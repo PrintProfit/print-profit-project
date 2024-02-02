@@ -1,12 +1,13 @@
-import React, { Fragment, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import React, { Fragment, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ApprovedAdminPage({ approvedUser }) {
   const dispatch = useDispatch();
@@ -34,18 +35,24 @@ function ApprovedAdminPage({ approvedUser }) {
   };
 
   return (
-    <tr>
-      <td>{approvedUser.user_name}</td>
-      <td>{approvedUser.email}</td>
-      <td>{approvedUser.company_name}</td>
-      <td>{approvedUser.last_login}</td>
-      <td>Approved</td>
-      <td>
-        <button type="button" onClick={handleDeleteClickOpen}>
+    <TableRow>
+      <TableCell>{approvedUser.user_name}</TableCell>
+      <TableCell align="center">{approvedUser.email}</TableCell>
+      <TableCell align="center">{approvedUser.company_name}</TableCell>
+      <TableCell align="center">{approvedUser.last_login}</TableCell>
+      <TableCell
+        sx={{ color: '#5CCD8B', fontWeight: 'bold', fontSize: 15 }}
+        align="center"
+      >
+        Approved
+      </TableCell>
+      <TableCell align="center">
+        <Button color="error" type="button" onClick={handleDeleteClickOpen}>
           Delete
-        </button>
-      </td>
+        </Button>
+      </TableCell>
 
+      {/* Delete Dialog */}
       <Dialog
         open={openDelete}
         onClose={handleDeleteClose}
@@ -61,13 +68,15 @@ function ApprovedAdminPage({ approvedUser }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={deleteUser} autoFocus>
+          <Button color="error" onClick={deleteUser} autoFocus>
             Delete
           </Button>
-          <Button onClick={handleDeleteClose}>Close</Button>
+          <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
-    </tr>
+    </TableRow>
   );
 }
 
