@@ -72,3 +72,7 @@ export interface PercentCellProps {
 export interface AddCostHeaderProps {
   readonly table: Table<Product>;
 }
+
+export interface AddProductCellProps {
+  readonly table: Table<Product>;
+}
