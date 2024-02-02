@@ -3,6 +3,9 @@
 /** @type {import("./data-types").Quote} */
 export const quote = {
   name: 'Sample Quote',
+  contributionPercent: 0.4,
+  manualPrice: 3000,
+  pricePerItem: 6800,
   products: [
     {
       name: 'Order Item 1',
