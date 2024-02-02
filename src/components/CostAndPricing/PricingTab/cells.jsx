@@ -187,8 +187,8 @@ export function AddCostHeader({ table }) {
 
   return (
     <>
-      <IconButton onClick={() => setOpen(true)} aria-label="add">
-        <Add />
+      <IconButton onClick={() => setOpen(true)} aria-label="add" size="small">
+        <Add fontSize="small" />
       </IconButton>
       <Dialog
         open={open}
