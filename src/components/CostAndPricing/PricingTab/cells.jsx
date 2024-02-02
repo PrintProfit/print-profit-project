@@ -243,11 +243,39 @@ export function AddProductCell({ table }) {
     setProductName('');
   };
 
+  const addProduct = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        // This is probably the safest way to get a unique list of cost names.
+        const costNames = draft.products
+          .flatMap((p) => p.costs.map((c) => c.name))
+          .filter((value, index, self) => self.indexOf(value) === index);
+
+        // This *should* also work, but it might not order things correctly,
+        // and we need to update the tsconfig/jsconfig to iterate through the
+        // values.
+        // const costs = new Set(
+        //   draft.products.flatMap((p) => p.costs.map((c) => c.name)),
+        // );
+
+        draft.products.push({
+          name: productName,
+          quantity: 0,
+          selling_price: 0,
+          total_selling_price: 0,
+          estimated_hours: 0,
+          costs: costNames.map((name) => ({ name, value: 0 })),
+        });
+      }),
+    );
+  };
+
   /**
    * @param {import('react').FormEvent<HTMLFormElement>} e
    */
   const handleSubmit = (e) => {
     e.preventDefault();
+    addProduct();
     closeDialog();
   };
 
