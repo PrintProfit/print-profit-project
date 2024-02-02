@@ -1,7 +1,17 @@
 // @ts-check
 
 import { Add } from '@mui/icons-material';
-import { IconButton, Input } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Input,
+  TextField,
+} from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 
@@ -145,12 +155,15 @@ export function PercentCell({ getValue }) {
  * @param {import('./prop-types').AddCostHeaderProps} props
  */
 export function AddCostHeader({ table }) {
+  const [open, setOpen] = useState(false);
+  const [costName, setCostName] = useState('');
+
   const addCost = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         for (const product of draft.products) {
           product.costs.push({
-            name: 'New Cost',
+            name: costName,
             value: 0,
           });
         }
@@ -158,9 +171,55 @@ export function AddCostHeader({ table }) {
     );
   };
 
+  const closeDialog = () => {
+    setOpen(false);
+    setCostName('');
+  };
+
+  /**
+   * @param {import('react').FormEvent<HTMLFormElement>} e
+   */
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addCost();
+    closeDialog();
+  };
+
   return (
-    <IconButton onClick={addCost} aria-label="add">
-      <Add />
-    </IconButton>
+    <>
+      <IconButton onClick={() => setOpen(true)} aria-label="add">
+        <Add />
+      </IconButton>
+      <Dialog
+        open={open}
+        onClose={closeDialog}
+        PaperProps={{
+          component: 'form',
+          onSubmit: handleSubmit,
+        }}
+      >
+        <DialogTitle>Cost Name</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please specify the name of the new cost.
+          </DialogContentText>
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="costName"
+            name="costName"
+            label="Cost Name"
+            fullWidth
+            value={costName}
+            onChange={(e) => setCostName(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button type="submit">Add Cost</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
