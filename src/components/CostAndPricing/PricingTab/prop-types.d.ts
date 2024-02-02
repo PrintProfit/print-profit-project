@@ -49,6 +49,7 @@ export interface ContributionRowsProps {
   };
   readonly profitMarginTotalPrice: number;
   readonly totalVariableCosts: number;
+  readonly estimatedTotalHours: number;
 }
 
 export interface ProductNameCellProps {

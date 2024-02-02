@@ -21,27 +21,23 @@ export function TotalsTable({ quote, table }) {
   const [manualPrice, setManualPrice] = useState(0);
   const [pricePerItem, setPricePerItem] = useState(0);
 
-  // the total variable costs aggregation function
-  const aggregateTotalVariableCosts = useCallback(
-    table.getColumn('totalVariableCosts').getAggregationFn(),
-    [],
-  );
-  const getTotalVariableCosts = useCallback(
+  const aggregate = useCallback(
     /**
+     * @param {string} column
      * @returns {number}
      */
-    () =>
-      aggregateTotalVariableCosts(
-        'totalVariableCosts',
-        [],
-        table.getCoreRowModel().rows,
-      ),
-    [aggregateTotalVariableCosts, table],
+    (column) => {
+      const aggregationFn = table.getColumn(column).getAggregationFn();
+      return aggregationFn(column, [], table.getCoreRowModel().rows);
+    },
+    [table.getColumn, table.getCoreRowModel],
   );
+
   const getCMTotalSellingPrice = useCallback(
-    () => getTotalVariableCosts() / (1 - contributionPercent / 100),
-    [getTotalVariableCosts, contributionPercent],
+    () => aggregate('totalVariableCosts') / (1 - contributionPercent / 100),
+    [aggregate, contributionPercent],
   );
+
   const dynamicCostIds = quote.products[0].costs.map(
     (cost) => `dynamic-cost-${cost.name}`,
   );
@@ -82,7 +78,8 @@ export function TotalsTable({ quote, table }) {
           {/* This is  */}
           <ContributionRows
             profitMarginTotalPrice={getCMTotalSellingPrice()}
-            totalVariableCosts={getTotalVariableCosts()}
+            totalVariableCosts={aggregate('totalVariableCosts')}
+            estimatedTotalHours={aggregate('estimated_hours')}
             state={{ manualPrice, pricePerItem }}
             slots={{
               marginInput: (
@@ -112,19 +109,21 @@ function ContributionRows({
   state: { manualPrice, pricePerItem },
   profitMarginTotalPrice,
   totalVariableCosts,
+  estimatedTotalHours,
 }) {
   const manualContrib = manualPrice - totalVariableCosts;
   const perItemContrib = pricePerItem - totalVariableCosts;
+  const targetContrib = profitMarginTotalPrice - totalVariableCosts;
 
   return (
     <>
       {/* Contribution Row */}
       <TableRow>
         <TableCell>
-          {(profitMarginTotalPrice - totalVariableCosts).toLocaleString(
-            undefined,
-            { style: 'currency', currency: 'USD' },
-          )}
+          {targetContrib.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+          })}
         </TableCell>
         <TableCell>
           {manualContrib.toLocaleString(undefined, {
