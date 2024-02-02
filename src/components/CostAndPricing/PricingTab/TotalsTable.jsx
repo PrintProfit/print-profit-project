@@ -147,16 +147,31 @@ function ContributionRows({
           })}
         </TableCell>
         <TableCell>
-          {perItemContrib.toLocaleString(undefined, {
+          {(perItemContrib / pricePerItem).toLocaleString(undefined, {
             style: 'percent',
           })}
         </TableCell>
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
-        <TableCell>TODO</TableCell>
-        <TableCell>TODO</TableCell>
-        <TableCell>TODO</TableCell>
+        <TableCell>
+          {(targetContrib / estimatedTotalHours).toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+          })}
+        </TableCell>
+        <TableCell>
+          {(manualContrib / estimatedTotalHours).toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+          })}
+        </TableCell>
+        <TableCell>
+          {(perItemContrib / estimatedTotalHours).toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+          })}
+        </TableCell>
       </TableRow>
     </>
   );
