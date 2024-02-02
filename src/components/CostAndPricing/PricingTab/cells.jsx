@@ -10,6 +10,7 @@ import {
   DialogTitle,
   IconButton,
   Input,
+  InputAdornment,
   TextField,
   Tooltip,
 } from '@mui/material';
@@ -51,6 +52,7 @@ export function DynamicCostCell({ getValue, costIndex, table, row }) {
   return (
     <Input
       size="small"
+      startAdornment={<InputAdornment position="start">$</InputAdornment>}
       value={value}
       // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
@@ -69,6 +71,12 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
+
+  // Kinda hacky way to only show the dollar sign on the selling price & total
+  // selling price cells.
+  const showAdornment = ['total_selling_price', 'selling_price'].includes(
+    column.id,
+  );
 
   /**
    * onBlur is called when the input loses focus.
@@ -91,6 +99,11 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   return (
     <Input
       size="small"
+      startAdornment={
+        showAdornment ? (
+          <InputAdornment position="start">$</InputAdornment>
+        ) : undefined
+      }
       value={value}
       // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
