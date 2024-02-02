@@ -68,3 +68,11 @@ export interface DollarCellProps {
 export interface PercentCellProps {
   readonly getValue: Getter<number>;
 }
+
+export interface AddCostHeaderProps {
+  readonly table: Table<Product>;
+}
+
+export interface AddProductCellProps {
+  readonly table: Table<Product>;
+}

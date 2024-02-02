@@ -2,6 +2,7 @@
 
 import * as calc from './calculations';
 import {
+  AddCostHeader,
   ConsistentNumericCell,
   DollarCell,
   PercentCell,
@@ -51,6 +52,14 @@ export const consistentColumns = [
     },
   },
 ];
+
+/**
+ * @type {import("./data-types").ProductColumnDef}
+ */
+export const addDynamicCostColumn = {
+  id: 'addDynamicCost',
+  header: AddCostHeader,
+};
 
 /** @type {import("./data-types").ProductColumnDef[]} */
 export const calculatedCosts = [
