@@ -21,10 +21,10 @@ import { unique } from './utils';
  */
 export function TotalsTable({ quote, setQuote, table }) {
   const [contributionPercent, setContributionPercent] = useState(
-    quote.contributionPercent,
+    quote.contributionPercent ?? 0,
   );
-  const [manualPrice, setManualPrice] = useState(quote.manualPrice);
-  const [pricePerItem, setPricePerItem] = useState(quote.pricePerItem);
+  const [manualPrice, setManualPrice] = useState(quote.manualPrice ?? 0);
+  const [pricePerItem, setPricePerItem] = useState(quote.pricePerItem ?? 0);
 
   const aggregate = useCallback(
     /**

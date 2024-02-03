@@ -18,9 +18,9 @@ export interface Product {
 
 export interface Quote {
   name: string;
-  contributionPercent: number;
-  manualPrice: number;
-  pricePerItem: number;
+  contributionPercent?: number;
+  manualPrice?: number;
+  pricePerItem?: number;
   products: Product[];
 }
 
