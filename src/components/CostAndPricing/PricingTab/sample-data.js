@@ -11,7 +11,6 @@ export const quote = {
       name: 'Order Item 1',
       quantity: 100,
       selling_price: 14.0,
-      total_selling_price: 1400,
       estimated_hours: 4,
       costs: [
         { name: 'garment', value: 625 },

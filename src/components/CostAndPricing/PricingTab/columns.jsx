@@ -44,7 +44,10 @@ export const consistentColumns = [
     },
   },
   {
-    accessorKey: 'total_selling_price',
+    id: 'total_selling_price',
+    // Total selling price can be null, in which case we're supposed to derive
+    // it from the product.
+    accessorFn: calc.totalSellingPrice,
     header: 'Total Selling Price',
     cell: ConsistentNumericCell,
     aggregationFn: 'sum',

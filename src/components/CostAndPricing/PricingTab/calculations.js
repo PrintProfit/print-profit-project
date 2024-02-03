@@ -7,8 +7,19 @@ const CREDIT_CARD_FEE = 0.03;
  * @param {import("./data-types").Product} product
  * @returns {number}
  */
+export function totalSellingPrice(product) {
+  return (
+    product.total_selling_price ?? product.selling_price * product.quantity
+  );
+}
+
+/**
+ * Calculate's the credit card fee for a product
+ * @param {import("./data-types").Product} product
+ * @returns {number}
+ */
 export function creditCardFee(product) {
-  return product.total_selling_price * CREDIT_CARD_FEE;
+  return totalSellingPrice(product) * CREDIT_CARD_FEE;
 }
 
 /**
@@ -33,7 +44,7 @@ export function totalVariableCosts(product) {
  * @returns {number}
  */
 export function contribution(product) {
-  return product.total_selling_price - totalVariableCosts(product);
+  return totalSellingPrice(product) - totalVariableCosts(product);
 }
 
 /**
@@ -41,7 +52,7 @@ export function contribution(product) {
  * @returns {number}
  */
 export function contributionMargin(product) {
-  return contribution(product) / product.total_selling_price;
+  return contribution(product) / totalSellingPrice(product);
 }
 
 /**
