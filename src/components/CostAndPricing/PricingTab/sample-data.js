@@ -1,6 +1,9 @@
 // @ts-check
 
-/** @type {import("./data-types").Quote} */
+/**
+ * Sample quote with some intentional bad data to stress test the code a bit.
+ * @type {import("./data-types").Quote}
+ */
 export const quote = {
   name: 'Sample Quote',
   contributionPercent: 0.4,
@@ -46,12 +49,7 @@ export const quote = {
       estimated_hours: 6,
       costs: [
         { name: 'garment', value: 2000 },
-        { name: 'ink', value: 0 },
-        { name: 'click', value: 0 },
-        { name: 'outsource', value: 0 },
-        { name: 'shipping', value: 0 },
-        { name: 'sales commission', value: 0 },
-        { name: 'transfers', value: 0 },
+        { name: 'jimmy', value: 7 },
       ],
     },
   ],
