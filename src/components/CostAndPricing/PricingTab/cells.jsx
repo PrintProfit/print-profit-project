@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
+import { unique } from './utils';
 
 /**
  * A component that renders editable cells with dynamic costs
@@ -40,17 +41,19 @@ export function DynamicCostCell({ getValue, table, row, column }) {
     }
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        const index = draft.products[row.index].costs.findIndex(
-          (cost) => cost.name === costName,
-        );
-        if (index === -1) {
+        const product = draft.products[row.index];
+        if (product === undefined) {
+          throw new Error('Inpossible state reached: product is undefined');
+        }
+        const cost = product.costs.find((c) => c.name === costName);
+        if (cost) {
+          cost.value = Number(value);
+        } else {
           // The quote is malformed, but fixable.
-          draft.products[row.index].costs.push({
+          product.costs.push({
             name: costName,
             value: Number(value),
           });
-        } else {
-          draft.products[row.index].costs[index].value = Number(value);
         }
       }),
     );
@@ -67,7 +70,6 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       startAdornment={<InputAdornment position="start">$</InputAdornment>}
       inputMode="decimal"
       value={value}
-      // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
     />
@@ -83,7 +85,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  const { meta } = column.columnDef;
+  const { adornment, inputMode, productKey } = column.columnDef.meta ?? {};
 
   /**
    * onBlur is called when the input loses focus.
@@ -94,8 +96,10 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        // @ts-ignore
-        draft.products[row.index][column.id] = Number(value);
+        const product = draft.products[row.index];
+        if (product && productKey) {
+          product[productKey] = Number(value);
+        }
       }),
     );
   };
@@ -108,13 +112,12 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
     <Input
       size="small"
       startAdornment={
-        meta?.adornment ? (
-          <InputAdornment position="start">{meta.adornment}</InputAdornment>
-        ) : undefined
+        adornment && (
+          <InputAdornment position="start">{adornment}</InputAdornment>
+        )
       }
-      inputMode={meta?.inputMode}
+      inputMode={inputMode}
       value={value}
-      // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
     />
@@ -132,7 +135,10 @@ export function ProductNameCell({ getValue, table, row }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[row.index].name = value;
+        const product = draft.products[row.index];
+        if (product) {
+          product.name = value;
+        }
       }),
     );
   };
@@ -271,7 +277,7 @@ export function AddProductCell({ table }) {
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products
           .flatMap((p) => p.costs.map((c) => c.name))
-          .filter((value, index, self) => self.indexOf(value) === index);
+          .filter(unique);
 
         // This *should* also work, but it might not order things correctly,
         // and we need to update the tsconfig/jsconfig to iterate through the

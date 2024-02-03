@@ -14,6 +14,7 @@ import {
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo, useState } from 'react';
+import { unique } from './utils';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -38,13 +39,16 @@ export function TotalsTable({ quote, setQuote, table }) {
   );
 
   const getCMTotalSellingPrice = useCallback(
-    () => aggregate('totalVariableCosts') / (1 - contributionPercent / 100),
+    () =>
+      aggregate('totalVariableCosts') ?? 0 / (1 - contributionPercent / 100),
     [aggregate, contributionPercent],
   );
 
-  const dynamicCostIds = quote.products[0].costs.map(
-    (cost) => `dynamic-cost-${cost.name}`,
-  );
+  const dynamicCostIds = quote.products
+    .flatMap((product) =>
+      product.costs.map((cost) => `dynamic-cost-${cost.name}`),
+    )
+    .filter(unique);
 
   return (
     <TableContainer component={Paper}>
@@ -230,9 +234,9 @@ function TotalsTableRow({ table, column }) {
 
   return (
     <TableRow>
-      <TableCell>{flexRender(footer, context)}</TableCell>
-      <TableCell>{flexRender(footer, context)}</TableCell>
-      <TableCell>{flexRender(footer, context)}</TableCell>
+      <TableCell>{context && flexRender(footer, context)}</TableCell>
+      <TableCell>{context && flexRender(footer, context)}</TableCell>
+      <TableCell>{context && flexRender(footer, context)}</TableCell>
     </TableRow>
   );
 }
@@ -242,14 +246,22 @@ function TotalsTableRow({ table, column }) {
  * @template TData
  * @param {import('@tanstack/react-table').Table<TData>} table
  * @param {string} columnId
- * @returns {Parameters<typeof flexRender>}
+ * @returns {Parameters<typeof flexRender> | [undefined, undefined]}
  */
 function getFooter(table, columnId) {
   const column = table.getColumn(columnId);
-  const footer = table
+  const context = table
     .getFooterGroups()
     .flatMap((g) => g.headers)
-    .find((h) => h.id === columnId);
-  // @ts-ignore
-  return [column.columnDef.footer, footer?.getContext()];
+    .find((h) => h.id === columnId)
+    ?.getContext();
+
+  const footerDef = column?.columnDef.footer;
+
+  if (footerDef && context) {
+    // This is *technically* the only thing here that isn't fully type-safe
+    // @ts-ignore
+    return [footerDef, context];
+  }
+  return [undefined, undefined];
 }

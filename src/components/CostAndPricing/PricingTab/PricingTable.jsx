@@ -22,6 +22,7 @@ import {
   contributionColumns,
   estimatedHoursColumn,
 } from './columns';
+import { aggregate, unique } from './utils';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -48,7 +49,7 @@ export function PricingTable({ quote, setQuote }) {
    */
   const dynamicColumns = quote.products
     .flatMap((product) => product.costs.map((cost) => cost.name))
-    .filter((value, index, self) => self.indexOf(value) === index)
+    .filter(unique)
     .map((name) => ({
       // The ID is how we can use getValue for calculations.
       id: `dynamic-cost-${name}`,
@@ -56,11 +57,9 @@ export function PricingTable({ quote, setQuote }) {
       header: name,
       cell: DynamicCostCell,
       aggregationFn: 'sum',
-      footer: ({ table, column }) => {
-        const aggregate = column.getAggregationFn();
-        const { rows } = table.getCoreRowModel();
-        const total = aggregate?.(`dynamic-cost-${name}`, [], rows);
-        return total.toLocaleString(undefined, {
+      footer: ({ table }) => {
+        const total = aggregate(table, `dynamic-cost-${name}`);
+        return total?.toLocaleString(undefined, {
           style: 'currency',
           currency: 'USD',
         });
@@ -104,6 +103,7 @@ export function PricingTable({ quote, setQuote }) {
     if (Comp && props) {
       return flexRender(Comp, props);
     }
+    return null;
   };
 
   // This is sorta awkward, but it's so far the best way I've found to get the
