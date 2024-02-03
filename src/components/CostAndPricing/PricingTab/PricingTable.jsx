@@ -49,7 +49,7 @@ export function PricingTable({ quote, setQuote }) {
   const dynamicColumns = quote.products
     .flatMap((product) => product.costs.map((cost) => cost.name))
     .filter((value, index, self) => self.indexOf(value) === index)
-    .map((name, index) => ({
+    .map((name) => ({
       // The ID is how we can use getValue for calculations.
       id: `dynamic-cost-${name}`,
       accessorFn: (row) => row.costs.find((cost) => cost.name === name)?.value,
@@ -66,7 +66,7 @@ export function PricingTable({ quote, setQuote }) {
         });
       },
       meta: {
-        costIndex: index,
+        costName: name,
       },
     }));
 

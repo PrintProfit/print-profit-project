@@ -26,8 +26,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  const productIndex = row.index;
-  const costIndex = column.columnDef.meta?.costIndex;
+  const costName = column.columnDef.meta?.costName;
 
   /**
    * onBlur is called when the input loses focus.
@@ -36,12 +35,23 @@ export function DynamicCostCell({ getValue, table, row, column }) {
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
   const onBlur = () => {
-    if (costIndex === undefined) {
-      throw new Error('costIndex is undefined');
+    if (costName === undefined) {
+      throw new Error('Malformed columnDef: costName is undefined');
     }
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[productIndex].costs[costIndex].value = Number(value);
+        const index = draft.products[row.index].costs.findIndex(
+          (cost) => cost.name === costName,
+        );
+        if (index === -1) {
+          // The quote is malformed, but fixable.
+          draft.products[row.index].costs.push({
+            name: costName,
+            value: Number(value),
+          });
+        } else {
+          draft.products[row.index].costs[index].value = Number(value);
+        }
       }),
     );
   };
