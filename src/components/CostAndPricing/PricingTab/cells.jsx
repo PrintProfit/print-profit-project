@@ -77,6 +77,39 @@ export function DynamicCostCell({ getValue, table, row, column }) {
 }
 
 /**
+ * @param {import('./prop-types').HeaderProps<unknown>} props
+ */
+export function DynamicCostHeader({ column, table }) {
+  const initialCostName = column.columnDef.meta?.costName;
+  if (initialCostName === undefined) {
+    throw new Error('Malformed columnDef: costName is undefined');
+  }
+  const [costName, setCostName] = useState(initialCostName);
+
+  const onBlur = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        for (const product of draft.products) {
+          const cost = product.costs.find((c) => c.name === initialCostName);
+          if (cost) {
+            cost.name = costName;
+          }
+        }
+      }),
+    );
+  };
+
+  return (
+    <Input
+      size="small"
+      value={costName}
+      onChange={(e) => setCostName(e.target.value)}
+      onBlur={onBlur}
+    />
+  );
+}
+
+/**
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
  * @param {import('./prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}

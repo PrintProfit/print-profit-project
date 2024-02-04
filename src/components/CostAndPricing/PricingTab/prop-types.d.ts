@@ -1,8 +1,15 @@
-import type { CellContext, Getter, Row, Table } from '@tanstack/react-table';
+import type {
+  CellContext,
+  Getter,
+  HeaderContext,
+  Row,
+  Table,
+} from '@tanstack/react-table';
 import type { Dispatch, ReactNode, SetStateAction } from 'react';
 import type { Product, Quote } from './data-types';
 
 export type CellProps<TValue> = CellContext<Product, TValue>;
+export type HeaderProps<TValue> = HeaderContext<Product, TValue>;
 
 export interface PricingTableProps {
   readonly quote: Quote;

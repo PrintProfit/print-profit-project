@@ -14,7 +14,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TotalsTable } from './TotalsTable';
-import { AddProductCell, DynamicCostCell } from './cells';
+import { AddProductCell, DynamicCostCell, DynamicCostHeader } from './cells';
 import {
   addDynamicCostColumn,
   calculatedCosts,
@@ -54,7 +54,7 @@ export function PricingTable({ quote, setQuote }) {
       // The ID is how we can use getValue for calculations.
       id: `dynamic-cost-${name}`,
       accessorFn: (row) => row.costs.find((c) => c.name === name)?.value ?? 0,
-      header: name,
+      header: DynamicCostHeader,
       cell: DynamicCostCell,
       aggregationFn: 'sum',
       footer: ({ table }) => {
