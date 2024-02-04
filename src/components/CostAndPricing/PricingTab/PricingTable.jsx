@@ -4,6 +4,7 @@ import {
   Paper,
   Stack,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableRow,
@@ -113,43 +114,45 @@ export function PricingTable({ quote, setQuote }) {
     <Stack direction="row" spacing={2}>
       <TableContainer component={Paper}>
         <Table size="small">
-          {table.getAllFlatColumns().map((col, index) => (
-            <TableRow key={col.id}>
-              <TableCell variant="head">
-                {safeFlexRender(
-                  col.columnDef.header,
-                  table
-                    .getFlatHeaders()
-                    .find((h) => h.id === col.id)
-                    ?.getContext(),
-                )}
-              </TableCell>
-              {table.getCoreRowModel().rows.map((row) => (
-                <TableCell key={row.id}>
+          <TableBody>
+            {table.getAllFlatColumns().map((col, index) => (
+              <TableRow key={col.id}>
+                <TableCell variant="head">
                   {safeFlexRender(
-                    col.columnDef.cell,
-                    row
-                      .getAllCells()
-                      .find((cell) => cell.column.id === col.id)
+                    col.columnDef.header,
+                    table
+                      .getFlatHeaders()
+                      .find((h) => h.id === col.id)
                       ?.getContext(),
                   )}
                 </TableCell>
-              ))}
-              <TableCell>
-                {index === 0 ? <AddProductCell table={table} /> : null}
-              </TableCell>
-              <TableCell variant="footer">
-                {safeFlexRender(
-                  col.columnDef.footer,
-                  table
-                    .getFooterGroups()
-                    .flatMap((g) => g.headers)
-                    .find((h) => h.id === col.id)
-                    ?.getContext(),
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
+                {table.getCoreRowModel().rows.map((row) => (
+                  <TableCell key={row.id}>
+                    {safeFlexRender(
+                      col.columnDef.cell,
+                      row
+                        .getAllCells()
+                        .find((cell) => cell.column.id === col.id)
+                        ?.getContext(),
+                    )}
+                  </TableCell>
+                ))}
+                <TableCell>
+                  {index === 0 ? <AddProductCell table={table} /> : null}
+                </TableCell>
+                <TableCell variant="footer">
+                  {safeFlexRender(
+                    col.columnDef.footer,
+                    table
+                      .getFooterGroups()
+                      .flatMap((g) => g.headers)
+                      .find((h) => h.id === col.id)
+                      ?.getContext(),
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
       <TotalsTable quote={quote} setQuote={setQuote} table={table} />
