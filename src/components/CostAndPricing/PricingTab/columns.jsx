@@ -37,13 +37,13 @@ export const consistentColumns = [
     },
   },
   {
-    accessorKey: 'selling_price',
+    accessorKey: 'selling_price_per_unit',
     header: 'Selling Price',
     cell: ConsistentNumericCell,
     meta: {
       inputMode: 'decimal',
       adornment: '$',
-      productKey: 'selling_price',
+      productKey: 'selling_price_per_unit',
     },
   },
   {

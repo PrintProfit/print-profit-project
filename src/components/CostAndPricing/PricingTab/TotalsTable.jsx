@@ -21,9 +21,11 @@ import { unique } from './utils';
  */
 export function TotalsTable({ quote, setQuote, table }) {
   const [contributionPercent, setContributionPercent] = useState(
-    quote.contributionPercent ?? 0,
+    quote.manual_contribution_percent ?? 0,
   );
-  const [manualPrice, setManualPrice] = useState(quote.manualPrice ?? 0);
+  const [manualPrice, setManualPrice] = useState(
+    quote.manual_total_selling_price ?? 0,
+  );
   const [pricePerItem, setPricePerItem] = useState(quote.pricePerItem ?? 0);
 
   const aggregate = useCallback(
@@ -75,7 +77,7 @@ export function TotalsTable({ quote, setQuote, table }) {
                   setQuote(
                     produce(
                       (/** @type {import('./data-types').Quote} */ draft) => {
-                        draft.manualPrice = manualPrice;
+                        draft.manual_total_selling_price = manualPrice;
                       },
                     ),
                   );
@@ -127,7 +129,8 @@ export function TotalsTable({ quote, setQuote, table }) {
                     setQuote(
                       produce(
                         (/** @type {import('./data-types').Quote} */ draft) => {
-                          draft.contributionPercent = contributionPercent;
+                          draft.manual_contribution_percent =
+                            contributionPercent;
                         },
                       ),
                     );

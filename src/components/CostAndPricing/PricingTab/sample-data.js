@@ -6,14 +6,14 @@
  */
 export const quote = {
   name: 'Sample Quote',
-  contributionPercent: 0.4,
-  manualPrice: 3000,
+  manual_contribution_percent: 0.4,
+  manual_total_selling_price: 3000,
   pricePerItem: 6800,
   products: [
     {
       name: 'Order Item 1',
       quantity: 100,
-      selling_price: 14.0,
+      selling_price_per_unit: 14.0,
       estimated_hours: 4,
       costs: [
         { name: 'garment', value: 625 },
@@ -28,7 +28,7 @@ export const quote = {
     {
       name: 'Order Item 2',
       quantity: 100,
-      selling_price: 19.0,
+      selling_price_per_unit: 19.0,
       total_selling_price: 1900,
       estimated_hours: 6,
       costs: [
@@ -44,7 +44,7 @@ export const quote = {
     {
       name: 'Order Item 3',
       quantity: 100,
-      selling_price: 35.0,
+      selling_price_per_unit: 35.0,
       total_selling_price: 3500,
       estimated_hours: 6,
       costs: [

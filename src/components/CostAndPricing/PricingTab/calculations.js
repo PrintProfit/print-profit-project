@@ -9,7 +9,8 @@ const CREDIT_CARD_FEE = 0.03;
  */
 export function totalSellingPrice(product) {
   return (
-    product.total_selling_price ?? product.selling_price * product.quantity
+    product.total_selling_price ??
+    product.selling_price_per_unit * product.quantity
   );
 }
 

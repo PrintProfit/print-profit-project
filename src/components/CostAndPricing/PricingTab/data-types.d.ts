@@ -10,7 +10,7 @@ export interface Cost {
 export interface Product {
   name: string;
   quantity: number;
-  selling_price: number;
+  selling_price_per_unit: number;
   total_selling_price?: number;
   estimated_hours: number;
   costs: Cost[];
@@ -18,8 +18,8 @@ export interface Product {
 
 export interface Quote {
   name: string;
-  contributionPercent?: number;
-  manualPrice?: number;
+  manual_contribution_percent?: number;
+  manual_total_selling_price?: number;
   pricePerItem?: number;
   products: Product[];
 }
