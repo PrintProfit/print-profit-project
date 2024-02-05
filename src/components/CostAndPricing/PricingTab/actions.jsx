@@ -72,7 +72,7 @@ function SaveQuote({ quote, setQuote }) {
       </Button>
       <Dialog
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={closeDialog}
         PaperProps={{
           component: 'form',
           onSubmit: handleSubmit,
