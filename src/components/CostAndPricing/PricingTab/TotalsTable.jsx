@@ -41,8 +41,7 @@ export function TotalsTable({ quote, setQuote, table }) {
   );
 
   const getCMTotalSellingPrice = useCallback(
-    () =>
-      aggregate('totalVariableCosts') ?? 0 / (1 - contributionPercent / 100),
+    () => aggregate('totalVariableCosts') / ((100 - contributionPercent) / 100),
     [aggregate, contributionPercent],
   );
 
@@ -65,7 +64,12 @@ export function TotalsTable({ quote, setQuote, table }) {
           {/* Total Variable Costs Row */}
           <TableRow>
             <TableCell variant="head">Total Variable Costs</TableCell>
-            <TableCell>${getCMTotalSellingPrice().toFixed(2)}</TableCell>
+            <TableCell>
+              {getCMTotalSellingPrice().toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </TableCell>
             <TableCell>
               <Input
                 startAdornment={
@@ -135,6 +139,7 @@ export function TotalsTable({ quote, setQuote, table }) {
             slots={{
               marginInput: (
                 <Input
+                  type="number"
                   endAdornment={
                     <InputAdornment position="end">%</InputAdornment>
                   }
