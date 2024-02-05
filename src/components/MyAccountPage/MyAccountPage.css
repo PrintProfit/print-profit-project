@@ -31,8 +31,8 @@
 }
 
 .editInfoButton {
-  position: absolute;
-  top: -80%;
+  position: relative;
+  top: -81%;
   right: -45%;
 }
 
