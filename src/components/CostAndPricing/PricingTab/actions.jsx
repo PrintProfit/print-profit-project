@@ -240,7 +240,7 @@ function UpdateQuote({ quote, setQuote }) {
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={6000}
-        message="Saved quote"
+        message="Updated quote"
         onClose={closeSnackbar}
         action={snackbarAction}
       />
