@@ -152,12 +152,98 @@ function SaveQuote({ quote, setQuote }) {
  * @param {import("./prop-types").QuoteActionsProps} props
  */
 function UpdateQuote({ quote, setQuote }) {
-  // TODO: Implement this.
-  // It's hard to do right now since there's no way to get an existing quote
-  // into the table right now.
+  const dispatch = useDispatch();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const updateQuote = () => {
+    dispatch({ type: 'SAGA/UPDATE_QUOTE', payload: quote });
+  };
+
+  /**
+   * @param {import('react').FormEvent<HTMLFormElement>} e
+   */
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateQuote();
+    setDialogOpen(false);
+    setSnackbarOpen(true);
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
+
+  /**
+   * @param {(React.SyntheticEvent | Event)} event
+   * @param {string} [reason]
+   */
+  const closeSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const snackbarAction = (
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={closeSnackbar}
+    >
+      <Close fontSize="small" />
+    </IconButton>
+  );
+
   return (
-    <Button type="button" variant="contained" startIcon={<Update />}>
-      Update
-    </Button>
+    <>
+      <Button
+        type="button"
+        variant="contained"
+        startIcon={<Update />}
+        onClick={() => setDialogOpen(true)}
+      >
+        Update
+      </Button>
+      <Dialog
+        open={dialogOpen}
+        onClose={closeDialog}
+        PaperProps={{
+          component: 'form',
+          onSubmit: handleSubmit,
+        }}
+      >
+        <DialogTitle>Update Quote</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to update this quote?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <ButtonGroup variant="contained">
+            <Button
+              type="button"
+              onClick={closeDialog}
+              color="secondary"
+              startIcon={<Cancel />}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" startIcon={<Update />}>
+              Update
+            </Button>
+          </ButtonGroup>
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        message="Saved quote"
+        onClose={closeSnackbar}
+        action={snackbarAction}
+      />
+    </>
   );
 }
