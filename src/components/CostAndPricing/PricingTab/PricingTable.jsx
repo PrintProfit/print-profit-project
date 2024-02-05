@@ -14,6 +14,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useSelector } from 'react-redux';
 import { TotalsTable } from './TotalsTable';
 import { QuoteActions } from './actions';
 import { AddProductCell, DynamicCostCell, DynamicCostHeader } from './cells';
@@ -32,6 +33,9 @@ import { aggregate, unique } from './utils';
 export function PricingTable({ quote, setQuote }) {
   // The @type JSDoc comments here are to get VSCode to understand
   // what these objects are.
+
+  /** @type {boolean} */
+  const updateMode = useSelector((state) => state.quote.updateMode);
 
   /**
    * The dynamic columns that the table uses. They're generated from the frist
@@ -78,7 +82,7 @@ export function PricingTable({ quote, setQuote }) {
   const columns = [
     ...consistentColumns,
     ...dynamicColumns,
-    addDynamicCostColumn,
+    ...(updateMode ? [] : [addDynamicCostColumn]),
     ...calculatedCosts,
     estimatedHoursColumn,
     ...contributionColumns,
@@ -139,7 +143,10 @@ export function PricingTable({ quote, setQuote }) {
                   </TableCell>
                 ))}
                 <TableCell>
-                  {index === 0 ? <AddProductCell table={table} /> : null}
+                  {/* In the update mode, adding products doesn't work yet. */}
+                  {index === 0 && !updateMode ? (
+                    <AddProductCell table={table} />
+                  ) : null}
                 </TableCell>
                 <TableCell variant="footer">
                   {safeFlexRender(
