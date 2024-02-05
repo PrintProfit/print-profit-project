@@ -220,7 +220,8 @@ function PendingAdminPage({ pendingUser }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This account will be available in the archive tab.
+            This account will be available in the archive tab if you decide to
+            archive this user.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

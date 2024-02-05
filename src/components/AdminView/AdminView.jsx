@@ -17,8 +17,6 @@ export default function AdminView() {
 
   return (
     <div>
-      <h1>Admin View</h1>
-
       <h2>Pending Users {pendingUsers.length}</h2>
       <TableContainer>
         <Table>

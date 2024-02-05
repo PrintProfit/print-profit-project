@@ -256,7 +256,7 @@ export default function MyAccountPage() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This action cannot be undone. Please be careful!
+            You can change this information again if need be.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -281,7 +281,7 @@ export default function MyAccountPage() {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This action cannot be undone. Please be careful!
+            You can change this information again if need be.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
