@@ -17,12 +17,6 @@ export default function AdminView() {
 
   return (
     <div>
-      <p>Admin View</p>
-      <div>
-        <h1>This about page is for admin to read!</h1>
-        <p>{user.name}</p>
-      </div>
-
       <h2>Pending Users {pendingUsers.length}</h2>
       <TableContainer>
         <Table>
@@ -33,7 +27,7 @@ export default function AdminView() {
               <TableCell align="center">Company Name</TableCell>
               <TableCell align="center">Last Login</TableCell>
               <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Delete</TableCell>
+              <TableCell align="center">Archive</TableCell>
             </TableRow>
           </TableHead>
 
@@ -60,7 +54,7 @@ export default function AdminView() {
               <TableCell align="center">Company Name</TableCell>
               <TableCell align="center">Last Login</TableCell>
               <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Delete</TableCell>
+              <TableCell align="center">Archive</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
