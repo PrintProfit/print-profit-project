@@ -1,0 +1,65 @@
+.myAccountPageCss {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  row-gap: 30px;
+}
+
+.accountPageFormArea {
+  height: 400px;
+  width: 500px;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.accountPageFormArea section,
+p {
+  font-size: 28px;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: 15px;
+  margin-bottom: 30px;
+}
+
+.editInfoButton {
+  position: absolute;
+  top: -80%;
+  right: -45%;
+}
+
+.invalidHeader {
+  position: absolute;
+  top: 17%;
+  right: 30%;
+  color: #d3302f;
+}
+
+.nameErrorText {
+  position: absolute;
+  top: 21.5%;
+  right: 31.7%;
+  color: #d3302f;
+}
+
+.emailErrorText {
+  position: absolute;
+  top: 31.5%;
+  right: 31.7%;
+  color: #d3302f;
+}
+
+.passwordErrorText {
+  position: absolute;
+  top: 51.4%;
+  right: 27%;
+  color: #d3302f;
+}
