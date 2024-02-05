@@ -59,7 +59,7 @@ function LoginForm() {
             onChange={(event) => setPassword(event.target.value)}
           />
         </Box>
-        <Button onClick={login} variant="contained">
+        <Button onClick={login} variant="contained" type="submit">
           Login
         </Button>
       </form>
