@@ -10,27 +10,15 @@ import { Link, useHistory } from 'react-router-dom';
 
 const drawerWidth = 200;
 /**
- * TODO: Create Style for all List and ListItems in the SideBar
+ * TODO: Create map for sidebar items
  */
 
 export default function SideBar({ children }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
 
   const handleNavigationHome = () => {
     history.push('/user');
   };
-
-  const handleMenu = (event) => {
-    console.log('handleMenu');
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    console.log('handleMenu');
-    setAnchorEl(null);
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer
@@ -58,29 +46,41 @@ export default function SideBar({ children }) {
 
         <List sx={{ height: '100%', textAlign: 'center' }}>
           <h3>Tools Header</h3>
-          <ListItem sx={{ height: '15%' }} disablePadding>
+          <ListItem disablePadding>
             <ListItemButton component={Link} to="/cost-and-pricing">
-              <ListItemText primary="C&P" sx={{ textAlign: 'center' }} />
+              <ListItemText
+                primary="C&P"
+                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
+              />
             </ListItemButton>
           </ListItem>
+          <Divider />
 
-          <ListItem sx={{ height: '15%' }} disablePadding>
+          <ListItem disablePadding>
             <ListItemButton component={Link} to="/tool-two">
-              <ListItemText primary="Tool 2" sx={{ textAlign: 'center' }} />
+              <ListItemText
+                primary="Tool 2"
+                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
+              />
             </ListItemButton>
           </ListItem>
+          <Divider />
 
-          <ListItem sx={{ height: '15%' }} disablePadding>
+          <ListItem disablePadding>
             <ListItemButton component={Link} to="/tool-three">
-              <ListItemText primary="Tool 3" sx={{ textAlign: 'center' }} />
+              <ListItemText
+                primary="Tool 3"
+                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
+              />
             </ListItemButton>
           </ListItem>
+          <Divider />
 
-          <ListItem sx={{ height: '15%' }} disablePadding>
+          <ListItem disablePadding>
             <ListItemButton component={Link} to="/about">
               <ListItemText
                 primary="About/Contact"
-                sx={{ textAlign: 'center' }}
+                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
               />
             </ListItemButton>
           </ListItem>
