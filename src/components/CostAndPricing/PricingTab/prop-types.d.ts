@@ -80,6 +80,13 @@ export interface UpdateQuoteProps {
   readonly quote: Quote;
 }
 
+export interface QuoteSnackbarProps {
+  readonly message: ReactNode;
+  readonly open: boolean;
+  readonly setOpen: Dispatch<SetStateAction<boolean>>;
+  readonly autoHideDuration?: number;
+}
+
 export interface PricingTabProps {
   readonly quote: Quote;
   readonly setQuote: Dispatch<SetStateAction<Quote>>;

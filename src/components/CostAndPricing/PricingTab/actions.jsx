@@ -64,28 +64,6 @@ function SaveQuote({ quote, setQuote }) {
     setName(quote.name ?? '');
   };
 
-  /**
-   * @param {(React.SyntheticEvent | Event)} event
-   * @param {string} [reason]
-   */
-  const closeSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
-
-  const snackbarAction = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={closeSnackbar}
-    >
-      <Close fontSize="small" />
-    </IconButton>
-  );
-
   return (
     <>
       <Button
@@ -137,12 +115,10 @@ function SaveQuote({ quote, setQuote }) {
           </ButtonGroup>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
+      <QuoteSnackbar
         message="Saved quote"
-        onClose={closeSnackbar}
-        action={snackbarAction}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
       />
     </>
   );
@@ -174,28 +150,6 @@ function UpdateQuote({ quote }) {
   const closeDialog = () => {
     setDialogOpen(false);
   };
-
-  /**
-   * @param {(React.SyntheticEvent | Event)} event
-   * @param {string} [reason]
-   */
-  const closeSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
-
-  const snackbarAction = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={closeSnackbar}
-    >
-      <Close fontSize="small" />
-    </IconButton>
-  );
 
   return (
     <>
@@ -237,13 +191,48 @@ function UpdateQuote({ quote }) {
           </ButtonGroup>
         </DialogActions>
       </Dialog>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
+      <QuoteSnackbar
         message="Updated quote"
-        onClose={closeSnackbar}
-        action={snackbarAction}
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
       />
     </>
+  );
+}
+
+/**
+ * @param {import('./prop-types').QuoteSnackbarProps} props
+ */
+function QuoteSnackbar({ message, open, setOpen, autoHideDuration = 6000 }) {
+  /**
+   * @param {(React.SyntheticEvent | Event)} event
+   * @param {string} [reason]
+   */
+  const closeSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const snackbarAction = (
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={closeSnackbar}
+    >
+      <Close fontSize="small" />
+    </IconButton>
+  );
+
+  return (
+    <Snackbar
+      open={open}
+      autoHideDuration={autoHideDuration}
+      message={message}
+      onClose={closeSnackbar}
+      action={snackbarAction}
+    />
   );
 }
