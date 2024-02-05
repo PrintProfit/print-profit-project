@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Cancel, Close, Save, Update } from '@mui/icons-material';
+import { Cancel, Close, Create, Save, Update } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
@@ -27,6 +27,7 @@ export function QuoteActions({ quote, setQuote }) {
     <ButtonGroup>
       <SaveQuote quote={quote} setQuote={setQuote} />
       {updateMode && <UpdateQuote quote={quote} />}
+      <NewQuote setQuote={setQuote} />
     </ButtonGroup>
   );
 }
@@ -193,6 +194,89 @@ function UpdateQuote({ quote }) {
       </Dialog>
       <QuoteSnackbar
         message="Updated quote"
+        open={snackbarOpen}
+        setOpen={setSnackbarOpen}
+      />
+    </>
+  );
+}
+
+/**
+ * @param {import('./prop-types').NewQuoteProps} props
+ */
+function NewQuote({ setQuote }) {
+  const dispatch = useDispatch();
+
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const createQuote = () => {
+    dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: false });
+    dispatch({ type: 'CLEAR_CURRENT_QUOTE' });
+    setQuote({
+      name: '',
+      products: [],
+    });
+  };
+
+  /**
+   * @param {import('react').FormEvent<HTMLFormElement>} e
+   */
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createQuote();
+    setDialogOpen(false);
+    setSnackbarOpen(true);
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
+
+  return (
+    <>
+      <Button
+        type="button"
+        variant="contained"
+        color="warning"
+        onClick={() => setDialogOpen(true)}
+        startIcon={<Create />}
+      >
+        New Quote
+      </Button>
+      <Dialog
+        open={dialogOpen}
+        onClose={closeDialog}
+        PaperProps={{
+          component: 'form',
+          onSubmit: handleSubmit,
+        }}
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to create a new quote? This will discard any
+            unsaved changes.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <ButtonGroup variant="contained">
+            <Button
+              type="button"
+              onClick={closeDialog}
+              color="secondary"
+              startIcon={<Cancel />}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" startIcon={<Create />}>
+              Create
+            </Button>
+          </ButtonGroup>
+        </DialogActions>
+      </Dialog>
+      <QuoteSnackbar
+        message="Created new quote"
         open={snackbarOpen}
         setOpen={setSnackbarOpen}
       />
