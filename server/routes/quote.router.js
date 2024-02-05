@@ -10,7 +10,7 @@ const router = express.Router();
 
 // GET all quotes
 router.get('/:id', (req, res) => {
-  const query = `
+  const query = /*sql*/ `
   SELECT
 	json_build_object(
 		'quotes', json_agg(
@@ -25,6 +25,10 @@ router.get('/:id', (req, res) => {
 					q.manual_total_selling_price,
 				'manual_contribution_percent',
 					q.manual_contribution_percent,
+        'inserted_at',
+          q.inserted_at,
+        'created_by',
+         	u.name,
 				'products',
 					products
 				)
@@ -70,8 +74,8 @@ router.get('/:id', (req, res) => {
 	) c on p.id = c.product_id
 	group by quote_id
 ) p on q.id = p.quote_id
-  	INNER JOIN "user" on q.user_id = "user".id
-  		WHERE "user".company_id = $1`;
+  	INNER JOIN "user" u on q.user_id = u.id
+  		WHERE u.company_id = $1;`;
   console.log('req.params.id', req.params.id);
   const values = [req.params.id];
   pool
@@ -452,39 +456,5 @@ router.put('/remove', async (req, res) => {
 //     },
 //   ],
 // }];
-
-function formatQuotesObject(quoteRows) {
-  // need to account for MULTIPLE quotes==> array
-  const quote = {};
-
-  quote.id = quoteRows[0].quote_id;
-  quote.name = quoteRows[0].name;
-  quote.created_by = quoteRows[0].user_id;
-  quote.products = [];
-
-  for (const product of quote.products) {
-    quote.products.push({
-      id: product.product_id,
-      name: product.product_name,
-      quantity: product.product_quantity,
-      selling_price_per_unit: product.product_selling_price_per_unit,
-      total_selling_price: product.total_selling_price,
-      estimated_hours: product.estimated_hours,
-      costs: [],
-    });
-    for (const cost of product) {
-      costs.push({
-        id: cost.cost_id,
-        name: cost.cost_input_name,
-        value: cost.value,
-      });
-    }
-  }
-  return quote;
-}
-
-function formatQuotesIdArray(rows) {
-  const quoteArray = [];
-}
 
 module.exports = router;
