@@ -7,7 +7,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QuoteTableRow from './QuoteTableRow';
 
@@ -24,11 +24,6 @@ export default function HistoryTab({ setTab }) {
       payload: companyId,
     });
   }, [dispatch, companyId]);
-
-  // Modal constants
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return (
     <div>
