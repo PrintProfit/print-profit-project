@@ -48,7 +48,7 @@ function ApprovedAdminPage({ approvedUser }) {
       </TableCell>
       <TableCell align="center">
         <Button color="error" type="button" onClick={handleDeleteClickOpen}>
-          Delete
+          Archive
         </Button>
       </TableCell>
 
@@ -60,16 +60,16 @@ function ApprovedAdminPage({ approvedUser }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to delete this account?'}
+          {'Are you sure you want to archive this account?'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This action cannot be undone. Please be careful!
+            This account will be available in the archive tab.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={deleteUser} autoFocus>
-            Delete
+            Archive
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
             Cancel

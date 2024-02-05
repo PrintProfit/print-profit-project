@@ -88,7 +88,7 @@ router.get('/company', (req, res) => {
   // console.log('im in company route');
 
   const query = `
-  SELECT "name" FROM "company";
+  SELECT * FROM "company";
   `;
 
   pool
@@ -178,7 +178,7 @@ router.put('/approve', (req, res) => {
       res.sendStatus(201);
     })
     .catch((err) => {
-      console.log('Error in user.router /approve/user PUT,', err);
+      console.log('Error in user.router /approve PUT,', err);
       res.sendStatus(500);
     });
 });
@@ -261,14 +261,15 @@ router.post('/company', (req, res) => {
   INSERT INTO "company" 
   ("name", "updated_by")
   VALUES
-  ($1, $2);
+  ($1, $2) RETURNING "id";
       `;
   const insertValue = [req.body.newCompanyName, req.user.id];
 
   pool
     .query(insertQuery, insertValue)
     .then((result) => {
-      res.sendStatus(201);
+      // console.log('result', result);
+      res.send(result.rows[0]);
     })
     .catch((err) => {
       console.log('err in company post route', err);

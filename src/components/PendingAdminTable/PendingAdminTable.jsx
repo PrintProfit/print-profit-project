@@ -18,6 +18,8 @@ function PendingAdminPage({ pendingUser }) {
 
   const companyList = useSelector((store) => store.user.companyList);
 
+  console.log('company', companyList);
+
   const [newCompanyInput, setNewCompanyInput] = useState('');
   const [openApproval, setOpenApproval] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -38,11 +40,11 @@ function PendingAdminPage({ pendingUser }) {
 
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
-    const companyIndex = companyList.findIndex(
+    const company = companyList.find(
       (company) => company.name === companyInput,
     );
-    if (companyIndex >= 0) {
-      const companyId = companyIndex + 1;
+    if (company) {
+      const companyId = company.id;
 
       dispatch({
         type: 'SAGA_APPROVE_USER',
@@ -52,16 +54,13 @@ function PendingAdminPage({ pendingUser }) {
         },
       });
     } else {
-      console.log('company not found');
-
-      const newCompanyId = companyList.length + 1;
+      // console.log('company not found');
 
       dispatch({
         type: 'SAGA_POST_NEW_COMPANY',
         payload: {
           pendingUserId: pendingUser.user_id,
           newCompanyName: companyInput,
-          companyId: newCompanyId,
         },
       });
     }
@@ -106,7 +105,7 @@ function PendingAdminPage({ pendingUser }) {
           type="button"
           onClick={() => handleDeleteClickOpen()}
         >
-          Delete
+          Archive
         </Button>
       </TableCell>
 
@@ -129,8 +128,8 @@ function PendingAdminPage({ pendingUser }) {
         <DialogTitle>Are you sure you want to approve this user?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please select the correct company that this user will be using this
-            with.
+            Please select the correct company or add a new company it doesn't
+            already exsist.
           </DialogContentText>
           <Autocomplete
             value={newCompanyInput}
@@ -217,16 +216,16 @@ function PendingAdminPage({ pendingUser }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to delete this account?'}
+          {'Are you sure you want to archive this account?'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This action cannot be undone. Please be careful!
+            This account will be available in the archive tab.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={deleteUser} autoFocus>
-            Delete
+            Archive
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
             Cancel

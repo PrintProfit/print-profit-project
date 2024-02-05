@@ -144,10 +144,11 @@ function* postNewCompany(action) {
       url: '/api/user/company',
       data: action.payload,
     });
+    console.log('companyResponse', companyResponse);
     const approveResponse = yield axios({
       method: 'PUT',
       url: '/api/user/approve',
-      data: action.payload,
+      data: { ...action.payload, companyId: companyResponse.data.id },
     });
     yield put({
       type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
