@@ -1,10 +1,4 @@
-import styled from '@emotion/styled';
 import {
-  Backdrop,
-  Box,
-  Button,
-  Fade,
-  Modal,
   Paper,
   Table,
   TableBody,
@@ -12,9 +6,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QuoteTableRow from './QuoteTableRow';
 
@@ -55,8 +48,8 @@ export default function HistoryTab() {
           <TableBody>
             {quoteHistory.quotes?.map((row) => (
               <QuoteTableRow
-                key={row.quote_id}
-                id={row.quote_id}
+                key={row.id}
+                id={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 row={row}
               />
