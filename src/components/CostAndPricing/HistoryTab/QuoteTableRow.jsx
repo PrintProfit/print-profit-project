@@ -13,12 +13,10 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 
-function QuoteDetailsModal(props) {
+function QuoteDetailsModal({ open, row, handleClose, ...props }) {
   // const [open, setOpen] = React.useState(false)
   // const handleOpen = () => setOpen(true)
   // const handleClose = () => setOpen(false)
-  const open = props.open;
-  const row = props.row;
   const style = {
     position: 'absolute',
     top: '50%',
@@ -36,8 +34,8 @@ function QuoteDetailsModal(props) {
       <Modal
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        open={props.open}
-        onClose={props.handleClose}
+        open={open}
+        onClose={handleClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
