@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { put, take, takeLatest } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 
 // Gets all quotes made by users of the same company
 function* getQuoteHistory(action) {
@@ -23,8 +23,21 @@ function* getQuoteHistory(action) {
   }
 }
 
+function* saveQuote(action) {
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
+  try {
+    yield axios.post('/api/quote', config, action.payload);
+  } catch (error) {
+    console.log('Error with saving quote: ', error);
+  }
+}
+
 function* quoteSaga() {
   yield takeLatest('SAGA/FETCH_QUOTE_HISTORY', getQuoteHistory);
+  yield takeLatest('SAGA/SAVE_QUOTE', saveQuote);
 }
 
 export default quoteSaga;
