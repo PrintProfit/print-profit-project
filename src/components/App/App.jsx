@@ -14,7 +14,6 @@ import AboutPage from '../AboutPage/AboutPage';
 import AdminPage from '../AdminPage/AdminPage';
 import AppBarHeader from '../AppBarHeader/AppBarHeader';
 import CostAndPricing from '../CostAndPricing/CostAndPricing';
-import InfoPage from '../InfoPage/InfoPage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
@@ -66,57 +65,67 @@ function App() {
             Even though it seems like they are different pages, the user is always on localhost:5173/user */}
 
           <ProtectedRoute exact path="/user">
-            <AppBarHeader />
-
-            <SideBar>
-              <UserPage />
-            </SideBar>
+            {user.is_approved ? (
+              <>
+                <AppBarHeader />
+                <SideBar>
+                  <UserPage />
+                </SideBar>
+              </>
+            ) : (
+              <LandingPage />
+            )}
           </ProtectedRoute>
 
+          {/* only admins can see Admin page; otherwise, user is redirected to /user */}
           <ProtectedRoute exact path="/admin">
             <AppBarHeader />
-
             <SideBar>
-              <AdminPage />
+              {user.is_admin ? <AdminPage /> : <Redirect to="/user" />}
             </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-two">
-            <AppBarHeader />
-
-            <SideBar>
-              <ToolTwo />
-            </SideBar>
+            {user.is_approved && (
+              <>
+                <AppBarHeader />
+                <SideBar>
+                  <ToolTwo />
+                </SideBar>
+              </>
+            )}
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-three">
-            <AppBarHeader />
+            {user.is_approved && (
+              <>
+                <AppBarHeader />
 
-            <SideBar>
-              <ToolThree />
-            </SideBar>
+                <SideBar>
+                  <ToolThree />
+                </SideBar>
+              </>
+            )}
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/cost-and-pricing">
-            <AppBarHeader />
-            <SideBar>
-              <CostAndPricing />
-            </SideBar>
+            {user.is_approved && (
+              <>
+                <AppBarHeader />
+                <SideBar>
+                  <CostAndPricing />
+                </SideBar>
+              </>
+            )}
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/my-account-page">
             <AppBarHeader />
-            <SideBar>
-              <MyAccountPage />
-            </SideBar>
-          </ProtectedRoute>
-
-          <ProtectedRoute
-            // logged in shows InfoPage else shows LoginPage
-            exact
-            path="/info"
-          >
-            <InfoPage />
+            {user.is_approved && (
+              <SideBar>
+                <MyAccountPage />
+              </SideBar>
+            )}
           </ProtectedRoute>
 
           <Route exact path="/login">
