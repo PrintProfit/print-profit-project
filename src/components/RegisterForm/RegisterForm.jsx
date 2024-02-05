@@ -34,78 +34,85 @@ function RegisterForm() {
   }; // end registerUser
 
   return (
-    <form className="formPanel" onSubmit={registerUser}>
-      <h2>Enter your information to become a member!</h2>
-      {errors.registrationMessage && (
-        <h3 className="alert" role="alert">
-          {errors.registrationMessage}
-        </h3>
-      )}
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField
-          id="email"
-          type="text"
-          label="e-mail"
-          variant="outlined"
-          value={email}
-          required
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <TextField
-          id="name"
-          type="text"
-          label="Full Name"
-          variant="outlined"
-          value={name}
-          required
-          onChange={(event) => setName(event.target.value)}
-        />
-        <TextField
-          id="companyName"
-          type="text"
-          label="Company Name"
-          variant="outlined"
-          value={companyName}
-          required
-          onChange={(event) => setCompanyName(event.target.value)}
-        />
-        <TextField
-          id="password"
-          type="password"
-          label="password"
-          variant="outlined"
-          value={password}
-          required
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        <TextField
-          id="confirmPassword"
-          type="password"
-          label="Confirm Password"
-          variant="outlined"
-          value={confirmedPassword}
-          required
-          onChange={(event) => setConfirmedPassword(event.target.value)}
-        />
-      </Box>
-      <div>
-        <Button
-          variant="contained"
-          type="submit"
-          name="submit"
-          value="Register"
+    <Box>
+      <form className="formPanel" onSubmit={registerUser}>
+        <h2>Enter your information to become a member!</h2>
+        {errors.registrationMessage && (
+          <h3 className="alert" role="alert">
+            {errors.registrationMessage}
+          </h3>
+        )}
+        <Box
+          component="form"
+          sx={{
+            '& > :not(style)': { m: 1, width: '25ch' },
+          }}
+          noValidate
+          autoComplete="off"
         >
-          Register
-        </Button>
-      </div>
-    </form>
+          <TextField
+            id="email"
+            type="text"
+            label="e-mail"
+            variant="outlined"
+            value={email}
+            required
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <TextField
+            id="name"
+            type="text"
+            label="Full Name"
+            variant="outlined"
+            value={name}
+            required
+            onChange={(event) => setName(event.target.value)}
+          />
+          <TextField
+            id="companyName"
+            type="text"
+            label="Company Name"
+            variant="outlined"
+            value={companyName}
+            required
+            onChange={(event) => setCompanyName(event.target.value)}
+          />
+          <TextField
+            id="password"
+            type="password"
+            label="password"
+            variant="outlined"
+            value={password}
+            required
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <TextField
+            id="confirmPassword"
+            type="password"
+            label="Confirm Password"
+            variant="outlined"
+            value={confirmedPassword}
+            required
+            onChange={(event) => setConfirmedPassword(event.target.value)}
+          />
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="50%"
+          >
+            <Button
+              variant="contained"
+              type="submit"
+              name="submit"
+              value="Register"
+            >
+              Register
+            </Button>
+          </Box>
+        </Box>
+      </form>
+    </Box>
   );
 }
 
