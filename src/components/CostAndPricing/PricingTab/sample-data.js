@@ -54,3 +54,11 @@ export const quote = {
     },
   ],
 };
+
+/**
+ * @type {import("./data-types").Quote}
+ */
+export const emptyQuote = {
+  name: '',
+  products: [],
+};

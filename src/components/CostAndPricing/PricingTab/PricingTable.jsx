@@ -15,6 +15,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TotalsTable } from './TotalsTable';
+import { QuoteActions } from './actions';
 import { AddProductCell, DynamicCostCell, DynamicCostHeader } from './cells';
 import {
   addDynamicCostColumn,
@@ -155,7 +156,10 @@ export function PricingTable({ quote, setQuote }) {
           </TableBody>
         </Table>
       </TableContainer>
-      <TotalsTable quote={quote} setQuote={setQuote} table={table} />
+      <Stack direction="column" spacing={2}>
+        <TotalsTable quote={quote} setQuote={setQuote} table={table} />
+        <QuoteActions quote={quote} setQuote={setQuote} />
+      </Stack>
     </Stack>
   );
 }

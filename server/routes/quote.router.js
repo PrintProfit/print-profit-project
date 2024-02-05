@@ -194,8 +194,8 @@ router.post('/', async (req, res) => {
         RETURNING "id";
     `;
 
-    const quoteProductArray = req.body.quote;
-    console.log('quote post req.body.quote:', quoteProductArray);
+    const quoteProductArray = req.body.products;
+    console.log('quote post req.body.products:', quoteProductArray);
 
     // loops over array of products belonging to the posted quote
     for (const product of quoteProductArray) {
@@ -209,7 +209,8 @@ router.post('/', async (req, res) => {
         product.estimated_hours,
       ];
       // second query inserts product info into product table with the returned quote_id from the previous query and returns each product's id after insertion
-      const productId = await connection.query(productQuery, productValues);
+      const productResult = await connection.query(productQuery, productValues);
+      const productId = productResult.rows[0].id;
       console.log(productId);
 
       // COST(S) POST
@@ -233,6 +234,8 @@ router.post('/', async (req, res) => {
     connection.query('COMMIT;');
     // and end connection
     connection.release();
+
+    res.sendStatus(201);
   } catch (err) {
     console.log('Error posting quote:', err);
     // otherwise, undo changes to tables

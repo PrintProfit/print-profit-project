@@ -323,7 +323,6 @@ export function AddProductCell({ table }) {
           name: productName,
           quantity: 0,
           selling_price_per_unit: 0,
-          total_selling_price: 0,
           estimated_hours: 0,
           costs: costNames.map((name) => ({ name, value: 0 })),
         });
