@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import React from 'react';
 
@@ -8,9 +9,8 @@ function RegisterPage() {
   const history = useHistory();
 
   return (
-    <div>
+    <Box paddingTop={4}>
       <RegisterForm />
-
       <center>
         <Button
           type="button"
@@ -22,7 +22,7 @@ function RegisterPage() {
           Login
         </Button>
       </center>
-    </div>
+    </Box>
   );
 }
 
