@@ -10,6 +10,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
+import { produce } from 'immer';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -44,6 +45,11 @@ function SaveQuote({ quote, setQuote }) {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
+    setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        draft.name = name;
+      }),
+    );
     saveQuote();
     setOpen(false);
   };
