@@ -336,8 +336,6 @@ router.put('/edit/info', (req, res) => {
   const newNameInput = req.body.newNameInput;
 
   if (req.body.newPasswordInput === undefined) {
-    console.log('undifined', req.body.newPasswordInput);
-
     sqlText = `
   UPDATE "user"
   SET "email" = $1, "name" = $2, "updated_by" = $3
@@ -346,8 +344,6 @@ WHERE "id" = $3;
 
     insertValue = [newEmailInput, newNameInput, req.user.id];
   } else {
-    console.log('not undifined', req.body.newPasswordInput);
-
     const newPasswordInput = encryptLib.encryptPassword(
       req.body.newPasswordInput,
     );
