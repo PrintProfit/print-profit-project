@@ -29,7 +29,7 @@ function* saveQuote(action) {
     withCredentials: true,
   };
   try {
-    yield axios.post('/api/quote', config, action.payload);
+    yield axios.post('/api/quote', action.payload, config);
   } catch (error) {
     console.log('Error with saving quote: ', error);
   }
