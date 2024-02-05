@@ -11,7 +11,7 @@ function* getQuoteHistory(action) {
     });
     yield put({
       type: 'SET_QUOTE_HISTORY',
-      payload: response.data[0].quotes,
+      payload: response.data.quotes,
     });
     console.log(
       'response.data[0].quotes from getQuoteHistory sagaaa: ',

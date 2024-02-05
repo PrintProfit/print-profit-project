@@ -1,21 +1,17 @@
-import styled from '@emotion/styled';
 import {
   Backdrop,
   Box,
   Button,
   Fade,
   Modal,
-  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 
 function QuoteDetailsModal(props) {
   // const [open, setOpen] = React.useState(false)
@@ -60,7 +56,7 @@ function QuoteDetailsModal(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  <TableCell>{row.quote_name}</TableCell>
+                  <TableCell>{row.name}</TableCell>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -104,37 +100,35 @@ function QuoteTableRow(props) {
   });
 
   return (
-    <>
-      <TableRow
-        key={row.quote_id}
-        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-      >
-        <TableCell>
-          <QuoteDetailsModal
-            open={open}
-            handleOpen={handleOpen}
-            handleClose={handleClose}
-            id={row.quote_id}
-            row={row}
-          />
-          <Button onClick={handleOpen} variant="contained">
-            See details
-          </Button>
-        </TableCell>
-        <TableCell variant="head" scope="row">
-          {row.quote_id}
-        </TableCell>
-        <TableCell>{row.quote_name}</TableCell>
-        <TableCell>{row.created_by}</TableCell>
-        <TableCell>{stringifyDate(row.inserted_at)}</TableCell>
-        <TableCell>{row.products.length}</TableCell>
-        <TableCell>
-          {row.manual_total_selling_price
-            ? USDollar.format(row.manual_total_selling_price)
-            : USDollar.format(sumQuoteSellingPrice(row.products))}
-        </TableCell>
-      </TableRow>
-    </>
+    <TableRow
+      key={row.id}
+      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+    >
+      <TableCell>
+        <QuoteDetailsModal
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+          id={row.id}
+          row={row}
+        />
+        <Button onClick={handleOpen} variant="contained">
+          See details
+        </Button>
+      </TableCell>
+      <TableCell variant="head" scope="row">
+        {row.id}
+      </TableCell>
+      <TableCell>{row.name}</TableCell>
+      <TableCell>{row.created_by}</TableCell>
+      <TableCell>{stringifyDate(row.inserted_at)}</TableCell>
+      <TableCell>{row.products.length}</TableCell>
+      <TableCell>
+        {row.manual_total_selling_price
+          ? USDollar.format(row.manual_total_selling_price)
+          : USDollar.format(sumQuoteSellingPrice(row.products))}
+      </TableCell>
+    </TableRow>
   );
 }
 

@@ -15,9 +15,9 @@ router.get('/:id', (req, res) => {
 	json_build_object(
 		'quotes', json_agg(
 			json_build_object(
-				'quote_id',
+				'id',
 					q.id,
-				'quote_name',
+				'name',
 					q.name,
 				'user_id',
 					q.user_id,
@@ -40,11 +40,11 @@ router.get('/:id', (req, res) => {
 			quote_id,
 			json_agg(
 				json_build_object(
-				'product_id',
+				'id',
 					p.id,
-				'product_name',
+				'name',
 					p.name,
-				'product_quantity',
+				'quantity',
 					p.quantity,
 				'selling_price_per_unit',
 					p.selling_price_per_unit,
@@ -82,7 +82,7 @@ router.get('/:id', (req, res) => {
     .query(query, values)
     .then((dbRes) => {
       console.log('dbRes.rows: ', dbRes.rows);
-      res.send(dbRes.rows);
+      res.send(dbRes.rows[0]);
     })
     .catch((dbErr) => {
       res.sendStatus(500);
@@ -268,7 +268,7 @@ router.put('/', async (req, res) => {
       req.user.id, // $2
       req.body.manual_total_selling_price, // $3
       req.body.manual_contribution_percent, // $4
-      req.body.quote_id, // $5
+      req.body.id, // $5
     ];
     // first query makes updates to quote table
     await connection.query(editQuoteQuery, editQuoteValues);
