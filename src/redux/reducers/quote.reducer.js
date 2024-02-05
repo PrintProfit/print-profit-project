@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { initialQuote } from '../../components/CostAndPricing/PricingTab/sample-data';
 
 const quoteHistory = (state = [], action) => {
   if (action.type === 'SET_QUOTE_HISTORY') {
@@ -14,21 +15,15 @@ const updateMode = (state = false, action) => {
   return state;
 };
 
-const currentQuote = (
-  state = {
-    name: '',
-    products: [],
-  },
-  action,
-) => {
+/**
+ * @type {import('redux').Reducer<import('../../components/CostAndPricing/PricingTab/data-types').Quote>}
+ */
+const currentQuote = (state = initialQuote, action) => {
   if (action.type === 'SET_CURRENT_QUOTE') {
     return action.payload;
   }
   if (action.type === 'CLEAR_CURRENT_QUOTE') {
-    return {
-      name: '',
-      products: [],
-    };
+    return initialQuote;
   }
   return state;
 };

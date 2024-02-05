@@ -62,3 +62,33 @@ export const emptyQuote = {
   name: '',
   products: [],
 };
+
+/**
+ * @type {import("./data-types").Quote}
+ */
+export const initialQuote = {
+  name: '',
+  products: [
+    {
+      name: 'Item 1',
+      quantity: 0,
+      selling_price_per_unit: 0,
+      estimated_hours: 0,
+      costs: [],
+    },
+    {
+      name: 'Item 2',
+      quantity: 0,
+      selling_price_per_unit: 0,
+      estimated_hours: 0,
+      costs: [],
+    },
+    {
+      name: 'Item 3',
+      quantity: 0,
+      selling_price_per_unit: 0,
+      estimated_hours: 0,
+      costs: [],
+    },
+  ],
+};

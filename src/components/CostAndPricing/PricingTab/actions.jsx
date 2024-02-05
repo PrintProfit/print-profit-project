@@ -16,6 +16,7 @@ import {
 import { produce } from 'immer';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { initialQuote } from './sample-data';
 
 /**
  * @param {import("./prop-types").QuoteActionGroupProps} props
@@ -213,10 +214,7 @@ function NewQuote({ setQuote }) {
   const createQuote = () => {
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: false });
     dispatch({ type: 'CLEAR_CURRENT_QUOTE' });
-    setQuote({
-      name: '',
-      products: [],
-    });
+    setQuote(initialQuote);
   };
 
   /**
