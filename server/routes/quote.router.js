@@ -25,6 +25,10 @@ router.get('/:id', (req, res) => {
 					q.manual_total_selling_price,
 				'manual_contribution_percent',
 					q.manual_contribution_percent,
+        'inserted_at',
+          q.inserted_at,
+        'created_by',
+         	u.name,
 				'products',
 					products
 				)
@@ -70,8 +74,8 @@ router.get('/:id', (req, res) => {
 	) c on p.id = c.product_id
 	group by quote_id
 ) p on q.id = p.quote_id
-  	INNER JOIN "user" on q.user_id = "user".id
-  		WHERE "user".company_id = $1;`;
+  	INNER JOIN "user" u on q.user_id = u.id
+  		WHERE u.company_id = $1;`;
   console.log('req.params.id', req.params.id);
   const values = [req.params.id];
   pool
@@ -169,7 +173,7 @@ router.post('/', async (req, res) => {
         RETURNING "id";
      `;
     const quoteValues = [
-      req.body.user_id,
+      req.user.id,
       req.body.name,
       req.body.manual_total_selling_price,
       req.body.manual_contribution_percent,
@@ -194,7 +198,7 @@ router.post('/', async (req, res) => {
     console.log('quote post req.body.quote:', quoteProductArray);
 
     // loops over array of products belonging to the posted quote
-    for (product of quoteProductArray) {
+    for (const product of quoteProductArray) {
       // array of sql values to insert into product table
       const productValues = [
         quoteId,
@@ -216,7 +220,7 @@ router.post('/', async (req, res) => {
       ($1, $2, $3);
       `;
       // loops over array of costs from each product and insert into cost table
-      for (cost of product.costs) {
+      for (const cost of product.costs) {
         const costValues = [productId, cost.name, cost.value];
         // third and final query inserts cost inputs and their corresponding values into the cost table
         await connection.query(costQuery, costValues);
@@ -258,7 +262,7 @@ router.put('/', async (req, res) => {
     // 👆 checks to make sure that quote_id and user_id both match: users may only edit their own quotes (for now)
     const editQuoteValues = [
       req.body.name, // $1
-      req.body.user_id, // $2
+      req.user.id, // $2
       req.body.manual_total_selling_price, // $3
       req.body.manual_contribution_percent, // $4
       req.body.quote_id, // $5
@@ -277,15 +281,15 @@ router.put('/', async (req, res) => {
     console.log('quote post req.body.quote:', quoteProductArray);
 
     // loops over array of product values to update table
-    for (product of quoteProductArray) {
+    for (const product of quoteProductArray) {
       const editProductValues = [
         product.name, //$1
         product.quantity, //$2
         product.selling_price_per_unit, //$3
         product.total_selling_price, //$4
         product.estimated_hours, //$5
-        req.body.user_id, // $6 - user id gets inserted into the "updated_by" column
-        // we re-use req.body.user_id for the sql query's "WHERE" clause => users may ONLY edit quotes that they themselves created
+        req.user.id, // $6 - user id gets inserted into the "updated_by" column
+        // we re-use req.user.id for the sql query's "WHERE" clause => users may ONLY edit quotes that they themselves created
         product.id, // $7
       ];
       // actual query to update the product tables
@@ -297,12 +301,12 @@ router.put('/', async (req, res) => {
           WHERE "id" = $3 AND "user_id" = $4;
      `;
       // nested loop goes over each cost in the given product and updates the corresponding values in the cost table
-      for (cost of product.costs) {
+      for (const cost of product.costs) {
         const editCostValues = [
           cost.name, // $1
           cost.value, // $2
           cost.id, // $3
-          req.body.user_id,
+          req.user.id,
         ]; // $4
         await connection.query(editCostQuery, editCostValues);
       } // END COST(S) PUT
@@ -342,7 +346,7 @@ router.put('/remove', async (req, res) => {
     const removeQuoteValues = [
       req.body.remove_quote,
       req.body.quote_id,
-      req.body.user_id,
+      req.user.id,
     ];
     await connection.query(removeQuoteQuery, removeQuoteValues);
     // END QUOTE SOFT_DELETE route
@@ -356,11 +360,11 @@ router.put('/remove', async (req, res) => {
     const quoteProductArray = req.body.quote;
     console.log('quote post req.body.quote:', quoteProductArray);
 
-    for (product of quoteProductArray) {
+    for (const product of quoteProductArray) {
       const removeProductValues = [
         product.remove_product, // $1
         product.id, // $2
-        req.body.user_id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
+        req.user.id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
       ];
       await connection.query(removeProductQuery, removeProductValues);
       // COST SOFT-DELETE route
@@ -369,11 +373,11 @@ router.put('/remove', async (req, res) => {
     SET "is_removed" = $1, "updated_by" = $3
     WHERE "id" = $2 and "user_id" = $3;
     `;
-      for (cost of product.costs) {
+      for (const cost of product.costs) {
         const removeCostValues = [
           cost.remove_cost, // $1
           cost.id, // $2
-          req.body.user_id,
+          req.user.id,
         ]; // $3
         await connection.query(removeCostQuery, removeCostValues);
       } // END COST SOFT-DELETE
