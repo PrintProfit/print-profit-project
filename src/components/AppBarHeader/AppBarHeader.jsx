@@ -9,7 +9,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 export default function AppBarHeader() {
   const history = useHistory();

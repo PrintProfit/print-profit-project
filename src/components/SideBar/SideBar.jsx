@@ -8,7 +8,7 @@ import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 /**
  * TODO: Create Style for all List and ListItems in the SideBar
  */
@@ -47,32 +47,41 @@ export default function SideBar({ children }) {
       >
         <div style={{ cursor: 'pointer' }}>
           {/* biome-ignore lint/a11y/useKeyWithClickEvents: Will change to logo will deal with later */}
-          <h1 onClick={handleNavigationHome}>HOME</h1>
+          <img
+            width={200}
+            height={150}
+            onClick={handleNavigationHome}
+            src="public/images/printProfitLogoV2.svg"
+            alt="printProfitLogo"
+          />
         </div>
 
-        <List sx={{ height: '100%' }}>
+        <List sx={{ height: '100%', textAlign: 'center' }}>
           <h3>Tools Header</h3>
-          <ListItem sx={{ height: '20%' }} disablePadding>
+          <ListItem sx={{ height: '15%' }} disablePadding>
             <ListItemButton component={Link} to="/cost-and-pricing">
-              <ListItemText primary="C&P" />
+              <ListItemText primary="C&P" sx={{ textAlign: 'center' }} />
             </ListItemButton>
           </ListItem>
 
-          <ListItem sx={{ height: '20%' }} disablePadding>
+          <ListItem sx={{ height: '15%' }} disablePadding>
             <ListItemButton component={Link} to="/tool-two">
-              <ListItemText primary="Tool 2" />
+              <ListItemText primary="Tool 2" sx={{ textAlign: 'center' }} />
             </ListItemButton>
           </ListItem>
 
-          <ListItem sx={{ height: '20%' }} disablePadding>
+          <ListItem sx={{ height: '15%' }} disablePadding>
             <ListItemButton component={Link} to="/tool-three">
-              <ListItemText primary="Tool 3" />
+              <ListItemText primary="Tool 3" sx={{ textAlign: 'center' }} />
             </ListItemButton>
           </ListItem>
 
-          <ListItem sx={{ height: '20%' }} disablePadding>
+          <ListItem sx={{ height: '15%' }} disablePadding>
             <ListItemButton component={Link} to="/about">
-              <ListItemText primary="About/Contact" />
+              <ListItemText
+                primary="About/Contact"
+                sx={{ textAlign: 'center' }}
+              />
             </ListItemButton>
           </ListItem>
         </List>
