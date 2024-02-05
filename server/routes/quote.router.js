@@ -8,6 +8,8 @@ const userStrategy = require('../strategies/user.strategy');
 
 const router = express.Router();
 
+router.use(rejectUnauthenticated);
+
 // GET all quotes
 router.get('/:id', (req, res) => {
   const query = /*sql*/ `
