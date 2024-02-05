@@ -96,8 +96,12 @@ function SaveQuote({ quote, setQuote }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button type="submit">Save</Button>
+          <ButtonGroup variant="contained">
+            <Button onClick={closeDialog} color="secondary">
+              Cancel
+            </Button>
+            <Button type="submit">Save</Button>
+          </ButtonGroup>
         </DialogActions>
       </Dialog>
     </>
