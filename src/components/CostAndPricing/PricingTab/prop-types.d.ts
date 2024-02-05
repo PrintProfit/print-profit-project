@@ -68,4 +68,5 @@ export interface AddProductCellProps {
 
 export interface QuoteActionsProps {
   readonly quote: Quote;
+  readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }

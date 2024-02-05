@@ -17,10 +17,10 @@ import { useDispatch } from 'react-redux';
  *
  * @param {import("./prop-types").QuoteActionsProps} props
  */
-export function QuoteActions({ quote }) {
+export function QuoteActions({ quote, setQuote }) {
   return (
     <Stack direction="row" spacing={2}>
-      <SaveQuote quote={quote} />
+      <SaveQuote quote={quote} setQuote={setQuote} />
       <Button type="button">Update</Button>
     </Stack>
   );
@@ -29,7 +29,7 @@ export function QuoteActions({ quote }) {
 /**
  * @param {import("./prop-types").QuoteActionsProps} props
  */
-function SaveQuote({ quote }) {
+function SaveQuote({ quote, setQuote }) {
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);

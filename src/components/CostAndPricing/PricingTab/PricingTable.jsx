@@ -158,7 +158,7 @@ export function PricingTable({ quote, setQuote }) {
       </TableContainer>
       <Stack direction="column" spacing={2}>
         <TotalsTable quote={quote} setQuote={setQuote} table={table} />
-        <QuoteActions quote={quote} />
+        <QuoteActions quote={quote} setQuote={setQuote} />
       </Stack>
     </Stack>
   );
