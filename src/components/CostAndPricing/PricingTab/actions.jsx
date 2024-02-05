@@ -22,7 +22,7 @@ export function QuoteActions({ quote, setQuote }) {
   return (
     <Stack direction="row" spacing={2}>
       <SaveQuote quote={quote} setQuote={setQuote} />
-      <Button type="button">Update</Button>
+      <UpdateQuote quote={quote} setQuote={setQuote} />
     </Stack>
   );
 }
@@ -96,4 +96,14 @@ function SaveQuote({ quote, setQuote }) {
       </Dialog>
     </>
   );
+}
+
+/**
+ * @param {import("./prop-types").QuoteActionsProps} props
+ */
+function UpdateQuote({ quote, setQuote }) {
+  // TODO: Implement this.
+  // It's hard to do right now since there's no way to get an existing quote
+  // into the table right now.
+  return <Button type="button">Update</Button>;
 }
