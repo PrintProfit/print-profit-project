@@ -12,8 +12,11 @@ import {
   TableRow,
 } from '@mui/material';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 function QuoteDetailsModal({ open, row, handleClose, ...props }) {
+  const dispatch = useDispatch();
+
   // const [open, setOpen] = React.useState(false)
   // const handleOpen = () => setOpen(true)
   // const handleClose = () => setOpen(false)
@@ -29,6 +32,13 @@ function QuoteDetailsModal({ open, row, handleClose, ...props }) {
     p: 4,
   };
   console.log('props:', props);
+
+  const sendToPricingTool = () => {
+    dispatch({ type: 'SET_CURRENT_QUOTE', payload: row });
+    dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: true });
+    handleClose();
+  };
+
   return (
     <div>
       <Modal
@@ -58,7 +68,7 @@ function QuoteDetailsModal({ open, row, handleClose, ...props }) {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Button>Open in Pricing Tool</Button>
+            <Button onClick={sendToPricingTool}>Open in Pricing Tool</Button>
           </Box>
         </Fade>
       </Modal>
