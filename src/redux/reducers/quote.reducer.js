@@ -14,7 +14,27 @@ const updateMode = (state = false, action) => {
   return state;
 };
 
+const currentQuote = (
+  state = {
+    name: '',
+    products: [],
+  },
+  action,
+) => {
+  if (action.type === 'SET_CURRENT_QUOTE') {
+    return action.payload;
+  }
+  if (action.type === 'CLEAR_CURRENT_QUOTE') {
+    return {
+      name: '',
+      products: [],
+    };
+  }
+  return state;
+};
+
 export default combineReducers({
   quoteHistory,
   updateMode,
+  current: currentQuote,
 });
