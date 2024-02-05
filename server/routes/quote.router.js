@@ -165,7 +165,7 @@ router.post('/', async (req, res) => {
       INSERT INTO "quote"
         ("user_id", "name", "manual_total_selling_price", "manual_contribution_percent")
         VALUES
-        ($1::integer, $2, $3, $4)
+        ($1, $2, $3, $4)
         RETURNING "id";
      `;
     const quoteValues = [
