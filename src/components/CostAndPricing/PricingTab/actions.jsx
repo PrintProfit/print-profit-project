@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Save, Update } from '@mui/icons-material';
+import { Cancel, Save, Update } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
@@ -97,10 +97,17 @@ function SaveQuote({ quote, setQuote }) {
         </DialogContent>
         <DialogActions>
           <ButtonGroup variant="contained">
-            <Button onClick={closeDialog} color="secondary">
+            <Button
+              type="button"
+              onClick={closeDialog}
+              color="secondary"
+              startIcon={<Cancel />}
+            >
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            <Button type="submit" startIcon={<Save />}>
+              Save
+            </Button>
           </ButtonGroup>
         </DialogActions>
       </Dialog>
