@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import './MyAccountPage.css';
 
 export default function MyAccountPage() {
   const dispatch = useDispatch();
@@ -27,11 +28,10 @@ export default function MyAccountPage() {
 
   // const [newEmailInput, setNewEmailInput] = useState(profileUser.email);
   // const [newNameInput, setNewNameInput] = useState(profileUser.name);
-  const [newPasswordInput, setNewPasswordInput] = useState('*********');
-  const [newVerifyPasswordInput, setNewVerifyPasswordInput] =
-    useState('*********');
+  const [newPasswordInput, setNewPasswordInput] = useState('');
+  const [newVerifyPasswordInput, setNewVerifyPasswordInput] = useState('');
 
-  console.log(newPasswordInput);
+  // console.log(newPasswordInput);
 
   const [openComfirmation, setOpenComfirmation] = useState(false);
   const [openDiscard, setOpenDiscard] = useState(false);
@@ -51,10 +51,11 @@ export default function MyAccountPage() {
     if (
       userName.name &&
       userEmail.email &&
-      newPasswordInput &&
-      newPasswordInput === newVerifyPasswordInput
+      newPasswordInput === newVerifyPasswordInput &&
+      (newPasswordInput.length >= 8 || newPasswordInput.length === 0)
     ) {
       setOpenComfirmation(true);
+      setInvalidText('');
     } else {
       setInvalidText('Invalid, please insert valid information');
     }
@@ -96,7 +97,7 @@ export default function MyAccountPage() {
   // Sends dispatch to save the users info
   const saveNewUserInfo = () => {
     // console.log('black password', newPasswordInput);
-    if (newPasswordInput === '*********') {
+    if (newPasswordInput === '' || newPasswordInput.length < 8) {
       console.log('no password');
       dispatch({
         type: 'SAGA_EDIT_USERS_INFO',
@@ -116,8 +117,8 @@ export default function MyAccountPage() {
         },
       });
     }
-    setNewPasswordInput('*********');
-    setNewVerifyPasswordInput('*********');
+    setNewPasswordInput('');
+    setNewVerifyPasswordInput('');
     toggleForm();
   };
 
@@ -126,65 +127,73 @@ export default function MyAccountPage() {
       return (
         <>
           <form>
-            <h2>{invalidText}</h2>
+            <section>
+              Name:
+              <TextField
+                variant="standard"
+                type="text"
+                name="name"
+                placeholder={profileUser.name}
+                value={userName.name}
+                onChange={(e) => handleNameChange(e.target.value)}
+                required
+                label="New Name"
+              />
+            </section>
 
-            <p>Name:</p>
-            <TextField
-              variant="standard"
-              type="text"
-              name="name"
-              placeholder={profileUser.name}
-              value={userName.name}
-              onChange={(e) => handleNameChange(e.target.value)}
-              required
-              label="New Name"
-            />
+            <section>
+              Email:
+              <TextField
+                variant="standard"
+                type="email"
+                name="email"
+                placeholder={profileUser.email}
+                value={userEmail.email}
+                onChange={(e) => handleEmailChange(e.target.value)}
+                required
+                label="New Email"
+              />
+            </section>
 
-            <p>Email:</p>
-            <TextField
-              variant="standard"
-              type="email"
-              name="email"
-              placeholder={profileUser.email}
-              value={userEmail.email}
-              onChange={(e) => handleEmailChange(e.target.value)}
-              required
-              label="New Email"
-            />
+            <section>
+              New Password:
+              <TextField
+                variant="standard"
+                type="password"
+                name="password"
+                placeholder={'password'}
+                onClick={() => setNewPasswordInput('')}
+                value={newPasswordInput}
+                onChange={(e) => setNewPasswordInput(e.target.value)}
+                required
+                label="New Password"
+              />
+            </section>
 
-            <p>New Password:</p>
-            <TextField
-              variant="standard"
-              type="password"
-              name="password"
-              placeholder={'password'}
-              onClick={() => setNewPasswordInput('')}
-              value={newPasswordInput}
-              onChange={(e) => setNewPasswordInput(e.target.value)}
-              required
-              label="New Password"
-            />
+            <section>
+              Verify New Password:
+              <TextField
+                variant="standard"
+                type="password"
+                name="Verify New Password"
+                placeholder={'verify new password'}
+                onClick={() => setNewVerifyPasswordInput('')}
+                value={newVerifyPasswordInput}
+                onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
+                required
+                label="Verify New Password"
+              />
+            </section>
 
-            {newPasswordInput === newVerifyPasswordInput ? '' : 'Invalid'}
-
-            <p>Verify New Password:</p>
-            <TextField
-              variant="standard"
-              type="password"
-              name="Verify New Password"
-              placeholder={'verify new password'}
-              onClick={() => setNewVerifyPasswordInput('')}
-              value={newVerifyPasswordInput}
-              onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
-              required
-              label="Verify New Password"
-            />
-
-            <Button onClick={handleDiscardClickOpen} type="button">
-              Discard Changes
-            </Button>
             <Button onClick={handleComfirmationClickOpen} type="button">
               Save Changes
+            </Button>
+            <Button
+              color="error"
+              onClick={handleDiscardClickOpen}
+              type="button"
+            >
+              Discard Changes
             </Button>
           </form>
         </>
@@ -193,23 +202,47 @@ export default function MyAccountPage() {
     if (isForm === false) {
       return (
         <>
-          <Button onClick={toggleForm} type="button">
-            <EditIcon />
-          </Button>
-
           <p>Name: {profileUser.user_name}</p>
           <p>Email: {profileUser.email} </p>
           <p>Company Name: {profileUser.company_name}</p>
+
+          <Button
+            aria-label="edit info"
+            className="editInfoButton"
+            onClick={toggleForm}
+            type="button"
+          >
+            <EditIcon sx={{ color: 'black' }} />
+          </Button>
         </>
       );
     }
   };
 
   return (
-    <div>
-      <h1>My Account Page:</h1>
+    <div className="myAccountPageCss">
+      <h1>My Account Page</h1>
 
-      {displayText()}
+      <h3 className="invalidHeader">{invalidText}</h3>
+
+      <div className="accountPageFormArea">{displayText()}</div>
+
+      <h5 className="nameErrorText">
+        {userName.name === '' ? 'you must enter a valid name' : ''}
+      </h5>
+
+      <h5 className="emailErrorText">
+        {userEmail.email === '' ? 'you must enter a valid email' : ''}
+      </h5>
+
+      <h5 className="passwordErrorText">
+        {' '}
+        {newPasswordInput.length < 8 && newPasswordInput !== ''
+          ? 'password must be 8 or more characters'
+          : newPasswordInput !== newVerifyPasswordInput
+            ? 'passwords do not match'
+            : ''}
+      </h5>
 
       {/* Discard Dialog */}
       <Dialog
@@ -227,10 +260,12 @@ export default function MyAccountPage() {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={discardChanges} autoFocus>
+          <Button color="error" onClick={discardChanges} autoFocus>
             Discard
           </Button>
-          <Button onClick={handleDiscardClose}>Cancel</Button>
+          <Button sx={{ color: 'black' }} onClick={handleDiscardClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -253,7 +288,9 @@ export default function MyAccountPage() {
           <Button onClick={saveNewUserInfo} autoFocus>
             Save Changes
           </Button>
-          <Button onClick={handleComfirmationClose}>Cancel</Button>
+          <Button sx={{ color: 'black' }} onClick={handleComfirmationClose}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
