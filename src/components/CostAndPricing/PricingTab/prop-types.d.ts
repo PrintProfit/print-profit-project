@@ -66,6 +66,11 @@ export interface AddProductCellProps {
   readonly table: Table<Product>;
 }
 
+export interface QuoteActionGroupProps {
+  readonly quote: Quote;
+  readonly setQuote: Dispatch<SetStateAction<Quote>>;
+}
+
 export interface QuoteActionsProps {
   readonly quote: Quote;
   readonly setQuote: Dispatch<SetStateAction<Quote>>;

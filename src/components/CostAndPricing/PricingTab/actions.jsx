@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 /**
- * @param {import("./prop-types").QuoteActionsProps} props
+ * @param {import("./prop-types").QuoteActionGroupProps} props
  */
 export function QuoteActions({ quote, setQuote }) {
   return (
