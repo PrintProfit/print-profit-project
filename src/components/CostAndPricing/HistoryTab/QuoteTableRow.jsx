@@ -14,7 +14,7 @@ import {
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-function QuoteDetailsModal({ open, row, handleClose, ...props }) {
+function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
   const dispatch = useDispatch();
 
   // const [open, setOpen] = React.useState(false)
@@ -37,6 +37,7 @@ function QuoteDetailsModal({ open, row, handleClose, ...props }) {
     dispatch({ type: 'SET_CURRENT_QUOTE', payload: row });
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: true });
     handleClose();
+    setTab(0);
   };
 
   return (
@@ -119,6 +120,7 @@ function QuoteTableRow(props) {
           handleClose={handleClose}
           id={row.id}
           row={row}
+          setTab={props.setTab}
         />
         <Button onClick={handleOpen} variant="contained">
           See details
