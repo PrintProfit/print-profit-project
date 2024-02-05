@@ -71,9 +71,13 @@ export interface QuoteActionGroupProps {
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }
 
-export interface QuoteActionsProps {
+export interface SaveQuoteProps {
   readonly quote: Quote;
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
+}
+
+export interface UpdateQuoteProps {
+  readonly quote: Quote;
 }
 
 export interface PricingTabProps {

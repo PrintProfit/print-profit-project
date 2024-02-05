@@ -26,13 +26,13 @@ export function QuoteActions({ quote, setQuote }) {
   return (
     <ButtonGroup>
       <SaveQuote quote={quote} setQuote={setQuote} />
-      {updateMode && <UpdateQuote quote={quote} setQuote={setQuote} />}
+      {updateMode && <UpdateQuote quote={quote} />}
     </ButtonGroup>
   );
 }
 
 /**
- * @param {import("./prop-types").QuoteActionsProps} props
+ * @param {import("./prop-types").SaveQuoteProps} props
  */
 function SaveQuote({ quote, setQuote }) {
   const dispatch = useDispatch();
@@ -149,9 +149,9 @@ function SaveQuote({ quote, setQuote }) {
 }
 
 /**
- * @param {import("./prop-types").QuoteActionsProps} props
+ * @param {import("./prop-types").UpdateQuoteProps} props
  */
-function UpdateQuote({ quote, setQuote }) {
+function UpdateQuote({ quote }) {
   const dispatch = useDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
