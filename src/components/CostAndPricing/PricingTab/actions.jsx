@@ -15,16 +15,18 @@ import {
 } from '@mui/material';
 import { produce } from 'immer';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 /**
  * @param {import("./prop-types").QuoteActionGroupProps} props
  */
 export function QuoteActions({ quote, setQuote }) {
+  /** @type {boolean} */
+  const updateMode = useSelector((state) => state.quote.updateMode);
   return (
     <ButtonGroup>
       <SaveQuote quote={quote} setQuote={setQuote} />
-      <UpdateQuote quote={quote} setQuote={setQuote} />
+      {updateMode && <UpdateQuote quote={quote} setQuote={setQuote} />}
     </ButtonGroup>
   );
 }
