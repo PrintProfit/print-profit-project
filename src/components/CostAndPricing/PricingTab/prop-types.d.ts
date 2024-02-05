@@ -25,6 +25,7 @@ export interface TotalsTableProps {
 export interface TotalsTableRowProps {
   readonly table: Table<Product>;
   readonly column: string;
+  readonly title: string;
 }
 
 export interface ContributionRowsProps {
