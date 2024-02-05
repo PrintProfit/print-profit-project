@@ -1,4 +1,10 @@
+import styled from '@emotion/styled';
 import {
+  Backdrop,
+  Box,
+  Button,
+  Fade,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -6,9 +12,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import QuoteTableRow from './QuoteTableRow';
 
 export default function HistoryTab() {
   const dispatch = useDispatch();
@@ -16,6 +24,7 @@ export default function HistoryTab() {
   const user = useSelector((store) => store.user);
   const companyId = user.currentUser.company_id;
 
+  // fetches all the quotes for a given user's company
   useEffect(() => {
     dispatch({
       type: 'SAGA/FETCH_QUOTE_HISTORY',
@@ -23,39 +32,38 @@ export default function HistoryTab() {
     });
   }, [dispatch, companyId]);
 
+  // Modal constants
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell></TableCell>
-            <TableCell>Quote id</TableCell>
-            <TableCell>Date created</TableCell>
-            <TableCell>Created by</TableCell>
-            <TableCell>Number of products</TableCell>
-            <TableCell>Total selling price</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {quoteHistory.quotes?.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell>
-                <button type="button">See details</button>
-              </TableCell>
-              <TableCell variant="head" scope="row">
-                {row.quote_id}
-              </TableCell>
-              <TableCell>{row.quote_name}</TableCell>
-              <TableCell>{row.created_at}</TableCell>
-              <TableCell>{row.products.length}</TableCell>
-              <TableCell>{row.products.total_selling_price}</TableCell>
+    <div>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell> </TableCell>
+              <TableCell>Quote id</TableCell>
+              <TableCell>Quote name</TableCell>
+              <TableCell>Created by</TableCell>
+              <TableCell>Date created</TableCell>
+              <TableCell>Number of products</TableCell>
+              <TableCell>Total selling price</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {quoteHistory.quotes?.map((row) => (
+              <QuoteTableRow
+                key={row.quote_id}
+                id={row.quote_id}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                row={row}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 }
