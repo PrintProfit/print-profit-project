@@ -1,10 +1,9 @@
 // @ts-check
-import { useState } from 'react';
 import { PricingTable } from './PricingTable';
-import { emptyQuote } from './sample-data';
 
-export function PricingTab() {
-  const [quote, setQuote] = useState(emptyQuote);
-
+/**
+ * @param {import('./prop-types').PricingTabProps} props
+ */
+export function PricingTab({ quote, setQuote }) {
   return <PricingTable quote={quote} setQuote={setQuote} />;
 }
