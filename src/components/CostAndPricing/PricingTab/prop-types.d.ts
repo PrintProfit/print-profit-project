@@ -65,3 +65,7 @@ export interface AddCostHeaderProps {
 export interface AddProductCellProps {
   readonly table: Table<Product>;
 }
+
+export interface QuoteActionsProps {
+  readonly quote: Quote;
+}
