@@ -81,7 +81,10 @@ function App() {
           <ProtectedRoute exact path="/admin">
             <AppBarHeader />
             <SideBar>
-              {user.is_admin ? <AdminPage /> : <Redirect to="/user" />}
+              {/* 🔥🔥🔥🔥Need to un-comment this for final🔥🔥🔥🔥🔥 */}
+              {/* {user.is_admin ?  */}
+              <AdminPage /> : <Redirect to="/user" />
+              {/* } */}
             </SideBar>
           </ProtectedRoute>
 
@@ -129,9 +132,7 @@ function App() {
           </ProtectedRoute>
 
           <Route exact path="/login">
-            {/* TODO: change user.id to user.is_approved in order to
-            only allow approved users */}
-            {user.id ? (
+            {user.is_approved ? (
               // If the user is already logged in,
               // redirect to the /user page
               <Redirect to="/user" />
@@ -142,7 +143,7 @@ function App() {
           </Route>
 
           <Route exact path="/registration">
-            {user.id ? (
+            {user.is_approved ? (
               // If the user is already logged in,
               // redirect them to the /user page
               <Redirect to="/user" />
