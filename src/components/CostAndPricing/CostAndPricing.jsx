@@ -38,7 +38,7 @@ export default function CostAndPricing() {
         <PricingTab />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <HistoryTab />
+        <HistoryTab setTab={setValue} />
       </TabPanel>
     </Box>
   );

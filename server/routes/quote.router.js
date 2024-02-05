@@ -8,6 +8,8 @@ const userStrategy = require('../strategies/user.strategy');
 
 const router = express.Router();
 
+router.use(rejectUnauthenticated);
+
 // GET all quotes
 router.get('/:id', (req, res) => {
   const query = /*sql*/ `
@@ -278,10 +280,10 @@ router.put('/', async (req, res) => {
     const editProductQuery = `
       UPDATE "product"
         SET "name" = $1, "quantity" = $2, "selling_price_per_unit" = $3, "total_selling_price" = $4, "estimated_hours" = $5, updated_by = $6
-        WHERE "id" = $7 and "user_id" = $6;
+        WHERE "id" = $6
     `;
-    const quoteProductArray = req.body.quote;
-    console.log('quote post req.body.quote:', quoteProductArray);
+    const quoteProductArray = req.body.products;
+    console.log('quote post req.body.products:', quoteProductArray);
 
     // loops over array of product values to update table
     for (const product of quoteProductArray) {
@@ -291,9 +293,9 @@ router.put('/', async (req, res) => {
         product.selling_price_per_unit, //$3
         product.total_selling_price, //$4
         product.estimated_hours, //$5
-        req.user.id, // $6 - user id gets inserted into the "updated_by" column
+        product.id, // $6
+        // req.user.id, // $7 - user id gets inserted into the "updated_by" column
         // we re-use req.user.id for the sql query's "WHERE" clause => users may ONLY edit quotes that they themselves created
-        product.id, // $7
       ];
       // actual query to update the product tables
       await connection.query(editProductQuery, editProductValues);
@@ -301,7 +303,7 @@ router.put('/', async (req, res) => {
       const editCostQuery = `
         UPDATE "cost"
           SET "name" = $1, "value" = $2, "updated_by" = $4
-          WHERE "id" = $3 AND "user_id" = $4;
+          WHERE "id" = $3
      `;
       // nested loop goes over each cost in the given product and updates the corresponding values in the cost table
       for (const cost of product.costs) {
@@ -309,8 +311,8 @@ router.put('/', async (req, res) => {
           cost.name, // $1
           cost.value, // $2
           cost.id, // $3
-          req.user.id,
-        ]; // $4
+          req.user.id, // $4
+        ];
         await connection.query(editCostQuery, editCostValues);
       } // END COST(S) PUT
     } // END PRODUCT(S) PUT

@@ -7,11 +7,11 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QuoteTableRow from './QuoteTableRow';
 
-export default function HistoryTab() {
+export default function HistoryTab({ setTab }) {
   const dispatch = useDispatch();
   const quoteHistory = useSelector((store) => store.quote.quoteHistory);
   const user = useSelector((store) => store.user);
@@ -24,11 +24,6 @@ export default function HistoryTab() {
       payload: companyId,
     });
   }, [dispatch, companyId]);
-
-  // Modal constants
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
   return (
     <div>
@@ -52,6 +47,7 @@ export default function HistoryTab() {
                 id={row.id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 row={row}
+                setTab={setTab}
               />
             ))}
           </TableBody>

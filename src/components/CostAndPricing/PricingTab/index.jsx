@@ -1,10 +1,12 @@
 // @ts-check
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { PricingTable } from './PricingTable';
-import { emptyQuote } from './sample-data';
 
 export function PricingTab() {
-  const [quote, setQuote] = useState(emptyQuote);
+  /** @type {import('./data-types').Quote} */
+  const currentQuote = useSelector((state) => state.quote.current);
+  const [quote, setQuote] = useState(currentQuote);
 
   return <PricingTable quote={quote} setQuote={setQuote} />;
 }

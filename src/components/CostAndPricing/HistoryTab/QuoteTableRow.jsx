@@ -11,14 +11,15 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React from 'react';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-function QuoteDetailsModal(props) {
+function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
+  const dispatch = useDispatch();
+
   // const [open, setOpen] = React.useState(false)
   // const handleOpen = () => setOpen(true)
   // const handleClose = () => setOpen(false)
-  const open = props.open;
-  const row = props.row;
   const style = {
     position: 'absolute',
     top: '50%',
@@ -31,13 +32,21 @@ function QuoteDetailsModal(props) {
     p: 4,
   };
   console.log('props:', props);
+
+  const sendToPricingTool = () => {
+    dispatch({ type: 'SET_CURRENT_QUOTE', payload: row });
+    dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: true });
+    handleClose();
+    setTab(0);
+  };
+
   return (
     <div>
       <Modal
         aria-labelledby="modal-title"
         aria-describedby="modal-description"
-        open={props.open}
-        onClose={props.handleClose}
+        open={open}
+        onClose={handleClose}
         closeAfterTransition
         slots={{ backdrop: Backdrop }}
         slotProps={{
@@ -60,7 +69,7 @@ function QuoteDetailsModal(props) {
                 </TableBody>
               </Table>
             </TableContainer>
-            <Button>Open in Pricing Tool</Button>
+            <Button onClick={sendToPricingTool}>Open in Pricing Tool</Button>
           </Box>
         </Fade>
       </Modal>
@@ -72,7 +81,7 @@ function QuoteTableRow(props) {
   const row = props.row;
 
   // modal state
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -111,6 +120,7 @@ function QuoteTableRow(props) {
           handleClose={handleClose}
           id={row.id}
           row={row}
+          setTab={props.setTab}
         />
         <Button onClick={handleOpen} variant="contained">
           See details

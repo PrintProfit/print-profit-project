@@ -35,9 +35,22 @@ function* saveQuote(action) {
   }
 }
 
+function* updateQuote(action) {
+  const config = {
+    headers: { 'Content-Type': 'application/json' },
+    withCredentials: true,
+  };
+  try {
+    yield axios.put('/api/quote', action.payload, config);
+  } catch (error) {
+    console.log('Error with saving quote: ', error);
+  }
+}
+
 function* quoteSaga() {
   yield takeLatest('SAGA/FETCH_QUOTE_HISTORY', getQuoteHistory);
   yield takeLatest('SAGA/SAVE_QUOTE', saveQuote);
+  yield takeLatest('SAGA/UPDATE_QUOTE', updateQuote);
 }
 
 export default quoteSaga;
