@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Cancel, Save, Update } from '@mui/icons-material';
+import { Cancel, Close, Save, Update } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
@@ -9,6 +9,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
+  Snackbar,
   TextField,
 } from '@mui/material';
 import { produce } from 'immer';
@@ -34,8 +36,9 @@ export function QuoteActions({ quote, setQuote }) {
 function SaveQuote({ quote, setQuote }) {
   const dispatch = useDispatch();
 
-  const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [name, setName] = useState(quote.name ?? '');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const saveQuote = () => {
     dispatch({ type: 'SAGA/SAVE_QUOTE', payload: quote });
@@ -52,13 +55,35 @@ function SaveQuote({ quote, setQuote }) {
       }),
     );
     saveQuote();
-    setOpen(false);
+    setDialogOpen(false);
+    setSnackbarOpen(true);
   };
-
   const closeDialog = () => {
-    setOpen(false);
+    setDialogOpen(false);
     setName(quote.name ?? '');
   };
+
+  /**
+   * @param {(React.SyntheticEvent | Event)} event
+   * @param {string} [reason]
+   */
+  const closeSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const snackbarAction = (
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={closeSnackbar}
+    >
+      <Close fontSize="small" />
+    </IconButton>
+  );
 
   return (
     <>
@@ -66,12 +91,12 @@ function SaveQuote({ quote, setQuote }) {
         type="button"
         variant="contained"
         startIcon={<Save />}
-        onClick={() => setOpen(true)}
+        onClick={() => setDialogOpen(true)}
       >
         Save
       </Button>
       <Dialog
-        open={open}
+        open={dialogOpen}
         onClose={closeDialog}
         PaperProps={{
           component: 'form',
@@ -111,6 +136,13 @@ function SaveQuote({ quote, setQuote }) {
           </ButtonGroup>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        message="Saved quote"
+        onClose={closeSnackbar}
+        action={snackbarAction}
+      />
     </>
   );
 }
