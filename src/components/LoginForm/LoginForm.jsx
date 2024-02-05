@@ -31,9 +31,11 @@ function LoginForm() {
    */
 
   return (
-    <Box>
+    <Box paddingTop={5}>
       <form className="formPanel" onSubmit={login}>
-        <h2>Login</h2>
+        <Box justifyContent="center" textAlign="center">
+          <h2>Login</h2>
+        </Box>
         {errors.loginMessage && (
           <h3 className="alert" role="alert">
             {errors.loginMessage}
