@@ -246,7 +246,7 @@ router.get('/profile/page', (req, res) => {
   pool
     .query(query, sqlValues)
     .then((result) => {
-      res.send(result.rows);
+      res.send(result.rows[0]);
     })
     .catch((err) => {
       console.log('ERROR: Get all users for profile page', err);
@@ -327,24 +327,35 @@ router.get('/archived', (req, res) => {
 
 // user saving changes to users info in DB
 router.put('/edit/info', (req, res) => {
+  // console.log('req.body', req.body.newPasswordInput);
+
+  let sqlText;
+  let insertValue;
+
   const newEmailInput = req.body.newEmailInput;
   const newNameInput = req.body.newNameInput;
-  const newPasswordInput = encryptLib.encryptPassword(
-    req.body.newPasswordInput,
-  );
 
-  const sqlText = `
+  if (req.body.newPasswordInput === undefined) {
+    sqlText = `
+  UPDATE "user"
+  SET "email" = $1, "name" = $2, "updated_by" = $3
+WHERE "id" = $3;
+        `;
+
+    insertValue = [newEmailInput, newNameInput, req.user.id];
+  } else {
+    const newPasswordInput = encryptLib.encryptPassword(
+      req.body.newPasswordInput,
+    );
+
+    sqlText = `
   UPDATE "user"
   SET "email" = $1, "name" = $2, "password" = $3, "updated_by" = $4
 WHERE "id" = $4;
         `;
 
-  const insertValue = [
-    newEmailInput,
-    newNameInput,
-    newPasswordInput,
-    req.user.id,
-  ];
+    insertValue = [newEmailInput, newNameInput, newPasswordInput, req.user.id];
+  }
 
   pool
     .query(sqlText, insertValue)

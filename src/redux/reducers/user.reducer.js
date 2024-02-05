@@ -11,8 +11,36 @@ const currentUser = (state = {}, action) => {
   }
 };
 
-const profilePageUser = (state = {}, action) => {
+const profileUserReducer = (state = [], action) => {
   if (action.type === 'SET_PROFILE_PAGE_USER') {
+    return action.payload;
+  }
+  return state;
+};
+
+const editUserEmail = (state = {}, action) => {
+  if (action.type === 'SET_USER') {
+    return action.payload;
+  }
+  if (action.type === 'CHANGE_EMAIL') {
+    const newEmail = action.payload;
+    return { ...state, email: newEmail };
+  }
+  if (action.type === 'RESET_EMAIL') {
+    return action.payload;
+  }
+  return state;
+};
+
+const editUserName = (state = {}, action) => {
+  if (action.type === 'SET_USER') {
+    return action.payload;
+  }
+  if (action.type === 'CHANGE_NAME') {
+    const newName = action.payload;
+    return { ...state, name: newName };
+  }
+  if (action.type === 'RESET_NAME') {
     return action.payload;
   }
   return state;
@@ -50,7 +78,9 @@ const companyList = (state = [], action) => {
 // state.user.blank
 export default combineReducers({
   currentUser,
-  profilePageUser,
+  profileUserReducer,
+  editUserEmail,
+  editUserName,
   pendingUserReducer,
   approvedUserReducer,
   archivedUserReducer,
