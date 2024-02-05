@@ -11,7 +11,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React from 'react';
+import { useState } from 'react';
 
 function QuoteDetailsModal(props) {
   // const [open, setOpen] = React.useState(false)
@@ -72,7 +72,7 @@ function QuoteTableRow(props) {
   const row = props.row;
 
   // modal state
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
