@@ -3,7 +3,6 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { useState } from 'react';
 import HistoryTab from './HistoryTab/HistoryTab';
 import { PricingTab } from './PricingTab';
-import { emptyQuote } from './PricingTab/sample-data';
 
 /**
  * Later on, this could be tweaked to use links for tabs, but right now that's
@@ -14,8 +13,6 @@ import { emptyQuote } from './PricingTab/sample-data';
  */
 export default function CostAndPricing() {
   const [value, setValue] = useState(0);
-
-  const [quote, setQuote] = useState(emptyQuote);
 
   /**
    * @param {React.SyntheticEvent} event
@@ -38,7 +35,7 @@ export default function CostAndPricing() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <PricingTab quote={quote} setQuote={setQuote} />
+        <PricingTab />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <HistoryTab />
