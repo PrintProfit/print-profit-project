@@ -59,7 +59,7 @@ export function TotalsTable({ quote, setQuote, table }) {
           <TableRow>
             <TableCell>Price on target CM%</TableCell>
             <TableCell>Price on manual entry</TableCell>
-            <TableCell>Price on price/item</TableCell>
+            {/* <TableCell>Price on price/item</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -84,7 +84,7 @@ export function TotalsTable({ quote, setQuote, table }) {
                 }}
               />
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
               <Input
                 startAdornment={
                   <InputAdornment position="start">$</InputAdornment>
@@ -94,14 +94,14 @@ export function TotalsTable({ quote, setQuote, table }) {
                 onBlur={() => {
                   setQuote(
                     produce(
-                      (/** @type {import('./data-types').Quote} */ draft) => {
+                      (/** @type {import('./data-types').Quote} * / draft) => {
                         draft.pricePerItem = pricePerItem;
                       },
                     ),
                   );
                 }}
               />
-            </TableCell>
+            </TableCell> */}
           </TableRow>
           {dynamicCostIds.map((column) => (
             <TotalsTableRow key={column} table={table} column={column} />
@@ -159,7 +159,7 @@ function ContributionRows({
   estimatedTotalHours,
 }) {
   const manualContrib = manualPrice - totalVariableCosts;
-  const perItemContrib = pricePerItem - totalVariableCosts;
+  // const perItemContrib = pricePerItem - totalVariableCosts;
   const targetContrib = profitMarginTotalPrice - totalVariableCosts;
 
   return (
@@ -178,12 +178,12 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {perItemContrib.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
           })}
-        </TableCell>
+        </TableCell> */}
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
@@ -193,11 +193,11 @@ function ContributionRows({
             style: 'percent',
           })}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {(perItemContrib / pricePerItem).toLocaleString(undefined, {
             style: 'percent',
           })}
-        </TableCell>
+        </TableCell> */}
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
@@ -213,12 +213,12 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {(perItemContrib / estimatedTotalHours).toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
           })}
-        </TableCell>
+        </TableCell> */}
       </TableRow>
     </>
   );
@@ -239,7 +239,7 @@ function TotalsTableRow({ table, column }) {
     <TableRow>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
-      <TableCell>{context && flexRender(footer, context)}</TableCell>
+      {/* <TableCell>{context && flexRender(footer, context)}</TableCell> */}
     </TableRow>
   );
 }
