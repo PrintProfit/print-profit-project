@@ -4,6 +4,7 @@ import {
   Paper,
   Stack,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableRow,
@@ -14,7 +15,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { TotalsTable } from './TotalsTable';
-import { AddProductCell, DynamicCostCell } from './cells';
+import { AddProductCell, DynamicCostCell, DynamicCostHeader } from './cells';
 import {
   addDynamicCostColumn,
   calculatedCosts,
@@ -22,6 +23,7 @@ import {
   contributionColumns,
   estimatedHoursColumn,
 } from './columns';
+import { aggregate, unique } from './utils';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -41,32 +43,32 @@ export function PricingTable({ quote, setQuote }) {
    * {@link https://react.dev/learn/you-might-not-need-an-effect You Might Not Need an Effect}
    * page suggests that this should be avoidable, and that this can be done
    * during rendering.
+   *
+   * the `.flatMap` call gets the cost names for all the products, even if there aren't any.
+   * the `.filter` call removes duplicates names.
    * @type {import('./data-types').ProductColumnDef[]}
    */
-  const dynamicColumns = quote.products[0].costs.map((cost, index) => ({
-    // The ID is how we can use getValue for calculations.
-    id: `dynamic-cost-${cost.name}`,
-    accessorFn: (row) => row.costs[index].value,
-    header: cost.name,
-    cell: ({ getValue, row, table }) => (
-      <DynamicCostCell
-        getValue={getValue}
-        costIndex={index}
-        table={table}
-        row={row}
-      />
-    ),
-    aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      const total = aggregate(`dynamic-cost-${cost.name}`, [], rows);
-      return total.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
-    },
-  }));
+  const dynamicColumns = quote.products
+    .flatMap((product) => product.costs.map((cost) => cost.name))
+    .filter(unique)
+    .map((name) => ({
+      // The ID is how we can use getValue for calculations.
+      id: `dynamic-cost-${name}`,
+      accessorFn: (row) => row.costs.find((c) => c.name === name)?.value ?? 0,
+      header: DynamicCostHeader,
+      cell: DynamicCostCell,
+      aggregationFn: 'sum',
+      footer: ({ table }) => {
+        const total = aggregate(table, `dynamic-cost-${name}`);
+        return total?.toLocaleString(undefined, {
+          style: 'currency',
+          currency: 'USD',
+        });
+      },
+      meta: {
+        costName: name,
+      },
+    }));
 
   /**
    * All the columns the table uses.
@@ -91,6 +93,20 @@ export function PricingTable({ quote, setQuote }) {
     },
   });
 
+  /**
+   * type-safe wrapper for flexRender
+   * @template {object} T
+   * @param {Parameters<typeof flexRender<T>>[0]} Comp
+   * @param {(Parameters<typeof flexRender<T>>[1]|undefined)} props
+   * @returns {ReturnType<typeof flexRender<T>>}
+   */
+  const safeFlexRender = (Comp, props) => {
+    if (Comp && props) {
+      return flexRender(Comp, props);
+    }
+    return null;
+  };
+
   // This is sorta awkward, but it's so far the best way I've found to get the
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
@@ -98,46 +114,48 @@ export function PricingTable({ quote, setQuote }) {
     <Stack direction="row" spacing={2}>
       <TableContainer component={Paper}>
         <Table size="small">
-          {table.getAllFlatColumns().map((col, index) => (
-            <TableRow key={col.id}>
-              <TableCell variant="head">
-                {flexRender(
-                  col.columnDef.header,
-                  table
-                    .getFlatHeaders()
-                    .find((h) => h.id === col.id)
-                    .getContext(),
-                )}
-              </TableCell>
-              {table.getCoreRowModel().rows.map((row) => (
-                <TableCell key={row.id}>
-                  {flexRender(
-                    col.columnDef.cell,
-                    row
-                      .getAllCells()
-                      .find((cell) => cell.column.id === col.id)
-                      .getContext(),
+          <TableBody>
+            {table.getAllFlatColumns().map((col, index) => (
+              <TableRow key={col.id}>
+                <TableCell variant="head">
+                  {safeFlexRender(
+                    col.columnDef.header,
+                    table
+                      .getFlatHeaders()
+                      .find((h) => h.id === col.id)
+                      ?.getContext(),
                   )}
                 </TableCell>
-              ))}
-              <TableCell>
-                {index === 0 ? <AddProductCell table={table} /> : null}
-              </TableCell>
-              <TableCell variant="footer">
-                {flexRender(
-                  col.columnDef.footer,
-                  table
-                    .getFooterGroups()
-                    .flatMap((g) => g.headers)
-                    .find((h) => h.id === col.id)
-                    .getContext(),
-                )}
-              </TableCell>
-            </TableRow>
-          ))}
+                {table.getCoreRowModel().rows.map((row) => (
+                  <TableCell key={row.id}>
+                    {safeFlexRender(
+                      col.columnDef.cell,
+                      row
+                        .getAllCells()
+                        .find((cell) => cell.column.id === col.id)
+                        ?.getContext(),
+                    )}
+                  </TableCell>
+                ))}
+                <TableCell>
+                  {index === 0 ? <AddProductCell table={table} /> : null}
+                </TableCell>
+                <TableCell variant="footer">
+                  {safeFlexRender(
+                    col.columnDef.footer,
+                    table
+                      .getFooterGroups()
+                      .flatMap((g) => g.headers)
+                      .find((h) => h.id === col.id)
+                      ?.getContext(),
+                  )}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
-      <TotalsTable quote={quote} table={table} />
+      <TotalsTable quote={quote} setQuote={setQuote} table={table} />
     </Stack>
   );
 }

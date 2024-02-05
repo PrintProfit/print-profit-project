@@ -8,6 +8,7 @@ import {
   PercentCell,
   ProductNameCell,
 } from './cells';
+import { aggregate } from './utils';
 
 /**
  * Consistent columns that are always present.
@@ -28,27 +29,45 @@ export const consistentColumns = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      return aggregate('quantity', [], rows);
+      return aggregate?.('quantity', [], rows);
+    },
+    meta: {
+      inputMode: 'numeric',
+      productKey: 'quantity',
     },
   },
   {
-    accessorKey: 'selling_price',
+    accessorKey: 'selling_price_per_unit',
     header: 'Selling Price',
     cell: ConsistentNumericCell,
+    meta: {
+      inputMode: 'decimal',
+      adornment: '$',
+      productKey: 'selling_price_per_unit',
+    },
   },
   {
-    accessorKey: 'total_selling_price',
+    id: 'total_selling_price',
+    // Total selling price can be null, in which case we're supposed to derive
+    // it from the product.
+    accessorFn: calc.totalSellingPrice,
     header: 'Total Selling Price',
     cell: ConsistentNumericCell,
     aggregationFn: 'sum',
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalSellingPrice = aggregate('total_selling_price', [], rows);
-      return totalSellingPrice.toLocaleString(undefined, {
+      /** @type {number?} */
+      const totalSellingPrice = aggregate?.('total_selling_price', [], rows);
+      return totalSellingPrice?.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
       });
+    },
+    meta: {
+      inputMode: 'decimal',
+      adornment: '$',
+      productKey: 'total_selling_price',
     },
   },
 ];
@@ -72,8 +91,9 @@ export const calculatedCosts = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalCreditCardFee = aggregate('creditCardFee', [], rows);
-      return totalCreditCardFee.toLocaleString(undefined, {
+      /** @type {number?} */
+      const totalCreditCardFee = aggregate?.('creditCardFee', [], rows);
+      return totalCreditCardFee?.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
       });
@@ -88,8 +108,9 @@ export const calculatedCosts = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalVariableCosts = aggregate('totalVariableCosts', [], rows);
-      return totalVariableCosts.toLocaleString(undefined, {
+      /** @type {number?} */
+      const totalVariableCosts = aggregate?.('totalVariableCosts', [], rows);
+      return totalVariableCosts?.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
       });
@@ -110,7 +131,10 @@ export const estimatedHoursColumn = {
   footer: ({ table, column }) => {
     const aggregate = column.getAggregationFn();
     const { rows } = table.getCoreRowModel();
-    return aggregate('estimated_hours', [], rows);
+    return aggregate?.('estimated_hours', [], rows);
+  },
+  meta: {
+    productKey: 'estimated_hours',
   },
 };
 
@@ -126,8 +150,9 @@ export const contributionColumns = [
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
       const { rows } = table.getCoreRowModel();
-      const totalContribution = aggregate('contributionDollars', [], rows);
-      return totalContribution.toLocaleString(undefined, {
+      /** @type {number?} */
+      const totalContribution = aggregate?.('contributionDollars', [], rows);
+      return totalContribution?.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
       });
@@ -138,23 +163,8 @@ export const contributionColumns = [
     header: 'Contribution %',
     cell: PercentCell,
     footer: ({ table }) => {
-      const { rows } = table.getCoreRowModel();
-      const aggregateContributionDollars = table
-        .getColumn('contributionDollars')
-        .getAggregationFn();
-      const aggregateTotalSellingPrice = table
-        .getColumn('total_selling_price')
-        .getAggregationFn();
-      const totalContribution = aggregateContributionDollars(
-        'contributionDollars',
-        [],
-        rows,
-      );
-      const totalSellingPrice = aggregateTotalSellingPrice(
-        'total_selling_price',
-        [],
-        rows,
-      );
+      const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
+      const totalSellingPrice = aggregate(table, 'total_selling_price') ?? 0;
       const percent = totalContribution / totalSellingPrice;
       return percent.toLocaleString(undefined, {
         style: 'percent',
@@ -166,20 +176,8 @@ export const contributionColumns = [
     header: 'Contribution / Hr',
     cell: DollarCell,
     footer: ({ table }) => {
-      const { rows } = table.getCoreRowModel();
-      const aggregateContribution = table
-        .getColumn('contributionDollars')
-        .getAggregationFn();
-      const aggregateEstimatedHours = table
-        .getColumn('estimated_hours')
-        .getAggregationFn();
-
-      const totalContribution = aggregateContribution(
-        'contributionDollars',
-        [],
-        rows,
-      );
-      const totalHours = aggregateEstimatedHours('estimated_hours', [], rows);
+      const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
+      const totalHours = aggregate(table, 'estimated_hours') ?? 0;
       const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
       return perHour.toLocaleString(undefined, {
         style: 'currency',

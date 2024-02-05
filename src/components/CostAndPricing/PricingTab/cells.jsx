@@ -10,24 +10,24 @@ import {
   DialogTitle,
   IconButton,
   Input,
+  InputAdornment,
   TextField,
   Tooltip,
 } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
+import { unique } from './utils';
 
 /**
  * A component that renders editable cells with dynamic costs
- * @template {(string|number)} T
- * @param {import('./prop-types').DynamicCostCellProps<T>} props
+ * @param {import('./prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
-export function DynamicCostCell({ getValue, costIndex, table, row }) {
-  /** @type {T} */
+export function DynamicCostCell({ getValue, table, row, column }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  const productIndex = row.index;
+  const costName = column.columnDef.meta?.costName;
 
   /**
    * onBlur is called when the input loses focus.
@@ -36,9 +36,25 @@ export function DynamicCostCell({ getValue, costIndex, table, row }) {
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
   const onBlur = () => {
+    if (costName === undefined) {
+      throw new Error('Malformed columnDef: costName is undefined');
+    }
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[productIndex].costs[costIndex].value = Number(value);
+        const product = draft.products[row.index];
+        if (product === undefined) {
+          throw new Error('Inpossible state reached: product is undefined');
+        }
+        const cost = product.costs.find((c) => c.name === costName);
+        if (cost) {
+          cost.value = Number(value);
+        } else {
+          // The quote is malformed, but fixable.
+          product.costs.push({
+            name: costName,
+            value: Number(value),
+          });
+        }
       }),
     );
   };
@@ -51,8 +67,9 @@ export function DynamicCostCell({ getValue, costIndex, table, row }) {
   return (
     <Input
       size="small"
+      startAdornment={<InputAdornment position="start">$</InputAdornment>}
+      inputMode="decimal"
       value={value}
-      // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
     />
@@ -60,15 +77,48 @@ export function DynamicCostCell({ getValue, costIndex, table, row }) {
 }
 
 /**
+ * @param {import('./prop-types').HeaderProps<unknown>} props
+ */
+export function DynamicCostHeader({ column, table }) {
+  const initialCostName = column.columnDef.meta?.costName;
+  if (initialCostName === undefined) {
+    throw new Error('Malformed columnDef: costName is undefined');
+  }
+  const [costName, setCostName] = useState(initialCostName);
+
+  const onBlur = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        for (const product of draft.products) {
+          const cost = product.costs.find((c) => c.name === initialCostName);
+          if (cost) {
+            cost.name = costName;
+          }
+        }
+      }),
+    );
+  };
+
+  return (
+    <Input
+      size="small"
+      value={costName}
+      onChange={(e) => setCostName(e.target.value)}
+      onBlur={onBlur}
+    />
+  );
+}
+
+/**
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
- * @template {(string|number)} T
- * @param {import('./prop-types').ConsistentNumericCellProps<T>} props
+ * @param {import('./prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
 export function ConsistentNumericCell({ getValue, table, row, column }) {
-  /** @type {T} */
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
+
+  const { adornment, inputMode, productKey } = column.columnDef.meta ?? {};
 
   /**
    * onBlur is called when the input loses focus.
@@ -79,7 +129,10 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[row.index][column.id] = Number(value);
+        const product = draft.products[row.index];
+        if (product && productKey) {
+          product[productKey] = Number(value);
+        }
       }),
     );
   };
@@ -91,8 +144,13 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   return (
     <Input
       size="small"
+      startAdornment={
+        adornment && (
+          <InputAdornment position="start">{adornment}</InputAdornment>
+        )
+      }
+      inputMode={inputMode}
       value={value}
-      // @ts-ignore
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
     />
@@ -108,9 +166,12 @@ export function ProductNameCell({ getValue, table, row }) {
 
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
-    table.options.meta.setQuote(
+    table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.products[row.index].name = value;
+        const product = draft.products[row.index];
+        if (product) {
+          product.name = value;
+        }
       }),
     );
   };
@@ -249,7 +310,7 @@ export function AddProductCell({ table }) {
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products
           .flatMap((p) => p.costs.map((c) => c.name))
-          .filter((value, index, self) => self.indexOf(value) === index);
+          .filter(unique);
 
         // This *should* also work, but it might not order things correctly,
         // and we need to update the tsconfig/jsconfig to iterate through the
@@ -261,7 +322,7 @@ export function AddProductCell({ table }) {
         draft.products.push({
           name: productName,
           quantity: 0,
-          selling_price: 0,
+          selling_price_per_unit: 0,
           total_selling_price: 0,
           estimated_hours: 0,
           costs: costNames.map((name) => ({ name, value: 0 })),

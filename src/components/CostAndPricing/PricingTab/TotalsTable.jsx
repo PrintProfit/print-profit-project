@@ -2,6 +2,7 @@
 
 import {
   Input,
+  InputAdornment,
   Paper,
   Table,
   TableBody,
@@ -11,15 +12,21 @@ import {
   TableRow,
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
+import { produce } from 'immer';
 import { useCallback, useMemo, useState } from 'react';
+import { unique } from './utils';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
  */
-export function TotalsTable({ quote, table }) {
-  const [contributionPercent, setContributionPercent] = useState(0);
-  const [manualPrice, setManualPrice] = useState(0);
-  const [pricePerItem, setPricePerItem] = useState(0);
+export function TotalsTable({ quote, setQuote, table }) {
+  const [contributionPercent, setContributionPercent] = useState(
+    quote.manual_contribution_percent ?? 0,
+  );
+  const [manualPrice, setManualPrice] = useState(
+    quote.manual_total_selling_price ?? 0,
+  );
+  const [pricePerItem, setPricePerItem] = useState(quote.pricePerItem ?? 0);
 
   const aggregate = useCallback(
     /**
@@ -27,54 +34,102 @@ export function TotalsTable({ quote, table }) {
      * @returns {number}
      */
     (column) => {
-      const aggregationFn = table.getColumn(column).getAggregationFn();
-      return aggregationFn(column, [], table.getCoreRowModel().rows);
+      const aggregationFn = table.getColumn(column)?.getAggregationFn();
+      return aggregationFn?.(column, [], table.getCoreRowModel().rows) || -1;
     },
     [table.getColumn, table.getCoreRowModel],
   );
 
   const getCMTotalSellingPrice = useCallback(
-    () => aggregate('totalVariableCosts') / (1 - contributionPercent / 100),
+    () => aggregate('totalVariableCosts') / ((100 - contributionPercent) / 100),
     [aggregate, contributionPercent],
   );
 
-  const dynamicCostIds = quote.products[0].costs.map(
-    (cost) => `dynamic-cost-${cost.name}`,
-  );
+  const dynamicCostNames = quote.products
+    .flatMap((product) => product.costs.map((cost) => cost.name))
+    .filter(unique);
 
   return (
     <TableContainer component={Paper}>
       <Table size="small">
         <TableHead>
           <TableRow>
+            <TableCell>{/* Padding for correct layout */}</TableCell>
             <TableCell>Price on target CM%</TableCell>
             <TableCell>Price on manual entry</TableCell>
-            <TableCell>Price on price/item</TableCell>
+            {/* <TableCell>Price on price/item</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
           {/* Total Variable Costs Row */}
           <TableRow>
-            <TableCell>${getCMTotalSellingPrice().toFixed(2)}</TableCell>
+            <TableCell variant="head">Total Variable Costs</TableCell>
+            <TableCell>
+              {getCMTotalSellingPrice().toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+              })}
+            </TableCell>
             <TableCell>
               <Input
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
                 value={manualPrice}
                 onChange={(e) => setManualPrice(Number(e.target.value))}
+                onBlur={() => {
+                  setQuote(
+                    produce(
+                      (/** @type {import('./data-types').Quote} */ draft) => {
+                        draft.manual_total_selling_price = manualPrice;
+                      },
+                    ),
+                  );
+                }}
               />
             </TableCell>
-            <TableCell>
+            {/* <TableCell>
               <Input
+                startAdornment={
+                  <InputAdornment position="start">$</InputAdornment>
+                }
                 value={pricePerItem}
                 onChange={(e) => setPricePerItem(Number(e.target.value))}
+                onBlur={() => {
+                  setQuote(
+                    produce(
+                      (/** @type {import('./data-types').Quote} * / draft) => {
+                        draft.pricePerItem = pricePerItem;
+                      },
+                    ),
+                  );
+                }}
               />
-            </TableCell>
+            </TableCell> */}
           </TableRow>
-          {dynamicCostIds.map((column) => (
-            <TotalsTableRow key={column} table={table} column={column} />
+          {dynamicCostNames.map((name) => (
+            <TotalsTableRow
+              key={name}
+              table={table}
+              column={`dynamic-cost-${name}`}
+              title={name}
+            />
           ))}
-          <TotalsTableRow table={table} column="creditCardFee" />
-          <TotalsTableRow table={table} column="totalVariableCosts" />
-          <TotalsTableRow table={table} column="estimated_hours" />
+          <TotalsTableRow
+            table={table}
+            column="creditCardFee"
+            title="Credit Card Fee"
+          />
+          <TotalsTableRow
+            table={table}
+            column="totalVariableCosts"
+            title="Total Variable Costs"
+          />
+          <TotalsTableRow
+            table={table}
+            column="estimated_hours"
+            title="Estimated Hours"
+          />
           {/* This is  */}
           <ContributionRows
             profitMarginTotalPrice={getCMTotalSellingPrice()}
@@ -84,10 +139,24 @@ export function TotalsTable({ quote, table }) {
             slots={{
               marginInput: (
                 <Input
+                  type="number"
+                  endAdornment={
+                    <InputAdornment position="end">%</InputAdornment>
+                  }
                   value={contributionPercent}
                   onChange={(e) =>
                     setContributionPercent(Number(e.target.value))
                   }
+                  onBlur={() => {
+                    setQuote(
+                      produce(
+                        (/** @type {import('./data-types').Quote} */ draft) => {
+                          draft.manual_contribution_percent =
+                            contributionPercent;
+                        },
+                      ),
+                    );
+                  }}
                 />
               ),
             }}
@@ -112,13 +181,14 @@ function ContributionRows({
   estimatedTotalHours,
 }) {
   const manualContrib = manualPrice - totalVariableCosts;
-  const perItemContrib = pricePerItem - totalVariableCosts;
+  // const perItemContrib = pricePerItem - totalVariableCosts;
   const targetContrib = profitMarginTotalPrice - totalVariableCosts;
 
   return (
     <>
       {/* Contribution Row */}
       <TableRow>
+        <TableCell variant="head">Contribution</TableCell>
         <TableCell>
           {targetContrib.toLocaleString(undefined, {
             style: 'currency',
@@ -131,29 +201,31 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {perItemContrib.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
           })}
-        </TableCell>
+        </TableCell> */}
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
+        <TableCell variant="head">Contribution %</TableCell>
         <TableCell>{marginInput}</TableCell>
         <TableCell>
           {(manualContrib / manualPrice).toLocaleString(undefined, {
             style: 'percent',
           })}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {(perItemContrib / pricePerItem).toLocaleString(undefined, {
             style: 'percent',
           })}
-        </TableCell>
+        </TableCell> */}
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
+        <TableCell variant="head">Contribution / Hr</TableCell>
         <TableCell>
           {(targetContrib / estimatedTotalHours).toLocaleString(undefined, {
             style: 'currency',
@@ -166,12 +238,12 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        <TableCell>
+        {/* <TableCell>
           {(perItemContrib / estimatedTotalHours).toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
           })}
-        </TableCell>
+        </TableCell> */}
       </TableRow>
     </>
   );
@@ -181,7 +253,7 @@ function ContributionRows({
  * Used for rows which have three columns that have the same value
  * @param {import('./prop-types').TotalsTableRowProps} props
  */
-function TotalsTableRow({ table, column }) {
+function TotalsTableRow({ table, column, title }) {
   // Attempt to cache the footer & context
   const [footer, context] = useMemo(
     () => getFooter(table, column),
@@ -190,9 +262,10 @@ function TotalsTableRow({ table, column }) {
 
   return (
     <TableRow>
-      <TableCell>{flexRender(footer, context)}</TableCell>
-      <TableCell>{flexRender(footer, context)}</TableCell>
-      <TableCell>{flexRender(footer, context)}</TableCell>
+      <TableCell variant="head">{title}</TableCell>
+      <TableCell>{context && flexRender(footer, context)}</TableCell>
+      <TableCell>{context && flexRender(footer, context)}</TableCell>
+      {/* <TableCell>{context && flexRender(footer, context)}</TableCell> */}
     </TableRow>
   );
 }
@@ -202,13 +275,22 @@ function TotalsTableRow({ table, column }) {
  * @template TData
  * @param {import('@tanstack/react-table').Table<TData>} table
  * @param {string} columnId
- * @returns {Parameters<typeof flexRender>}
+ * @returns {Parameters<typeof flexRender> | [undefined, undefined]}
  */
 function getFooter(table, columnId) {
   const column = table.getColumn(columnId);
-  const footer = table
+  const context = table
     .getFooterGroups()
     .flatMap((g) => g.headers)
-    .find((h) => h.id === columnId);
-  return [column.columnDef.footer, footer.getContext()];
+    .find((h) => h.id === columnId)
+    ?.getContext();
+
+  const footerDef = column?.columnDef.footer;
+
+  if (footerDef && context) {
+    // This is *technically* the only thing here that isn't fully type-safe
+    // @ts-ignore
+    return [footerDef, context];
+  }
+  return [undefined, undefined];
 }
