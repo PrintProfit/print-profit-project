@@ -1,13 +1,14 @@
 // @ts-check
 
+import { Save, Update } from '@mui/icons-material';
 import {
   Button,
+  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Stack,
   TextField,
 } from '@mui/material';
 import { produce } from 'immer';
@@ -20,10 +21,10 @@ import { useDispatch } from 'react-redux';
  */
 export function QuoteActions({ quote, setQuote }) {
   return (
-    <Stack direction="row" spacing={2}>
+    <ButtonGroup>
       <SaveQuote quote={quote} setQuote={setQuote} />
       <UpdateQuote quote={quote} setQuote={setQuote} />
-    </Stack>
+    </ButtonGroup>
   );
 }
 
@@ -61,7 +62,12 @@ function SaveQuote({ quote, setQuote }) {
 
   return (
     <>
-      <Button type="button" onClick={() => setOpen(true)}>
+      <Button
+        type="button"
+        variant="contained"
+        startIcon={<Save />}
+        onClick={() => setOpen(true)}
+      >
         Save
       </Button>
       <Dialog
@@ -105,5 +111,9 @@ function UpdateQuote({ quote, setQuote }) {
   // TODO: Implement this.
   // It's hard to do right now since there's no way to get an existing quote
   // into the table right now.
-  return <Button type="button">Update</Button>;
+  return (
+    <Button type="button" variant="contained" startIcon={<Update />}>
+      Update
+    </Button>
+  );
 }
