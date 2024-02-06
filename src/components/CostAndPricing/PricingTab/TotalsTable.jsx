@@ -14,6 +14,7 @@ import {
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
+import * as fmt from './formats';
 import { unique } from './utils';
 
 /**
@@ -23,18 +24,18 @@ export function TotalsTable({ quote, setQuote, table }) {
   const aggregate = useCallback(
     /**
      * @param {string} column
-     * @returns {number}
+     * @returns {(number|undefined)}
      */
     (column) => {
       const aggregationFn = table.getColumn(column)?.getAggregationFn();
-      return aggregationFn?.(column, [], table.getCoreRowModel().rows) || -1;
+      return aggregationFn?.(column, [], table.getCoreRowModel().rows);
     },
     [table.getColumn, table.getCoreRowModel],
   );
 
   const getCMTotalSellingPrice = useCallback(
     () =>
-      aggregate('totalVariableCosts') /
+      (aggregate('totalVariableCosts') ?? 0) /
       ((100 - (quote.manual_contribution_percent ?? 0)) / 100),
     [aggregate, quote.manual_contribution_percent],
   );
@@ -57,12 +58,7 @@ export function TotalsTable({ quote, setQuote, table }) {
           {/* Total Variable Costs Row */}
           <TableRow>
             <TableCell variant="head">Total Variable Costs</TableCell>
-            <TableCell>
-              {getCMTotalSellingPrice().toLocaleString(undefined, {
-                style: 'currency',
-                currency: 'USD',
-              })}
-            </TableCell>
+            <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
             <TableCell>
               <Input
                 startAdornment={
@@ -110,8 +106,8 @@ export function TotalsTable({ quote, setQuote, table }) {
           {/* This is  */}
           <ContributionRows
             profitMarginTotalPrice={getCMTotalSellingPrice()}
-            totalVariableCosts={aggregate('totalVariableCosts')}
-            estimatedTotalHours={aggregate('estimated_hours')}
+            totalVariableCosts={aggregate('totalVariableCosts') ?? 0}
+            estimatedTotalHours={aggregate('estimated_hours') ?? 0}
             state={{
               manualPrice: quote.manual_total_selling_price ?? 0,
             }}
@@ -165,43 +161,23 @@ function ContributionRows({
       {/* Contribution Row */}
       <TableRow>
         <TableCell variant="head">Contribution</TableCell>
-        <TableCell>
-          {targetContrib.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </TableCell>
-        <TableCell>
-          {manualContrib.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </TableCell>
+        <TableCell>{fmt.currency(targetContrib)}</TableCell>
+        <TableCell>{fmt.currency(manualContrib)}</TableCell>
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
         <TableCell variant="head">Contribution %</TableCell>
         <TableCell>{marginInput}</TableCell>
-        <TableCell>
-          {(manualContrib / manualPrice).toLocaleString(undefined, {
-            style: 'percent',
-          })}
-        </TableCell>
+        <TableCell>{fmt.percent(manualContrib / manualPrice)}</TableCell>
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
         <TableCell variant="head">Contribution / Hr</TableCell>
         <TableCell>
-          {(targetContrib / estimatedTotalHours).toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
+          {fmt.currency(targetContrib / estimatedTotalHours)}
         </TableCell>
         <TableCell>
-          {(manualContrib / estimatedTotalHours).toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
+          {fmt.currency(manualContrib / estimatedTotalHours)}
         </TableCell>
       </TableRow>
     </>
