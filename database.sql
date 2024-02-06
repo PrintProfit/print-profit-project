@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS "product";
 DROP TABLE IF EXISTS "quote";
 DROP TABLE IF EXISTS "user";
 DROP TABLE IF EXISTS "company";
+DROP TABLE IF EXISTS "session";
 
 
 CREATE TABLE "company" (
@@ -129,3 +130,17 @@ FOR EACH ROW
 EXECUTE PROCEDURE set_updated_at_to_now();
 
 SET TIMEZONE = 'America/Chicago'; 
+
+-- This is from node_modules/connect-pg-simple/table.sql
+CREATE TABLE "session" (
+	"sid" varchar NOT NULL COLLATE "default",
+	"sess" json NOT NULL,
+	"expire" timestamp(6) NOT NULL
+) WITH (OIDS = FALSE);
+
+ALTER TABLE
+	"session"
+ADD
+	CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
+
+CREATE INDEX "IDX_session_expire" ON "session" ("expire");
