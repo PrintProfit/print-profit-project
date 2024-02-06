@@ -102,6 +102,21 @@ export function DynamicCostHeader({ column, table }) {
     );
   };
 
+  const deleteCost = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        for (const product of draft.products) {
+          const index = product.costs.findIndex((c) => c.name === costName);
+          // If the cost doesn't exist on a product, then the product is
+          // malformed, but it doesn't really matter here.
+          if (index !== -1) {
+            product.costs.splice(index, 1);
+          }
+        }
+      }),
+    );
+  };
+
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
       <Input
@@ -116,6 +131,7 @@ export function DynamicCostHeader({ column, table }) {
             aria-label="Remove Cost"
             size="small"
             disabled={updateMode}
+            onClick={deleteCost}
           >
             <Delete fontSize="small" />
           </IconButton>
