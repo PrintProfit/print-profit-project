@@ -25,6 +25,7 @@ import {
   contributionColumns,
   estimatedHoursColumn,
 } from './columns';
+import * as fmt from './formats';
 import { aggregate, unique } from './utils';
 
 /**
@@ -67,10 +68,7 @@ export function PricingTable({ quote, setQuote }) {
       aggregationFn: 'sum',
       footer: ({ table }) => {
         const total = aggregate(table, `dynamic-cost-${name}`);
-        return total?.toLocaleString(undefined, {
-          style: 'currency',
-          currency: 'USD',
-        });
+        return fmt.currency(total);
       },
       meta: {
         costName: name,
