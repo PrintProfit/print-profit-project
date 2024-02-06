@@ -44,7 +44,7 @@ function SaveQuote({ quote, setQuote }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const saveQuote = () => {
-    dispatch({ type: 'SAGA/SAVE_QUOTE', payload: quote });
+    dispatch({ type: 'SAGA/SAVE_QUOTE', payload: { ...quote, name } });
   };
 
   /**
