@@ -83,8 +83,8 @@ function App() {
             <SideBar>
               {/* 🔥🔥🔥🔥Need to un-comment this for final🔥🔥🔥🔥🔥 */}
               {/* {user.is_admin ?  */}
-              <AdminPage /> : <Redirect to="/user" />
-              {/* } */}
+              <AdminPage />
+              {/* : <Redirect to="/user" />} */}
             </SideBar>
           </ProtectedRoute>
 
