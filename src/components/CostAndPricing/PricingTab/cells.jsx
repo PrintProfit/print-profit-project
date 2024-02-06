@@ -179,6 +179,14 @@ export function ProductNameCell({ getValue, table, row }) {
     );
   };
 
+  const deleteProduct = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        draft.products.splice(row.index, 1);
+      }),
+    );
+  };
+
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
@@ -197,6 +205,7 @@ export function ProductNameCell({ getValue, table, row }) {
             aria-label="Remove Product"
             size="small"
             disabled={updateMode}
+            onClick={deleteProduct}
           >
             <Delete fontSize="small" />
           </IconButton>
