@@ -5,7 +5,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { use } from 'passport';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
@@ -103,20 +102,6 @@ export default function SideBar({ children }) {
       </Drawer>
     </Box>
   );
-}
-
-{
-  /* {
-          sidebarItems.map((item, index) => {
-            return <div>
-            <ListItem
-              key={index}
-              disablePadding
-              style={{
-                backgroundColor: selected === index ? 'lightgray' : 'transparent',
-                textDecoration: selected === index ? 'underline' : 'none',
-              })
-              </div> */
 }
 
 // return(
