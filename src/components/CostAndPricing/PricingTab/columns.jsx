@@ -166,9 +166,11 @@ export const contributionColumns = [
       const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
       const totalSellingPrice = aggregate(table, 'total_selling_price') ?? 0;
       const percent = totalContribution / totalSellingPrice;
-      return percent.toLocaleString(undefined, {
-        style: 'percent',
-      });
+      return Number.isNaN(percent)
+        ? undefined
+        : percent.toLocaleString(undefined, {
+            style: 'percent',
+          });
     },
   },
   {
