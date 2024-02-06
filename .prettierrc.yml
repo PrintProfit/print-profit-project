@@ -8,6 +8,10 @@ plugins:
 overrides:
   - files:
       - .vscode/*.json
+      - jsconfig.json
+      - jsconfig.*.json
+      - tsconfig.json
+      - tsconfig.*.json
     options:
       parser: jsonc
   - files:
