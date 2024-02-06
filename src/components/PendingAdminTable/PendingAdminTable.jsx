@@ -66,6 +66,14 @@ function PendingAdminPage({ pendingUser }) {
     }
   };
 
+  // formats inserted_at timestamp as readable string
+  const stringifyDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const stringifiedDate = date.toLocaleDateString('en-us', options);
+    return stringifiedDate;
+  };
+
   // Opens Delete Dialog
   const handleDeleteClickOpen = () => {
     setOpenDelete(true);
@@ -93,7 +101,9 @@ function PendingAdminPage({ pendingUser }) {
       </TableCell>
       <TableCell align="center">{pendingUser.email}</TableCell>
       <TableCell align="center">{pendingUser.pending_company_name}</TableCell>
-      <TableCell align="center">{pendingUser.last_login}</TableCell>
+      <TableCell align="center">
+        {stringifyDate(pendingUser.last_login)}
+      </TableCell>
       <TableCell align="center">
         <Button type="button" onClick={handleApprovalClickOpen}>
           Approve
