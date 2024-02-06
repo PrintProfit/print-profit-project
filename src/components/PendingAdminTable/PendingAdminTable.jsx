@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
@@ -18,7 +18,7 @@ function PendingAdminPage({ pendingUser }) {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  console.log('company', companyList);
+  // console.log('company', companyList);
 
   const [newCompanyInput, setNewCompanyInput] = useState('');
   const [openApproval, setOpenApproval] = useState(false);
@@ -66,6 +66,14 @@ function PendingAdminPage({ pendingUser }) {
     }
   };
 
+  // formats inserted_at timestamp as readable string
+  const stringifyDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const stringifiedDate = date.toLocaleDateString('en-us', options);
+    return stringifiedDate;
+  };
+
   // Opens Delete Dialog
   const handleDeleteClickOpen = () => {
     setOpenDelete(true);
@@ -91,11 +99,15 @@ function PendingAdminPage({ pendingUser }) {
       <TableCell variant="head" scope="row">
         {pendingUser.user_name}
       </TableCell>
-      <TableCell align="center">{pendingUser.email}</TableCell>
-      <TableCell align="center">{pendingUser.pending_company_name}</TableCell>
-      <TableCell align="center">{pendingUser.last_login}</TableCell>
+      <TableCell>{pendingUser.email}</TableCell>
+      <TableCell>{pendingUser.pending_company_name}</TableCell>
+      <TableCell>{stringifyDate(pendingUser.created_at)}</TableCell>
       <TableCell align="center">
-        <Button type="button" onClick={handleApprovalClickOpen}>
+        <Button
+          type="button"
+          variant="contained"
+          onClick={handleApprovalClickOpen}
+        >
           Approve
         </Button>
       </TableCell>
@@ -103,6 +115,7 @@ function PendingAdminPage({ pendingUser }) {
         <Button
           color="error"
           type="button"
+          variant="outlined"
           onClick={() => handleDeleteClickOpen()}
         >
           Archive

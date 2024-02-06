@@ -1,12 +1,11 @@
-const express = require('express');
-const {
-  rejectUnauthenticated,
-} = require('../modules/authentication-middleware');
-const encryptLib = require('../modules/encryption');
-const pool = require('../modules/pool');
-const userStrategy = require('../strategies/user.strategy');
+// @ts-check
+import { Router } from 'express';
+import { rejectUnauthenticated } from '../middleware/auth.js';
+import { encryptPassword } from '../modules/encryption.js';
+import pool from '../modules/pool.js';
+import userStrategy from '../strategies/user.strategy.js';
 
-const router = express.Router();
+const router = Router();
 
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -26,7 +25,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', (req, res, next) => {
   const email = req.body.email;
   const name = req.body.name;
-  const password = encryptLib.encryptPassword(req.body.password);
+  const password = encryptPassword(req.body.password);
 
   const queryText = `INSERT INTO "user" (email, name, password)
     VALUES ($1, $2, $3) RETURNING id`;
@@ -77,10 +76,12 @@ router.post('/login', userStrategy.authenticate('local'), (req, res) => {
 });
 
 // clear all server session information about this user
-router.post('/logout', (req, res) => {
+router.post('/logout', (req, res, next) => {
   // Use passport's built-in method to log out the user
-  req.logout();
-  res.sendStatus(200);
+  req.logout((err) => {
+    if (err) return next(err);
+    res.sendStatus(200);
+  });
 });
 
 // Gets all companys from company table
@@ -114,7 +115,7 @@ router.get('/pending', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "pending_user_company"."name" as "pending_company_name",
   "pending_user_company"."id" as "pending_company_id"
       FROM "user"
@@ -143,7 +144,7 @@ router.get('/approved', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "company"."name" as "company_name",
   "company"."id" as "company_id"
       FROM "user"
@@ -306,12 +307,8 @@ router.get('/archived', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
-  "pending_user_company"."name" as "pending_company_name",
-  "pending_user_company"."id" as "pending_company_id"
+  "user"."last_login" as "last_login"
       FROM "user"
-  INNER JOIN "pending_user_company"
-      ON "user"."id" = "pending_user_company"."id"
   WHERE "user"."is_removed" = TRUE;
   `;
 
@@ -345,9 +342,7 @@ WHERE "id" = $3;
 
     insertValue = [newEmailInput, newNameInput, req.user.id];
   } else {
-    const newPasswordInput = encryptLib.encryptPassword(
-      req.body.newPasswordInput,
-    );
+    const newPasswordInput = encryptPassword(req.body.newPasswordInput);
 
     sqlText = `
   UPDATE "user"
@@ -369,4 +364,68 @@ WHERE "id" = $4;
     });
 });
 
-module.exports = router;
+router.post('/admin/create/company/user', (req, res) => {
+  // Now handle the company reference:
+  const insertNewUserQuery = `
+      INSERT INTO "company"
+        ("name", "updated_by")
+        VALUES
+        ($1, $2) RETURNING "id";
+    `;
+
+  console.log('req.body.companyName', req.body.companyName);
+
+  const insertNewUserValues = [req.body.companyName, req.user.id];
+
+  pool
+    .query(insertNewUserQuery, insertNewUserValues)
+    .then((result) => {
+      // console.log('newUserId:', result.rows[0].id);
+      const newCompanyId = result.rows[0].id;
+
+      const email = req.body.email;
+      const name = req.body.name;
+      const password = encryptPassword(req.body.password);
+
+      const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
+        VALUES ($1, $2, $3, $4, $5, TRUE);`;
+
+      pool
+        .query(queryText, [email, name, password, newCompanyId, req.user.id])
+        .then((result) => res.sendStatus(201));
+    })
+    .catch((err) => {
+      // catch for second query
+      console.log('2nd admin create user and company post query fails', err);
+      res.sendStatus(500);
+    })
+    .catch((err) => {
+      // catch for first query
+      console.log('admin create user and company post failed: ', err);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/admin/create/user', (req, res) => {
+  // console.log('req.body', req.body);
+  const email = req.body.email;
+  const name = req.body.name;
+  const companyId = req.body.companyId;
+  const password = encryptPassword(req.body.password);
+
+  const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
+  VALUES ($1, $2, $3, $4, $5, TRUE);`;
+
+  pool
+    .query(queryText, [email, name, password, companyId, req.user.id])
+    .then((result) => {
+      // console.log('result', result);
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('err in admin user post route', err);
+      res.sendStatus(500);
+    });
+});
+
+export default router;

@@ -8,7 +8,6 @@ export const quote = {
   name: 'Sample Quote',
   manual_contribution_percent: 40,
   manual_total_selling_price: 3000,
-  pricePerItem: 6800,
   products: [
     {
       name: 'Order Item 1',

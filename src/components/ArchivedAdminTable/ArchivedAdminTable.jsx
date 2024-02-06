@@ -1,11 +1,15 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TableCell,
+  TableRow,
+  styled,
+  tableCellClasses,
+} from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -14,12 +18,33 @@ function ArchivedAdminPage({ archivedUser }) {
 
   const [openRecover, setOpenRecover] = useState(false);
 
-  // Opens Delete Dialog
+  // Styles table head to be black
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
+  // Opens Recover Dialog
   const handleRecoverClickOpen = () => {
     setOpenRecover(true);
   };
 
-  // Closes Delete Dialog
+  // Closes Recover Dialog
   const handleRecoverClose = () => {
     setOpenRecover(false);
   };
@@ -56,23 +81,43 @@ function ArchivedAdminPage({ archivedUser }) {
     });
   };
 
+  // formats created_at timestamp as readable string
+  const stringifyDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const stringifiedDate = date.toLocaleDateString('en-us', options);
+    return stringifiedDate;
+  };
+
   return (
     <TableRow>
-      <TableCell variant="head" scope="row">
+      {/* 👇This makes the name field background black in archived users table - not sure if that's what we want */}
+      <StyledTableCell variant="head" scope="row">
         {archivedUser.user_name}
-      </TableCell>
-      <TableCell align="center">{archivedUser.email}</TableCell>
-      <TableCell align="center">{archivedUser.last_login}</TableCell>
-      <TableCell align="center">
-        <Button type="button" onClick={handleRecoverClickOpen}>
+      </StyledTableCell>
+      <StyledTableCell align="center">{archivedUser.email}</StyledTableCell>
+      <StyledTableCell align="center">
+        {stringifyDate(archivedUser.created_at)}
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        <Button
+          type="button"
+          onClick={handleRecoverClickOpen}
+          variant="contained"
+        >
           Recover
         </Button>
-      </TableCell>
-      <TableCell align="center">
-        <Button color="error" type="button" onClick={handleDeleteClickOpen}>
+      </StyledTableCell>
+      <StyledTableCell align="center">
+        <Button
+          color="error"
+          type="button"
+          onClick={handleDeleteClickOpen}
+          variant="outlined"
+        >
           Delete
         </Button>
-      </TableCell>
+      </StyledTableCell>
 
       {/* Recover Dialog */}
       <Dialog
@@ -90,10 +135,14 @@ function ArchivedAdminPage({ archivedUser }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={recoverUser} autoFocus>
+          <Button onClick={recoverUser} autoFocus variant="outlined">
             Recover
           </Button>
-          <Button sx={{ color: 'black' }} onClick={handleRecoverClose}>
+          <Button
+            sx={{ color: 'black', outlineColor: 'black' }}
+            onClick={handleRecoverClose}
+            variant="outlined"
+          >
             Cancel
           </Button>
         </DialogActions>

@@ -1,7 +1,8 @@
 // @ts-check
 
-import { Add } from '@mui/icons-material';
+import { Add, Delete } from '@mui/icons-material';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -16,6 +17,7 @@ import {
 } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
+import * as fmt from './formats';
 import { unique } from './utils';
 
 /**
@@ -41,9 +43,15 @@ export function DynamicCostCell({ getValue, table, row, column }) {
     }
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         const product = draft.products[row.index];
         if (product === undefined) {
           throw new Error('Inpossible state reached: product is undefined');
+        }
+        if (product.costs === undefined) {
+          product.costs = [];
         }
         const cost = product.costs.find((c) => c.name === costName);
         if (cost) {
@@ -86,10 +94,18 @@ export function DynamicCostHeader({ column, table }) {
   }
   const [costName, setCostName] = useState(initialCostName);
 
+  const updateMode = table.options.meta?.updateMode ?? false;
+
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         for (const product of draft.products) {
+          if (product.costs === undefined) {
+            product.costs = [];
+          }
           const cost = product.costs.find((c) => c.name === initialCostName);
           if (cost) {
             cost.name = costName;
@@ -99,13 +115,48 @@ export function DynamicCostHeader({ column, table }) {
     );
   };
 
+  const deleteCost = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
+        for (const product of draft.products) {
+          if (product.costs === undefined) {
+            product.costs = [];
+          }
+          const index = product.costs.findIndex((c) => c.name === costName);
+          if (index !== -1) {
+            // If the cost doesn't exist on a product, then the product is
+            // malformed, but it doesn't really matter here.
+            product.costs.splice(index, 1);
+          }
+        }
+      }),
+    );
+  };
+
   return (
-    <Input
-      size="small"
-      value={costName}
-      onChange={(e) => setCostName(e.target.value)}
-      onBlur={onBlur}
-    />
+    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+      <Input
+        size="small"
+        value={costName}
+        onChange={(e) => setCostName(e.target.value)}
+        onBlur={onBlur}
+      />
+      {updateMode || (
+        <Tooltip title="Remove Cost" arrow>
+          <IconButton
+            aria-label="Remove Cost"
+            size="small"
+            disabled={updateMode}
+            onClick={deleteCost}
+          >
+            <Delete fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Box>
   );
 }
 
@@ -129,6 +180,9 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         const product = draft.products[row.index];
         if (product && productKey) {
           product[productKey] = Number(value);
@@ -164,14 +218,30 @@ export function ProductNameCell({ getValue, table, row }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
+  const updateMode = table.options.meta?.updateMode ?? false;
+
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         const product = draft.products[row.index];
         if (product) {
           product.name = value;
         }
+      }),
+    );
+  };
+
+  const deleteProduct = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
+        draft.products.splice(row.index, 1);
       }),
     );
   };
@@ -181,12 +251,26 @@ export function ProductNameCell({ getValue, table, row }) {
   }, [initialValue]);
 
   return (
-    <Input
-      size="small"
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={onBlur}
-    />
+    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+      <Input
+        size="small"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={onBlur}
+      />
+      {updateMode || (
+        <Tooltip title="Remove Product" arrow>
+          <IconButton
+            aria-label="Remove Product"
+            size="small"
+            disabled={updateMode}
+            onClick={deleteProduct}
+          >
+            <Delete fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Box>
   );
 }
 
@@ -196,10 +280,7 @@ export function ProductNameCell({ getValue, table, row }) {
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
-  return value.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-  });
+  return fmt.currency(value);
 }
 
 /**
@@ -208,9 +289,7 @@ export function DollarCell({ getValue }) {
 export function PercentCell({ getValue }) {
   const value = getValue();
   const percent = Number(value);
-  return percent.toLocaleString(undefined, {
-    style: 'percent',
-  });
+  return fmt.percent(percent);
 }
 
 /**
@@ -223,7 +302,13 @@ export function AddCostHeader({ table }) {
   const addCost = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         for (const product of draft.products) {
+          if (product.costs === undefined) {
+            product.costs = [];
+          }
           product.costs.push({
             name: costName,
             value: 0,
@@ -307,9 +392,16 @@ export function AddProductCell({ table }) {
   const addProduct = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        // This is the only place where we should repair the products array.
+        // In any other place, the products array would need to be correct for
+        // the component to appear in the first place.
+        if (draft.products === undefined || draft.products === null) {
+          draft.products = [];
+        }
+
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products
-          .flatMap((p) => p.costs.map((c) => c.name))
+          .flatMap((p) => (p.costs ?? []).map((c) => c.name))
           .filter(unique);
 
         // This *should* also work, but it might not order things correctly,

@@ -34,12 +34,20 @@ function ApprovedAdminPage({ approvedUser }) {
     });
   };
 
+  // formats inserted_at timestamp as readable string
+  const stringifyDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const stringifiedDate = date.toLocaleDateString('en-us', options);
+    return stringifiedDate;
+  };
+
   return (
     <TableRow>
       <TableCell>{approvedUser.user_name}</TableCell>
-      <TableCell align="center">{approvedUser.email}</TableCell>
-      <TableCell align="center">{approvedUser.company_name}</TableCell>
-      <TableCell align="center">{approvedUser.last_login}</TableCell>
+      <TableCell>{approvedUser.email}</TableCell>
+      <TableCell>{approvedUser.company_name}</TableCell>
+      <TableCell>{stringifyDate(approvedUser.created_at)}</TableCell>
       <TableCell
         sx={{ color: '#5CCD8B', fontWeight: 'bold', fontSize: 15 }}
         align="center"
@@ -47,7 +55,12 @@ function ApprovedAdminPage({ approvedUser }) {
         Approved
       </TableCell>
       <TableCell align="center">
-        <Button color="error" type="button" onClick={handleDeleteClickOpen}>
+        <Button
+          color="error"
+          type="button"
+          variant="outlined"
+          onClick={handleDeleteClickOpen}
+        >
           Archive
         </Button>
       </TableCell>

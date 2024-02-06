@@ -1,7 +1,7 @@
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Tab, Tabs, styled } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -15,19 +15,39 @@ export default function AdminView() {
   const pendingUsers = useSelector((store) => store.user.pendingUserReducer);
   const approvedUsers = useSelector((store) => store.user.approvedUserReducer);
 
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:nth-of-type(odd)': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    '&:last-child td, &:last-child th': {
+      border: 0,
+    },
+  }));
+
   return (
     <div>
-      <h2>Pending Users {pendingUsers.length}</h2>
+      <h3>Pending Users: {pendingUsers.length}</h3>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="center">Email</TableCell>
-              <TableCell align="center">Company Name</TableCell>
-              <TableCell align="center">Last Login</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Archive</TableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Email</StyledTableCell>
+              <StyledTableCell>Company Name</StyledTableCell>
+              <StyledTableCell>Created on</StyledTableCell>
+              <StyledTableCell align="center">Approve</StyledTableCell>
+              <StyledTableCell align="center">Archive</StyledTableCell>
             </TableRow>
           </TableHead>
 
@@ -44,17 +64,17 @@ export default function AdminView() {
         </Table>
       </TableContainer>
 
-      <h2>Approved Users {approvedUsers.length}</h2>
+      <h3>Approved Users: {approvedUsers.length}</h3>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="center">Email</TableCell>
-              <TableCell align="center">Company Name</TableCell>
-              <TableCell align="center">Last Login</TableCell>
-              <TableCell align="center">Status</TableCell>
-              <TableCell align="center">Archive</TableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Email</StyledTableCell>
+              <StyledTableCell>Company Name</StyledTableCell>
+              <StyledTableCell>Created on</StyledTableCell>
+              <StyledTableCell align="center">Status</StyledTableCell>
+              <StyledTableCell align="center">Archive</StyledTableCell>
             </TableRow>
           </TableHead>
           <TableBody>

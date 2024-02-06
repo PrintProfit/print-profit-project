@@ -15,7 +15,7 @@ export interface Product {
   selling_price_per_unit: number;
   total_selling_price?: number;
   estimated_hours: number;
-  costs: Cost[];
+  costs?: Cost[];
 }
 
 export interface Quote {
@@ -23,8 +23,9 @@ export interface Quote {
   name: string;
   manual_contribution_percent?: number;
   manual_total_selling_price?: number;
-  pricePerItem?: number;
-  products: Product[];
+  inserted_at?: string;
+  created_by?: string;
+  products?: Product[];
 }
 
 export type ProductColumnDef = ColumnDef<Product>;

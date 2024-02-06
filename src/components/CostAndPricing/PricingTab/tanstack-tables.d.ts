@@ -7,6 +7,7 @@ import { Product, Quote } from './data-types';
 declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
     setQuote: Dispatch<SetStateAction<Quote>>;
+    updateMode: boolean;
   }
   interface ColumnMeta<TData extends RowData, TValue> {
     inputMode?: InputProps['inputMode'];

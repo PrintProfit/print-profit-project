@@ -34,7 +34,6 @@ export interface ContributionRowsProps {
   };
   readonly state: {
     readonly manualPrice: number;
-    readonly pricePerItem: number;
   };
   readonly profitMarginTotalPrice: number;
   readonly totalVariableCosts: number;
