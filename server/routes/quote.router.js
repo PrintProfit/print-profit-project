@@ -247,12 +247,11 @@ router.post('/', async (req, res) => {
 
 // PUT route to edit quote
 router.put('/', async (req, res) => {
-  let connection;
+  // Establishes a longstanding connection to our database:
+  const connection = await pool.connect();
+
   console.log('req.body from put route: ', req.body);
   try {
-    // Establishes a longstanding connection to our database:
-    connection = await pool.connect();
-
     // BEGIN the SQL Transaction:
     await connection.query('BEGIN;');
     // QUOTE PUT
