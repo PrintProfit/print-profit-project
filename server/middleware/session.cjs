@@ -1,10 +1,11 @@
 // @ts-check
 
 const expressSession = require('express-session');
-const createMemoryStore = require('memorystore');
+const createPGStore = require('connect-pg-simple');
 const { badSecret, exampleBadSecret } = require('../constants/warnings');
+const pool = require('../modules/pool');
 
-const MemoryStore = createMemoryStore(expressSession);
+const PGStore = createPGStore(expressSession);
 
 function serverSessionSecret() {
   if (
@@ -20,9 +21,9 @@ function serverSessionSecret() {
 }
 
 const middleware = expressSession({
-  cookie: { maxAge: 86400000 },
-  store: new MemoryStore({
-    checkPeriod: 86400000, // prune expired entries every 24h
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 }, // 30 days
+  store: new PGStore({
+    pool,
   }),
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
