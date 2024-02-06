@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
@@ -99,11 +99,9 @@ function PendingAdminPage({ pendingUser }) {
       <TableCell variant="head" scope="row">
         {pendingUser.user_name}
       </TableCell>
-      <TableCell align="center">{pendingUser.email}</TableCell>
-      <TableCell align="center">{pendingUser.pending_company_name}</TableCell>
-      <TableCell align="center">
-        {stringifyDate(pendingUser.last_login)}
-      </TableCell>
+      <TableCell>{pendingUser.email}</TableCell>
+      <TableCell>{pendingUser.pending_company_name}</TableCell>
+      <TableCell>{stringifyDate(pendingUser.last_login)}</TableCell>
       <TableCell align="center">
         <Button
           type="button"

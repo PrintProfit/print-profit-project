@@ -45,11 +45,9 @@ function ApprovedAdminPage({ approvedUser }) {
   return (
     <TableRow>
       <TableCell>{approvedUser.user_name}</TableCell>
-      <TableCell align="center">{approvedUser.email}</TableCell>
-      <TableCell align="center">{approvedUser.company_name}</TableCell>
-      <TableCell align="center">
-        {stringifyDate(approvedUser.last_login)}
-      </TableCell>
+      <TableCell>{approvedUser.email}</TableCell>
+      <TableCell>{approvedUser.company_name}</TableCell>
+      <TableCell>{stringifyDate(approvedUser.last_login)}</TableCell>
       <TableCell
         sx={{ color: '#5CCD8B', fontWeight: 'bold', fontSize: 15 }}
         align="center"
