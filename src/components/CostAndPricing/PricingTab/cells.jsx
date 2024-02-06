@@ -87,6 +87,8 @@ export function DynamicCostHeader({ column, table }) {
   }
   const [costName, setCostName] = useState(initialCostName);
 
+  const updateMode = table.options.meta?.updateMode ?? false;
+
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
@@ -101,12 +103,25 @@ export function DynamicCostHeader({ column, table }) {
   };
 
   return (
-    <Input
-      size="small"
-      value={costName}
-      onChange={(e) => setCostName(e.target.value)}
-      onBlur={onBlur}
-    />
+    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+      <Input
+        size="small"
+        value={costName}
+        onChange={(e) => setCostName(e.target.value)}
+        onBlur={onBlur}
+      />
+      {updateMode || (
+        <Tooltip title="Remove Cost" arrow>
+          <IconButton
+            aria-label="Remove Cost"
+            size="small"
+            disabled={updateMode}
+          >
+            <Delete fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Box>
   );
 }
 
