@@ -105,7 +105,11 @@ function PendingAdminPage({ pendingUser }) {
         {stringifyDate(pendingUser.last_login)}
       </TableCell>
       <TableCell align="center">
-        <Button type="button" onClick={handleApprovalClickOpen}>
+        <Button
+          type="button"
+          variant="contained"
+          onClick={handleApprovalClickOpen}
+        >
           Approve
         </Button>
       </TableCell>
@@ -113,6 +117,7 @@ function PendingAdminPage({ pendingUser }) {
         <Button
           color="error"
           type="button"
+          variant="outlined"
           onClick={() => handleDeleteClickOpen()}
         >
           Archive

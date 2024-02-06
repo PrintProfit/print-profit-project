@@ -57,7 +57,12 @@ function ApprovedAdminPage({ approvedUser }) {
         Approved
       </TableCell>
       <TableCell align="center">
-        <Button color="error" type="button" onClick={handleDeleteClickOpen}>
+        <Button
+          color="error"
+          type="button"
+          variant="outlined"
+          onClick={handleDeleteClickOpen}
+        >
           Archive
         </Button>
       </TableCell>
