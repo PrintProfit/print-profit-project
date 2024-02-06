@@ -101,7 +101,7 @@ function PendingAdminPage({ pendingUser }) {
       </TableCell>
       <TableCell>{pendingUser.email}</TableCell>
       <TableCell>{pendingUser.pending_company_name}</TableCell>
-      <TableCell>{stringifyDate(pendingUser.last_login)}</TableCell>
+      <TableCell>{stringifyDate(pendingUser.created_at)}</TableCell>
       <TableCell align="center">
         <Button
           type="button"
