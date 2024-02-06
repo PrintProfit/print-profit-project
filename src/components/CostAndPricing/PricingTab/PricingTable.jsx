@@ -35,6 +35,7 @@ export function PricingTable({ quote, setQuote }) {
   // what these objects are.
 
   /** @type {boolean} */
+  // @ts-ignore
   const updateMode = useSelector((state) => state.quote.updateMode);
 
   /**
@@ -53,7 +54,7 @@ export function PricingTable({ quote, setQuote }) {
    * the `.filter` call removes duplicates names.
    * @type {import('./data-types').ProductColumnDef[]}
    */
-  const dynamicColumns = quote.products
+  const dynamicColumns = (quote.products ?? [])
     .flatMap((product) => (product.costs ?? []).map((cost) => cost.name))
     .filter(unique)
     .map((name) => ({
@@ -90,7 +91,7 @@ export function PricingTable({ quote, setQuote }) {
   ];
 
   const table = useReactTable({
-    data: quote.products,
+    data: quote.products ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     // The meta option is how we can pass the setQuote function to the cells.

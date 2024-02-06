@@ -77,8 +77,12 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
   );
 }
 
-function QuoteTableRow(props) {
-  const row = props.row;
+/**
+ * @param {Object} props
+ * @param {import('../PricingTab/data-types').Quote} props.row
+ */
+function QuoteTableRow({ row, setTab, ...props }) {
+  console.log(row);
 
   // modal state
   const [open, setOpen] = useState(false);
@@ -91,15 +95,6 @@ function QuoteTableRow(props) {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     const stringifiedDate = date.toLocaleDateString('en-us', options);
     return stringifiedDate;
-  };
-
-  // sums the individual products' selling prices for a quote
-  const sumQuoteSellingPrice = (row) => {
-    let totalSellingPrice = 0;
-    for (const product of row) {
-      totalSellingPrice += product.total_selling_price;
-    }
-    return totalSellingPrice;
   };
 
   // formats number string as US currency
@@ -120,7 +115,7 @@ function QuoteTableRow(props) {
           handleClose={handleClose}
           id={row.id}
           row={row}
-          setTab={props.setTab}
+          setTab={setTab}
         />
         <Button onClick={handleOpen} variant="contained">
           See details
@@ -132,11 +127,16 @@ function QuoteTableRow(props) {
       <TableCell>{row.name}</TableCell>
       <TableCell>{row.created_by}</TableCell>
       <TableCell>{stringifyDate(row.inserted_at)}</TableCell>
-      <TableCell>{row.products.length}</TableCell>
+      <TableCell>{row.products?.length}</TableCell>
       <TableCell>
         {row.manual_total_selling_price
           ? USDollar.format(row.manual_total_selling_price)
-          : USDollar.format(sumQuoteSellingPrice(row.products))}
+          : USDollar.format(
+              (row.products ?? []).reduce(
+                (acc, product) => acc + (product?.total_selling_price ?? 0),
+                0,
+              ),
+            )}
       </TableCell>
     </TableRow>
   );

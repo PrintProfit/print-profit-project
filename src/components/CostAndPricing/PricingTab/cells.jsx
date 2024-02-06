@@ -42,6 +42,9 @@ export function DynamicCostCell({ getValue, table, row, column }) {
     }
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         const product = draft.products[row.index];
         if (product === undefined) {
           throw new Error('Inpossible state reached: product is undefined');
@@ -95,6 +98,9 @@ export function DynamicCostHeader({ column, table }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         for (const product of draft.products) {
           if (product.costs === undefined) {
             product.costs = [];
@@ -111,6 +117,9 @@ export function DynamicCostHeader({ column, table }) {
   const deleteCost = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         for (const product of draft.products) {
           if (product.costs === undefined) {
             product.costs = [];
@@ -170,6 +179,9 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         const product = draft.products[row.index];
         if (product && productKey) {
           product[productKey] = Number(value);
@@ -211,6 +223,9 @@ export function ProductNameCell({ getValue, table, row }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         const product = draft.products[row.index];
         if (product) {
           product.name = value;
@@ -222,6 +237,9 @@ export function ProductNameCell({ getValue, table, row }) {
   const deleteProduct = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         draft.products.splice(row.index, 1);
       }),
     );
@@ -288,6 +306,9 @@ export function AddCostHeader({ table }) {
   const addCost = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        if (draft.products === undefined || draft.products === null) {
+          throw new Error('Malformed quote: products is undefined');
+        }
         for (const product of draft.products) {
           if (product.costs === undefined) {
             product.costs = [];
@@ -375,6 +396,13 @@ export function AddProductCell({ table }) {
   const addProduct = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
+        // This is the only place where we should repair the products array.
+        // In any other place, the products array would need to be correct for
+        // the component to appear in the first place.
+        if (draft.products === undefined || draft.products === null) {
+          draft.products = [];
+        }
+
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products
           .flatMap((p) => (p.costs ?? []).map((c) => c.name))

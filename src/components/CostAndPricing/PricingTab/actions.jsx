@@ -23,6 +23,7 @@ import { initialQuote } from './sample-data';
  */
 export function QuoteActions({ quote, setQuote }) {
   /** @type {boolean} */
+  // @ts-ignore
   const updateMode = useSelector((state) => state.quote.updateMode);
   return (
     <ButtonGroup>

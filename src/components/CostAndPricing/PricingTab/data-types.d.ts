@@ -23,7 +23,9 @@ export interface Quote {
   name: string;
   manual_contribution_percent?: number;
   manual_total_selling_price?: number;
-  products: Product[];
+  inserted_at?: string;
+  created_by?: string;
+  products?: Product[];
 }
 
 export type ProductColumnDef = ColumnDef<Product>;
