@@ -1,14 +1,10 @@
 const express = require('express');
-const {
-  rejectUnauthenticated,
-} = require('../modules/authentication-middleware');
-const encryptLib = require('../modules/encryption');
+const { rejectUnapproved } = require('../middleware/auth.cjs');
 const pool = require('../modules/pool');
-const userStrategy = require('../strategies/user.strategy');
 
 const router = express.Router();
 
-router.use(rejectUnauthenticated);
+router.use(rejectUnapproved);
 
 // GET all quotes
 router.get('/:id', (req, res) => {
