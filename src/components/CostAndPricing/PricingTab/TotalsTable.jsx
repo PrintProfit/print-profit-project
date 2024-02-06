@@ -13,21 +13,13 @@ import {
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { unique } from './utils';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
  */
 export function TotalsTable({ quote, setQuote, table }) {
-  const [contributionPercent, setContributionPercent] = useState(
-    quote.manual_contribution_percent ?? 0,
-  );
-  const [manualPrice, setManualPrice] = useState(
-    quote.manual_total_selling_price ?? 0,
-  );
-  const [pricePerItem, setPricePerItem] = useState(quote.pricePerItem ?? 0);
-
   const aggregate = useCallback(
     /**
      * @param {string} column
@@ -41,8 +33,10 @@ export function TotalsTable({ quote, setQuote, table }) {
   );
 
   const getCMTotalSellingPrice = useCallback(
-    () => aggregate('totalVariableCosts') / ((100 - contributionPercent) / 100),
-    [aggregate, contributionPercent],
+    () =>
+      aggregate('totalVariableCosts') /
+      ((100 - (quote.manual_contribution_percent ?? 0)) / 100),
+    [aggregate, quote.manual_contribution_percent],
   );
 
   const dynamicCostNames = quote.products
@@ -57,7 +51,6 @@ export function TotalsTable({ quote, setQuote, table }) {
             <TableCell>{/* Padding for correct layout */}</TableCell>
             <TableCell>Price on target CM%</TableCell>
             <TableCell>Price on manual entry</TableCell>
-            {/* <TableCell>Price on price/item</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -75,37 +68,21 @@ export function TotalsTable({ quote, setQuote, table }) {
                 startAdornment={
                   <InputAdornment position="start">$</InputAdornment>
                 }
-                value={manualPrice}
-                onChange={(e) => setManualPrice(Number(e.target.value))}
-                onBlur={() => {
+                value={quote.manual_total_selling_price ?? 0}
+                onChange={(e) => {
+                  console.log(e.target.value);
                   setQuote(
                     produce(
                       (/** @type {import('./data-types').Quote} */ draft) => {
-                        draft.manual_total_selling_price = manualPrice;
+                        draft.manual_total_selling_price = Number(
+                          e.target.value,
+                        );
                       },
                     ),
                   );
                 }}
               />
             </TableCell>
-            {/* <TableCell>
-              <Input
-                startAdornment={
-                  <InputAdornment position="start">$</InputAdornment>
-                }
-                value={pricePerItem}
-                onChange={(e) => setPricePerItem(Number(e.target.value))}
-                onBlur={() => {
-                  setQuote(
-                    produce(
-                      (/** @type {import('./data-types').Quote} * / draft) => {
-                        draft.pricePerItem = pricePerItem;
-                      },
-                    ),
-                  );
-                }}
-              />
-            </TableCell> */}
           </TableRow>
           {dynamicCostNames.map((name) => (
             <TotalsTableRow
@@ -135,7 +112,9 @@ export function TotalsTable({ quote, setQuote, table }) {
             profitMarginTotalPrice={getCMTotalSellingPrice()}
             totalVariableCosts={aggregate('totalVariableCosts')}
             estimatedTotalHours={aggregate('estimated_hours')}
-            state={{ manualPrice, pricePerItem }}
+            state={{
+              manualPrice: quote.manual_total_selling_price ?? 0,
+            }}
             slots={{
               marginInput: (
                 <Input
@@ -143,16 +122,14 @@ export function TotalsTable({ quote, setQuote, table }) {
                   endAdornment={
                     <InputAdornment position="end">%</InputAdornment>
                   }
-                  value={contributionPercent}
-                  onChange={(e) =>
-                    setContributionPercent(Number(e.target.value))
-                  }
-                  onBlur={() => {
+                  value={quote.manual_contribution_percent ?? 0}
+                  onChange={(e) => {
                     setQuote(
                       produce(
                         (/** @type {import('./data-types').Quote} */ draft) => {
-                          draft.manual_contribution_percent =
-                            contributionPercent;
+                          draft.manual_contribution_percent = Number(
+                            e.target.value,
+                          );
                         },
                       ),
                     );
@@ -175,13 +152,12 @@ export function TotalsTable({ quote, setQuote, table }) {
  */
 function ContributionRows({
   slots: { marginInput },
-  state: { manualPrice, pricePerItem },
+  state: { manualPrice },
   profitMarginTotalPrice,
   totalVariableCosts,
   estimatedTotalHours,
 }) {
   const manualContrib = manualPrice - totalVariableCosts;
-  // const perItemContrib = pricePerItem - totalVariableCosts;
   const targetContrib = profitMarginTotalPrice - totalVariableCosts;
 
   return (
@@ -201,12 +177,6 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        {/* <TableCell>
-          {perItemContrib.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </TableCell> */}
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
@@ -217,11 +187,6 @@ function ContributionRows({
             style: 'percent',
           })}
         </TableCell>
-        {/* <TableCell>
-          {(perItemContrib / pricePerItem).toLocaleString(undefined, {
-            style: 'percent',
-          })}
-        </TableCell> */}
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
@@ -238,12 +203,6 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        {/* <TableCell>
-          {(perItemContrib / estimatedTotalHours).toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </TableCell> */}
       </TableRow>
     </>
   );

@@ -23,7 +23,6 @@ export interface Quote {
   name: string;
   manual_contribution_percent?: number;
   manual_total_selling_price?: number;
-  pricePerItem?: number;
   products: Product[];
 }
 
