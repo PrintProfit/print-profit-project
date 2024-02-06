@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
+import * as fmt from './formats';
 import { unique } from './utils';
 
 /**
@@ -279,12 +280,7 @@ export function ProductNameCell({ getValue, table, row }) {
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
-  return Number.isNaN(value)
-    ? undefined
-    : value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
+  return fmt.currency(value);
 }
 
 /**
@@ -293,11 +289,7 @@ export function DollarCell({ getValue }) {
 export function PercentCell({ getValue }) {
   const value = getValue();
   const percent = Number(value);
-  return Number.isNaN(percent)
-    ? undefined
-    : percent.toLocaleString(undefined, {
-        style: 'percent',
-      });
+  return fmt.percent(percent);
 }
 
 /**
