@@ -15,7 +15,7 @@ export interface Product {
   selling_price_per_unit: number;
   total_selling_price?: number;
   estimated_hours: number;
-  costs: Cost[];
+  costs?: Cost[];
 }
 
 export interface Quote {

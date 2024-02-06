@@ -54,12 +54,13 @@ export function PricingTable({ quote, setQuote }) {
    * @type {import('./data-types').ProductColumnDef[]}
    */
   const dynamicColumns = quote.products
-    .flatMap((product) => product.costs.map((cost) => cost.name))
+    .flatMap((product) => (product.costs ?? []).map((cost) => cost.name))
     .filter(unique)
     .map((name) => ({
       // The ID is how we can use getValue for calculations.
       id: `dynamic-cost-${name}`,
-      accessorFn: (row) => row.costs.find((c) => c.name === name)?.value ?? 0,
+      accessorFn: (row) =>
+        (row.costs ?? []).find((c) => c.name === name)?.value ?? 0,
       header: DynamicCostHeader,
       cell: DynamicCostCell,
       aggregationFn: 'sum',
