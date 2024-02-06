@@ -1,7 +1,8 @@
 // @ts-check
 
-import { Add } from '@mui/icons-material';
+import { Add, Delete } from '@mui/icons-material';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -164,6 +165,8 @@ export function ProductNameCell({ getValue, table, row }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
+  const updateMode = table.options.meta?.updateMode ?? false;
+
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
     table.options.meta?.setQuote(
@@ -181,12 +184,25 @@ export function ProductNameCell({ getValue, table, row }) {
   }, [initialValue]);
 
   return (
-    <Input
-      size="small"
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={onBlur}
-    />
+    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+      <Input
+        size="small"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={onBlur}
+      />
+      {updateMode || (
+        <Tooltip title="Remove Product" arrow>
+          <IconButton
+            aria-label="Remove Product"
+            size="small"
+            disabled={updateMode}
+          >
+            <Delete fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Box>
   );
 }
 
