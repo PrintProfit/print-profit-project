@@ -1,13 +1,11 @@
 // @ts-check
-const express = require('express');
-const {
-  rejectUnauthenticated,
-} = require('../modules/authentication-middleware');
-const encryptLib = require('../modules/encryption');
-const pool = require('../modules/pool');
-const userStrategy = require('../strategies/user.strategy');
+import { Router } from 'express';
+import { rejectUnauthenticated } from '../middleware/auth.js';
+import { encryptPassword } from '../modules/encryption.js';
+import pool from '../modules/pool.js';
+import userStrategy from '../strategies/user.strategy.js';
 
-const router = express.Router();
+const router = Router();
 
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
@@ -27,7 +25,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/register', (req, res, next) => {
   const email = req.body.email;
   const name = req.body.name;
-  const password = encryptLib.encryptPassword(req.body.password);
+  const password = encryptPassword(req.body.password);
 
   const queryText = `INSERT INTO "user" (email, name, password)
     VALUES ($1, $2, $3) RETURNING id`;
@@ -344,9 +342,7 @@ WHERE "id" = $3;
 
     insertValue = [newEmailInput, newNameInput, req.user.id];
   } else {
-    const newPasswordInput = encryptLib.encryptPassword(
-      req.body.newPasswordInput,
-    );
+    const newPasswordInput = encryptPassword(req.body.newPasswordInput);
 
     sqlText = `
   UPDATE "user"
@@ -389,7 +385,7 @@ router.post('/admin/create/company/user', (req, res) => {
 
       const email = req.body.email;
       const name = req.body.name;
-      const password = encryptLib.encryptPassword(req.body.password);
+      const password = encryptPassword(req.body.password);
 
       const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
         VALUES ($1, $2, $3, $4, $5, TRUE);`;
@@ -415,7 +411,7 @@ router.post('/admin/create/user', (req, res) => {
   const email = req.body.email;
   const name = req.body.name;
   const companyId = req.body.companyId;
-  const password = encryptLib.encryptPassword(req.body.password);
+  const password = encryptPassword(req.body.password);
 
   const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
   VALUES ($1, $2, $3, $4, $5, TRUE);`;
@@ -432,4 +428,4 @@ router.post('/admin/create/user', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

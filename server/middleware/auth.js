@@ -1,7 +1,7 @@
 // @ts-check
 
 /** @type {import("express").RequestHandler} */
-const rejectUnauthenticated = (req, res, next) => {
+export const rejectUnauthenticated = (req, res, next) => {
   // check if logged in
   if (req.isAuthenticated() && !req.user.is_removed) {
     // They were authenticated! User may do the next thing
@@ -14,7 +14,7 @@ const rejectUnauthenticated = (req, res, next) => {
 };
 
 /** @type {import("express").RequestHandler} */
-const rejectUnapproved = (req, res, next) => {
+export const rejectUnapproved = (req, res, next) => {
   if (req.isAuthenticated() && !req.user.is_removed && req.user.is_approved) {
     next();
   } else {
@@ -23,12 +23,10 @@ const rejectUnapproved = (req, res, next) => {
 };
 
 /** @type {import("express").RequestHandler} */
-const rejectNonAdmin = (req, res, next) => {
+export const rejectNonAdmin = (req, res, next) => {
   if (req.isAuthenticated() && !req.user.is_removed && req.user.is_admin) {
     next();
   } else {
     res.sendStatus(403);
   }
 };
-
-module.exports = { rejectUnauthenticated, rejectUnapproved, rejectNonAdmin };
