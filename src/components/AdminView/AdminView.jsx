@@ -45,7 +45,7 @@ export default function AdminView() {
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
               <StyledTableCell>Company Name</StyledTableCell>
-              <StyledTableCell>Last Login</StyledTableCell>
+              <StyledTableCell>Created on</StyledTableCell>
               <StyledTableCell align="center">Approve</StyledTableCell>
               <StyledTableCell align="center">Archive</StyledTableCell>
             </TableRow>
@@ -72,7 +72,7 @@ export default function AdminView() {
               <StyledTableCell>Name</StyledTableCell>
               <StyledTableCell>Email</StyledTableCell>
               <StyledTableCell>Company Name</StyledTableCell>
-              <StyledTableCell>Last Login</StyledTableCell>
+              <StyledTableCell>Created on</StyledTableCell>
               <StyledTableCell align="center">Status</StyledTableCell>
               <StyledTableCell align="center">Archive</StyledTableCell>
             </TableRow>
