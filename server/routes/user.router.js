@@ -117,7 +117,7 @@ router.get('/pending', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "pending_user_company"."name" as "pending_company_name",
   "pending_user_company"."id" as "pending_company_id"
       FROM "user"
@@ -146,7 +146,7 @@ router.get('/approved', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "company"."name" as "company_name",
   "company"."id" as "company_id"
       FROM "user"
@@ -309,7 +309,7 @@ router.get('/archived', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "pending_user_company"."name" as "pending_company_name",
   "pending_user_company"."id" as "pending_company_id"
       FROM "user"
