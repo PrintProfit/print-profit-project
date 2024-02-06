@@ -9,7 +9,16 @@ function AboutPage() {
   return (
     <div className="container">
       <div>
-        <p>This about page is for anyone to read!</p>
+        <p>
+          Surviving in the printing industry is not for the faint of heart Print
+          Profit believes the future is worth fighting for We go the distance in
+          empowering printers to profitability
+        </p>
+        <p>
+          2023 Print Profit was founded out of a passion to build a stronger
+          financial future for the industry by empowering printers to maximize
+          profitability.
+        </p>
       </div>
     </div>
   );
