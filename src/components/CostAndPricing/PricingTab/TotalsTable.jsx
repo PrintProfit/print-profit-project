@@ -39,8 +39,8 @@ export function TotalsTable({ quote, setQuote, table }) {
     [aggregate, quote.manual_contribution_percent],
   );
 
-  const dynamicCostNames = quote.products
-    .flatMap((product) => product.costs.map((cost) => cost.name))
+  const dynamicCostNames = (quote.products ?? [])
+    .flatMap((product) => (product.costs ?? []).map((cost) => cost.name))
     .filter(unique);
 
   return (
