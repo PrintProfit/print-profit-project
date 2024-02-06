@@ -1,6 +1,5 @@
-const express = require('express');
-const pool = require('../modules/pool');
-const router = express.Router();
+import { Router } from 'express';
+const router = Router();
 
 /**
  * GET route template
@@ -16,4 +15,4 @@ router.post('/', (req, res) => {
   // POST route code here
 });
 
-module.exports = router;
+export default router;

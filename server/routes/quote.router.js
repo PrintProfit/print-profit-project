@@ -1,8 +1,8 @@
-const express = require('express');
-const { rejectUnapproved } = require('../middleware/auth.cjs');
-const pool = require('../modules/pool');
+import { Router } from 'express';
+import { rejectUnapproved } from '../middleware/auth.js';
+import pool from '../modules/pool.js';
 
-const router = express.Router();
+const router = Router();
 
 router.use(rejectUnapproved);
 
@@ -455,4 +455,4 @@ router.put('/remove', async (req, res) => {
 //   ],
 // }];
 
-module.exports = router;
+export default router;

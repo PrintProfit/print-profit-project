@@ -1,15 +1,12 @@
-const express = require('express');
+import 'dotenv/config';
+import express from 'express';
+import { session } from './middleware/session.js';
+import quoteRouter from './routes/quote.router.js';
+import userRouter from './routes/user.router.js';
+import passport from './strategies/user.strategy.js';
+
 const app = express();
-require('dotenv').config();
 const PORT = process.env.PORT || 5001;
-
-// Middleware Includes
-const { session } = require('./middleware/session.cjs');
-const passport = require('./strategies/user.strategy');
-
-// Route Includes
-const userRouter = require('./routes/user.router');
-const quoteRouter = require('./routes/quote.router');
 
 // Express Middleware
 app.use(express.json());
