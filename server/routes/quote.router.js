@@ -341,7 +341,7 @@ router.put('/', async (req, res) => {
         /** @type {import('pg').QueryConfig} */
         const costUpdate = {
           text: /*sql*/ `
-            UPDATE "cost"
+            UPDATE cost
             SET
               name = $1,
               value = $2,
