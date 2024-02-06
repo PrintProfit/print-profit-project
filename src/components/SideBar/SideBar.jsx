@@ -5,8 +5,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { use } from 'passport';
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 const drawerWidth = 200;
@@ -20,16 +21,20 @@ const sidebarItems = [
 
 export default function SideBar({ children }) {
   const history = useHistory();
-  const [selected, setSelected] = useState(0);
-  console.log('index:', selected);
+  const [selectedListItem, setSelectedListItem] = useState(0);
+  // console.log('index:', selected);
+
+  //  useEffect(() => {
+  //     console.log('index:', selectedListItem);
+
+  //  }, [selectedListItem]);
   const handleNavigationHome = () => {
     history.push('/user');
   };
 
   const handleClick = (index) => {
     console.log('index:', index);
-    console.log('setSelected:', setSelected);
-    setSelected(index);
+    setSelectedListItem(index);
   };
 
   return (
@@ -80,11 +85,13 @@ export default function SideBar({ children }) {
                       sx={{
                         textAlign: 'center',
                         color:
-                          selected === item.index
+                          selectedListItem === item.index
                             ? 'primary.main'
                             : 'primary.contrastText',
                         textDecoration:
-                          selected === item.index ? 'underline' : 'none',
+                          selectedListItem === item.index
+                            ? 'underline'
+                            : 'none',
                       }}
                     />
                   </ListItemButton>
