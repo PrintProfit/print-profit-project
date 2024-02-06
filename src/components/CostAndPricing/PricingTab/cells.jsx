@@ -1,7 +1,8 @@
 // @ts-check
 
-import { Add } from '@mui/icons-material';
+import { Add, Delete } from '@mui/icons-material';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -86,6 +87,8 @@ export function DynamicCostHeader({ column, table }) {
   }
   const [costName, setCostName] = useState(initialCostName);
 
+  const updateMode = table.options.meta?.updateMode ?? false;
+
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
@@ -99,13 +102,42 @@ export function DynamicCostHeader({ column, table }) {
     );
   };
 
+  const deleteCost = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        for (const product of draft.products) {
+          const index = product.costs.findIndex((c) => c.name === costName);
+          // If the cost doesn't exist on a product, then the product is
+          // malformed, but it doesn't really matter here.
+          if (index !== -1) {
+            product.costs.splice(index, 1);
+          }
+        }
+      }),
+    );
+  };
+
   return (
-    <Input
-      size="small"
-      value={costName}
-      onChange={(e) => setCostName(e.target.value)}
-      onBlur={onBlur}
-    />
+    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+      <Input
+        size="small"
+        value={costName}
+        onChange={(e) => setCostName(e.target.value)}
+        onBlur={onBlur}
+      />
+      {updateMode || (
+        <Tooltip title="Remove Cost" arrow>
+          <IconButton
+            aria-label="Remove Cost"
+            size="small"
+            disabled={updateMode}
+            onClick={deleteCost}
+          >
+            <Delete fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Box>
   );
 }
 
@@ -164,6 +196,8 @@ export function ProductNameCell({ getValue, table, row }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
+  const updateMode = table.options.meta?.updateMode ?? false;
+
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
     table.options.meta?.setQuote(
@@ -176,17 +210,39 @@ export function ProductNameCell({ getValue, table, row }) {
     );
   };
 
+  const deleteProduct = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        draft.products.splice(row.index, 1);
+      }),
+    );
+  };
+
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
   return (
-    <Input
-      size="small"
-      value={value}
-      onChange={(e) => setValue(e.target.value)}
-      onBlur={onBlur}
-    />
+    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+      <Input
+        size="small"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onBlur={onBlur}
+      />
+      {updateMode || (
+        <Tooltip title="Remove Product" arrow>
+          <IconButton
+            aria-label="Remove Product"
+            size="small"
+            disabled={updateMode}
+            onClick={deleteProduct}
+          >
+            <Delete fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Box>
   );
 }
 

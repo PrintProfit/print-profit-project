@@ -95,6 +95,7 @@ export function PricingTable({ quote, setQuote }) {
     // The meta option is how we can pass the setQuote function to the cells.
     meta: {
       setQuote,
+      updateMode,
     },
   });
 
