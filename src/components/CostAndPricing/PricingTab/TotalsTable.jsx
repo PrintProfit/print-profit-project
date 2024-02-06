@@ -20,8 +20,6 @@ import { unique } from './utils';
  * @param {import("./prop-types").TotalsTableProps} props
  */
 export function TotalsTable({ quote, setQuote, table }) {
-  const pricePerItem = quote.pricePerItem ?? 0;
-
   const aggregate = useCallback(
     /**
      * @param {string} column
@@ -53,7 +51,6 @@ export function TotalsTable({ quote, setQuote, table }) {
             <TableCell>{/* Padding for correct layout */}</TableCell>
             <TableCell>Price on target CM%</TableCell>
             <TableCell>Price on manual entry</TableCell>
-            {/* <TableCell>Price on price/item</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -86,24 +83,6 @@ export function TotalsTable({ quote, setQuote, table }) {
                 }}
               />
             </TableCell>
-            {/* <TableCell>
-              <Input
-                startAdornment={
-                  <InputAdornment position="start">$</InputAdornment>
-                }
-                value={pricePerItem}
-                onChange={(e) => setPricePerItem(Number(e.target.value))}
-                onBlur={() => {
-                  setQuote(
-                    produce(
-                      (/** @type {import('./data-types').Quote} * / draft) => {
-                        draft.pricePerItem = pricePerItem;
-                      },
-                    ),
-                  );
-                }}
-              />
-            </TableCell> */}
           </TableRow>
           {dynamicCostNames.map((name) => (
             <TotalsTableRow
@@ -135,7 +114,6 @@ export function TotalsTable({ quote, setQuote, table }) {
             estimatedTotalHours={aggregate('estimated_hours')}
             state={{
               manualPrice: quote.manual_total_selling_price ?? 0,
-              pricePerItem,
             }}
             slots={{
               marginInput: (
@@ -174,13 +152,12 @@ export function TotalsTable({ quote, setQuote, table }) {
  */
 function ContributionRows({
   slots: { marginInput },
-  state: { manualPrice, pricePerItem },
+  state: { manualPrice },
   profitMarginTotalPrice,
   totalVariableCosts,
   estimatedTotalHours,
 }) {
   const manualContrib = manualPrice - totalVariableCosts;
-  // const perItemContrib = pricePerItem - totalVariableCosts;
   const targetContrib = profitMarginTotalPrice - totalVariableCosts;
 
   return (
@@ -200,12 +177,6 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        {/* <TableCell>
-          {perItemContrib.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </TableCell> */}
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
@@ -216,11 +187,6 @@ function ContributionRows({
             style: 'percent',
           })}
         </TableCell>
-        {/* <TableCell>
-          {(perItemContrib / pricePerItem).toLocaleString(undefined, {
-            style: 'percent',
-          })}
-        </TableCell> */}
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
@@ -237,12 +203,6 @@ function ContributionRows({
             currency: 'USD',
           })}
         </TableCell>
-        {/* <TableCell>
-          {(perItemContrib / estimatedTotalHours).toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-          })}
-        </TableCell> */}
       </TableRow>
     </>
   );
