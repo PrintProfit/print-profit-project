@@ -1,0 +1,20 @@
+{
+  // JSConfig files help VSCode with autocompletion and processing.
+  // Most of these options only apply if a @ts-check comment is at the top of a
+  // file though.
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "react-jsx", // This tells VSCode that React doesn't need to be imported in .jsx files
+    "strict": true,
+    "noImplicitAny": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+  },
+}
