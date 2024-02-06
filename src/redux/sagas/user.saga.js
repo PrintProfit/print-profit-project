@@ -144,7 +144,6 @@ function* postNewCompany(action) {
       url: '/api/user/company',
       data: action.payload,
     });
-    console.log('companyResponse', companyResponse);
     const approveResponse = yield axios({
       method: 'PUT',
       url: '/api/user/approve',
@@ -178,6 +177,41 @@ function* hardDeleteUser(action) {
   }
 }
 
+function* adminPostNewUserAndCompany(action) {
+  // console.log('action', action.payloaad);
+  try {
+    const companyResponse = yield axios({
+      method: 'POST',
+      url: '/api/user/admin/create/company/user',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
+    });
+  } catch (error) {
+    console.log(
+      'Unable to admin posting new company and posting new user to server',
+      error,
+    );
+  }
+}
+
+function* adminPostNewUser(action) {
+  // console.log('action', action.payloaad);
+  try {
+    const response = yield axios({
+      method: 'POST',
+      url: '/api/user/admin/create/user',
+      data: action.payload,
+    });
+    yield put({
+      type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
+    });
+  } catch (error) {
+    console.log('Unable to admin posting new user to server', error);
+  }
+}
+
 function* userSaga() {
   yield takeLatest('FETCH_USER', fetchUser);
   yield takeLatest('SAGA_FETCH_ADMIN_USERS_FOR_TABLE', fetchAdminUsers);
@@ -188,6 +222,11 @@ function* userSaga() {
   yield takeLatest('SAGA_POST_NEW_COMPANY', postNewCompany);
   yield takeLatest('SAGA_HARD_DELETE_USER', hardDeleteUser);
   yield takeLatest('SAGA_EDIT_USERS_INFO', userEditingInfo);
+  yield takeLatest(
+    'SAGA_ADMIN_POST_NEW_COMPANY_AND_USER',
+    adminPostNewUserAndCompany,
+  );
+  yield takeLatest('SAGA_ADMIN_POST_NEW_USER', adminPostNewUser);
 }
 
 export default userSaga;
