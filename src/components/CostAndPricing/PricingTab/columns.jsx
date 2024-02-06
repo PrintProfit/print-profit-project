@@ -8,6 +8,7 @@ import {
   PercentCell,
   ProductNameCell,
 } from './cells';
+import * as fmt from './formats';
 import { aggregate } from './utils';
 
 /**
@@ -59,10 +60,7 @@ export const consistentColumns = [
       const { rows } = table.getCoreRowModel();
       /** @type {number?} */
       const totalSellingPrice = aggregate?.('total_selling_price', [], rows);
-      return totalSellingPrice?.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
+      return fmt.currency(totalSellingPrice);
     },
     meta: {
       inputMode: 'decimal',
@@ -93,10 +91,7 @@ export const calculatedCosts = [
       const { rows } = table.getCoreRowModel();
       /** @type {number?} */
       const totalCreditCardFee = aggregate?.('creditCardFee', [], rows);
-      return totalCreditCardFee?.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
+      return fmt.currency(totalCreditCardFee);
     },
   },
   {
@@ -110,10 +105,7 @@ export const calculatedCosts = [
       const { rows } = table.getCoreRowModel();
       /** @type {number?} */
       const totalVariableCosts = aggregate?.('totalVariableCosts', [], rows);
-      return totalVariableCosts?.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
+      return fmt.currency(totalVariableCosts);
     },
   },
 ];
@@ -152,10 +144,7 @@ export const contributionColumns = [
       const { rows } = table.getCoreRowModel();
       /** @type {number?} */
       const totalContribution = aggregate?.('contributionDollars', [], rows);
-      return totalContribution?.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
+      return fmt.currency(totalContribution);
     },
   },
   {
@@ -166,11 +155,7 @@ export const contributionColumns = [
       const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
       const totalSellingPrice = aggregate(table, 'total_selling_price') ?? 0;
       const percent = totalContribution / totalSellingPrice;
-      return Number.isNaN(percent)
-        ? undefined
-        : percent.toLocaleString(undefined, {
-            style: 'percent',
-          });
+      return fmt.percent(percent);
     },
   },
   {
@@ -181,10 +166,7 @@ export const contributionColumns = [
       const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
       const totalHours = aggregate(table, 'estimated_hours') ?? 0;
       const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
-      return perHour.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-      });
+      return fmt.currency(perHour);
     },
   },
 ];
