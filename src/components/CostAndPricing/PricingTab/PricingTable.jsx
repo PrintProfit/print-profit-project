@@ -84,7 +84,7 @@ export function PricingTable({ quote, setQuote }) {
   const columns = [
     ...consistentColumns,
     ...dynamicColumns,
-    ...(updateMode ? [] : [addDynamicCostColumn]),
+    addDynamicCostColumn,
     ...calculatedCosts,
     estimatedHoursColumn,
     ...contributionColumns,
@@ -147,9 +147,7 @@ export function PricingTable({ quote, setQuote }) {
                 ))}
                 <TableCell>
                   {/* In the update mode, adding products doesn't work yet. */}
-                  {index === 0 && !updateMode ? (
-                    <AddProductCell table={table} />
-                  ) : null}
+                  {index === 0 ? <AddProductCell table={table} /> : null}
                 </TableCell>
                 <TableCell variant="footer">
                   {safeFlexRender(
