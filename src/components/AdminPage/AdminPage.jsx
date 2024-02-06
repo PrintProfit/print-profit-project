@@ -30,13 +30,17 @@ function AdminPage() {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="admin tabs">
             <Tab label="Admin View" {...a11yProps(0)} />
-            <Tab label="Archive" {...a11yProps(1)} />
+            <Tab label="Create New Account" {...a11yProps(1)} />
+            <Tab label="Archive" {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
           <AdminView />
         </TabPanel>
         <TabPanel value={value} index={1}>
+          <AdminView />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
           <AdminArchivedUsers />
         </TabPanel>
       </Box>

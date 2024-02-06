@@ -369,4 +369,66 @@ WHERE "id" = $4;
     });
 });
 
+router.post('/admin/create/company/user', (req, res) => {
+  // Now handle the company reference:
+  const insertNewUserQuery = `
+      INSERT INTO "company"
+        ("name", "updated_by")
+        VALUES
+        ($1, $2) RETURNING "id";
+    `;
+
+  const insertNewUserValues = [req.body.companyName, req.user.id];
+
+  pool
+    .query(insertNewUserQuery, insertNewUserValues)
+    .then((result) => {
+      // console.log('newUserId:', result.rows[0].id);
+      const newCompanyId = result.rows[0].id;
+
+      const email = req.body.email;
+      const name = req.body.name;
+      const password = encryptLib.encryptPassword(req.body.password);
+
+      const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
+        VALUES ($1, $2, $3, $4, $5, TRUE);`;
+
+      pool
+        .query(queryText, [email, name, password, newCompanyId, req.user.id])
+        .then((result) => res.sendStatus(201));
+    })
+    .catch((err) => {
+      // catch for second query
+      console.log('2nd admin create user and company post query fails', err);
+      res.sendStatus(500);
+    })
+    .catch((err) => {
+      // catch for first query
+      console.log('admin create user and company post failed: ', err);
+      res.sendStatus(500);
+    });
+});
+
+router.post('/admin/create/user', (req, res) => {
+  // console.log('req.body', req.body);
+  const email = req.body.email;
+  const name = req.body.name;
+  const companyId = req.body.companyId;
+  const password = encryptLib.encryptPassword(req.body.password);
+
+  const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
+  VALUES ($1, $2, $3, $4, $5, TRUE);`;
+
+  pool
+    .query(queryText, [email, name, password, companyId, req.user.id])
+    .then((result) => {
+      // console.log('result', result);
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.log('err in admin user post route', err);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
