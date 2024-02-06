@@ -40,6 +40,9 @@ function LandingPage() {
       justifyContent="center"
       sx={{ minHeight: '100vh' }}
     >
+      <Grid container justifyContent="flex-end">
+        <Button>hey there Square</Button>
+      </Grid>
       <h2>Print Profit</h2>
 
       <RegisterForm />
