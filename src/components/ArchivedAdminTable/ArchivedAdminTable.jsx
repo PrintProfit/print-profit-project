@@ -81,22 +81,40 @@ function ArchivedAdminPage({ archivedUser }) {
     });
   };
 
+  // formats created_at timestamp as readable string
+  const stringifyDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    const stringifiedDate = date.toLocaleDateString('en-us', options);
+    return stringifiedDate;
+  };
+
   return (
     <TableRow>
+      {/* 👇This makes the name field background black in archived users table - not sure if that's what we want */}
       <StyledTableCell variant="head" scope="row">
         {archivedUser.user_name}
       </StyledTableCell>
       <StyledTableCell align="center">{archivedUser.email}</StyledTableCell>
       <StyledTableCell align="center">
-        {archivedUser.last_login}
+        {stringifyDate(archivedUser.created_at)}
       </StyledTableCell>
       <StyledTableCell align="center">
-        <Button type="button" onClick={handleRecoverClickOpen}>
+        <Button
+          type="button"
+          onClick={handleRecoverClickOpen}
+          variant="contained"
+        >
           Recover
         </Button>
       </StyledTableCell>
       <StyledTableCell align="center">
-        <Button color="error" type="button" onClick={handleDeleteClickOpen}>
+        <Button
+          color="error"
+          type="button"
+          onClick={handleDeleteClickOpen}
+          variant="outlined"
+        >
           Delete
         </Button>
       </StyledTableCell>
@@ -117,10 +135,14 @@ function ArchivedAdminPage({ archivedUser }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={recoverUser} autoFocus>
+          <Button onClick={recoverUser} autoFocus variant="outlined">
             Recover
           </Button>
-          <Button sx={{ color: 'black' }} onClick={handleRecoverClose}>
+          <Button
+            sx={{ color: 'black', outlineColor: 'black' }}
+            onClick={handleRecoverClose}
+            variant="outlined"
+          >
             Cancel
           </Button>
         </DialogActions>

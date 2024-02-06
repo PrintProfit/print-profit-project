@@ -45,7 +45,7 @@ export default function AdminArchivedUsers() {
           <TableRow>
             <StyledTableCell>Name</StyledTableCell>
             <StyledTableCell align="center">Email</StyledTableCell>
-            <StyledTableCell align="center">Last Login</StyledTableCell>
+            <StyledTableCell align="center">Created on</StyledTableCell>
             <StyledTableCell align="center">Status</StyledTableCell>
             <StyledTableCell align="center">Delete</StyledTableCell>
           </TableRow>
