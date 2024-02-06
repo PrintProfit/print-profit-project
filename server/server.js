@@ -4,7 +4,7 @@ require('dotenv').config();
 const PORT = process.env.PORT || 5001;
 
 // Middleware Includes
-const sessionMiddleware = require('./modules/session-middleware');
+const { session } = require('./middleware/session.cjs');
 const passport = require('./strategies/user.strategy');
 
 // Route Includes
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('build'));
 
 // Passport Session Configuration
-app.use(sessionMiddleware);
+app.use(session);
 
 // Start Passport Sessions
 app.use(passport.initialize());
