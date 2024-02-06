@@ -279,10 +279,12 @@ export function ProductNameCell({ getValue, table, row }) {
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
-  return value.toLocaleString(undefined, {
-    style: 'currency',
-    currency: 'USD',
-  });
+  return Number.isNaN(value)
+    ? undefined
+    : value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+      });
 }
 
 /**
@@ -291,9 +293,11 @@ export function DollarCell({ getValue }) {
 export function PercentCell({ getValue }) {
   const value = getValue();
   const percent = Number(value);
-  return percent.toLocaleString(undefined, {
-    style: 'percent',
-  });
+  return Number.isNaN(percent)
+    ? undefined
+    : percent.toLocaleString(undefined, {
+        style: 'percent',
+      });
 }
 
 /**
