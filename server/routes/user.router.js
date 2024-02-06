@@ -309,12 +309,8 @@ router.get('/archived', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."inserted_at" as "created_at",
-  "pending_user_company"."name" as "pending_company_name",
-  "pending_user_company"."id" as "pending_company_id"
+  "user"."last_login" as "last_login"
       FROM "user"
-  INNER JOIN "pending_user_company"
-      ON "user"."id" = "pending_user_company"."id"
   WHERE "user"."is_removed" = TRUE;
   `;
 
@@ -380,6 +376,8 @@ router.post('/admin/create/company/user', (req, res) => {
         VALUES
         ($1, $2) RETURNING "id";
     `;
+
+  console.log('req.body.companyName', req.body.companyName);
 
   const insertNewUserValues = [req.body.companyName, req.user.id];
 

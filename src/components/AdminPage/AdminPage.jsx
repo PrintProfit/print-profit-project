@@ -2,6 +2,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminArchivedUsers from '../AdminArchivedUsers/AdminArchivedUsers';
+import AdminCreateNewUser from '../AdminCreateNewUser/AdminCreateNewUser';
 import AdminView from '../AdminView/AdminView';
 import ApprovedAdminTable from '../ApprovedAdminTable/ApprovedAdminTable';
 import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
@@ -38,7 +39,7 @@ function AdminPage() {
           <AdminView />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <AdminView />
+          <AdminCreateNewUser />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <AdminArchivedUsers />
