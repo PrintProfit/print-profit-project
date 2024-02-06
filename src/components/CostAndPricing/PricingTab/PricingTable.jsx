@@ -25,6 +25,7 @@ import {
   contributionColumns,
   estimatedHoursColumn,
 } from './columns';
+import * as fmt from './formats';
 import { aggregate, unique } from './utils';
 
 /**
@@ -35,6 +36,7 @@ export function PricingTable({ quote, setQuote }) {
   // what these objects are.
 
   /** @type {boolean} */
+  // @ts-ignore
   const updateMode = useSelector((state) => state.quote.updateMode);
 
   /**
@@ -53,22 +55,20 @@ export function PricingTable({ quote, setQuote }) {
    * the `.filter` call removes duplicates names.
    * @type {import('./data-types').ProductColumnDef[]}
    */
-  const dynamicColumns = quote.products
-    .flatMap((product) => product.costs.map((cost) => cost.name))
+  const dynamicColumns = (quote.products ?? [])
+    .flatMap((product) => (product.costs ?? []).map((cost) => cost.name))
     .filter(unique)
     .map((name) => ({
       // The ID is how we can use getValue for calculations.
       id: `dynamic-cost-${name}`,
-      accessorFn: (row) => row.costs.find((c) => c.name === name)?.value ?? 0,
+      accessorFn: (row) =>
+        (row.costs ?? []).find((c) => c.name === name)?.value ?? 0,
       header: DynamicCostHeader,
       cell: DynamicCostCell,
       aggregationFn: 'sum',
       footer: ({ table }) => {
         const total = aggregate(table, `dynamic-cost-${name}`);
-        return total?.toLocaleString(undefined, {
-          style: 'currency',
-          currency: 'USD',
-        });
+        return fmt.currency(total);
       },
       meta: {
         costName: name,
@@ -82,14 +82,14 @@ export function PricingTable({ quote, setQuote }) {
   const columns = [
     ...consistentColumns,
     ...dynamicColumns,
-    ...(updateMode ? [] : [addDynamicCostColumn]),
+    addDynamicCostColumn,
     ...calculatedCosts,
     estimatedHoursColumn,
     ...contributionColumns,
   ];
 
   const table = useReactTable({
-    data: quote.products,
+    data: quote.products ?? [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     // The meta option is how we can pass the setQuote function to the cells.
@@ -145,9 +145,7 @@ export function PricingTable({ quote, setQuote }) {
                 ))}
                 <TableCell>
                   {/* In the update mode, adding products doesn't work yet. */}
-                  {index === 0 && !updateMode ? (
-                    <AddProductCell table={table} />
-                  ) : null}
+                  {index === 0 ? <AddProductCell table={table} /> : null}
                 </TableCell>
                 <TableCell variant="footer">
                   {safeFlexRender(

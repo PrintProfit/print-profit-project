@@ -47,7 +47,7 @@ function ApprovedAdminPage({ approvedUser }) {
       <TableCell>{approvedUser.user_name}</TableCell>
       <TableCell>{approvedUser.email}</TableCell>
       <TableCell>{approvedUser.company_name}</TableCell>
-      <TableCell>{stringifyDate(approvedUser.last_login)}</TableCell>
+      <TableCell>{stringifyDate(approvedUser.created_at)}</TableCell>
       <TableCell
         sx={{ color: '#5CCD8B', fontWeight: 'bold', fontSize: 15 }}
         align="center"

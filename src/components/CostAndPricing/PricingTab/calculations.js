@@ -37,7 +37,7 @@ function sumCosts(costs) {
  * @returns {number}
  */
 export function totalVariableCosts(product) {
-  return sumCosts(product.costs) + creditCardFee(product);
+  return sumCosts(product.costs ?? []) + creditCardFee(product);
 }
 
 /**

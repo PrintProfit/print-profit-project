@@ -1,3 +1,4 @@
+// @ts-check
 import { Router } from 'express';
 import { rejectUnauthenticated } from '../middleware/auth.js';
 import { encryptPassword } from '../modules/encryption.js';
@@ -75,10 +76,12 @@ router.post('/login', userStrategy.authenticate('local'), (req, res) => {
 });
 
 // clear all server session information about this user
-router.post('/logout', (req, res) => {
+router.post('/logout', (req, res, next) => {
   // Use passport's built-in method to log out the user
-  req.logout();
-  res.sendStatus(200);
+  req.logout((err) => {
+    if (err) return next(err);
+    res.sendStatus(200);
+  });
 });
 
 // Gets all companys from company table
@@ -112,7 +115,7 @@ router.get('/pending', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "pending_user_company"."name" as "pending_company_name",
   "pending_user_company"."id" as "pending_company_id"
       FROM "user"
@@ -141,7 +144,7 @@ router.get('/approved', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "company"."name" as "company_name",
   "company"."id" as "company_id"
       FROM "user"
@@ -304,12 +307,8 @@ router.get('/archived', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
-  "pending_user_company"."name" as "pending_company_name",
-  "pending_user_company"."id" as "pending_company_id"
+  "user"."last_login" as "last_login"
       FROM "user"
-  INNER JOIN "pending_user_company"
-      ON "user"."id" = "pending_user_company"."id"
   WHERE "user"."is_removed" = TRUE;
   `;
 
@@ -373,6 +372,8 @@ router.post('/admin/create/company/user', (req, res) => {
         VALUES
         ($1, $2) RETURNING "id";
     `;
+
+  console.log('req.body.companyName', req.body.companyName);
 
   const insertNewUserValues = [req.body.companyName, req.user.id];
 

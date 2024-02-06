@@ -23,6 +23,7 @@ import { initialQuote } from './sample-data';
  */
 export function QuoteActions({ quote, setQuote }) {
   /** @type {boolean} */
+  // @ts-ignore
   const updateMode = useSelector((state) => state.quote.updateMode);
   return (
     <ButtonGroup>
@@ -44,7 +45,7 @@ function SaveQuote({ quote, setQuote }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const saveQuote = () => {
-    dispatch({ type: 'SAGA/SAVE_QUOTE', payload: quote });
+    dispatch({ type: 'SAGA/SAVE_QUOTE', payload: { ...quote, name } });
   };
 
   /**

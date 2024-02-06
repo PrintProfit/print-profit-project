@@ -1,5 +1,13 @@
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,7 +36,7 @@ function AdminCreateNewUser() {
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
     const company = companyList.find(
-      (company) => company.name === companyInput,
+      (company) => company.name === companyName.name,
     );
     if (company) {
       const companyId = company.id;
@@ -50,7 +58,7 @@ function AdminCreateNewUser() {
         payload: {
           email: email,
           name: name,
-          companyName: companyName,
+          companyName: companyName.name,
           password: password,
         },
       });
@@ -93,7 +101,7 @@ function AdminCreateNewUser() {
         />
 
         <Autocomplete
-          value={newCompanyInput}
+          value={companyName}
           onChange={(event, newValue) => {
             if (typeof newValue === 'string') {
               setCompanyName({
