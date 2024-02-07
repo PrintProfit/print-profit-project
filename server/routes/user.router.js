@@ -15,7 +15,7 @@ import {
   DeleteUserBody,
   RecoverUserBody,
 } from '../schemas/admin.js';
-import { RegisterBody } from '../schemas/auth.js';
+import { RegisterBody } from '../schemas/users.js';
 import userStrategy from '../strategies/user.strategy.js';
 
 const router = Router();
