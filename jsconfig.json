@@ -17,4 +17,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
   },
+  "references": [
+    { "path": "./jsconfig.server.json" },
+    { "path": "./jsconfig.client.json" },
+    { "path": "./jsconfig.scripts.json" },
+  ],
 }
