@@ -12,6 +12,7 @@ import pool from '../modules/pool.js';
 import {
   ApproveUserBody,
   CreateCompanyBody,
+  CreateCompanyUserBody,
   CreateUserBody,
   DeleteUserBody,
   RecoverUserBody,
@@ -402,47 +403,52 @@ router.put(
   },
 );
 
-router.post('/admin/create/company/user', rejectNonAdmin, (req, res) => {
-  // Now handle the company reference:
-  const insertNewUserQuery = `
+router.post(
+  '/admin/create/company/user',
+  rejectNonAdmin,
+  validate(z.object({ body: CreateCompanyUserBody })),
+  (req, res) => {
+    // Now handle the company reference:
+    const insertNewUserQuery = `
       INSERT INTO "company"
         ("name", "updated_by")
         VALUES
         ($1, $2) RETURNING "id";
     `;
 
-  console.log('req.body.companyName', req.body.companyName);
+    console.log('req.body.companyName', req.body.companyName);
 
-  const insertNewUserValues = [req.body.companyName, req.user.id];
+    const insertNewUserValues = [req.body.companyName, req.user.id];
 
-  pool
-    .query(insertNewUserQuery, insertNewUserValues)
-    .then((result) => {
-      // console.log('newUserId:', result.rows[0].id);
-      const newCompanyId = result.rows[0].id;
+    pool
+      .query(insertNewUserQuery, insertNewUserValues)
+      .then((result) => {
+        // console.log('newUserId:', result.rows[0].id);
+        const newCompanyId = result.rows[0].id;
 
-      const email = req.body.email;
-      const name = req.body.name;
-      const password = encryptPassword(req.body.password);
+        const email = req.body.email;
+        const name = req.body.name;
+        const password = encryptPassword(req.body.password);
 
-      const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
+        const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
         VALUES ($1, $2, $3, $4, $5, TRUE);`;
 
-      pool
-        .query(queryText, [email, name, password, newCompanyId, req.user.id])
-        .then((result) => res.sendStatus(201));
-    })
-    .catch((err) => {
-      // catch for second query
-      console.log('2nd admin create user and company post query fails', err);
-      res.sendStatus(500);
-    })
-    .catch((err) => {
-      // catch for first query
-      console.log('admin create user and company post failed: ', err);
-      res.sendStatus(500);
-    });
-});
+        pool
+          .query(queryText, [email, name, password, newCompanyId, req.user.id])
+          .then((result) => res.sendStatus(201));
+      })
+      .catch((err) => {
+        // catch for second query
+        console.log('2nd admin create user and company post query fails', err);
+        res.sendStatus(500);
+      })
+      .catch((err) => {
+        // catch for first query
+        console.log('admin create user and company post failed: ', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 router.post(
   '/admin/create/user',

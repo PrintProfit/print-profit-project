@@ -24,3 +24,10 @@ export const CreateUserBody = z.object({
   name: z.string(),
   companyId: z.coerce.number().positive().int(),
 });
+
+export const CreateCompanyUserBody = z.object({
+  companyName: z.string(),
+  email: z.string().email(),
+  name: z.string(),
+  password: z.string().min(8),
+});
