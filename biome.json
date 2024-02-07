@@ -43,7 +43,18 @@
         "noRestrictedGlobals": {
           "level": "warn",
           "options": {
-            "deniedGlobals": ["module"]
+            "deniedGlobals": [
+              "__dirname",
+              "__filename",
+              "atob",
+              "btoa",
+              "escape",
+              "exports",
+              "global",
+              "InternalError",
+              "module",
+              "unescape"
+            ]
           }
         },
         "useCollapsedElseIf": "warn",
