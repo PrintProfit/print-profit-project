@@ -1,7 +1,7 @@
+import { composeWithDevToolsDevelopmentOnly } from '@redux-devtools/extension';
 import { applyMiddleware, legacy_createStore as createStore } from 'redux';
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-
 import rootReducer from './reducers/_root.reducer'; // imports ./redux/reducers/index.js
 import rootSaga from './sagas/_root.saga'; // imports ./redux/sagas/index.js
 
@@ -19,7 +19,7 @@ const store = createStore(
   // rootSaga contains all of our other reducers
   rootReducer,
   // adds all middleware to our project including saga and logger
-  applyMiddleware(...middlewareList),
+  composeWithDevToolsDevelopmentOnly(applyMiddleware(...middlewareList)),
 );
 
 // tells the saga middleware to use the rootSaga
