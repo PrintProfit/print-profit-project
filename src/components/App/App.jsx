@@ -25,6 +25,7 @@ import MyAccountPage from '../MyAccountPage/MyAccountPage';
 import ToolThree from '../ToolThree/ToolThree';
 import ToolTwo from '../ToolTwo/ToolTwo';
 import './App.css';
+import './Orpheus.ttf';
 
 function App() {
   const dispatch = useDispatch();
