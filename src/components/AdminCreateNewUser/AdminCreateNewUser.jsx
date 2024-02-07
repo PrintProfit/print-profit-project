@@ -13,6 +13,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import CreateIcon from '@mui/icons-material/Create';
+
 const filter = createFilterOptions();
 
 function AdminCreateNewUser() {
@@ -165,7 +167,6 @@ function AdminCreateNewUser() {
           renderInput={(params) => (
             <TextField
               {...params}
-              autoFocus
               required
               margin="dense"
               name="text"
@@ -207,7 +208,7 @@ function AdminCreateNewUser() {
             name="submit"
             value="Create New Account"
           >
-            Create New Account
+            <CreateIcon /> Create New Account
           </Button>
         </Box>
       </Box>

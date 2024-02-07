@@ -11,6 +11,11 @@ import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import ArchiveIcon from '@mui/icons-material/Archive';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CloseIcon from '@mui/icons-material/Close';
+import DoneIcon from '@mui/icons-material/Done';
+
 const filter = createFilterOptions();
 
 function PendingAdminPage({ pendingUser }) {
@@ -108,7 +113,7 @@ function PendingAdminPage({ pendingUser }) {
           variant="contained"
           onClick={handleApprovalClickOpen}
         >
-          Approve
+          <CheckCircleIcon /> <DoneIcon /> Approve
         </Button>
       </TableCell>
       <TableCell align="center">
@@ -118,7 +123,7 @@ function PendingAdminPage({ pendingUser }) {
           variant="outlined"
           onClick={() => handleDeleteClickOpen()}
         >
-          Archive
+          <ArchiveIcon /> Archive
         </Button>
       </TableCell>
 
@@ -213,10 +218,10 @@ function PendingAdminPage({ pendingUser }) {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" type="submit">
-            Approve
+            <CheckCircleIcon /> Approve
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleApprovalClose}>
-            Cancel
+            <CloseIcon /> Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -239,10 +244,10 @@ function PendingAdminPage({ pendingUser }) {
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={deleteUser} autoFocus>
-            Archive
+            <ArchiveIcon /> Archive
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
-            Cancel
+            <CloseIcon /> Cancel
           </Button>
         </DialogActions>
       </Dialog>

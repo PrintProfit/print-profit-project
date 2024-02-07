@@ -120,7 +120,7 @@ router.get('/pending', (req, res) => {
   "pending_user_company"."id" as "pending_company_id"
       FROM "user"
   INNER JOIN "pending_user_company"
-      ON "user"."id" = "pending_user_company"."id"
+      ON "user"."id" = "pending_user_company"."user_id"
   WHERE "user"."is_approved" = FALSE AND "user"."is_removed" = FALSE; 
   `;
 

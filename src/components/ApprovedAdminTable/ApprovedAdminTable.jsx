@@ -9,6 +9,10 @@ import TableRow from '@mui/material/TableRow';
 import React, { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import ArchiveIcon from '@mui/icons-material/Archive';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CloseIcon from '@mui/icons-material/Close';
+
 function ApprovedAdminPage({ approvedUser }) {
   const dispatch = useDispatch();
 
@@ -52,7 +56,7 @@ function ApprovedAdminPage({ approvedUser }) {
         sx={{ color: '#5CCD8B', fontWeight: 'bold', fontSize: 15 }}
         align="center"
       >
-        Approved
+        <CheckBoxIcon /> Approved
       </TableCell>
       <TableCell align="center">
         <Button
@@ -61,7 +65,7 @@ function ApprovedAdminPage({ approvedUser }) {
           variant="outlined"
           onClick={handleDeleteClickOpen}
         >
-          Archive
+          <ArchiveIcon /> Archive
         </Button>
       </TableCell>
 
@@ -83,10 +87,10 @@ function ApprovedAdminPage({ approvedUser }) {
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={deleteUser} autoFocus>
-            Archive
+            <ArchiveIcon /> Archive
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
-            Cancel
+            <CloseIcon /> Cancel
           </Button>
         </DialogActions>
       </Dialog>
