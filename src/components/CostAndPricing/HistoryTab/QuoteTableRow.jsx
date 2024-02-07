@@ -1,8 +1,10 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Backdrop,
   Box,
   Button,
   Fade,
+  IconButton,
   Modal,
   Table,
   TableBody,
@@ -10,6 +12,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Tooltip,
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -117,7 +120,7 @@ function QuoteTableRow({ row, setTab, ...props }) {
           row={row}
           setTab={setTab}
         />
-        <Button onClick={handleOpen} variant="contained">
+        <Button onClick={handleOpen} variant="contained" color="button">
           See details
         </Button>
       </TableCell>
@@ -137,6 +140,13 @@ function QuoteTableRow({ row, setTab, ...props }) {
                 0,
               ),
             )}
+      </TableCell>
+      <TableCell>
+        <Tooltip title="Delete quote">
+          <IconButton>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
       </TableCell>
     </TableRow>
   );
