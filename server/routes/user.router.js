@@ -9,6 +9,7 @@ import {
 import { validate } from '../middleware/validator.js';
 import { encryptPassword } from '../modules/encryption.js';
 import pool from '../modules/pool.js';
+import { ApproveUserBody } from '../schemas/admin.js';
 import { RegisterBody } from '../schemas/auth.js';
 import userStrategy from '../strategies/user.strategy.js';
 
@@ -165,24 +166,33 @@ router.get('/approved', rejectNonAdmin, (req, res) => {
 });
 
 // approves the user that the admin clicked
-router.put('/approve', rejectNonAdmin, (req, res) => {
-  const sqlText = `
+router.put(
+  '/approve',
+  rejectNonAdmin,
+  validate(z.object({ body: ApproveUserBody })),
+  (req, res) => {
+    const sqlText = `
   UPDATE "user"
     SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = $2
   WHERE "id" = $3;
         `;
 
-  const insertValue = [req.user.id, req.body.companyId, req.body.pendingUserId];
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /approve PUT,', err);
-      res.sendStatus(500);
-    });
-});
+    const insertValue = [
+      req.user.id,
+      req.body.companyId,
+      req.body.pendingUserId,
+    ];
+    pool
+      .query(sqlText, insertValue)
+      .then((result) => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('Error in user.router /approve PUT,', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // soft deletes the user the admin clicked
 router.put('/delete/soft', rejectNonAdmin, (req, res) => {
