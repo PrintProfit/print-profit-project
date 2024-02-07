@@ -233,7 +233,7 @@ router.get('/profile/page', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login",
+  "user"."inserted_at" as "created_at",
   "company"."name" as "company_name",
   "company"."id" as "company_id"
       FROM "user"
@@ -307,7 +307,7 @@ router.get('/archived', (req, res) => {
   "user"."email" as "email",
   "user"."name" as "user_name",
   "user"."is_approved" as "is_approved",
-  "user"."last_login" as "last_login"
+  "user"."inserted_at" as "created_at"
       FROM "user"
   WHERE "user"."is_removed" = TRUE;
   `;
