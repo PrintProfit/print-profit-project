@@ -407,46 +407,46 @@ router.post(
   '/admin/create/company/user',
   rejectNonAdmin,
   validate(z.object({ body: CreateCompanyUserBody })),
-  (req, res) => {
-    // Now handle the company reference:
-    const insertNewUserQuery = `
-      INSERT INTO "company"
-        ("name", "updated_by")
-        VALUES
-        ($1, $2) RETURNING "id";
-    `;
+  async (req, res) => {
+    const conn = await pool.connect();
 
-    console.log('req.body.companyName', req.body.companyName);
+    const { companyName, email, name, password } = req.body;
 
-    const insertNewUserValues = [req.body.companyName, req.user.id];
-
-    pool
-      .query(insertNewUserQuery, insertNewUserValues)
-      .then((result) => {
-        // console.log('newUserId:', result.rows[0].id);
-        const newCompanyId = result.rows[0].id;
-
-        const email = req.body.email;
-        const name = req.body.name;
-        const password = encryptPassword(req.body.password);
-
-        const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
-        VALUES ($1, $2, $3, $4, $5, TRUE);`;
-
-        pool
-          .query(queryText, [email, name, password, newCompanyId, req.user.id])
-          .then((result) => res.sendStatus(201));
-      })
-      .catch((err) => {
-        // catch for second query
-        console.log('2nd admin create user and company post query fails', err);
-        res.sendStatus(500);
-      })
-      .catch((err) => {
-        // catch for first query
-        console.log('admin create user and company post failed: ', err);
-        res.sendStatus(500);
-      });
+    try {
+      await conn.query('BEGIN');
+      const result = await conn.query(
+        `--sql
+          INSERT INTO company (name, updated_by)
+          VALUES ($1, $2)
+          RETURNING id
+        `,
+        [companyName, req.user?.id],
+      );
+      const companyId = result.rows[0].id;
+      const hashedPassword = encryptPassword(password);
+      await conn.query(
+        `--sql
+          INSERT INTO "user" (
+            email,
+            name,
+            password,
+            company_id,
+            updated_by,
+            is_approved
+          )
+          VALUES ($1, $2, $3, $4, $5, TRUE)
+        `,
+        [email, name, hashedPassword, companyId, req.user?.id],
+      );
+      await conn.query('COMMIT');
+      res.sendStatus(201);
+    } catch (error) {
+      console.log('Error in admin create user route', error);
+      await conn.query('ROLLBACK');
+      res.sendStatus(500);
+    } finally {
+      conn.release();
+    }
   },
 );
 
