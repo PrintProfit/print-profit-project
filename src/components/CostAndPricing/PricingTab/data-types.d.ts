@@ -21,7 +21,7 @@ export interface Product {
   selling_price_per_unit: number;
   total_selling_price?: number;
   estimated_hours: number;
-  costs?: Cost[];
+  costs: Cost[];
 }
 
 export type DamagedProduct = DamagedStruct<
@@ -37,7 +37,7 @@ export interface Quote {
   manual_total_selling_price?: number;
   inserted_at?: string;
   created_by?: string;
-  products?: Product[];
+  products: Product[];
 }
 
 // This type represents the absolute maximum degree of bad data the client
