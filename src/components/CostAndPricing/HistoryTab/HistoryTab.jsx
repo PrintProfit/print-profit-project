@@ -38,6 +38,7 @@ export default function HistoryTab({ setTab }) {
               <TableCell>Date created</TableCell>
               <TableCell>Number of products</TableCell>
               <TableCell>Total selling price</TableCell>
+              <TableCell> </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
