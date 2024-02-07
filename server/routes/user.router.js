@@ -9,7 +9,11 @@ import {
 import { validate } from '../middleware/validator.js';
 import { encryptPassword } from '../modules/encryption.js';
 import pool from '../modules/pool.js';
-import { ApproveUserBody } from '../schemas/admin.js';
+import {
+  ApproveUserBody,
+  RecoverUserBody,
+  SoftDeleteUserBody,
+} from '../schemas/admin.js';
 import { RegisterBody } from '../schemas/auth.js';
 import userStrategy from '../strategies/user.strategy.js';
 
@@ -195,44 +199,54 @@ router.put(
 );
 
 // soft deletes the user the admin clicked
-router.put('/delete/soft', rejectNonAdmin, (req, res) => {
-  const sqlText = `
+router.put(
+  '/delete/soft',
+  rejectNonAdmin,
+  validate(z.object({ body: SoftDeleteUserBody })),
+  (req, res) => {
+    const sqlText = `
   UPDATE "user"
     SET "is_removed" = TRUE, "updated_by" = $1
   WHERE "id" = $2;
         `;
 
-  const insertValue = [req.user.id, req.body.aboutToBeDeletedUser];
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /delete/soft PUT,', err);
-      res.sendStatus(500);
-    });
-});
+    const insertValue = [req.user.id, req.body.aboutToBeDeletedUser];
+    pool
+      .query(sqlText, insertValue)
+      .then((result) => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('Error in user.router /delete/soft PUT,', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // recovers the user the admin clicked
-router.put('/recover', rejectNonAdmin, (req, res) => {
-  const sqlText = `
+router.put(
+  '/recover',
+  rejectNonAdmin,
+  validate(z.object({ body: RecoverUserBody })),
+  (req, res) => {
+    const sqlText = `
   UPDATE "user"
     SET "is_removed" = FALSE, "updated_by" = $1
   WHERE "id" = $2;
         `;
 
-  const insertValue = [req.user.id, req.body.aboutToBeRecoveredUser];
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /recover PUT,', err);
-      res.sendStatus(500);
-    });
-});
+    const insertValue = [req.user.id, req.body.aboutToBeRecoveredUser];
+    pool
+      .query(sqlText, insertValue)
+      .then((result) => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('Error in user.router /recover PUT,', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // Gets the user that is logged in for the profile page
 router.get('/profile/page', rejectUnapproved, (req, res) => {
