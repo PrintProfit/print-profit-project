@@ -99,13 +99,12 @@ router.post(
   '/',
   validate(z.object({ body: SaveQuoteBody })),
   async (req, res) => {
-    let connection;
+    const connection = await pool.connect();
 
     try {
       console.log('quote post req.body:', req.body);
 
       // Establishes a longstanding connection to our database:
-      connection = await pool.connect();
 
       // BEGIN the SQL Transaction:
       await connection.query('BEGIN;');
@@ -184,17 +183,17 @@ router.post(
       // END PRODUCT(S) POST
 
       // if all posts are successful, commit those changes to the tables
-      connection.query('COMMIT;');
-      // and end connection
-      connection.release();
+      await connection.query('COMMIT;');
 
       res.sendStatus(201);
     } catch (err) {
       console.log('Error posting quote:', err);
       // otherwise, undo changes to tables
-      connection.query('ROLLBACK;');
-      connection.release();
+      await connection.query('ROLLBACK;');
       res.sendStatus(500);
+    } finally {
+      // Close the connection
+      connection.release();
     }
   },
 );
