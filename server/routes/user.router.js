@@ -215,7 +215,7 @@ router.put(
     pool
       .query(sqlText, insertValue)
       .then((result) => {
-        res.sendStatus(201);
+        res.sendStatus(200);
       })
       .catch((err) => {
         console.log('Error in user.router /delete/soft PUT,', err);
@@ -319,7 +319,7 @@ router.delete(
     pool
       .query(sqlText, insertValue)
       .then((result) => {
-        res.sendStatus(201);
+        res.sendStatus(200);
       })
       .catch((err) => {
         console.log('Error in user.router DELETE, deleting account', err);
