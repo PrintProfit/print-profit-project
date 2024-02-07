@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import '../App/Orpheus.ttf';
 
 const drawerWidth = 200;
 
@@ -42,8 +43,17 @@ export default function AppBarHeader() {
         sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Typography variant="h6" noWrap component="div">
-            {/* Text for AppBar Goes here */}
+          {/* Text for AppBar */}
+          <Typography
+            variant="h4"
+            noWrap
+            // component="div"
+            // fontWeight="bold"
+            textAlign={'center'}
+            sx={{ flexGrow: 1, fontSize: 43, color: 'white' }}
+            fontFamily={'Orpheus'}
+          >
+            Print Profit
           </Typography>
           <IconButton
             size="large"
