@@ -6,6 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
 const drawerWidth = 200;
@@ -15,6 +16,7 @@ const drawerWidth = 200;
 
 export default function SideBar({ children }) {
   const history = useHistory();
+  const user = useSelector((store) => store.user.currentUser);
 
   const handleNavigationHome = () => {
     history.push('/user');
@@ -46,6 +48,7 @@ export default function SideBar({ children }) {
 
         <List sx={{ height: '100%', textAlign: 'center' }}>
           <h3>User tools</h3>
+          <Divider />
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/cost-and-pricing">
               <ListItemText
@@ -55,7 +58,6 @@ export default function SideBar({ children }) {
             </ListItemButton>
           </ListItem>
           <Divider />
-
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/tool-two">
               <ListItemText
@@ -85,6 +87,30 @@ export default function SideBar({ children }) {
             </ListItemButton>
           </ListItem>
           <Divider />
+        </List>
+        <List
+          sx={{
+            position: 'absolute',
+            bottom: '0',
+            width: '100%',
+            textAlign: 'center',
+          }}
+        >
+          {user.is_admin && (
+            <>
+              <Divider />
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/admin">
+                  <ListItemText
+                    primary="Admin"
+                    sx={{ textAlign: 'center', color: 'primary.contrastText' }}
+                  />
+                </ListItemButton>
+              </ListItem>
+            </>
+          )}
+
+          <Divider />
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/contact">
               <ListItemText
@@ -93,7 +119,6 @@ export default function SideBar({ children }) {
               />
             </ListItemButton>
           </ListItem>
-          <Divider />
         </List>
       </Drawer>
       <Box
