@@ -1,8 +1,11 @@
 // @ts-check
 import { Router } from 'express';
+import { z } from 'zod';
 import { rejectUnauthenticated } from '../middleware/auth.js';
+import { validate } from '../middleware/validator.js';
 import { encryptPassword } from '../modules/encryption.js';
 import pool from '../modules/pool.js';
+import { RegisterBody } from '../schemas/auth.js';
 import userStrategy from '../strategies/user.strategy.js';
 
 const router = Router();
@@ -10,62 +13,61 @@ const router = Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
-
-  // soft delete, this will prevent soft deleted users to login
-  if (req.user.is_removed === false) {
-    res.send(req.user);
-  } else {
-    res.sendStatus(403);
-  }
+  // rejectUnauthenticated already checks that the user wasn't removed
+  res.send(req.user);
 });
 
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.post('/register', (req, res, next) => {
-  const email = req.body.email;
-  const name = req.body.name;
-  const password = encryptPassword(req.body.password);
+router.post(
+  '/register',
+  validate(z.object({ body: RegisterBody })),
+  (req, res) => {
+    const email = req.body.email;
+    const name = req.body.name;
+    const password = encryptPassword(req.body.password);
 
-  const queryText = `INSERT INTO "user" (email, name, password)
+    const queryText = `INSERT INTO "user" (email, name, password)
     VALUES ($1, $2, $3) RETURNING id`;
 
-  pool
-    .query(queryText, [email, name, password])
-    .then((result) => {
-      // ID IS HERE!
-      console.log('New user Id:', result.rows[0].id);
-      const createdUserId = result.rows[0].id;
+    pool
+      .query(queryText, [email, name, password])
+      .then((result) => {
+        // ID IS HERE!
+        console.log('New user Id:', result.rows[0].id);
+        const createdUserId = result.rows[0].id;
 
-      // Now handle the pending_user_company reference:
-      const insertNewUserQuery = `
+        // Now handle the pending_user_company reference:
+        const insertNewUserQuery = `
       INSERT INTO "pending_user_company"
         ("user_id", "name", "updated_by")
         VALUES
         ($1, $2, $3);
     `;
 
-      const insertNewUserValues = [
-        createdUserId,
-        req.body.companyName,
-        createdUserId,
-      ];
+        const insertNewUserValues = [
+          createdUserId,
+          req.body.companyName,
+          createdUserId,
+        ];
 
-      pool.query(insertNewUserQuery, insertNewUserValues)
+        pool.query(insertNewUserQuery, insertNewUserValues)
 
-      .then(() => res.sendStatus(201));
-    })
-    .catch((err) => {
-      // catch for second query
-      console.log('2nd register query fails', err);
-      res.sendStatus(500);
-    })
-    .catch((err) => {
-      // catch for first query
-      console.log('User registration failed: ', err);
-      res.sendStatus(500);
-    });
-});
+        .then(() => res.sendStatus(201));
+      })
+      .catch((err) => {
+        // catch for second query
+        console.log('2nd register query fails', err);
+        res.sendStatus(500);
+      })
+      .catch((err) => {
+        // catch for first query
+        console.log('User registration failed: ', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
