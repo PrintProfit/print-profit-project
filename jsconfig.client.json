@@ -1,0 +1,21 @@
+{
+  "extends": ["./jsconfig.json"],
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "react-jsx", // This tells VSCode that React doesn't need to be imported in .jsx files
+
+    /* Things Vite sets in TSConfigs */
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+  },
+  "include": ["src"],
+}

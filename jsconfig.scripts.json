@@ -1,0 +1,12 @@
+{
+  "extends": ["./jsconfig.json"],
+  "compilerOptions": {
+    "composite": true,
+
+    /* Set by vite */
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowSyntheticDefaultImports": true,
+  },
+  "include": ["vite.config.*"],
+}
