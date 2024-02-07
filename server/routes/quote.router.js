@@ -216,19 +216,19 @@ router.put(
       // first query makes updates to quote table
       await connection.query(
         /*sql*/ `
-        UPDATE quote
-        SET
-          name = $1,
-          updated_by = $2,
-          manual_total_selling_price = $3,
-          manual_contribution_percent = $4
-        WHERE
-          id = $5
-          AND user_id = $2
-      `,
+          UPDATE quote
+          SET
+            name = $1,
+            updated_by = $2,
+            manual_total_selling_price = $3,
+            manual_contribution_percent = $4
+          WHERE
+            id = $5
+            AND user_id = $2
+        `,
         [
           req.body.name, // $1
-          req.user.id, // $2
+          req.user?.id, // $2
           req.body.manual_total_selling_price, // $3
           req.body.manual_contribution_percent, // $4
           req.body.id, // $5
@@ -242,24 +242,24 @@ router.put(
         /** @type {import('pg').QueryConfig} */
         const productUpdate = {
           text: /*sql*/ `
-          UPDATE product
-          SET
-          	name = $1,
-          	quantity = $2,
-          	selling_price_per_unit = $3,
-          	total_selling_price = $4,
-          	estimated_hours = $5,
-          	updated_by = $6
-          WHERE	id = $7
-          RETURNING id
-        `,
+            UPDATE product
+            SET
+            	name = $1,
+            	quantity = $2,
+            	selling_price_per_unit = $3,
+            	total_selling_price = $4,
+            	estimated_hours = $5,
+            	updated_by = $6
+            WHERE	id = $7
+            RETURNING id
+          `,
           values: [
             product.name,
             product.quantity,
             product.selling_price_per_unit,
             product.total_selling_price,
             product.estimated_hours,
-            req.user.id,
+            req.user?.id,
             product.id,
           ],
         };
@@ -267,17 +267,17 @@ router.put(
         /** @type {import('pg').QueryConfig} */
         const productInsert = {
           text: /*sql*/ `
-          INSERT INTO product (
-            quote_id,
-            name,
-            quantity,
-            selling_price_per_unit,
-            total_selling_price,
-            estimated_hours
-          )
-          VALUES ($1, $2, $3, $4, $5, $6)
-          RETURNING id
-        `,
+            INSERT INTO product (
+              quote_id,
+              name,
+              quantity,
+              selling_price_per_unit,
+              total_selling_price,
+              estimated_hours
+            )
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING id
+          `,
           values: [
             req.body.id,
             product.name,
@@ -298,26 +298,26 @@ router.put(
           /** @type {import('pg').QueryConfig} */
           const costUpdate = {
             text: /*sql*/ `
-            UPDATE cost
-            SET
-              name = $1,
-              value = $2,
-              updated_by = $3
-            WHERE id = $4
-          `,
-            values: [cost.name, cost.value, req.user.id, cost.id],
+              UPDATE cost
+              SET
+                name = $1,
+                value = $2,
+                updated_by = $3
+              WHERE id = $4
+            `,
+            values: [cost.name, cost.value, req.user?.id, cost.id],
           };
 
           /** @type {import('pg').QueryConfig} */
           const costInsert = {
             text: /*sql*/ `
-            INSERT INTO cost (
-              product_id,
-              name,
-              value
-            )
-            VALUES ($1, $2, $3)
-          `,
+              INSERT INTO cost (
+                product_id,
+                name,
+                value
+              )
+              VALUES ($1, $2, $3)
+            `,
             values: [productId, cost.name, cost.value],
           };
 
@@ -326,14 +326,15 @@ router.put(
       }
 
       // if all edits are successful, commit those changes to the table
-      connection.query('COMMIT;');
-      // and end connection
-      connection.release();
+      await connection.query('COMMIT;');
+      res.sendStatus(200);
     } catch (err) {
       console.log('Error editing quote: ', err);
-      connection.query('ROLLBACK;');
-      connection.release();
+      await connection.query('ROLLBACK;');
       res.sendStatus(500);
+    } finally {
+      // Close the connection
+      connection.release();
     }
   },
 );
