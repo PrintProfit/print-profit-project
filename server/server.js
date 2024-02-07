@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import logger from 'morgan';
 import { session } from './middleware/session.js';
 import quoteRouter from './routes/quote.router.js';
 import userRouter from './routes/user.router.js';
@@ -7,6 +8,8 @@ import passport from './strategies/user.strategy.js';
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+app.use(logger('dev'));
 
 // Express Middleware
 app.use(express.json());
