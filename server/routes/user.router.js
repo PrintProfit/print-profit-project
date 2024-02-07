@@ -12,6 +12,7 @@ import pool from '../modules/pool.js';
 import {
   ApproveUserBody,
   CreateCompanyBody,
+  CreateUserBody,
   DeleteUserBody,
   RecoverUserBody,
 } from '../schemas/admin.js';
@@ -401,7 +402,7 @@ router.put(
   },
 );
 
-router.post('/admin/create/company/user', (req, res) => {
+router.post('/admin/create/company/user', rejectNonAdmin, (req, res) => {
   // Now handle the company reference:
   const insertNewUserQuery = `
       INSERT INTO "company"
@@ -443,26 +444,29 @@ router.post('/admin/create/company/user', (req, res) => {
     });
 });
 
-router.post('/admin/create/user', (req, res) => {
-  // console.log('req.body', req.body);
-  const email = req.body.email;
-  const name = req.body.name;
-  const companyId = req.body.companyId;
-  const password = encryptPassword(req.body.password);
+router.post(
+  '/admin/create/user',
+  rejectNonAdmin,
+  validate(z.object({ body: CreateUserBody })),
+  (req, res) => {
+    const email = req.body.email;
+    const name = req.body.name;
+    const companyId = req.body.companyId;
+    const password = encryptPassword(req.body.password);
 
-  const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
+    const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
   VALUES ($1, $2, $3, $4, $5, TRUE);`;
 
-  pool
-    .query(queryText, [email, name, password, companyId, req.user.id])
-    .then((result) => {
-      // console.log('result', result);
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('err in admin user post route', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(queryText, [email, name, password, companyId, req.user.id])
+      .then((result) => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('err in admin user post route', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 export default router;

@@ -17,3 +17,10 @@ export const RecoverUserBody = z.object({
 export const CreateCompanyBody = z.object({
   newCompanyName: z.string(),
 });
+
+export const CreateUserBody = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+  name: z.string(),
+  companyId: z.coerce.number().positive().int(),
+});
