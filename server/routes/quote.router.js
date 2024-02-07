@@ -62,6 +62,8 @@ router.get('/:id', (req, res) => {
 			product_id,
 			json_agg(
 			json_build_object(
+        'id',
+          c.id,
 				'name',
 					c.name,
 				'value',
