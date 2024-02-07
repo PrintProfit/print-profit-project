@@ -36,3 +36,15 @@ export const SaveQuoteBody = BaseQuote.merge(
     ),
   }),
 );
+
+export const UpdateQuoteBody = BaseQuote.merge(WithId).merge(
+  z.object({
+    products: z.array(
+      BaseProduct.merge(WithId.partial()).merge(
+        z.object({
+          costs: z.array(BaseCost.merge(WithId.partial())),
+        }),
+      ),
+    ),
+  }),
+);
