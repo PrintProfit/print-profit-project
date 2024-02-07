@@ -12,8 +12,8 @@ import pool from '../modules/pool.js';
 import {
   ApproveUserBody,
   CreateCompanyBody,
+  DeleteUserBody,
   RecoverUserBody,
-  SoftDeleteUserBody,
 } from '../schemas/admin.js';
 import { RegisterBody } from '../schemas/auth.js';
 import userStrategy from '../strategies/user.strategy.js';
@@ -203,7 +203,7 @@ router.put(
 router.put(
   '/delete/soft',
   rejectNonAdmin,
-  validate(z.object({ body: SoftDeleteUserBody })),
+  validate(z.object({ body: DeleteUserBody })),
   (req, res) => {
     const sqlText = `
   UPDATE "user"
@@ -304,24 +304,29 @@ router.post(
 );
 
 // hard deletes users that are in the archived table
-router.delete('/delete/archived', (req, res) => {
-  const sqlText = `
+router.delete(
+  '/delete/archived',
+  rejectNonAdmin,
+  validate(z.object({ body: DeleteUserBody })),
+  (req, res) => {
+    const sqlText = `
   DELETE FROM "user"
     WHERE "id" = $1;
     `;
 
-  const insertValue = [req.body.aboutToBeDeletedUser];
+    const insertValue = [req.body.aboutToBeDeletedUser];
 
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router DELETE, deleting account', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(sqlText, insertValue)
+      .then((result) => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('Error in user.router DELETE, deleting account', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // Gets all users that have been soft delete
 router.get('/archived', (req, res) => {

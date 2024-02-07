@@ -6,7 +6,7 @@ export const ApproveUserBody = z.object({
   pendingUserId: z.coerce.number().positive().int(),
 });
 
-export const SoftDeleteUserBody = z.object({
+export const DeleteUserBody = z.object({
   aboutToBeDeletedUser: z.coerce.number().positive().int(),
 });
 
