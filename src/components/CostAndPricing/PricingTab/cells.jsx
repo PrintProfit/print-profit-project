@@ -303,7 +303,7 @@ export function AddCostHeader({ table }) {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
+          draft.products = [];
         }
         for (const product of draft.products) {
           if (product.costs === undefined) {
@@ -392,16 +392,14 @@ export function AddProductCell({ table }) {
   const addProduct = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        // This is the only place where we should repair the products array.
-        // In any other place, the products array would need to be correct for
-        // the component to appear in the first place.
+        // This code is now preventing what should be an impossible crash.
         if (draft.products === undefined || draft.products === null) {
           draft.products = [];
         }
 
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products
-          .flatMap((p) => (p.costs ?? []).map((c) => c.name))
+          .flatMap((product) => product.costs.map((c) => c.name))
           .filter(unique);
 
         // This *should* also work, but it might not order things correctly,

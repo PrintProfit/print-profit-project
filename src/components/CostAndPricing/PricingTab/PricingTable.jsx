@@ -55,14 +55,13 @@ export function PricingTable({ quote, setQuote }) {
    * the `.filter` call removes duplicates names.
    * @type {import('./data-types').ProductColumnDef[]}
    */
-  const dynamicColumns = (quote.products ?? [])
-    .flatMap((product) => (product.costs ?? []).map((cost) => cost.name))
+  const dynamicColumns = quote.products
+    .flatMap((product) => product.costs.map((cost) => cost.name))
     .filter(unique)
     .map((name) => ({
       // The ID is how we can use getValue for calculations.
       id: `dynamic-cost-${name}`,
-      accessorFn: (row) =>
-        (row.costs ?? []).find((c) => c.name === name)?.value ?? 0,
+      accessorFn: (row) => row.costs.find((c) => c.name === name)?.value ?? 0,
       header: DynamicCostHeader,
       cell: DynamicCostCell,
       aggregationFn: 'sum',
@@ -89,7 +88,7 @@ export function PricingTable({ quote, setQuote }) {
   ];
 
   const table = useReactTable({
-    data: quote.products ?? [],
+    data: quote.products,
     columns,
     getCoreRowModel: getCoreRowModel(),
     // The meta option is how we can pass the setQuote function to the cells.
