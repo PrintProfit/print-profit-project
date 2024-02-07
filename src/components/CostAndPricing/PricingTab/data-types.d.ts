@@ -12,7 +12,7 @@ export interface Cost {
   value: number;
 }
 
-type DamagedCost = DamagedStruct<Cost>;
+export type DamagedCost = DamagedStruct<Cost>;
 
 export interface Product {
   id?: number;
@@ -24,7 +24,7 @@ export interface Product {
   costs?: Cost[];
 }
 
-type DamagedProduct = DamagedStruct<
+export type DamagedProduct = DamagedStruct<
   Omit<Product, 'costs'> & {
     costs?: DamagedCost[];
   }
