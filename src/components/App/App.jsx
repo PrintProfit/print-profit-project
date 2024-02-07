@@ -13,6 +13,7 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import AboutPage from '../AboutPage/AboutPage';
 import AdminPage from '../AdminPage/AdminPage';
 import AppBarHeader from '../AppBarHeader/AppBarHeader';
+import ContactPage from '../ContactPage/ContactPage';
 import CostAndPricing from '../CostAndPricing/CostAndPricing';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
@@ -53,6 +54,13 @@ function App() {
             <AppBarHeader />
             <SideBar>
               <AboutPage />
+            </SideBar>
+          </Route>
+
+          <Route exact path="/contact">
+            <AppBarHeader />
+            <SideBar>
+              <ContactPage />
             </SideBar>
           </Route>
 

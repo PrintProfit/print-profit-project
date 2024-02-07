@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
 
 // This is one of our simplest components
@@ -9,18 +9,57 @@ import React from 'react';
 function AboutPage() {
   return (
     <div className="container">
-      <div>
-        <p>
-          Surviving in the printing industry is not for the faint of heart Print
-          Profit believes the future is worth fighting for We go the distance in
-          empowering printers to profitability
-        </p>
-        <p>
-          2023 Print Profit was founded out of a passion to build a stronger
-          financial future for the industry by empowering printers to maximize
-          profitability.
-        </p>
-      </div>
+      <Typography
+        fontFamily={'Orpheus'}
+        sx={{
+          flexGrow: 1,
+          fontSize: 26,
+          color: 'black',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          mt: 5,
+        }}
+      >
+        Unconventional thinking. Unconventional results. Print profitability
+        reimagined.
+      </Typography>
+      <Box align="center">
+        <Box
+          component="section"
+          sx={{
+            p: 2,
+            border: '1px solid black',
+            maxWidth: '40em',
+            borderRadius: '5px',
+            mt: 5,
+          }}
+        >
+          <Typography
+            fontFamily={'Orpheus'}
+            sx={{
+              fontSize: 20,
+              mb: 2,
+              mt: 5,
+            }}
+          >
+            Print Profit transforms how you do business. We turn hidden
+            profitability insights into smart manufacturing strategies that
+            drive financial performance. The way your company competes will
+            never be the same.
+          </Typography>
+          <Button
+            variant="contained"
+            color="button"
+            sx={{
+              mb: 2,
+              fontWeight: 'bold',
+              mt: 2,
+            }}
+          >
+            Book a call now
+          </Button>
+        </Box>
+      </Box>
     </div>
   );
 }
