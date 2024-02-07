@@ -36,10 +36,12 @@
         "useSimplifiedLogicExpression": "warn"
       },
       "correctness": {
+        "noNewSymbol": "error",
         "noUndeclaredVariables": "warn",
         "useHookAtTopLevel": "warn"
       },
       "style": {
+        "noCommaOperator": "warn",
         "noRestrictedGlobals": {
           "level": "warn",
           "options": {
@@ -68,6 +70,7 @@
       },
       "nursery": {
         "noDuplicateJsonKeys": "warn",
+        "noEmptyBlockStatements": "warn",
         "noEmptyTypeParameters": "warn",
         "noGlobalAssign": "warn",
         "noGlobalEval": "error",
