@@ -41,11 +41,10 @@ function SaveQuote({ quote, setQuote }) {
   const dispatch = useDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [name, setName] = useState(quote.name ?? '');
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const saveQuote = () => {
-    dispatch({ type: 'SAGA/SAVE_QUOTE', payload: { ...quote, name } });
+    dispatch({ type: 'SAGA/SAVE_QUOTE', payload: quote });
   };
 
   /**
@@ -53,18 +52,23 @@ function SaveQuote({ quote, setQuote }) {
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.name = name;
-      }),
-    );
     saveQuote();
     setDialogOpen(false);
     setSnackbarOpen(true);
   };
   const closeDialog = () => {
     setDialogOpen(false);
-    setName(quote.name ?? '');
+  };
+
+  /**
+   * @type {import('react').ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>}
+   */
+  const setQuoteName = (e) => {
+    setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        draft.name = e.target.value;
+      }),
+    );
   };
 
   return (
@@ -98,8 +102,8 @@ function SaveQuote({ quote, setQuote }) {
             id="quoteName"
             name="quoteName"
             label="Quote Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={quote.name}
+            onChange={setQuoteName}
           />
         </DialogContent>
         <DialogActions>
