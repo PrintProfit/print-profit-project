@@ -1,8 +1,23 @@
 // @ts-check
 import { Router } from 'express';
-import { rejectUnauthenticated } from '../middleware/auth.js';
+import { z } from 'zod';
+import {
+  rejectNonAdmin,
+  rejectUnapproved,
+  rejectUnauthenticated,
+} from '../middleware/auth.js';
+import { validate } from '../middleware/validator.js';
 import { encryptPassword } from '../modules/encryption.js';
 import pool from '../modules/pool.js';
+import {
+  ApproveUserBody,
+  CreateCompanyBody,
+  CreateCompanyUserBody,
+  CreateUserBody,
+  DeleteUserBody,
+  RecoverUserBody,
+} from '../schemas/admin.js';
+import { EditUserBody, RegisterBody } from '../schemas/users.js';
 import userStrategy from '../strategies/user.strategy.js';
 
 const router = Router();
@@ -10,62 +25,60 @@ const router = Router();
 // Handles Ajax request for user information if user is authenticated
 router.get('/', rejectUnauthenticated, (req, res) => {
   // Send back user object from the session (previously queried from the database)
-
-  // soft delete, this will prevent soft deleted users to login
-  if (req.user.is_removed === false) {
-    res.send(req.user);
-  } else {
-    res.sendStatus(403);
-  }
+  // rejectUnauthenticated already checks that the user wasn't removed
+  res.send(req.user);
 });
 
 // Handles POST request with new user data
 // The only thing different from this and every other post we've seen
 // is that the password gets encrypted before being inserted
-router.post('/register', (req, res, next) => {
-  const email = req.body.email;
-  const name = req.body.name;
-  const password = encryptPassword(req.body.password);
+router.post(
+  '/register',
+  validate(z.object({ body: RegisterBody })),
+  async (req, res) => {
+    const conn = await pool.connect();
+    const { email, name, password, companyName } = req.body;
 
-  const queryText = `INSERT INTO "user" (email, name, password)
-    VALUES ($1, $2, $3) RETURNING id`;
+    try {
+      await conn.query('BEGIN');
+      const hashedPassword = encryptPassword(password);
 
-  pool
-    .query(queryText, [email, name, password])
-    .then((result) => {
-      // ID IS HERE!
-      console.log('New user Id:', result.rows[0].id);
-      const createdUserId = result.rows[0].id;
+      const result = await conn.query(
+        `--sql
+          INSERT INTO "user" (
+            email,
+            name,
+            password
+          )
+          VALUES ($1, $2, $3)
+          RETURNING id
+        `,
+        [email, name, hashedPassword],
+      );
+      const userId = result.rows[0].id;
 
-      // Now handle the pending_user_company reference:
-      const insertNewUserQuery = `
-      INSERT INTO "pending_user_company"
-        ("user_id", "name", "updated_by")
-        VALUES
-        ($1, $2, $3);
-    `;
+      await conn.query(
+        `--sql
+          INSERT INTO pending_user_company (
+            user_id,
+            name,
+            updated_by
+          )
+          VALUES ($1::integer, $2::text, $1::integer)
+        `,
+        [userId, companyName],
+      );
 
-      const insertNewUserValues = [
-        createdUserId,
-        req.body.companyName,
-        createdUserId,
-      ];
-
-      pool.query(insertNewUserQuery, insertNewUserValues)
-
-      .then(() => res.sendStatus(201));
-    })
-    .catch((err) => {
-      // catch for second query
-      console.log('2nd register query fails', err);
-      res.sendStatus(500);
-    })
-    .catch((err) => {
-      // catch for first query
-      console.log('User registration failed: ', err);
-      res.sendStatus(500);
-    });
-});
+      await conn.query('COMMIT');
+      res.sendStatus(201);
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      console.log('Error in user.router /register POST,', error);
+    } finally {
+      conn.release();
+    }
+  },
+);
 
 // Handles login form authenticate/login POST
 // userStrategy.authenticate('local') is middleware that we run on this route
@@ -85,9 +98,7 @@ router.post('/logout', (req, res, next) => {
 });
 
 // Gets all companys from company table
-router.get('/company', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/company', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT * FROM "company";
   `;
@@ -107,9 +118,7 @@ router.get('/company', (req, res) => {
 });
 
 // Gets all pending users
-router.get('/pending', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/pending', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
@@ -136,9 +145,7 @@ router.get('/pending', (req, res) => {
 });
 
 // Gets all of the approved users
-router.get('/approved', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/approved', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
@@ -165,69 +172,86 @@ router.get('/approved', (req, res) => {
 });
 
 // approves the user that the admin clicked
-router.put('/approve', (req, res) => {
-  const sqlText = `
+router.put(
+  '/approve',
+  rejectNonAdmin,
+  validate(z.object({ body: ApproveUserBody })),
+  (req, res) => {
+    const sqlText = `
   UPDATE "user"
     SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = $2
   WHERE "id" = $3;
         `;
 
-  const insertValue = [req.user.id, req.body.companyId, req.body.pendingUserId];
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /approve PUT,', err);
-      res.sendStatus(500);
-    });
-});
+    const insertValue = [
+      req.user?.id,
+      req.body.companyId,
+      req.body.pendingUserId,
+    ];
+    pool
+      .query(sqlText, insertValue)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('Error in user.router /approve PUT,', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // soft deletes the user the admin clicked
-router.put('/delete/soft', (req, res) => {
-  const sqlText = `
+router.put(
+  '/delete/soft',
+  rejectNonAdmin,
+  validate(z.object({ body: DeleteUserBody })),
+  (req, res) => {
+    const sqlText = `
   UPDATE "user"
     SET "is_removed" = TRUE, "updated_by" = $1
   WHERE "id" = $2;
         `;
 
-  const insertValue = [req.user.id, req.body.aboutToBeDeletedUser];
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /delete/soft PUT,', err);
-      res.sendStatus(500);
-    });
-});
+    const insertValue = [req.user?.id, req.body.aboutToBeDeletedUser];
+    pool
+      .query(sqlText, insertValue)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.log('Error in user.router /delete/soft PUT,', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // recovers the user the admin clicked
-router.put('/recover', (req, res) => {
-  const sqlText = `
+router.put(
+  '/recover',
+  rejectNonAdmin,
+  validate(z.object({ body: RecoverUserBody })),
+  (req, res) => {
+    const sqlText = `
   UPDATE "user"
     SET "is_removed" = FALSE, "updated_by" = $1
   WHERE "id" = $2;
         `;
 
-  const insertValue = [req.user.id, req.body.aboutToBeRecoveredUser];
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /recover PUT,', err);
-      res.sendStatus(500);
-    });
-});
+    const insertValue = [req.user?.id, req.body.aboutToBeRecoveredUser];
+    pool
+      .query(sqlText, insertValue)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('Error in user.router /recover PUT,', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // Gets the user that is logged in for the profile page
-router.get('/profile/page', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/profile/page', rejectUnapproved, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
@@ -242,7 +266,7 @@ router.get('/profile/page', (req, res) => {
   WHERE "user"."id" = $1 AND "user"."is_removed" = FALSE;
   `;
 
-  const sqlValues = [req.user.id];
+  const sqlValues = [req.user?.id];
 
   pool
     .query(query, sqlValues)
@@ -255,53 +279,58 @@ router.get('/profile/page', (req, res) => {
     });
 });
 
-router.post('/company', (req, res) => {
-  // console.log('req.body', req.body);
-
-  const insertQuery = `
+router.post(
+  '/company',
+  rejectNonAdmin,
+  validate(z.object({ body: CreateCompanyBody })),
+  (req, res) => {
+    const insertQuery = `
   INSERT INTO "company" 
   ("name", "updated_by")
   VALUES
   ($1, $2) RETURNING "id";
       `;
-  const insertValue = [req.body.newCompanyName, req.user.id];
+    const insertValue = [req.body.newCompanyName, req.user?.id];
 
-  pool
-    .query(insertQuery, insertValue)
-    .then((result) => {
-      // console.log('result', result);
-      res.send(result.rows[0]);
-    })
-    .catch((err) => {
-      console.log('err in company post route', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(insertQuery, insertValue)
+      .then((result) => {
+        res.send(result.rows[0]);
+      })
+      .catch((err) => {
+        console.log('err in company post route', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // hard deletes users that are in the archived table
-router.delete('/delete/archived', (req, res) => {
-  const sqlText = `
+router.delete(
+  '/delete/archived',
+  rejectNonAdmin,
+  validate(z.object({ body: DeleteUserBody })),
+  (req, res) => {
+    const sqlText = `
   DELETE FROM "user"
     WHERE "id" = $1;
     `;
 
-  const insertValue = [req.body.aboutToBeDeletedUser];
+    const insertValue = [req.body.aboutToBeDeletedUser];
 
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router DELETE, deleting account', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(sqlText, insertValue)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.log('Error in user.router DELETE, deleting account', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // Gets all users that have been soft delete
-router.get('/archived', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/archived', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
@@ -324,108 +353,123 @@ router.get('/archived', (req, res) => {
 });
 
 // user saving changes to users info in DB
-router.put('/edit/info', (req, res) => {
-  // console.log('req.body', req.body.newPasswordInput);
+router.put(
+  '/edit/info',
+  rejectUnapproved,
+  validate(z.object({ body: EditUserBody })),
+  async (req, res) => {
+    const {
+      newEmailInput: email,
+      newNameInput: name,
+      newPasswordInput: password,
+    } = req.body;
 
-  let sqlText;
-  let insertValue;
-
-  const newEmailInput = req.body.newEmailInput;
-  const newNameInput = req.body.newNameInput;
-
-  if (req.body.newPasswordInput === undefined) {
-    sqlText = `
-  UPDATE "user"
-  SET "email" = $1, "name" = $2, "updated_by" = $3
-WHERE "id" = $3;
-        `;
-
-    insertValue = [newEmailInput, newNameInput, req.user.id];
-  } else {
-    const newPasswordInput = encryptPassword(req.body.newPasswordInput);
-
-    sqlText = `
-  UPDATE "user"
-  SET "email" = $1, "name" = $2, "password" = $3, "updated_by" = $4
-WHERE "id" = $4;
-        `;
-
-    insertValue = [newEmailInput, newNameInput, newPasswordInput, req.user.id];
-  }
-
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
+    try {
+      if (password) {
+        const hashedPassword = encryptPassword(password);
+        await pool.query(
+          `--sql
+            UPDATE "user"
+            SET
+              email = $1,
+              name = $2,
+              password = $3,
+              updated_by = $4
+            WHERE id = $4
+          `,
+          [email, name, hashedPassword, req.user?.id],
+        );
+      } else {
+        await pool.query(
+          `--sql
+            UPDATE "user"
+            SET
+              email = $1,
+              name = $2,
+              updated_by = $3
+            WHERE id = $3
+          `,
+          [email, name, req.user?.id],
+        );
+      }
       res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /edit/info PUT,', err);
+    } catch (error) {
+      console.log('Error in user.router /edit/info PUT,', error);
       res.sendStatus(500);
-    });
-});
+    }
+  },
+);
 
-router.post('/admin/create/company/user', (req, res) => {
-  // Now handle the company reference:
-  const insertNewUserQuery = `
-      INSERT INTO "company"
-        ("name", "updated_by")
-        VALUES
-        ($1, $2) RETURNING "id";
-    `;
+router.post(
+  '/admin/create/company/user',
+  rejectNonAdmin,
+  validate(z.object({ body: CreateCompanyUserBody })),
+  async (req, res) => {
+    const conn = await pool.connect();
 
-  console.log('req.body.companyName', req.body.companyName);
+    const { companyName, email, name, password } = req.body;
 
-  const insertNewUserValues = [req.body.companyName, req.user.id];
-
-  pool
-    .query(insertNewUserQuery, insertNewUserValues)
-    .then((result) => {
-      // console.log('newUserId:', result.rows[0].id);
-      const newCompanyId = result.rows[0].id;
-
-      const email = req.body.email;
-      const name = req.body.name;
-      const password = encryptPassword(req.body.password);
-
-      const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
-        VALUES ($1, $2, $3, $4, $5, TRUE);`;
-
-      pool
-        .query(queryText, [email, name, password, newCompanyId, req.user.id])
-        .then((result) => res.sendStatus(201));
-    })
-    .catch((err) => {
-      // catch for second query
-      console.log('2nd admin create user and company post query fails', err);
+    try {
+      await conn.query('BEGIN');
+      const result = await conn.query(
+        `--sql
+          INSERT INTO company (name, updated_by)
+          VALUES ($1, $2)
+          RETURNING id
+        `,
+        [companyName, req.user?.id],
+      );
+      const companyId = result.rows[0].id;
+      const hashedPassword = encryptPassword(password);
+      await conn.query(
+        `--sql
+          INSERT INTO "user" (
+            email,
+            name,
+            password,
+            company_id,
+            updated_by,
+            is_approved
+          )
+          VALUES ($1, $2, $3, $4, $5, TRUE)
+        `,
+        [email, name, hashedPassword, companyId, req.user?.id],
+      );
+      await conn.query('COMMIT');
+      res.sendStatus(201);
+    } catch (error) {
+      console.log('Error in admin create user route', error);
+      await conn.query('ROLLBACK');
       res.sendStatus(500);
-    })
-    .catch((err) => {
-      // catch for first query
-      console.log('admin create user and company post failed: ', err);
-      res.sendStatus(500);
-    });
-});
+    } finally {
+      conn.release();
+    }
+  },
+);
 
-router.post('/admin/create/user', (req, res) => {
-  // console.log('req.body', req.body);
-  const email = req.body.email;
-  const name = req.body.name;
-  const companyId = req.body.companyId;
-  const password = encryptPassword(req.body.password);
+router.post(
+  '/admin/create/user',
+  rejectNonAdmin,
+  validate(z.object({ body: CreateUserBody })),
+  (req, res) => {
+    const email = req.body.email;
+    const name = req.body.name;
+    const companyId = req.body.companyId;
+    const password = encryptPassword(req.body.password);
 
-  const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
+    const queryText = `INSERT INTO "user" (email, name, password, "company_id", "updated_by", "is_approved")
   VALUES ($1, $2, $3, $4, $5, TRUE);`;
 
-  pool
-    .query(queryText, [email, name, password, companyId, req.user.id])
-    .then((result) => {
-      // console.log('result', result);
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('err in admin user post route', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(queryText, [email, name, password, companyId, req.user?.id])
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('err in admin user post route', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 export default router;

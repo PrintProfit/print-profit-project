@@ -1,7 +1,10 @@
 // @ts-check
 import { Router } from 'express';
+import { z } from 'zod';
 import { rejectUnapproved } from '../middleware/auth.js';
+import { validate } from '../middleware/validator.js';
 import pool from '../modules/pool.js';
+import { SaveQuoteBody, UpdateQuoteBody } from '../schemas/quotes.js';
 
 const router = Router();
 
@@ -77,8 +80,7 @@ router.get('/:id', (req, res) => {
 ) p on q.id = p.quote_id
   	INNER JOIN "user" u on q.user_id = u.id
   		WHERE u.company_id = $1;`;
-  console.log('req.params.id', req.params.id);
-  const values = [req.params.id];
+  const values = [req.user?.company_id];
   pool
     .query(query, values)
     .then((dbRes) => {
@@ -89,105 +91,51 @@ router.get('/:id', (req, res) => {
       res.sendStatus(500);
     });
 });
-// END GET quotes route
 
-//  POST req.body should look like:
-//  {
-//    user_id: 2,
-//    name: 'Prime Swag',
-//    manual_total_selling_price: 2000,
-//    manual_contribution_percent: 40,
-//    quote: [
-//      // 👇 FIRST ORDER (PRODUCT) IN QUOTE
-//              {
-//                name: 't-shirts',
-//                quantity: 80,
-//                selling_price: 14.99,
-//                total_selling_price: 1199.20,
-//                estimated_hours: 4,
-//                costs: [
-//      // 👇 FIRST COST INPUT IN PRODUCT 1
-//                  {
-//                    name: 'garment',
-//                    value: 480
-//                    },
-//                    // END FIRST COST INPUT
-//      // 👇 SECOND COST INPUT IN PRODUCT 1
-//                  {
-//                    name: 'ink',
-//                    value: 200
-//                    }
-//                    // END SECOND COST INPUT
-//                 ]
-//                 // END OF COST INPUTS IN PRODUCT 1
-//                },
-//               // END OF FIRST PRODUCT
-//       // 👇 SECOND PRODUCT IN QUOTE
-//              {
-//                name: 'hoodies',
-//                quantity: 50,
-//                selling_price: 39.99,
-//                total_selling_price: 1999.50,
-//                estimated_hours: 6,
-//                costs: [
-//                   {
-//                    name: 'garment',
-//                    value: 900
-//                    },
-//                  {
-//                    name: 'ink',
-//                    value: 150
-//                    }
-//                        ]
-//                        // END OF COST INPUTS
-//                }
-//               // END OF SECOND PRODUCT
-
-//            ]
-//           // END OF PRODUCTS ARRAY
-// }
-
-// POST new quote
-
-// PUT quote req.body will look the same, but each object (quote, product, and cost) will additionally have an id
+// An example post and put requests are in ../../docs/requests/save-quote-post-body.jsonc
 
 // POST quotes route
-router.post('/', async (req, res) => {
-  let connection;
+router.post(
+  '/',
+  validate(z.object({ body: SaveQuoteBody })),
+  async (req, res) => {
+    const connection = await pool.connect();
 
-  try {
-    console.log('quote post req.body:', req.body);
+    try {
+      console.log('quote post req.body:', req.body);
 
-    // Establishes a longstanding connection to our database:
-    connection = await pool.connect();
+      // Establishes a longstanding connection to our database:
 
-    // BEGIN the SQL Transaction:
-    await connection.query('BEGIN;');
+      // BEGIN the SQL Transaction:
+      await connection.query('BEGIN;');
 
-    // first query inserts quote name and user_id into quote table ==> 🔥 need to get user_id from user state
-    // QUOTE POST
-    const quoteQuery = `
+      // first query inserts quote name and user_id into quote table ==> 🔥 need to get user_id from user state
+      // QUOTE POST
+      const quoteQuery = `
       INSERT INTO "quote"
         ("user_id", "name", "manual_total_selling_price", "manual_contribution_percent")
         VALUES
         ($1, $2, $3, $4)
         RETURNING "id";
      `;
-    const quoteValues = [
-      req.user.id,
-      req.body.name,
-      req.body.manual_total_selling_price,
-      req.body.manual_contribution_percent,
-    ];
-    // query returns id from the inserted quote
-    const returnedQuoteIdRows = await connection.query(quoteQuery, quoteValues);
-    // END QUOTE POST
-    console.log('returnedQuoteIdRows: ', returnedQuoteIdRows);
-    // should give us the posted quote's id number
-    const quoteId = returnedQuoteIdRows.rows[0].id;
+      const quoteValues = [
+        req.user?.id,
+        req.body.name,
+        req.body.manual_total_selling_price,
+        req.body.manual_contribution_percent,
+      ];
+      // query returns id from the inserted quote
+      const returnedQuoteIdRows = await connection.query(
+        quoteQuery,
+        quoteValues,
+      );
+      // END QUOTE POST
+      console.log('returnedQuoteIdRows: ', returnedQuoteIdRows);
+      // should give us the posted quote's id number
+      const quoteId = returnedQuoteIdRows.rows[0].id;
 
-    // PRODUCT(S) POST
-    const productQuery = `
+      // PRODUCT(S) POST
+      const productQuery = `
       INSERT INTO "product"
         ("quote_id", "name", "quantity", "selling_price_per_unit", "total_selling_price", "estimated_hours")
         VALUES
@@ -195,202 +143,209 @@ router.post('/', async (req, res) => {
         RETURNING "id";
     `;
 
-    const quoteProductArray = req.body.products;
-    console.log('quote post req.body.products:', quoteProductArray);
+      const quoteProductArray = req.body.products;
+      console.log('quote post req.body.products:', quoteProductArray);
 
-    // loops over array of products belonging to the posted quote
-    for (const product of quoteProductArray) {
-      // array of sql values to insert into product table
-      const productValues = [
-        quoteId,
-        product.name,
-        product.quantity,
-        product.selling_price_per_unit,
-        product.total_selling_price,
-        product.estimated_hours,
-      ];
-      // second query inserts product info into product table with the returned quote_id from the previous query and returns each product's id after insertion
-      const productResult = await connection.query(productQuery, productValues);
-      const productId = productResult.rows[0].id;
-      console.log(productId);
+      // loops over array of products belonging to the posted quote
+      for (const product of quoteProductArray) {
+        // array of sql values to insert into product table
+        const productValues = [
+          quoteId,
+          product.name,
+          product.quantity,
+          product.selling_price_per_unit,
+          product.total_selling_price,
+          product.estimated_hours,
+        ];
+        // second query inserts product info into product table with the returned quote_id from the previous query and returns each product's id after insertion
+        const productResult = await connection.query(
+          productQuery,
+          productValues,
+        );
+        const productId = productResult.rows[0].id;
+        console.log(productId);
 
-      // COST(S) POST
-      const costQuery = `
+        // COST(S) POST
+        const costQuery = `
       INSERT INTO "cost"
       ("product_id", "name", "value")
       VALUES
       ($1, $2, $3);
       `;
-      // loops over array of costs from each product and insert into cost table
-      for (const cost of product.costs) {
-        const costValues = [productId, cost.name, cost.value];
-        // third and final query inserts cost inputs and their corresponding values into the cost table
-        await connection.query(costQuery, costValues);
+        // loops over array of costs from each product and insert into cost table
+        for (const cost of product.costs) {
+          const costValues = [productId, cost.name, cost.value];
+          // third and final query inserts cost inputs and their corresponding values into the cost table
+          await connection.query(costQuery, costValues);
+        }
+        // END COST(S) POST
       }
-      // END COST(S) POST
+      // END PRODUCT(S) POST
+
+      // if all posts are successful, commit those changes to the tables
+      await connection.query('COMMIT;');
+
+      res.sendStatus(201);
+    } catch (err) {
+      console.log('Error posting quote:', err);
+      // otherwise, undo changes to tables
+      await connection.query('ROLLBACK;');
+      res.sendStatus(500);
+    } finally {
+      // Close the connection
+      connection.release();
     }
-    // END PRODUCT(S) POST
-
-    // if all posts are successful, commit those changes to the tables
-    connection.query('COMMIT;');
-    // and end connection
-    connection.release();
-
-    res.sendStatus(201);
-  } catch (err) {
-    console.log('Error posting quote:', err);
-    // otherwise, undo changes to tables
-    connection.query('ROLLBACK;');
-    connection.release();
-    res.sendStatus(500);
-  }
-});
+  },
+);
 // end POST route
 
 // PUT route to edit quote
-router.put('/', async (req, res) => {
-  // Establishes a longstanding connection to our database:
-  const connection = await pool.connect();
+router.put(
+  '/',
+  validate(z.object({ body: UpdateQuoteBody })),
+  async (req, res) => {
+    // Establishes a longstanding connection to our database:
+    const connection = await pool.connect();
 
-  console.log('req.body from put route: ', req.body);
-  try {
-    // BEGIN the SQL Transaction:
-    await connection.query('BEGIN;');
-    // QUOTE PUT
-    // 👆 checks to make sure that quote_id and user_id both match: users may only edit their own quotes (for now)
-    // first query makes updates to quote table
-    await connection.query(
-      /*sql*/ `
-        UPDATE quote
-        SET
-          name = $1,
-          updated_by = $2,
-          manual_total_selling_price = $3,
-          manual_contribution_percent = $4
-        WHERE
-          id = $5
-          AND user_id = $2
-      `,
-      [
-        req.body.name, // $1
-        req.user.id, // $2
-        req.body.manual_total_selling_price, // $3
-        req.body.manual_contribution_percent, // $4
-        req.body.id, // $5
-      ],
-    );
-
-    const products = req.body.products;
-
-    // loops over array of product values to update table
-    for (const product of products) {
-      /** @type {import('pg').QueryConfig} */
-      const productUpdate = {
-        text: /*sql*/ `
-          UPDATE product
+    console.log('req.body from put route: ', req.body);
+    try {
+      // BEGIN the SQL Transaction:
+      await connection.query('BEGIN;');
+      // QUOTE PUT
+      // 👆 checks to make sure that quote_id and user_id both match: users may only edit their own quotes (for now)
+      // first query makes updates to quote table
+      await connection.query(
+        /*sql*/ `
+          UPDATE quote
           SET
-          	name = $1,
-          	quantity = $2,
-          	selling_price_per_unit = $3,
-          	total_selling_price = $4,
-          	estimated_hours = $5,
-          	updated_by = $6
-          WHERE	id = $7
-          RETURNING id
+            name = $1,
+            updated_by = $2,
+            manual_total_selling_price = $3,
+            manual_contribution_percent = $4
+          WHERE
+            id = $5
+            AND user_id = $2
         `,
-        values: [
-          product.name,
-          product.quantity,
-          product.selling_price_per_unit,
-          product.total_selling_price,
-          product.estimated_hours,
-          req.user.id,
-          product.id,
+        [
+          req.body.name, // $1
+          req.user?.id, // $2
+          req.body.manual_total_selling_price, // $3
+          req.body.manual_contribution_percent, // $4
+          req.body.id, // $5
         ],
-      };
-
-      /** @type {import('pg').QueryConfig} */
-      const productInsert = {
-        text: /*sql*/ `
-          INSERT INTO product (
-            quote_id,
-            name,
-            quantity,
-            selling_price_per_unit,
-            total_selling_price,
-            estimated_hours
-          )
-          VALUES ($1, $2, $3, $4, $5, $6)
-          RETURNING id
-        `,
-        values: [
-          req.body.id,
-          product.name,
-          product.quantity,
-          product.selling_price_per_unit,
-          product.total_selling_price,
-          product.estimated_hours,
-        ],
-      };
-
-      const productResult = await connection.query(
-        product.id ? productUpdate : productInsert,
       );
 
-      const productId = productResult.rows[0].id;
+      const products = req.body.products;
 
-      for (const cost of product.costs) {
+      // loops over array of product values to update table
+      for (const product of products) {
         /** @type {import('pg').QueryConfig} */
-        const costUpdate = {
+        const productUpdate = {
           text: /*sql*/ `
-            UPDATE cost
+            UPDATE product
             SET
-              name = $1,
-              value = $2,
-              updated_by = $3
-            WHERE id = $4
+            	name = $1,
+            	quantity = $2,
+            	selling_price_per_unit = $3,
+            	total_selling_price = $4,
+            	estimated_hours = $5,
+            	updated_by = $6
+            WHERE	id = $7
+            RETURNING id
           `,
-          values: [cost.name, cost.value, req.user.id, cost.id],
+          values: [
+            product.name,
+            product.quantity,
+            product.selling_price_per_unit,
+            product.total_selling_price,
+            product.estimated_hours,
+            req.user?.id,
+            product.id,
+          ],
         };
 
         /** @type {import('pg').QueryConfig} */
-        const costInsert = {
+        const productInsert = {
           text: /*sql*/ `
-            INSERT INTO cost (
-              product_id,
+            INSERT INTO product (
+              quote_id,
               name,
-              value
+              quantity,
+              selling_price_per_unit,
+              total_selling_price,
+              estimated_hours
             )
-            VALUES ($1, $2, $3)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING id
           `,
-          values: [productId, cost.name, cost.value],
+          values: [
+            req.body.id,
+            product.name,
+            product.quantity,
+            product.selling_price_per_unit,
+            product.total_selling_price,
+            product.estimated_hours,
+          ],
         };
 
-        await connection.query(cost.id ? costUpdate : costInsert);
-      }
-    }
+        const productResult = await connection.query(
+          product.id ? productUpdate : productInsert,
+        );
 
-    // if all edits are successful, commit those changes to the table
-    connection.query('COMMIT;');
-    // and end connection
-    connection.release();
-  } catch (err) {
-    console.log('Error editing quote: ', err);
-    connection.query('ROLLBACK;');
-    connection.release();
-    res.sendStatus(500);
-  }
-});
+        const productId = productResult.rows[0].id;
+
+        for (const cost of product.costs) {
+          /** @type {import('pg').QueryConfig} */
+          const costUpdate = {
+            text: /*sql*/ `
+              UPDATE cost
+              SET
+                name = $1,
+                value = $2,
+                updated_by = $3
+              WHERE id = $4
+            `,
+            values: [cost.name, cost.value, req.user?.id, cost.id],
+          };
+
+          /** @type {import('pg').QueryConfig} */
+          const costInsert = {
+            text: /*sql*/ `
+              INSERT INTO cost (
+                product_id,
+                name,
+                value
+              )
+              VALUES ($1, $2, $3)
+            `,
+            values: [productId, cost.name, cost.value],
+          };
+
+          await connection.query(cost.id ? costUpdate : costInsert);
+        }
+      }
+
+      // if all edits are successful, commit those changes to the table
+      await connection.query('COMMIT;');
+      res.sendStatus(200);
+    } catch (err) {
+      console.log('Error editing quote: ', err);
+      await connection.query('ROLLBACK;');
+      res.sendStatus(500);
+    } finally {
+      // Close the connection
+      connection.release();
+    }
+  },
+);
 // END PUT route to edit quote
 
 // PUT route to soft-delete quote/product/cost
 router.put('/remove', async (req, res) => {
-  let connection;
+  // Establishes a longstanding connection to our database:
+  const connection = await pool.connect();
   console.log('req.body from soft-delete quote route: ', req.body);
   try {
-    // Establishes a longstanding connection to our database:
-    connection = await pool.connect();
-
     // BEGIN the SQL Transaction:
     await connection.query('BEGIN;');
     // QUOTE SOFT-DELETE
@@ -403,7 +358,7 @@ router.put('/remove', async (req, res) => {
     const removeQuoteValues = [
       req.body.remove_quote,
       req.body.quote_id,
-      req.user.id,
+      req.user?.id,
     ];
     await connection.query(removeQuoteQuery, removeQuoteValues);
     // END QUOTE SOFT_DELETE route
@@ -421,7 +376,7 @@ router.put('/remove', async (req, res) => {
       const removeProductValues = [
         product.remove_product, // $1
         product.id, // $2
-        req.user.id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
+        req.user?.id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
       ];
       await connection.query(removeProductQuery, removeProductValues);
       // COST SOFT-DELETE route
@@ -434,7 +389,7 @@ router.put('/remove', async (req, res) => {
         const removeCostValues = [
           cost.remove_cost, // $1
           cost.id, // $2
-          req.user.id,
+          req.user?.id,
         ]; // $3
         await connection.query(removeCostQuery, removeCostValues);
       } // END COST SOFT-DELETE
@@ -442,73 +397,16 @@ router.put('/remove', async (req, res) => {
     // END QUOTE SOFT-DELETE
 
     // if all removes are successful, commit those changes to the table
-    connection.query('COMMIT;');
+    await connection.query('COMMIT;');
     // and end connection
-    connection.release();
   } catch (err) {
     console.log('Error removing quote: ', err);
-    connection.query('ROLLBACK;');
-    connection.release();
+    await connection.query('ROLLBACK;');
     res.sendStatus(500);
+  } finally {
+    // Close the connection
+    connection.release();
   }
 });
-
-// quoteArray = [
-//   // first quote
-//   {
-//   id: 1,
-//   name: 'Prime Swag',
-//   created_by: 1,
-//   manual_total_selling_price: 2000,
-//   manual_contribution_percent: 4,
-//   products: [
-//     // first product
-//     {
-//       id: 1,
-//       name: 'T-shirts',
-//       quantity: 100,
-//       selling_price_per_unit: 15,
-//       total_selling_price: 1500,
-//       estimated_hours: 6,
-//       costs: [
-//         // first cost input
-//         {
-//           id: 1,
-//           name: 'Garment',
-//           value: 400,
-//         },
-//         // second cost input
-//         {
-//           id: 2,
-//           name: 'Ink',
-//           value: 200,
-//         },
-//       ],
-//     },
-//     // second product
-//     {
-//       id: 2,
-//       name: 'Hoodies',
-//       quantity: 50,
-//       selling_price_per_unit: 30,
-//       total_selling_price: 1500,
-//       estimated_hours: 4,
-//       costs: [
-//         // first cost input
-//         {
-//           id: 3,
-//           name: 'Garment',
-//           value: 750,
-//         },
-//         // second cost input
-//         {
-//           id: 4,
-//           name: 'Ink',
-//           value: 100,
-//         },
-//       ],
-//     },
-//   ],
-// }];
 
 export default router;
