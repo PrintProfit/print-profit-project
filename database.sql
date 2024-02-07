@@ -88,7 +88,8 @@ CREATE TABLE "cost" (
 	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT 
+	"updated_by" INT,
+	UNIQUE (product_id, name) -- prevents broken quotes from being inserted
 );
 
 CREATE FUNCTION set_updated_at_to_now()
