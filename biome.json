@@ -43,7 +43,13 @@
   },
   "overrides": [
     {
-      "include": [".vscode/**"],
+      "include": [
+        ".vscode/**",
+        "jsconfig.json",
+        "jsconfig.*.json",
+        "tsconfig.json",
+        "tsconfig.*.json"
+      ],
       "json": {
         "parser": {
           "allowComments": true,
