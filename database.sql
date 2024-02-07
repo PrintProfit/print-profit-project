@@ -26,7 +26,7 @@ CREATE TABLE "company" (
 	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT
+	"updated_by" INT DEFAULT NULL -- FK constraint can't be set yet
 );
 
 CREATE TABLE "user" (
@@ -42,8 +42,13 @@ CREATE TABLE "user" (
 	"last_login" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT
+	"updated_by" INT REFERENCES "user"("id") ON DELETE SET NULL DEFAULT NULL
 );
+
+ALTER TABLE company
+ADD CONSTRAINT company_updated_by_fkey
+FOREIGN KEY (updated_by)
+REFERENCES "user"(id) ON DELETE SET NULL;
 
 CREATE TABLE "pending_user_company" (
 	"id" SERIAL PRIMARY KEY,
@@ -51,7 +56,7 @@ CREATE TABLE "pending_user_company" (
 	"name" VARCHAR(100) DEFAULT NULL,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT
+	"updated_by" INT REFERENCES "user"("id") ON DELETE SET NULL DEFAULT NULL
 );
 
 CREATE TABLE "quote" (
@@ -63,7 +68,7 @@ CREATE TABLE "quote" (
 	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT 
+	"updated_by" INT REFERENCES "user"("id") ON DELETE SET NULL DEFAULT NULL 
 );
 
 CREATE TABLE "product" (
@@ -77,7 +82,7 @@ CREATE TABLE "product" (
 	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT 
+	"updated_by" INT REFERENCES "user"("id") ON DELETE SET NULL DEFAULT NULL 
 );
 
 CREATE TABLE "cost" (
@@ -88,7 +93,7 @@ CREATE TABLE "cost" (
 	"is_removed" BOOLEAN DEFAULT FALSE,
 	"inserted_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
 	"updated_at" TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-	"updated_by" INT,
+	"updated_by" INT REFERENCES "user"("id") ON DELETE SET NULL DEFAULT NULL,
 	UNIQUE (product_id, name) -- prevents broken quotes from being inserted
 );
 
