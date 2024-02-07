@@ -9,7 +9,8 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["*.json", "*.jsonc"]
+    "ignore": ["*.json", "*.jsonc"],
+    "ignoreUnknown": true
   },
   "formatter": {
     "enabled": true,
@@ -30,14 +31,55 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "useLiteralKeys": "off"
+        "noExcessiveCognitiveComplexity": "warn",
+        "noVoid": "warn",
+        "useLiteralKeys": "off",
+        "useSimplifiedLogicExpression": "warn"
       },
       "correctness": {
+        "noNewSymbol": "error",
+        "noUndeclaredVariables": "warn",
         "useHookAtTopLevel": "warn"
       },
       "style": {
+        "noCommaOperator": "warn",
+        "noRestrictedGlobals": {
+          "level": "warn",
+          "options": {
+            "deniedGlobals": [
+              "__dirname",
+              "__filename",
+              "atob",
+              "btoa",
+              "escape",
+              "exports",
+              "global",
+              "InternalError",
+              "module",
+              "unescape"
+            ]
+          }
+        },
+        "useCollapsedElseIf": "warn",
         "useDefaultParameterLast": "off",
-        "useFragmentSyntax": "warn"
+        "useFragmentSyntax": "warn",
+        "useShorthandAssign": "warn",
+        "useSingleCaseStatement": "warn"
+      },
+      "suspicious": {
+        "noApproximativeNumericConstant": "warn"
+      },
+      "nursery": {
+        "noDuplicateJsonKeys": "warn",
+        "noEmptyBlockStatements": "warn",
+        "noEmptyTypeParameters": "warn",
+        "noGlobalAssign": "warn",
+        "noGlobalEval": "error",
+        "noMisleadingCharacterClass": "warn",
+        "noThenProperty": "error",
+        "noUselessTernary": "warn",
+        "useForOf": "warn",
+        "useNodejsImportProtocol": "warn"
       }
     }
   },
