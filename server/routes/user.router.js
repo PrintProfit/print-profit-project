@@ -35,49 +35,48 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post(
   '/register',
   validate(z.object({ body: RegisterBody })),
-  (req, res) => {
-    const email = req.body.email;
-    const name = req.body.name;
-    const password = encryptPassword(req.body.password);
+  async (req, res) => {
+    const conn = await pool.connect();
+    const { email, name, password, companyName } = req.body;
 
-    const queryText = `INSERT INTO "user" (email, name, password)
-    VALUES ($1, $2, $3) RETURNING id`;
+    try {
+      await conn.query('BEGIN');
+      const hashedPassword = encryptPassword(password);
 
-    pool
-      .query(queryText, [email, name, password])
-      .then((result) => {
-        // ID IS HERE!
-        console.log('New user Id:', result.rows[0].id);
-        const createdUserId = result.rows[0].id;
+      const result = await conn.query(
+        `--sql
+          INSERT INTO "user" (
+            email,
+            name,
+            password
+          )
+          VALUES ($1, $2, $3)
+          RETURNING id
+        `,
+        [email, name, hashedPassword],
+      );
+      const userId = result.rows[0].id;
 
-        // Now handle the pending_user_company reference:
-        const insertNewUserQuery = `
-      INSERT INTO "pending_user_company"
-        ("user_id", "name", "updated_by")
-        VALUES
-        ($1, $2, $3);
-    `;
+      await conn.query(
+        `--sql
+          INSERT INTO pending_user_company (
+            user_id,
+            name,
+            updated_by
+          )
+          VALUES ($1::integer, $2::text, $1::integer)
+        `,
+        [userId, companyName],
+      );
 
-        const insertNewUserValues = [
-          createdUserId,
-          req.body.companyName,
-          createdUserId,
-        ];
-
-        pool.query(insertNewUserQuery, insertNewUserValues)
-
-        .then(() => res.sendStatus(201));
-      })
-      .catch((err) => {
-        // catch for second query
-        console.log('2nd register query fails', err);
-        res.sendStatus(500);
-      })
-      .catch((err) => {
-        // catch for first query
-        console.log('User registration failed: ', err);
-        res.sendStatus(500);
-      });
+      await conn.query('COMMIT');
+      res.sendStatus(201);
+    } catch (error) {
+      await conn.query('ROLLBACK');
+      console.log('Error in user.router /register POST,', error);
+    } finally {
+      conn.release();
+    }
   },
 );
 
@@ -185,13 +184,13 @@ router.put(
         `;
 
     const insertValue = [
-      req.user.id,
+      req.user?.id,
       req.body.companyId,
       req.body.pendingUserId,
     ];
     pool
       .query(sqlText, insertValue)
-      .then((result) => {
+      .then(() => {
         res.sendStatus(201);
       })
       .catch((err) => {
@@ -213,10 +212,10 @@ router.put(
   WHERE "id" = $2;
         `;
 
-    const insertValue = [req.user.id, req.body.aboutToBeDeletedUser];
+    const insertValue = [req.user?.id, req.body.aboutToBeDeletedUser];
     pool
       .query(sqlText, insertValue)
-      .then((result) => {
+      .then(() => {
         res.sendStatus(200);
       })
       .catch((err) => {
@@ -238,7 +237,7 @@ router.put(
   WHERE "id" = $2;
         `;
 
-    const insertValue = [req.user.id, req.body.aboutToBeRecoveredUser];
+    const insertValue = [req.user?.id, req.body.aboutToBeRecoveredUser];
     pool
       .query(sqlText, insertValue)
       .then((result) => {
@@ -267,7 +266,7 @@ router.get('/profile/page', rejectUnapproved, (req, res) => {
   WHERE "user"."id" = $1 AND "user"."is_removed" = FALSE;
   `;
 
-  const sqlValues = [req.user.id];
+  const sqlValues = [req.user?.id];
 
   pool
     .query(query, sqlValues)
@@ -291,7 +290,7 @@ router.post(
   VALUES
   ($1, $2) RETURNING "id";
       `;
-    const insertValue = [req.body.newCompanyName, req.user.id];
+    const insertValue = [req.body.newCompanyName, req.user?.id];
 
     pool
       .query(insertQuery, insertValue)
@@ -320,7 +319,7 @@ router.delete(
 
     pool
       .query(sqlText, insertValue)
-      .then((result) => {
+      .then(() => {
         res.sendStatus(200);
       })
       .catch((err) => {
@@ -331,9 +330,7 @@ router.delete(
 );
 
 // Gets all users that have been soft delete
-router.get('/archived', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/archived', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
@@ -464,7 +461,7 @@ router.post(
   VALUES ($1, $2, $3, $4, $5, TRUE);`;
 
     pool
-      .query(queryText, [email, name, password, companyId, req.user.id])
+      .query(queryText, [email, name, password, companyId, req.user?.id])
       .then((result) => {
         res.sendStatus(201);
       })
