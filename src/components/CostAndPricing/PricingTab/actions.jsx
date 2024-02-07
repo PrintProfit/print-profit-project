@@ -75,7 +75,7 @@ function SaveQuote({ quote, setQuote }) {
         startIcon={<Save />}
         onClick={() => setDialogOpen(true)}
       >
-        Save
+        Save as new quote
       </Button>
       <Dialog
         open={dialogOpen}
