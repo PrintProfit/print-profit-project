@@ -11,6 +11,10 @@ const theme = createTheme({
     secondary: {
       main: '#FFC107',
     },
+    button: {
+      main: '#3C2A80',
+      contrastText: 'white',
+    },
   },
   typography: {
     fontFamily: 'Source Sans Pro, sans-serif',
