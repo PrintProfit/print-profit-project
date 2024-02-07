@@ -10,3 +10,9 @@ export const RegisterBody = z.object({
   name: z.string(),
   companyName: z.string(),
 });
+
+export const EditUserBody = z.object({
+  newEmailInput: z.string().email(),
+  newNameInput: z.string(),
+  newPasswordInput: z.string().min(8).optional(),
+});

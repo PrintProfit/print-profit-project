@@ -15,7 +15,7 @@ import {
   DeleteUserBody,
   RecoverUserBody,
 } from '../schemas/admin.js';
-import { RegisterBody } from '../schemas/users.js';
+import { EditUserBody, RegisterBody } from '../schemas/users.js';
 import userStrategy from '../strategies/user.strategy.js';
 
 const router = Router();
@@ -354,45 +354,55 @@ router.get('/archived', (req, res) => {
 });
 
 // user saving changes to users info in DB
-router.put('/edit/info', (req, res) => {
-  // console.log('req.body', req.body.newPasswordInput);
+router.put(
+  '/edit/info',
+  rejectUnapproved,
+  validate(z.object({ body: EditUserBody })),
+  (req, res) => {
+    // console.log('req.body', req.body.newPasswordInput);
 
-  let sqlText;
-  let insertValue;
+    let sqlText;
+    let insertValue;
 
-  const newEmailInput = req.body.newEmailInput;
-  const newNameInput = req.body.newNameInput;
+    const newEmailInput = req.body.newEmailInput;
+    const newNameInput = req.body.newNameInput;
 
-  if (req.body.newPasswordInput === undefined) {
-    sqlText = `
+    if (req.body.newPasswordInput === undefined) {
+      sqlText = `
   UPDATE "user"
   SET "email" = $1, "name" = $2, "updated_by" = $3
 WHERE "id" = $3;
         `;
 
-    insertValue = [newEmailInput, newNameInput, req.user.id];
-  } else {
-    const newPasswordInput = encryptPassword(req.body.newPasswordInput);
+      insertValue = [newEmailInput, newNameInput, req.user.id];
+    } else {
+      const newPasswordInput = encryptPassword(req.body.newPasswordInput);
 
-    sqlText = `
+      sqlText = `
   UPDATE "user"
   SET "email" = $1, "name" = $2, "password" = $3, "updated_by" = $4
 WHERE "id" = $4;
         `;
 
-    insertValue = [newEmailInput, newNameInput, newPasswordInput, req.user.id];
-  }
+      insertValue = [
+        newEmailInput,
+        newNameInput,
+        newPasswordInput,
+        req.user.id,
+      ];
+    }
 
-  pool
-    .query(sqlText, insertValue)
-    .then((result) => {
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.log('Error in user.router /edit/info PUT,', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(sqlText, insertValue)
+      .then((result) => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log('Error in user.router /edit/info PUT,', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 router.post('/admin/create/company/user', (req, res) => {
   // Now handle the company reference:
