@@ -9,7 +9,8 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["*.json", "*.jsonc"]
+    "ignore": ["*.json", "*.jsonc"],
+    "ignoreUnknown": true
   },
   "formatter": {
     "enabled": true,
