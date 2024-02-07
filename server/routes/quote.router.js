@@ -88,67 +88,8 @@ router.get('/:id', (req, res) => {
       res.sendStatus(500);
     });
 });
-// END GET quotes route
 
-//  POST req.body should look like:
-//  {
-//    user_id: 2,
-//    name: 'Prime Swag',
-//    manual_total_selling_price: 2000,
-//    manual_contribution_percent: 40,
-//    quote: [
-//      // 👇 FIRST ORDER (PRODUCT) IN QUOTE
-//              {
-//                name: 't-shirts',
-//                quantity: 80,
-//                selling_price: 14.99,
-//                total_selling_price: 1199.20,
-//                estimated_hours: 4,
-//                costs: [
-//      // 👇 FIRST COST INPUT IN PRODUCT 1
-//                  {
-//                    name: 'garment',
-//                    value: 480
-//                    },
-//                    // END FIRST COST INPUT
-//      // 👇 SECOND COST INPUT IN PRODUCT 1
-//                  {
-//                    name: 'ink',
-//                    value: 200
-//                    }
-//                    // END SECOND COST INPUT
-//                 ]
-//                 // END OF COST INPUTS IN PRODUCT 1
-//                },
-//               // END OF FIRST PRODUCT
-//       // 👇 SECOND PRODUCT IN QUOTE
-//              {
-//                name: 'hoodies',
-//                quantity: 50,
-//                selling_price: 39.99,
-//                total_selling_price: 1999.50,
-//                estimated_hours: 6,
-//                costs: [
-//                   {
-//                    name: 'garment',
-//                    value: 900
-//                    },
-//                  {
-//                    name: 'ink',
-//                    value: 150
-//                    }
-//                        ]
-//                        // END OF COST INPUTS
-//                }
-//               // END OF SECOND PRODUCT
-
-//            ]
-//           // END OF PRODUCTS ARRAY
-// }
-
-// POST new quote
-
-// PUT quote req.body will look the same, but each object (quote, product, and cost) will additionally have an id
+// An example post and put requests are in ../../docs/requests/save-quote-post-body.jsonc
 
 // POST quotes route
 router.post('/', async (req, res) => {
@@ -451,63 +392,5 @@ router.put('/remove', async (req, res) => {
     res.sendStatus(500);
   }
 });
-
-// quoteArray = [
-//   // first quote
-//   {
-//   id: 1,
-//   name: 'Prime Swag',
-//   created_by: 1,
-//   manual_total_selling_price: 2000,
-//   manual_contribution_percent: 4,
-//   products: [
-//     // first product
-//     {
-//       id: 1,
-//       name: 'T-shirts',
-//       quantity: 100,
-//       selling_price_per_unit: 15,
-//       total_selling_price: 1500,
-//       estimated_hours: 6,
-//       costs: [
-//         // first cost input
-//         {
-//           id: 1,
-//           name: 'Garment',
-//           value: 400,
-//         },
-//         // second cost input
-//         {
-//           id: 2,
-//           name: 'Ink',
-//           value: 200,
-//         },
-//       ],
-//     },
-//     // second product
-//     {
-//       id: 2,
-//       name: 'Hoodies',
-//       quantity: 50,
-//       selling_price_per_unit: 30,
-//       total_selling_price: 1500,
-//       estimated_hours: 4,
-//       costs: [
-//         // first cost input
-//         {
-//           id: 3,
-//           name: 'Garment',
-//           value: 750,
-//         },
-//         // second cost input
-//         {
-//           id: 4,
-//           name: 'Ink',
-//           value: 100,
-//         },
-//       ],
-//     },
-//   ],
-// }];
 
 export default router;

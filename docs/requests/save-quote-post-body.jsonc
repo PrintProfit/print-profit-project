@@ -1,0 +1,56 @@
+//  POST req.body should look like:
+{
+  "user_id": 2,
+  "name": "Prime Swag",
+  "manual_total_selling_price": 2000,
+  "manual_contribution_percent": 40,
+  "quote": [
+    // 👇 FIRST ORDER (PRODUCT) IN QUOTE
+    {
+      "name": "t-shirts",
+      "quantity": 80,
+      "selling_price": 14.99,
+      "total_selling_price": 1199.2,
+      "estimated_hours": 4,
+      "costs": [
+        // 👇 FIRST COST INPUT IN PRODUCT 1
+        {
+          "name": "garment",
+          "value": 480,
+        },
+        // END FIRST COST INPUT
+        // 👇 SECOND COST INPUT IN PRODUCT 1
+        {
+          "name": "ink",
+          "value": 200,
+        },
+        // END SECOND COST INPUT
+      ],
+      // END OF COST INPUTS IN PRODUCT 1
+    },
+    // END OF FIRST PRODUCT
+    // 👇 SECOND PRODUCT IN QUOTE
+    {
+      "name": "hoodies",
+      "quantity": 50,
+      "selling_price": 39.99,
+      "total_selling_price": 1999.5,
+      "estimated_hours": 6,
+      "costs": [
+        {
+          "name": "garment",
+          "value": 900,
+        },
+        {
+          "name": "ink",
+          "value": 150,
+        },
+      ],
+      // END OF COST INPUTS
+    },
+    // END OF SECOND PRODUCT
+  ],
+  // END OF PRODUCTS ARRAY
+}
+
+// PUT quote req.body will look the same, but each object (quote, product, and cost) will additionally have an id
