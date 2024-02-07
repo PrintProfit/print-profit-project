@@ -119,7 +119,7 @@ router.post(
         RETURNING "id";
      `;
       const quoteValues = [
-        req.user.id,
+        req.user?.id,
         req.body.name,
         req.body.manual_total_selling_price,
         req.body.manual_contribution_percent,
@@ -358,7 +358,7 @@ router.put('/remove', async (req, res) => {
     const removeQuoteValues = [
       req.body.remove_quote,
       req.body.quote_id,
-      req.user.id,
+      req.user?.id,
     ];
     await connection.query(removeQuoteQuery, removeQuoteValues);
     // END QUOTE SOFT_DELETE route
@@ -376,7 +376,7 @@ router.put('/remove', async (req, res) => {
       const removeProductValues = [
         product.remove_product, // $1
         product.id, // $2
-        req.user.id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
+        req.user?.id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
       ];
       await connection.query(removeProductQuery, removeProductValues);
       // COST SOFT-DELETE route
@@ -389,7 +389,7 @@ router.put('/remove', async (req, res) => {
         const removeCostValues = [
           cost.remove_cost, // $1
           cost.id, // $2
-          req.user.id,
+          req.user?.id,
         ]; // $3
         await connection.query(removeCostQuery, removeCostValues);
       } // END COST SOFT-DELETE
