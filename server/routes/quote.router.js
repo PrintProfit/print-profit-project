@@ -77,8 +77,7 @@ router.get('/:id', (req, res) => {
 ) p on q.id = p.quote_id
   	INNER JOIN "user" u on q.user_id = u.id
   		WHERE u.company_id = $1;`;
-  console.log('req.params.id', req.params.id);
-  const values = [req.params.id];
+  const values = [req.user?.company_id];
   pool
     .query(query, values)
     .then((dbRes) => {
