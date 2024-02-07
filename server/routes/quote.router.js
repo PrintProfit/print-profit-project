@@ -342,12 +342,10 @@ router.put(
 
 // PUT route to soft-delete quote/product/cost
 router.put('/remove', async (req, res) => {
-  let connection;
+  // Establishes a longstanding connection to our database:
+  const connection = await pool.connect();
   console.log('req.body from soft-delete quote route: ', req.body);
   try {
-    // Establishes a longstanding connection to our database:
-    connection = await pool.connect();
-
     // BEGIN the SQL Transaction:
     await connection.query('BEGIN;');
     // QUOTE SOFT-DELETE
@@ -399,14 +397,15 @@ router.put('/remove', async (req, res) => {
     // END QUOTE SOFT-DELETE
 
     // if all removes are successful, commit those changes to the table
-    connection.query('COMMIT;');
+    await connection.query('COMMIT;');
     // and end connection
-    connection.release();
   } catch (err) {
     console.log('Error removing quote: ', err);
-    connection.query('ROLLBACK;');
-    connection.release();
+    await connection.query('ROLLBACK;');
     res.sendStatus(500);
+  } finally {
+    // Close the connection
+    connection.release();
   }
 });
 
