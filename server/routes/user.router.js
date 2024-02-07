@@ -11,6 +11,7 @@ import { encryptPassword } from '../modules/encryption.js';
 import pool from '../modules/pool.js';
 import {
   ApproveUserBody,
+  CreateCompanyBody,
   RecoverUserBody,
   SoftDeleteUserBody,
 } from '../schemas/admin.js';
@@ -277,28 +278,30 @@ router.get('/profile/page', rejectUnapproved, (req, res) => {
     });
 });
 
-router.post('/company', (req, res) => {
-  // console.log('req.body', req.body);
-
-  const insertQuery = `
+router.post(
+  '/company',
+  rejectNonAdmin,
+  validate(z.object({ body: CreateCompanyBody })),
+  (req, res) => {
+    const insertQuery = `
   INSERT INTO "company" 
   ("name", "updated_by")
   VALUES
   ($1, $2) RETURNING "id";
       `;
-  const insertValue = [req.body.newCompanyName, req.user.id];
+    const insertValue = [req.body.newCompanyName, req.user.id];
 
-  pool
-    .query(insertQuery, insertValue)
-    .then((result) => {
-      // console.log('result', result);
-      res.send(result.rows[0]);
-    })
-    .catch((err) => {
-      console.log('err in company post route', err);
-      res.sendStatus(500);
-    });
-});
+    pool
+      .query(insertQuery, insertValue)
+      .then((result) => {
+        res.send(result.rows[0]);
+      })
+      .catch((err) => {
+        console.log('err in company post route', err);
+        res.sendStatus(500);
+      });
+  },
+);
 
 // hard deletes users that are in the archived table
 router.delete('/delete/archived', (req, res) => {

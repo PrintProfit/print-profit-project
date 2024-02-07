@@ -13,3 +13,7 @@ export const SoftDeleteUserBody = z.object({
 export const RecoverUserBody = z.object({
   aboutToBeRecoveredUser: z.coerce.number().positive().int(),
 });
+
+export const CreateCompanyBody = z.object({
+  newCompanyName: z.string(),
+});
