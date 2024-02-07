@@ -30,14 +30,41 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "useLiteralKeys": "off"
+        "noExcessiveCognitiveComplexity": "warn",
+        "noVoid": "warn",
+        "useLiteralKeys": "off",
+        "useSimplifiedLogicExpression": "warn"
       },
       "correctness": {
+        "noUndeclaredVariables": "warn",
         "useHookAtTopLevel": "warn"
       },
       "style": {
+        "noRestrictedGlobals": {
+          "level": "warn",
+          "options": {
+            "deniedGlobals": ["module"]
+          }
+        },
+        "useCollapsedElseIf": "warn",
         "useDefaultParameterLast": "off",
-        "useFragmentSyntax": "warn"
+        "useFragmentSyntax": "warn",
+        "useShorthandAssign": "warn",
+        "useSingleCaseStatement": "warn"
+      },
+      "suspicious": {
+        "noApproximativeNumericConstant": "warn"
+      },
+      "nursery": {
+        "noDuplicateJsonKeys": "warn",
+        "noEmptyTypeParameters": "warn",
+        "noGlobalAssign": "warn",
+        "noGlobalEval": "error",
+        "noMisleadingCharacterClass": "warn",
+        "noThenProperty": "error",
+        "noUselessTernary": "warn",
+        "useForOf": "warn",
+        "useNodejsImportProtocol": "warn"
       }
     }
   },
