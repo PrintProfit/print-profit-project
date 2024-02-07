@@ -42,10 +42,13 @@ export interface Quote {
 
 // This type represents the absolute maximum degree of bad data the client
 // can accept from the server. Every property can be null or undefined.
-export type DamaagedQuote = DamagedStruct<
-  Omit<Quote, 'products'> & {
-    products?: DamagedProduct[];
-  }
->;
+export type DamaagedQuote =
+  | DamagedStruct<
+      Omit<Quote, 'products'> & {
+        products?: DamagedProduct[];
+      }
+    >
+  | undefined
+  | null;
 
 export type ProductColumnDef = ColumnDef<Product>;
