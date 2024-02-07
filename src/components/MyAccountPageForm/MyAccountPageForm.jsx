@@ -9,6 +9,10 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+
 export default function MyAccountPageForm({ setIsForm }) {
   const dispatch = useDispatch();
 
@@ -176,7 +180,7 @@ export default function MyAccountPageForm({ setIsForm }) {
           variant="contained"
           type="button"
         >
-          Save Changes
+          <SaveIcon /> Save Changes
         </Button>
         <Button
           color="error"
@@ -184,7 +188,7 @@ export default function MyAccountPageForm({ setIsForm }) {
           variant="outlined"
           type="button"
         >
-          Discard Changes
+          <DeleteIcon /> Discard Changes
         </Button>
         <h5 className="nameErrorText">
           {userName.name === '' ? 'you must enter a valid name' : ''}
@@ -221,10 +225,10 @@ export default function MyAccountPageForm({ setIsForm }) {
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={discardChanges} autoFocus>
-            Discard
+            <DeleteIcon /> Discard
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleDiscardClose}>
-            Cancel
+            <CloseIcon /> Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -246,10 +250,10 @@ export default function MyAccountPageForm({ setIsForm }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={saveNewUserInfo} autoFocus>
-            Save Changes
+            <SaveIcon /> Save Changes
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleComfirmationClose}>
-            Cancel
+            <CloseIcon /> Cancel
           </Button>
         </DialogActions>
       </Dialog>

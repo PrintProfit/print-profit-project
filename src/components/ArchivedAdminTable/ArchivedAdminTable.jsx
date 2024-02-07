@@ -13,6 +13,10 @@ import {
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
+
 function ArchivedAdminPage({ archivedUser }) {
   const dispatch = useDispatch();
 
@@ -105,7 +109,7 @@ function ArchivedAdminPage({ archivedUser }) {
           onClick={handleRecoverClickOpen}
           variant="contained"
         >
-          Recover
+          <UnarchiveIcon /> Recover
         </Button>
       </StyledTableCell>
       <StyledTableCell align="center">
@@ -115,7 +119,7 @@ function ArchivedAdminPage({ archivedUser }) {
           onClick={handleDeleteClickOpen}
           variant="outlined"
         >
-          Delete
+          <DeleteIcon /> Delete
         </Button>
       </StyledTableCell>
 
@@ -136,14 +140,14 @@ function ArchivedAdminPage({ archivedUser }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={recoverUser} autoFocus variant="outlined">
-            Recover
+            <UnarchiveIcon /> Recover
           </Button>
           <Button
             sx={{ color: 'black', outlineColor: 'black' }}
             onClick={handleRecoverClose}
             variant="outlined"
           >
-            Cancel
+            <CloseIcon /> Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -165,10 +169,10 @@ function ArchivedAdminPage({ archivedUser }) {
         </DialogContent>
         <DialogActions>
           <Button color="error" onClick={deleteUser} autoFocus>
-            Delete
+            <DeleteIcon /> Delete
           </Button>
           <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
-            Cancel
+            <CloseIcon /> Cancel
           </Button>
         </DialogActions>
       </Dialog>
