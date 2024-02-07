@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import '../App/Orpheus.ttf';
 
@@ -14,6 +14,7 @@ const drawerWidth = 200;
 
 export default function AppBarHeader() {
   const history = useHistory();
+  const user = useSelector((store) => store.user.currentUser);
   const [anchorEl, setAnchorEl] = useState(null);
   // Check below link for info
   // https://mui.com/material-ui/react-app-bar/
@@ -27,6 +28,9 @@ export default function AppBarHeader() {
     setAnchorEl(null);
   };
 
+  const handleNavigationToMyAdminPage = () => {
+    history.push('/admin');
+  };
   const handleNavigationToMyAccountPage = () => {
     history.push('/my-account-page');
   };
@@ -80,6 +84,10 @@ export default function AppBarHeader() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
+            {/* conditionally renders an "admin" menu item if the current user is authorized as an admin */}
+            {user.is_admin && (
+              <MenuItem onClick={handleNavigationToMyAdminPage}>Admin</MenuItem>
+            )}
             <MenuItem onClick={handleNavigationToMyAccountPage}>
               My account
             </MenuItem>
