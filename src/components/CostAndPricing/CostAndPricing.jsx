@@ -64,6 +64,7 @@ function TabPanel({ children, value, index, ...other }) {
 /**
  * @param {number} index
  */
+// a11y = accessibility!
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
