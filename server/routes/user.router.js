@@ -1,7 +1,11 @@
 // @ts-check
 import { Router } from 'express';
 import { z } from 'zod';
-import { rejectUnauthenticated } from '../middleware/auth.js';
+import {
+  rejectNonAdmin,
+  rejectUnapproved,
+  rejectUnauthenticated,
+} from '../middleware/auth.js';
 import { validate } from '../middleware/validator.js';
 import { encryptPassword } from '../modules/encryption.js';
 import pool from '../modules/pool.js';
@@ -87,9 +91,7 @@ router.post('/logout', (req, res, next) => {
 });
 
 // Gets all companys from company table
-router.get('/company', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/company', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT * FROM "company";
   `;
@@ -109,9 +111,7 @@ router.get('/company', (req, res) => {
 });
 
 // Gets all pending users
-router.get('/pending', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/pending', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
@@ -138,9 +138,7 @@ router.get('/pending', (req, res) => {
 });
 
 // Gets all of the approved users
-router.get('/approved', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/approved', rejectNonAdmin, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
@@ -167,7 +165,7 @@ router.get('/approved', (req, res) => {
 });
 
 // approves the user that the admin clicked
-router.put('/approve', (req, res) => {
+router.put('/approve', rejectNonAdmin, (req, res) => {
   const sqlText = `
   UPDATE "user"
     SET "is_approved" = TRUE, "updated_by" = $1, "company_id" = $2
@@ -187,7 +185,7 @@ router.put('/approve', (req, res) => {
 });
 
 // soft deletes the user the admin clicked
-router.put('/delete/soft', (req, res) => {
+router.put('/delete/soft', rejectNonAdmin, (req, res) => {
   const sqlText = `
   UPDATE "user"
     SET "is_removed" = TRUE, "updated_by" = $1
@@ -207,7 +205,7 @@ router.put('/delete/soft', (req, res) => {
 });
 
 // recovers the user the admin clicked
-router.put('/recover', (req, res) => {
+router.put('/recover', rejectNonAdmin, (req, res) => {
   const sqlText = `
   UPDATE "user"
     SET "is_removed" = FALSE, "updated_by" = $1
@@ -227,9 +225,7 @@ router.put('/recover', (req, res) => {
 });
 
 // Gets the user that is logged in for the profile page
-router.get('/profile/page', (req, res) => {
-  // console.log('im in company route');
-
+router.get('/profile/page', rejectUnapproved, (req, res) => {
   const query = `
   SELECT "user"."id" as "user_id",
   "user"."email" as "email",
