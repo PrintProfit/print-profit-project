@@ -240,7 +240,7 @@ router.put(
     const insertValue = [req.user?.id, req.body.aboutToBeRecoveredUser];
     pool
       .query(sqlText, insertValue)
-      .then((result) => {
+      .then(() => {
         res.sendStatus(201);
       })
       .catch((err) => {
@@ -462,7 +462,7 @@ router.post(
 
     pool
       .query(queryText, [email, name, password, companyId, req.user?.id])
-      .then((result) => {
+      .then(() => {
         res.sendStatus(201);
       })
       .catch((err) => {
