@@ -45,11 +45,11 @@ export default function SideBar({ children }) {
         </div>
 
         <List sx={{ height: '100%', textAlign: 'center' }}>
-          <h3>Tools Header</h3>
+          <h3>User tools</h3>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/cost-and-pricing">
               <ListItemText
-                primary="C&P"
+                primary="Cost and pricing"
                 sx={{ textAlign: 'center', color: 'primary.contrastText' }}
               />
             </ListItemButton>
@@ -79,13 +79,22 @@ export default function SideBar({ children }) {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/about">
               <ListItemText
-                primary="About/Contact"
+                primary="About"
                 sx={{ textAlign: 'center', color: 'primary.contrastText' }}
               />
             </ListItemButton>
           </ListItem>
+          <Divider />
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/contact">
+              <ListItemText
+                primary="Contact"
+                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
         </List>
-        <Divider />
       </Drawer>
       <Box
         component="main"
