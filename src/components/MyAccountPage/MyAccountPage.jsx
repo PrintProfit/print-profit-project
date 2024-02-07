@@ -2,13 +2,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import MyAccountPageForm from '../MyAccountPageForm/MyAccountPage';
+import MyAccountPageForm from '../MyAccountPageForm/MyAccountPageForm';
 import './MyAccountPage.css';
 
 export default function MyAccountPage() {
   const dispatch = useDispatch();
 
   const profileUser = useSelector((store) => store.user.profileUserReducer);
+  const currentUser = useSelector((store) => store.user.currentUser);
 
   useEffect(() => {
     dispatch({ type: 'SAGA_FETCH_PROFILE_PAGE_USER' });
@@ -31,8 +32,8 @@ export default function MyAccountPage() {
     if (isForm === false) {
       return (
         <>
-          <p>Name: {profileUser.user_name}</p>
-          <p>Email: {profileUser.email} </p>
+          <p>Name: {currentUser.name}</p>
+          <p>Email: {currentUser.email} </p>
           <p>Company Name: {profileUser.company_name}</p>
 
           <Button

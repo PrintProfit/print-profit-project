@@ -153,7 +153,6 @@ export default function MyAccountPageForm({ setIsForm }) {
             onClick={() => setNewPasswordInput('')}
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
-            required
             label="New Password"
           />
         </section>
@@ -168,15 +167,23 @@ export default function MyAccountPageForm({ setIsForm }) {
             onClick={() => setNewVerifyPasswordInput('')}
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
-            required
             label="Verify New Password"
           />
         </section>
 
-        <Button onClick={handleComfirmationClickOpen} type="button">
+        <Button
+          onClick={handleComfirmationClickOpen}
+          variant="contained"
+          type="button"
+        >
           Save Changes
         </Button>
-        <Button color="error" onClick={handleDiscardClickOpen} type="button">
+        <Button
+          color="error"
+          onClick={handleDiscardClickOpen}
+          variant="outlined"
+          type="button"
+        >
           Discard Changes
         </Button>
         <h5 className="nameErrorText">
