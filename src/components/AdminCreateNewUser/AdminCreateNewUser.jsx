@@ -32,6 +32,7 @@ function AdminCreateNewUser() {
     if (password !== confirmedPassword) {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
     }
+    console.log('creating user');
 
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
@@ -63,10 +64,15 @@ function AdminCreateNewUser() {
         },
       });
     }
+    setEmail('');
+    setName('');
+    setCompanyName('');
+    setPassword('');
+    setConfirmedPassword('');
   };
 
   return (
-    <form className="formPanel" onSubmit={adminCreateUser}>
+    <Box className="formPanel" textAlign={'center'} marginTop={'3%'}>
       <h2>Enter new information to create a member!</h2>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
@@ -75,17 +81,22 @@ function AdminCreateNewUser() {
       )}
       <Box
         component="form"
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        flexDirection={'column'}
         sx={{
           '& > :not(style)': { m: 1, width: '25ch' },
         }}
         noValidate
         autoComplete="off"
+        onSubmit={adminCreateUser}
       >
         <TextField
           id="email"
           type="text"
           label="e-mail"
-          variant="outlined"
+          variant="filled"
           value={email}
           required
           onChange={(event) => setEmail(event.target.value)}
@@ -94,7 +105,7 @@ function AdminCreateNewUser() {
           id="name"
           type="text"
           label="Full Name"
-          variant="outlined"
+          variant="filled"
           value={name}
           required
           onChange={(event) => setName(event.target.value)}
@@ -162,7 +173,7 @@ function AdminCreateNewUser() {
               label="Company Name Here"
               placeholder={'Company Name Here'}
               fullWidth
-              variant="standard"
+              variant="filled"
             />
           )}
         />
@@ -170,7 +181,7 @@ function AdminCreateNewUser() {
           id="password"
           type="password"
           label="password"
-          variant="outlined"
+          variant="filled"
           value={password}
           required
           onChange={(event) => setPassword(event.target.value)}
@@ -179,23 +190,28 @@ function AdminCreateNewUser() {
           id="confirmPassword"
           type="password"
           label="Confirm Password"
-          variant="outlined"
+          variant="filled"
           value={confirmedPassword}
           required
           onChange={(event) => setConfirmedPassword(event.target.value)}
         />
-      </Box>
-      <div>
-        <Button
-          variant="contained"
-          type="submit"
-          name="submit"
-          value="Register"
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="50%"
         >
-          Create New Account
-        </Button>
-      </div>
-    </form>
+          <Button
+            variant="contained"
+            type="submit"
+            name="submit"
+            value="Create New Account"
+          >
+            Create New Account
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 
