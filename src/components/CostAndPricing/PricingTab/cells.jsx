@@ -303,7 +303,7 @@ export function AddCostHeader({ table }) {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
+          draft.products = [];
         }
         for (const product of draft.products) {
           if (product.costs === undefined) {
