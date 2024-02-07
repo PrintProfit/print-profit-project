@@ -358,49 +358,46 @@ router.put(
   '/edit/info',
   rejectUnapproved,
   validate(z.object({ body: EditUserBody })),
-  (req, res) => {
-    // console.log('req.body', req.body.newPasswordInput);
+  async (req, res) => {
+    const {
+      newEmailInput: email,
+      newNameInput: name,
+      newPasswordInput: password,
+    } = req.body;
 
-    let sqlText;
-    let insertValue;
-
-    const newEmailInput = req.body.newEmailInput;
-    const newNameInput = req.body.newNameInput;
-
-    if (req.body.newPasswordInput === undefined) {
-      sqlText = `
-  UPDATE "user"
-  SET "email" = $1, "name" = $2, "updated_by" = $3
-WHERE "id" = $3;
-        `;
-
-      insertValue = [newEmailInput, newNameInput, req.user.id];
-    } else {
-      const newPasswordInput = encryptPassword(req.body.newPasswordInput);
-
-      sqlText = `
-  UPDATE "user"
-  SET "email" = $1, "name" = $2, "password" = $3, "updated_by" = $4
-WHERE "id" = $4;
-        `;
-
-      insertValue = [
-        newEmailInput,
-        newNameInput,
-        newPasswordInput,
-        req.user.id,
-      ];
+    try {
+      if (password) {
+        const hashedPassword = encryptPassword(password);
+        await pool.query(
+          `--sql
+            UPDATE "user"
+            SET
+              email = $1,
+              name = $2,
+              password = $3,
+              updated_by = $4
+            WHERE id = $4
+          `,
+          [email, name, hashedPassword, req.user?.id],
+        );
+      } else {
+        await pool.query(
+          `--sql
+            UPDATE "user"
+            SET
+              email = $1,
+              name = $2,
+              updated_by = $3
+            WHERE id = $3
+          `,
+          [email, name, req.user?.id],
+        );
+      }
+      res.sendStatus(201);
+    } catch (error) {
+      console.log('Error in user.router /edit/info PUT,', error);
+      res.sendStatus(500);
     }
-
-    pool
-      .query(sqlText, insertValue)
-      .then((result) => {
-        res.sendStatus(201);
-      })
-      .catch((err) => {
-        console.log('Error in user.router /edit/info PUT,', err);
-        res.sendStatus(500);
-      });
   },
 );
 
