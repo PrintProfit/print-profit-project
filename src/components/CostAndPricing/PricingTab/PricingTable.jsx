@@ -117,8 +117,8 @@ export function PricingTable({ quote, setQuote }) {
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
   return (
-    <Stack direction="row" spacing={2}>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+    <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }} variant="outlined">
         <TableContainer>
           <Table size="small" stickyHeader>
             <TableBody>

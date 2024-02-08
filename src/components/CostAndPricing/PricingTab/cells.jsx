@@ -11,7 +11,6 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  Input,
   InputAdornment,
   TextField,
   Tooltip,
@@ -76,14 +75,16 @@ export function DynamicCostCell({ getValue, table, row, column }) {
   }, [initialValue]);
 
   return (
-    <Input
+    <TableTextField
       size="small"
-      startAdornment={<InputAdornment position="start">$</InputAdornment>}
       inputMode="decimal"
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
-      inputComponent={/** @type {any} */ (NumericInput)}
+      InputProps={{
+        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+        inputComponent: /** @type {any} */ (NumericInput),
+      }}
     />
   );
 }
@@ -142,7 +143,7 @@ export function DynamicCostHeader({ column, table }) {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-      <Input
+      <TableTextField
         size="small"
         value={costName}
         onChange={(e) => setCostName(e.target.value)}
@@ -216,8 +217,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
         startAdornment: adornment && (
           <InputAdornment position="start">{adornment}</InputAdornment>
         ),
-        // @ts-ignore
-        inputComponent: NumericInput,
+        inputComponent: /** @type {any} */ (NumericInput),
       }}
     />
   );
@@ -264,7 +264,7 @@ export function ProductNameCell({ getValue, table, row }) {
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-      <Input
+      <TextField
         size="small"
         value={value}
         onChange={(e) => setValue(e.target.value)}
