@@ -95,10 +95,7 @@ function ArchivedAdminPage({ archivedUser }) {
 
   return (
     <TableRow>
-      {/* 👇This makes the name field background black in archived users table - not sure if that's what we want */}
-      <StyledTableCell variant="head" scope="row">
-        {archivedUser.user_name}
-      </StyledTableCell>
+      <StyledTableCell>{archivedUser.user_name}</StyledTableCell>
       <StyledTableCell align="center">{archivedUser.email}</StyledTableCell>
       <StyledTableCell align="center">
         {stringifyDate(archivedUser.created_at)}

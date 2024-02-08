@@ -1,16 +1,28 @@
-import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControl,
+  FormLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 
 export default function MyAccountPageForm({ setIsForm }) {
@@ -117,12 +129,13 @@ export default function MyAccountPageForm({ setIsForm }) {
 
   return (
     <div className="">
-      <form>
+      <form marginTop={2}>
         <h3 className="invalidHeader">{invalidText}</h3>
         <section>
-          Name:
+          <FormLabel sx={{ mt: 5 }}>Name:</FormLabel>
+
           <TextField
-            variant="standard"
+            variant="outlined"
             type="text"
             name="name"
             placeholder={profileUser.name}
@@ -130,13 +143,17 @@ export default function MyAccountPageForm({ setIsForm }) {
             onChange={(e) => handleNameChange(e.target.value)}
             required
             label="New Name"
+            sx={{
+              mt: 5,
+              width: '20ch',
+            }}
           />
         </section>
 
         <section>
-          Email:
+          <FormLabel>Email:</FormLabel>
           <TextField
-            variant="standard"
+            variant="outlined"
             type="email"
             name="email"
             placeholder={profileUser.email}
@@ -144,34 +161,39 @@ export default function MyAccountPageForm({ setIsForm }) {
             onChange={(e) => handleEmailChange(e.target.value)}
             required
             label="New Email"
+            sx={{
+              width: '20ch',
+            }}
           />
         </section>
 
         <section>
-          New Password:
+          <FormLabel>New Password:</FormLabel>
+
           <TextField
-            variant="standard"
+            variant="outlined"
             type="password"
             name="password"
             placeholder={'password'}
-            onClick={() => setNewPasswordInput('')}
+            // onClick={() => setNewPasswordInput('')}
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
-            label="New Password"
+            label="Enter new password"
           />
         </section>
 
         <section>
-          Verify New Password:
+          <FormLabel>Verify New Password:</FormLabel>
+
           <TextField
-            variant="standard"
+            variant="outlined"
             type="password"
             name="Verify New Password"
             placeholder={'verify new password'}
-            onClick={() => setNewVerifyPasswordInput('')}
+            // onClick={() => setNewVerifyPasswordInput('')}
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
-            label="Verify New Password"
+            label="Verify new password"
           />
         </section>
 
@@ -179,6 +201,11 @@ export default function MyAccountPageForm({ setIsForm }) {
           onClick={handleComfirmationClickOpen}
           variant="contained"
           type="button"
+          color="button"
+          sx={{
+            mb: 5,
+            mr: 2,
+          }}
         >
           <SaveIcon /> Save Changes
         </Button>
@@ -187,6 +214,10 @@ export default function MyAccountPageForm({ setIsForm }) {
           onClick={handleDiscardClickOpen}
           variant="outlined"
           type="button"
+          sx={{
+            mb: 5,
+            ml: 2,
+          }}
         >
           <DeleteIcon /> Discard Changes
         </Button>

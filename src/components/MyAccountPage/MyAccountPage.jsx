@@ -1,5 +1,16 @@
 import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button';
+import {
+  Box,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MyAccountPageForm from '../MyAccountPageForm/MyAccountPageForm';
@@ -25,25 +36,42 @@ export default function MyAccountPage() {
     if (isForm) {
       return (
         <>
-          <MyAccountPageForm setIsForm={setIsForm} />
+          <MyAccountPageForm setIsForm={setIsForm} sx={{ mt: 5 }} />
         </>
       );
     }
     if (isForm === false) {
       return (
         <>
-          <p>Name: {currentUser.name}</p>
-          <p>Email: {currentUser.email} </p>
-          <p>Company Name: {profileUser.company_name}</p>
+          <TableContainer>
+            <Table>
+              <TableRow>
+                <TableCell>Name:</TableCell>
+                <TableCell>{currentUser.name}</TableCell>
+              </TableRow>
 
-          <Button
-            aria-label="edit info"
-            className="editInfoButton"
-            onClick={toggleForm}
-            type="button"
-          >
-            <EditIcon sx={{ color: 'black' }} />
-          </Button>
+              <TableRow>
+                <TableCell>Email:</TableCell>
+                <TableCell>{currentUser.email}</TableCell>
+              </TableRow>
+
+              <TableRow>
+                <TableCell>Company:</TableCell>
+                <TableCell>{currentUser.company_name}</TableCell>
+              </TableRow>
+
+              <Button
+                aria-label="edit info"
+                className="editInfoButton"
+                onClick={toggleForm}
+                type="button"
+              >
+                <Typography> Edit info</Typography>
+
+                <EditIcon sx={{ color: 'black' }} />
+              </Button>
+            </Table>
+          </TableContainer>
         </>
       );
     }
@@ -51,7 +79,6 @@ export default function MyAccountPage() {
 
   return (
     <div className="myAccountPageCss">
-      <h1>My Account Page</h1>
       <div className="accountPageFormArea">{displayText()}</div>
     </div>
   );
