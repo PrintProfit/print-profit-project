@@ -1,8 +1,10 @@
 import DeleteIcon from '@mui/icons-material/Delete';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   Backdrop,
   Box,
   Button,
+  Divider,
   Fade,
   IconButton,
   Modal,
@@ -13,28 +15,28 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
   const dispatch = useDispatch();
-
-  // const [open, setOpen] = React.useState(false)
-  // const handleOpen = () => setOpen(true)
-  // const handleClose = () => setOpen(false)
+  console.log('row:', row);
   const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 'auto',
+    height: '90%',
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    // makes table scrollable if it exceeds the height of the modal
+    overflow: 'auto',
   };
-  console.log('props:', props);
 
   const sendToPricingTool = () => {
     dispatch({ type: 'SET_CURRENT_QUOTE', payload: row });
@@ -60,19 +62,85 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
       >
         <Fade in={open}>
           <Box sx={style}>
+            <Typography align="center" fontWeight="bold" sx={{ mb: 2 }}>
+              {row.name}
+            </Typography>
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name</TableCell>
+                    <TableCell> </TableCell>
+                    {/* TO-DO: loop through quote object and insert TableCell for each cost input name */}
+                    {row.products?.map((product) => (
+                      <TableCell>{product.name}</TableCell>
+                    ))}
+                    <TableCell>
+                      <Typography fontWeight={'bold'}>Total:</Typography>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
+
                 <TableBody>
-                  <TableCell>{row.name}</TableCell>
+                  <TableRow>
+                    <TableCell>Quantity</TableCell>
+                    {row.products?.map((product) => (
+                      <TableCell>{product.quantity}</TableCell>
+                    ))}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Selling Price</TableCell>
+                    {row.products?.map((product) => (
+                      <TableCell>{product.selling_price_per_unit}</TableCell>
+                    ))}
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Total Selling Price</TableCell>
+                    {row.products?.map((product) => (
+                      <TableCell>{product.total_selling_price}</TableCell>
+                    ))}
+                  </TableRow>
+                  {/* TO-DO: loop through quote object and insert new TableRow for each cost input; nested loop and add values from each product as TableCells? */}
+                  {row.products[0].costs?.map((cost) => (
+                    <>
+                      <TableRow>
+                        <TableCell>{cost.name}</TableCell>
+                        <TableCell>{cost.value}</TableCell>
+                      </TableRow>
+                    </>
+                  ))}
+                  {/* {row.products?.map((product) => (
+                    <TableRow>
+                      <TableCell></TableCell>
+                    </TableRow>
+                  ))} */}
+
+                  <TableRow>
+                    <TableCell>Estimated Hours</TableCell>
+                    {row.products?.map((product) => (
+                      <>
+                        <TableCell>{product.estimated_hours}</TableCell>
+                      </>
+                    ))}
+                    <TableCell>A number</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Total Variable Costs</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Contribution $</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
-            <Button onClick={sendToPricingTool}>Open in Pricing Tool</Button>
+            <Button
+              onClick={sendToPricingTool}
+              variant="contained"
+              color="button"
+              sx={{ ml: '50%', mt: 3 }}
+            >
+              <Typography sx={{ mr: 1 }}>Open in Pricing Tool</Typography>
+              <OpenInNewIcon />
+            </Button>
           </Box>
         </Fade>
       </Modal>
