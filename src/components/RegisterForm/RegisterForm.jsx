@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
+import emailjs from '@emailjs/browser';
+
 function RegisterForm() {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -13,11 +15,29 @@ function RegisterForm() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const templateParams = {
+    from_name: name,
+    from_email: email,
+  };
+
   const registerUser = (event) => {
     event.preventDefault();
     if (password !== confirmedPassword) {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
     }
+
+    emailjs
+      .send('service_596xcui', 'template_98dektt', templateParams, {
+        publicKey: 'AHgPPyj4SiCZqSRfw',
+      })
+      .then(
+        () => {
+          console.log('SUCCESS!');
+        },
+        (error) => {
+          console.log('FAILED...', error.text);
+        },
+      );
 
     dispatch({
       type: 'REGISTER',
