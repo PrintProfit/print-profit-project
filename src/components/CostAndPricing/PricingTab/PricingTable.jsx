@@ -7,7 +7,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableRow,
 } from '@mui/material';
 import {
   flexRender,
@@ -26,6 +25,7 @@ import {
   estimatedHoursColumn,
 } from './columns';
 import * as fmt from './formats';
+import { PricingTableRow } from './stylized';
 import { aggregate, unique } from './utils';
 
 /**
@@ -121,7 +121,7 @@ export function PricingTable({ quote, setQuote }) {
         <Table size="small">
           <TableBody>
             {table.getAllFlatColumns().map((col, index) => (
-              <TableRow key={col.id}>
+              <PricingTableRow key={col.id}>
                 <TableCell variant="head">
                   {safeFlexRender(
                     col.columnDef.header,
@@ -156,7 +156,7 @@ export function PricingTable({ quote, setQuote }) {
                       ?.getContext(),
                   )}
                 </TableCell>
-              </TableRow>
+              </PricingTableRow>
             ))}
           </TableBody>
         </Table>
