@@ -20,6 +20,7 @@ import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
+import { TableTextField } from './stylized';
 import { unique } from './utils';
 
 /**
@@ -199,18 +200,25 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   }, [initialValue]);
 
   return (
-    <Input
+    <TableTextField
       size="small"
-      startAdornment={
-        adornment && (
-          <InputAdornment position="start">{adornment}</InputAdornment>
-        )
-      }
+      // startAdornment={
+      //   adornment && (
+      //     <InputAdornment position="start">{adornment}</InputAdornment>
+      //   )
+      // }
       inputMode={inputMode}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
-      inputComponent={/** @type {any} */ (NumericInput)}
+      // inputComponent={/** @type {any} */ (NumericInput)}
+      InputProps={{
+        startAdornment: adornment && (
+          <InputAdornment position="start">{adornment}</InputAdornment>
+        ),
+        // @ts-ignore
+        inputComponent: NumericInput,
+      }}
     />
   );
 }
