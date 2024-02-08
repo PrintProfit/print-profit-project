@@ -267,18 +267,21 @@ export function ProductNameCell({ getValue, table, row }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onBlur={onBlur}
+        InputProps={{
+          endAdornment: updateMode || (
+            <Tooltip title="Remove Product" arrow>
+              <IconButton
+                size="small"
+                aria-label="Remove Product"
+                disabled={updateMode}
+                onClick={deleteProduct}
+              >
+                <Delete fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          ),
+        }}
       />
-      {updateMode || (
-        <Tooltip title="Remove Product" arrow>
-          <IconButton
-            aria-label="Remove Product"
-            disabled={updateMode}
-            onClick={deleteProduct}
-          >
-            <Delete />
-          </IconButton>
-        </Tooltip>
-      )}
     </Box>
   );
 }
