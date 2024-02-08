@@ -7,6 +7,10 @@ import { Box, Button, Typography } from '@mui/material';
 // or even care what the redux state is'
 
 function AboutPage() {
+  const pushToPrintProfit = () => {
+    window.open('https://calendly.com/printprofit/introductory-call');
+  };
+
   return (
     <div className="container">
       <Typography
@@ -55,6 +59,7 @@ function AboutPage() {
               fontWeight: 'bold',
               mt: 2,
             }}
+            onClick={pushToPrintProfit}
           >
             Book a call now
           </Button>

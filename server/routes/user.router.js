@@ -200,6 +200,31 @@ router.put(
   },
 );
 
+// hard deletes pending users company
+router.delete(
+  '/delete/pending/company',
+  rejectNonAdmin,
+  // validate(z.object({ body: DeleteUserBody })),
+  (req, res) => {
+    const sqlText = `
+  DELETE FROM "pending_user_company"
+    WHERE "user_id" = $1;
+    `;
+
+    const insertValue = [req.body.pendingUserId];
+
+    pool
+      .query(sqlText, insertValue)
+      .then(() => {
+        res.sendStatus(200);
+      })
+      .catch((err) => {
+        console.log('Error in user.router DELETE, deleting account', err);
+        res.sendStatus(500);
+      });
+  },
+);
+
 // soft deletes the user the admin clicked
 router.put(
   '/delete/soft',
