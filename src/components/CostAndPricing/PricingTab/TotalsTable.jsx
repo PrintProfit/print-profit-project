@@ -9,12 +9,13 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
 import * as fmt from './formats';
+import { NumericInput } from './inputs';
+import { TotalsTableRow as TableRow } from './stylized';
 import { unique } from './utils';
 
 /**
@@ -77,28 +78,29 @@ export function TotalsTable({ quote, setQuote, table }) {
                     ),
                   );
                 }}
+                inputComponent={/** @type {any} */ (NumericInput)}
               />
             </TableCell>
           </TableRow>
           {dynamicCostNames.map((name) => (
-            <TotalsTableRow
+            <SimpleTotalsTableRow
               key={name}
               table={table}
               column={`dynamic-cost-${name}`}
               title={name}
             />
           ))}
-          <TotalsTableRow
+          <SimpleTotalsTableRow
             table={table}
             column="creditCardFee"
             title="Credit Card Fee"
           />
-          <TotalsTableRow
+          <SimpleTotalsTableRow
             table={table}
             column="totalVariableCosts"
             title="Total Variable Costs"
           />
-          <TotalsTableRow
+          <SimpleTotalsTableRow
             table={table}
             column="estimated_hours"
             title="Estimated Hours"
@@ -130,6 +132,15 @@ export function TotalsTable({ quote, setQuote, table }) {
                       ),
                     );
                   }}
+                  inputComponent={/** @type {any} */ (NumericInput)}
+                  // @ts-ignore
+                  inputProps={
+                    /** @type {import('react-number-format').NumericFormatProps} */ ({
+                      allowNegative: false,
+                      min: 0,
+                      max: 100,
+                    })
+                  }
                 />
               ),
             }}
@@ -186,9 +197,9 @@ function ContributionRows({
 
 /**
  * Used for rows which have three columns that have the same value
- * @param {import('./prop-types').TotalsTableRowProps} props
+ * @param {import('./prop-types').SimpleTotalsTableRowProps} props
  */
-function TotalsTableRow({ table, column, title }) {
+function SimpleTotalsTableRow({ table, column, title }) {
   // Attempt to cache the footer & context
   const [footer, context] = useMemo(
     () => getFooter(table, column),
@@ -200,7 +211,6 @@ function TotalsTableRow({ table, column, title }) {
       <TableCell variant="head">{title}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
-      {/* <TableCell>{context && flexRender(footer, context)}</TableCell> */}
     </TableRow>
   );
 }

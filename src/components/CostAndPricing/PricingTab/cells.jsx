@@ -4,6 +4,7 @@ import { Add, Delete } from '@mui/icons-material';
 import {
   Box,
   Button,
+  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
@@ -18,6 +19,7 @@ import {
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import * as fmt from './formats';
+import { NumericInput } from './inputs';
 import { unique } from './utils';
 
 /**
@@ -80,6 +82,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
+      inputComponent={/** @type {any} */ (NumericInput)}
     />
   );
 }
@@ -207,6 +210,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
+      inputComponent={/** @type {any} */ (NumericInput)}
     />
   );
 }
@@ -332,17 +336,21 @@ export function AddCostHeader({ table }) {
     closeDialog();
   };
 
+  // We need to ensure that the cost name is unique.
+  const costNameExists = table.options.meta?.costNames.includes(costName);
+
   return (
     <>
-      <Tooltip title="Add Cost" arrow>
-        <IconButton
-          onClick={() => setOpen(true)}
-          aria-label="Add Cost"
-          size="small"
-        >
-          <Add fontSize="small" />
-        </IconButton>
-      </Tooltip>
+      <Button
+        size="small"
+        // Everything kinda looks bad here
+        variant="contained"
+        // color="primary"
+        endIcon={<Add fontSize="small" />}
+        onClick={() => setOpen(true)}
+      >
+        Add Cost
+      </Button>
       <Dialog
         open={open}
         onClose={closeDialog}
@@ -366,11 +374,19 @@ export function AddCostHeader({ table }) {
             fullWidth
             value={costName}
             onChange={(e) => setCostName(e.target.value)}
+            error={costNameExists}
+            helperText={costNameExists && 'Cost name already exists'}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button type="submit">Add Cost</Button>
+          <ButtonGroup variant="contained">
+            <Button color="secondary" onClick={closeDialog}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={costNameExists}>
+              Add Cost
+            </Button>
+          </ButtonGroup>
         </DialogActions>
       </Dialog>
     </>
@@ -433,9 +449,10 @@ export function AddProductCell({ table }) {
     <>
       <Tooltip title="Add Product" arrow>
         <IconButton
-          onClick={() => setOpen(true)}
+          // size="small"
+          color="primary"
           aria-label="Add Product"
-          size="small"
+          onClick={() => setOpen(true)}
         >
           <Add fontSize="small" />
         </IconButton>
@@ -466,8 +483,12 @@ export function AddProductCell({ table }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button type="submit">Add Product</Button>
+          <ButtonGroup variant="contained">
+            <Button color="secondary" onClick={closeDialog}>
+              Cancel
+            </Button>
+            <Button type="submit">Add Product</Button>
+          </ButtonGroup>
         </DialogActions>
       </Dialog>
     </>

@@ -73,21 +73,30 @@ export const initialQuote = {
       quantity: 0,
       selling_price_per_unit: 0,
       estimated_hours: 0,
-      costs: [],
+      costs: [
+        { name: 'Garment', value: 0 },
+        { name: 'Ink', value: 0 },
+      ],
     },
     {
       name: 'Item 2',
       quantity: 0,
       selling_price_per_unit: 0,
       estimated_hours: 0,
-      costs: [],
+      costs: [
+        { name: 'Garment', value: 0 },
+        { name: 'Ink', value: 0 },
+      ],
     },
     {
       name: 'Item 3',
       quantity: 0,
       selling_price_per_unit: 0,
       estimated_hours: 0,
-      costs: [],
+      costs: [
+        { name: 'Garment', value: 0 },
+        { name: 'Ink', value: 0 },
+      ],
     },
   ],
 };

@@ -22,7 +22,7 @@ export interface TotalsTableProps {
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }
 
-export interface TotalsTableRowProps {
+export interface SimpleTotalsTableRowProps {
   readonly table: Table<Product>;
   readonly column: string;
   readonly title: string;
@@ -93,4 +93,9 @@ export interface QuoteSnackbarProps {
 export interface PricingTabProps {
   readonly quote: Quote;
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
+}
+
+export interface InputExtraProps {
+  onChange: (event: { target: { name: string; value: string } }) => void;
+  name: string;
 }
