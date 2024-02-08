@@ -25,7 +25,7 @@ import {
   estimatedHoursColumn,
 } from './columns';
 import * as fmt from './formats';
-import { PricingTableRow } from './stylized';
+import { PricingTableRow as TableRow } from './stylized';
 import { aggregate, unique } from './utils';
 
 /**
@@ -122,7 +122,7 @@ export function PricingTable({ quote, setQuote }) {
           <Table size="small" stickyHeader>
             <TableBody>
               {table.getAllFlatColumns().map((col, index) => (
-                <PricingTableRow key={col.id}>
+                <TableRow key={col.id}>
                   <TableCell variant="head" sx={{ minWidth: 170 }}>
                     {safeFlexRender(
                       col.columnDef.header,
@@ -156,7 +156,7 @@ export function PricingTable({ quote, setQuote }) {
                         ?.getContext(),
                     )}
                   </TableCell>
-                </PricingTableRow>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
