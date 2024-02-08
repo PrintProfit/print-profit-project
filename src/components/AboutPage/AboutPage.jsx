@@ -1,5 +1,5 @@
+import '@fontsource-variable/cormorant';
 import { Box, Button, Typography } from '@mui/material';
-import React from 'react';
 
 // This is one of our simplest components
 // It doesn't have local state,

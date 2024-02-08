@@ -1,3 +1,4 @@
+import '@fontsource-variable/cormorant';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
