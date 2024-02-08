@@ -132,6 +132,15 @@ export function TotalsTable({ quote, setQuote, table }) {
                       ),
                     );
                   }}
+                  inputComponent={/** @type {any} */ (NumericInput)}
+                  // @ts-ignore
+                  inputProps={
+                    /** @type {import('react-number-format').NumericFormatProps} */ ({
+                      allowNegative: false,
+                      min: 0,
+                      max: 100,
+                    })
+                  }
                 />
               ),
             }}
