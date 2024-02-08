@@ -118,7 +118,7 @@ export function PricingTable({ quote, setQuote }) {
   return (
     <Stack direction="row" spacing={2}>
       <TableContainer component={Paper}>
-        <Table size="small">
+        <Table size="small" stickyHeader>
           <TableBody>
             {table.getAllFlatColumns().map((col, index) => (
               <PricingTableRow key={col.id}>
