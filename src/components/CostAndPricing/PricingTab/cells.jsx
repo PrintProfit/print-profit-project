@@ -337,15 +337,16 @@ export function AddCostHeader({ table }) {
 
   return (
     <>
-      <Tooltip title="Add Cost" arrow>
-        <IconButton
-          onClick={() => setOpen(true)}
-          aria-label="Add Cost"
-          size="small"
-        >
-          <Add fontSize="small" />
-        </IconButton>
-      </Tooltip>
+      <Button
+        size="small"
+        // Everything kinda looks bad here
+        variant="contained"
+        // color="primary"
+        endIcon={<Add fontSize="small" />}
+        onClick={() => setOpen(true)}
+      >
+        Add Cost
+      </Button>
       <Dialog
         open={open}
         onClose={closeDialog}
@@ -436,9 +437,10 @@ export function AddProductCell({ table }) {
     <>
       <Tooltip title="Add Product" arrow>
         <IconButton
-          onClick={() => setOpen(true)}
-          aria-label="Add Product"
           size="small"
+          color="primary"
+          aria-label="Add Product"
+          onClick={() => setOpen(true)}
         >
           <Add fontSize="small" />
         </IconButton>
