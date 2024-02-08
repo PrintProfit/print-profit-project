@@ -7,7 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import '../App/Orpheus.ttf';
 
 const drawerWidth = 200;
@@ -34,6 +34,10 @@ export default function AppBarHeader() {
   const handleNavigationToMyAccountPage = () => {
     history.push('/my-account-page');
   };
+
+  const handleNavigationToTools = () => {
+    history.push('/user');
+  };
   const handleLogOut = () => {
     dispatch({ type: 'LOGOUT' });
 
@@ -54,8 +58,15 @@ export default function AppBarHeader() {
             // component="div"
             // fontWeight="bold"
             textAlign={'center'}
-            sx={{ flexGrow: 1, fontSize: 43, color: 'white' }}
+            sx={{
+              flexGrow: 1,
+              fontSize: 43,
+              color: 'white',
+              textDecoration: 'none',
+            }}
             fontFamily={'Orpheus'}
+            component={Link}
+            to="/user"
           >
             Print Profit
           </Typography>
