@@ -4,6 +4,7 @@ import { Add, Delete } from '@mui/icons-material';
 import {
   Box,
   Button,
+  ButtonGroup,
   Dialog,
   DialogActions,
   DialogContent,
@@ -373,8 +374,12 @@ export function AddCostHeader({ table }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button type="submit">Add Cost</Button>
+          <ButtonGroup variant="contained">
+            <Button color="secondary" onClick={closeDialog}>
+              Cancel
+            </Button>
+            <Button type="submit">Add Cost</Button>
+          </ButtonGroup>
         </DialogActions>
       </Dialog>
     </>
@@ -471,8 +476,12 @@ export function AddProductCell({ table }) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
-          <Button type="submit">Add Product</Button>
+          <ButtonGroup variant="contained">
+            <Button color="secondary" onClick={closeDialog}>
+              Cancel
+            </Button>
+            <Button type="submit">Add Product</Button>
+          </ButtonGroup>
         </DialogActions>
       </Dialog>
     </>
