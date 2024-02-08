@@ -117,50 +117,51 @@ export function PricingTable({ quote, setQuote }) {
   // by data field, which is what our rows are.
   return (
     <Stack direction="row" spacing={2}>
-      <TableContainer component={Paper}>
-        <Table size="small" stickyHeader>
-          <TableBody>
-            {table.getAllFlatColumns().map((col, index) => (
-              <PricingTableRow key={col.id}>
-                <TableCell variant="head">
-                  {safeFlexRender(
-                    col.columnDef.header,
-                    table
-                      .getFlatHeaders()
-                      .find((h) => h.id === col.id)
-                      ?.getContext(),
-                  )}
-                </TableCell>
-                {table.getCoreRowModel().rows.map((row) => (
-                  <TableCell key={row.id}>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer>
+          <Table size="small" stickyHeader>
+            <TableBody>
+              {table.getAllFlatColumns().map((col, index) => (
+                <PricingTableRow key={col.id}>
+                  <TableCell variant="head" sx={{ minWidth: 170 }}>
                     {safeFlexRender(
-                      col.columnDef.cell,
-                      row
-                        .getAllCells()
-                        .find((cell) => cell.column.id === col.id)
+                      col.columnDef.header,
+                      table
+                        .getFlatHeaders()
+                        .find((h) => h.id === col.id)
                         ?.getContext(),
                     )}
                   </TableCell>
-                ))}
-                <TableCell>
-                  {/* In the update mode, adding products doesn't work yet. */}
-                  {index === 0 ? <AddProductCell table={table} /> : null}
-                </TableCell>
-                <TableCell variant="footer">
-                  {safeFlexRender(
-                    col.columnDef.footer,
-                    table
-                      .getFooterGroups()
-                      .flatMap((g) => g.headers)
-                      .find((h) => h.id === col.id)
-                      ?.getContext(),
-                  )}
-                </TableCell>
-              </PricingTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  {table.getCoreRowModel().rows.map((row) => (
+                    <TableCell key={row.id} sx={{ minWidth: 170 }}>
+                      {safeFlexRender(
+                        col.columnDef.cell,
+                        row
+                          .getAllCells()
+                          .find((cell) => cell.column.id === col.id)
+                          ?.getContext(),
+                      )}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    {index === 0 ? <AddProductCell table={table} /> : null}
+                  </TableCell>
+                  <TableCell variant="footer">
+                    {safeFlexRender(
+                      col.columnDef.footer,
+                      table
+                        .getFooterGroups()
+                        .flatMap((g) => g.headers)
+                        .find((h) => h.id === col.id)
+                        ?.getContext(),
+                    )}
+                  </TableCell>
+                </PricingTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
       <Stack direction="column" spacing={2}>
         <TotalsTable quote={quote} setQuote={setQuote} table={table} />
         <QuoteActions quote={quote} setQuote={setQuote} />
