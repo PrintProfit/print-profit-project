@@ -272,12 +272,10 @@ export function ProductNameCell({ getValue, table, row }) {
         <Tooltip title="Remove Product" arrow>
           <IconButton
             aria-label="Remove Product"
-            size="small"
             disabled={updateMode}
             onClick={deleteProduct}
-            sx={{ mr: 1, my: 0.5 }}
           >
-            <Delete fontSize="small" />
+            <Delete />
           </IconButton>
         </Tooltip>
       )}
