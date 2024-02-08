@@ -154,7 +154,7 @@ export default function MyAccountPageForm({ setIsForm }) {
             type="password"
             name="password"
             placeholder={'password'}
-            onClick={() => setNewPasswordInput('')}
+            // onClick={() => setNewPasswordInput('')}
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
             label="New Password"
@@ -168,7 +168,7 @@ export default function MyAccountPageForm({ setIsForm }) {
             type="password"
             name="Verify New Password"
             placeholder={'verify new password'}
-            onClick={() => setNewVerifyPasswordInput('')}
+            // onClick={() => setNewVerifyPasswordInput('')}
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
             label="Verify New Password"
@@ -179,6 +179,10 @@ export default function MyAccountPageForm({ setIsForm }) {
           onClick={handleComfirmationClickOpen}
           variant="contained"
           type="button"
+          sx={{
+            mb: 5,
+            mr: 2,
+          }}
         >
           <SaveIcon /> Save Changes
         </Button>
@@ -187,6 +191,10 @@ export default function MyAccountPageForm({ setIsForm }) {
           onClick={handleDiscardClickOpen}
           variant="outlined"
           type="button"
+          sx={{
+            mb: 5,
+            ml: 2,
+          }}
         >
           <DeleteIcon /> Discard Changes
         </Button>
