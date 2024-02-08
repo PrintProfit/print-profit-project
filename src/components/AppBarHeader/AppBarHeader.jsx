@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import '../App/Orpheus.ttf';
 
 const drawerWidth = 200;
 
