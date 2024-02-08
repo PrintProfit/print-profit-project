@@ -50,8 +50,8 @@ function PendingAdminPage({ pendingUser }) {
     setOpenApproval(false);
 
     // emailjs
-    //   .send('service_596xcui', 'template_79hnsdn', templateParams, {
-    //     publicKey: 'AHgPPyj4SiCZqSRfw',
+    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_APPROVED_TEMPLATE_ID, templateParams, {
+    //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
     //   })
     //   .then(
     //     () => {
