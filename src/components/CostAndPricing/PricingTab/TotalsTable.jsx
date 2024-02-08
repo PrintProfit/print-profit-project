@@ -15,6 +15,7 @@ import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
 import * as fmt from './formats';
+import { NumericInput } from './inputs';
 import { unique } from './utils';
 
 /**
@@ -77,6 +78,7 @@ export function TotalsTable({ quote, setQuote, table }) {
                     ),
                   );
                 }}
+                inputComponent={/** @type {any} */ (NumericInput)}
               />
             </TableCell>
           </TableRow>

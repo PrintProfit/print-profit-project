@@ -209,6 +209,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
+      inputComponent={/** @type {any} */ (NumericInput)}
     />
   );
 }
