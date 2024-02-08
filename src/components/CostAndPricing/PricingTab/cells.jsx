@@ -437,7 +437,7 @@ export function AddProductCell({ table }) {
     <>
       <Tooltip title="Add Product" arrow>
         <IconButton
-          size="small"
+          // size="small"
           color="primary"
           aria-label="Add Product"
           onClick={() => setOpen(true)}
