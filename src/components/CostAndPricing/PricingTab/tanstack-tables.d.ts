@@ -8,6 +8,7 @@ declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
     setQuote: Dispatch<SetStateAction<Quote>>;
     updateMode: boolean;
+    costNames: string[];
   }
   interface ColumnMeta<TData extends RowData, TValue> {
     inputMode?: InputProps['inputMode'];

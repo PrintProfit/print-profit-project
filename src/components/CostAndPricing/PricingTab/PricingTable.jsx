@@ -39,6 +39,9 @@ export function PricingTable({ quote, setQuote }) {
   // @ts-ignore
   const updateMode = useSelector((state) => state.quote.updateMode);
 
+  const costNames = quote.products
+    .flatMap((product) => product.costs.map((cost) => cost.name))
+    .filter(unique);
   /**
    * The dynamic columns that the table uses. They're generated from the frist
    * product's costs.
@@ -55,24 +58,21 @@ export function PricingTable({ quote, setQuote }) {
    * the `.filter` call removes duplicates names.
    * @type {import('./data-types').ProductColumnDef[]}
    */
-  const dynamicColumns = quote.products
-    .flatMap((product) => product.costs.map((cost) => cost.name))
-    .filter(unique)
-    .map((name) => ({
-      // The ID is how we can use getValue for calculations.
-      id: `dynamic-cost-${name}`,
-      accessorFn: (row) => row.costs.find((c) => c.name === name)?.value ?? 0,
-      header: DynamicCostHeader,
-      cell: DynamicCostCell,
-      aggregationFn: 'sum',
-      footer: ({ table }) => {
-        const total = aggregate(table, `dynamic-cost-${name}`);
-        return fmt.currency(total);
-      },
-      meta: {
-        costName: name,
-      },
-    }));
+  const dynamicColumns = costNames.map((name) => ({
+    // The ID is how we can use getValue for calculations.
+    id: `dynamic-cost-${name}`,
+    accessorFn: (row) => row.costs.find((c) => c.name === name)?.value ?? 0,
+    header: DynamicCostHeader,
+    cell: DynamicCostCell,
+    aggregationFn: 'sum',
+    footer: ({ table }) => {
+      const total = aggregate(table, `dynamic-cost-${name}`);
+      return fmt.currency(total);
+    },
+    meta: {
+      costName: name,
+    },
+  }));
 
   /**
    * All the columns the table uses.
@@ -95,6 +95,7 @@ export function PricingTable({ quote, setQuote }) {
     meta: {
       setQuote,
       updateMode,
+      costNames,
     },
   });
 
