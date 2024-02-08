@@ -75,7 +75,7 @@ function RegisterForm() {
         <TextField
           id="email"
           type="text"
-          label="e-mail"
+          label="E-mail"
           variant="outlined"
           value={email}
           required
@@ -102,7 +102,7 @@ function RegisterForm() {
         <TextField
           id="password"
           type="password"
-          label="password"
+          label="Password"
           variant="outlined"
           value={password}
           required
