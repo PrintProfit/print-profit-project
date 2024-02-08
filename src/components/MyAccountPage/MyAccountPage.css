@@ -39,29 +39,41 @@
 }
 
 .invalidHeader {
-  position: absolute;
-  top: 17%;
-  right: 25%;
+  position: relative;
+  /* top: -171%; */
+  /* right: 25%; */
+  padding: 0px;
+  margin: 0px;
+  margin-top: -35px;
   color: #d3302f;
 }
 
 .nameErrorText {
-  position: absolute;
-  top: 21.5%;
-  right: 31.7%;
+  /* position: absolute; */
+  padding: 0px;
+  margin: 0px;
+  /* top: 21.5%;
+  right: 31.7%; */
   color: #d3302f;
+  font-size: 15px;
 }
 
 .emailErrorText {
-  position: absolute;
-  top: 31.5%;
-  right: 31.7%;
+  /* position: absolute; */
+  padding: 0px;
+  margin: 0px;
+  /* top: 31.5%;
+  right: 31.7%; */
   color: #d3302f;
+  font-size: 15px;
 }
 
 .passwordErrorText {
-  position: absolute;
-  top: 51.4%;
-  right: 27%;
+  /* position: absolute; */
+  padding: 0px;
+  margin: 0px;
+  /* top: 47%;
+  right: 27%; */
   color: #d3302f;
+  font-size: 15px;
 }

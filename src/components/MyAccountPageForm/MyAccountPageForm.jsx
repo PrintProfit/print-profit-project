@@ -129,8 +129,8 @@ export default function MyAccountPageForm({ setIsForm }) {
 
   return (
     <div className="">
+      <h3 className="invalidHeader">{invalidText}</h3>
       <form marginTop={2}>
-        <h3 className="invalidHeader">{invalidText}</h3>
         <section>
           <FormLabel sx={{ mt: 5 }}>Name:</FormLabel>
 
@@ -143,11 +143,15 @@ export default function MyAccountPageForm({ setIsForm }) {
             onChange={(e) => handleNameChange(e.target.value)}
             required
             label="New Name"
+            color={userName.name === '' ? 'error' : ''}
             sx={{
               mt: 5,
               width: '20ch',
             }}
           />
+          <h5 className="nameErrorText">
+            {userName.name === '' ? 'you must enter a valid name' : ''}
+          </h5>
         </section>
 
         <section>
@@ -159,12 +163,16 @@ export default function MyAccountPageForm({ setIsForm }) {
             placeholder={profileUser.email}
             value={userEmail.email}
             onChange={(e) => handleEmailChange(e.target.value)}
+            color={userEmail.email === '' ? 'error' : ''}
             required
             label="New Email"
             sx={{
               width: '20ch',
             }}
           />
+          <h5 className="emailErrorText">
+            {userEmail.email === '' ? 'you must enter a valid email' : ''}
+          </h5>
         </section>
 
         <section>
@@ -175,13 +183,27 @@ export default function MyAccountPageForm({ setIsForm }) {
             type="password"
             name="password"
             placeholder={'password'}
+            color={
+              newPasswordInput.length < 8 && newPasswordInput !== ''
+                ? 'error'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'error'
+                  : ''
+            }
             // onClick={() => setNewPasswordInput('')}
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
             label="Enter new password"
           />
         </section>
-
+        <h5 className="passwordErrorText">
+          {' '}
+          {newPasswordInput.length < 8 && newPasswordInput !== ''
+            ? 'password must be 8 or more characters'
+            : newPasswordInput !== newVerifyPasswordInput
+              ? 'passwords do not match'
+              : ''}
+        </h5>
         <section>
           <FormLabel>Verify New Password:</FormLabel>
 
@@ -190,6 +212,13 @@ export default function MyAccountPageForm({ setIsForm }) {
             type="password"
             name="Verify New Password"
             placeholder={'verify new password'}
+            color={
+              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
+                ? 'error'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'error'
+                  : ''
+            }
             // onClick={() => setNewVerifyPasswordInput('')}
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
@@ -221,22 +250,22 @@ export default function MyAccountPageForm({ setIsForm }) {
         >
           <DeleteIcon /> Discard Changes
         </Button>
-        <h5 className="nameErrorText">
+        {/* <h5 className="nameErrorText">
           {userName.name === '' ? 'you must enter a valid name' : ''}
-        </h5>
+        </h5> */}
 
-        <h5 className="emailErrorText">
+        {/* <h5 className="emailErrorText">
           {userEmail.email === '' ? 'you must enter a valid email' : ''}
-        </h5>
+        </h5> */}
 
-        <h5 className="passwordErrorText">
+        {/* <h5 className="passwordErrorText">
           {' '}
           {newPasswordInput.length < 8 && newPasswordInput !== ''
             ? 'password must be 8 or more characters'
             : newPasswordInput !== newVerifyPasswordInput
               ? 'passwords do not match'
               : ''}
-        </h5>
+        </h5> */}
       </form>
 
       {/* Discard Dialog */}
