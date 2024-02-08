@@ -337,11 +337,7 @@ export function AddCostHeader({ table }) {
   };
 
   // We need to ensure that the cost name is unique.
-  const costNameExists = table
-    .getAllFlatColumns()
-    .map((c) => c.columnDef.meta?.costName)
-    .filter(Boolean)
-    .includes(costName);
+  const costNameExists = table.options.meta?.costNames.includes(costName);
 
   return (
     <>
