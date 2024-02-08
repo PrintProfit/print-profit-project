@@ -5,7 +5,7 @@
 // These are additional environment variables needed in .env files.
 interface ImportMetaEnv {
   /** The service ID for EmailJS */
-  readonly EMAILJS_SERVICE_ID: string;
+  readonly VITE_EMAILJS_SERVICE_ID: string;
   /** The public key for EmailJS */
-  readonly EMAILJS_PUBLIC_KEY: string;
+  readonly VITE_EMAILJS_PUBLIC_KEY: string;
 }
