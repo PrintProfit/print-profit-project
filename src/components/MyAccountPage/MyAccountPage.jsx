@@ -1,5 +1,6 @@
 import EditIcon from '@mui/icons-material/Edit';
 import {
+  Box,
   Button,
   Table,
   TableBody,
@@ -8,6 +9,7 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,7 +36,7 @@ export default function MyAccountPage() {
     if (isForm) {
       return (
         <>
-          <MyAccountPageForm setIsForm={setIsForm} />
+          <MyAccountPageForm setIsForm={setIsForm} sx={{ mt: 5 }} />
         </>
       );
     }
@@ -64,6 +66,8 @@ export default function MyAccountPage() {
                 onClick={toggleForm}
                 type="button"
               >
+                <Typography> Edit info</Typography>
+
                 <EditIcon sx={{ color: 'black' }} />
               </Button>
             </Table>
