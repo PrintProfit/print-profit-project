@@ -9,14 +9,13 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
-import { TotalsTableRow } from './stylized';
+import { TotalsTableRow as TableRow } from './stylized';
 import { unique } from './utils';
 
 /**
@@ -58,7 +57,7 @@ export function TotalsTable({ quote, setQuote, table }) {
         </TableHead>
         <TableBody>
           {/* Total Variable Costs Row */}
-          <TotalsTableRow>
+          <TableRow>
             <TableCell variant="head">Total Variable Costs</TableCell>
             <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
             <TableCell>
@@ -82,7 +81,7 @@ export function TotalsTable({ quote, setQuote, table }) {
                 inputComponent={/** @type {any} */ (NumericInput)}
               />
             </TableCell>
-          </TotalsTableRow>
+          </TableRow>
           {dynamicCostNames.map((name) => (
             <SimpleTotalsTableRow
               key={name}
@@ -171,19 +170,19 @@ function ContributionRows({
   return (
     <>
       {/* Contribution Row */}
-      <TotalsTableRow>
+      <TableRow>
         <TableCell variant="head">Contribution</TableCell>
         <TableCell>{fmt.currency(targetContrib)}</TableCell>
         <TableCell>{fmt.currency(manualContrib)}</TableCell>
-      </TotalsTableRow>
+      </TableRow>
       {/* Contribution Margin Row */}
-      <TotalsTableRow>
+      <TableRow>
         <TableCell variant="head">Contribution %</TableCell>
         <TableCell>{marginInput}</TableCell>
         <TableCell>{fmt.percent(manualContrib / manualPrice)}</TableCell>
-      </TotalsTableRow>
+      </TableRow>
       {/* Contribution Per Hour Row */}
-      <TotalsTableRow>
+      <TableRow>
         <TableCell variant="head">Contribution / Hr</TableCell>
         <TableCell>
           {fmt.currency(targetContrib / estimatedTotalHours)}
@@ -191,7 +190,7 @@ function ContributionRows({
         <TableCell>
           {fmt.currency(manualContrib / estimatedTotalHours)}
         </TableCell>
-      </TotalsTableRow>
+      </TableRow>
     </>
   );
 }
@@ -208,11 +207,11 @@ function SimpleTotalsTableRow({ table, column, title }) {
   );
 
   return (
-    <TotalsTableRow>
+    <TableRow>
       <TableCell variant="head">{title}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
-    </TotalsTableRow>
+    </TableRow>
   );
 }
 
