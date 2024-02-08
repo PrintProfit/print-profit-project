@@ -15,19 +15,19 @@ export const RecoverUserBody = z.object({
 });
 
 export const CreateCompanyBody = z.object({
-  newCompanyName: z.string(),
+  newCompanyName: z.string().trim().min(1).max(100),
 });
 
 export const CreateUserBody = z.object({
-  email: z.string().email(),
+  email: z.string().trim().email().max(100),
   password: z.string().min(8),
-  name: z.string(),
+  name: z.string().trim().min(1).max(200),
   companyId: z.coerce.number().positive().int(),
 });
 
 export const CreateCompanyUserBody = z.object({
-  companyName: z.string(),
-  email: z.string().email(),
-  name: z.string(),
+  companyName: z.string().trim().min(1).max(100),
+  email: z.string().trim().email().max(100),
+  name: z.string().trim().min(1).max(200),
   password: z.string().min(8),
 });

@@ -8,22 +8,42 @@ const WithId = z.object({
 // A lot more of this can be null than I would have thought.
 
 const BaseCost = z.object({
-  name: z.string().max(100),
-  value: z.coerce.number().finite(),
+  name: z.string().trim().min(1).max(100),
+  value: z.coerce.number().nonnegative().finite().safe(),
 });
 
 const BaseProduct = z.object({
-  name: z.string().max(100),
-  quantity: z.coerce.number().int().optional(),
-  selling_price_per_unit: z.coerce.number().finite().optional(),
-  total_selling_price: z.coerce.number().finite().optional(),
-  estimated_hours: z.coerce.number().int().optional(),
+  name: z.string().trim().min(1).max(100),
+  quantity: z.coerce.number().int().nonnegative().optional(),
+  selling_price_per_unit: z.coerce
+    .number()
+    .nonnegative()
+    .finite()
+    .safe()
+    .optional(),
+  total_selling_price: z.coerce
+    .number()
+    .nonnegative()
+    .finite()
+    .safe()
+    .optional(),
+  estimated_hours: z.coerce.number().int().nonnegative().optional(),
 });
 
 const BaseQuote = z.object({
-  name: z.string().max(100),
-  manual_contribution_percent: z.coerce.number().nonnegative().int().optional(),
-  manual_total_selling_price: z.coerce.number().finite().optional(),
+  name: z.string().trim().max(100).min(1),
+  manual_contribution_percent: z.coerce
+    .number()
+    .int()
+    .nonnegative()
+    .max(100)
+    .optional(),
+  manual_total_selling_price: z.coerce
+    .number()
+    .nonnegative()
+    .finite()
+    .safe()
+    .optional(),
 });
 
 // This is done via merging so update routes can also construct a schema.
