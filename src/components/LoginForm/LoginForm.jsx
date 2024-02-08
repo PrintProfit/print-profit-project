@@ -4,7 +4,6 @@ import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import './aesthetically_pleasing_rectangles.css';
 
 function LoginForm() {
   const [email, setEmail] = useState('');

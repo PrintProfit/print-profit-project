@@ -20,13 +20,6 @@ function LoginPage() {
         }}
       >
         <LoginForm />
-        {/* <Button
-          onClick={() => {
-            history.push('/registration');
-          }}
-          >
-          Register
-        </Button> */}
       </Box>
     </div>
   );
