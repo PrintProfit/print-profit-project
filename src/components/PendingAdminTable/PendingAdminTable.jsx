@@ -14,7 +14,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
-import DoneIcon from '@mui/icons-material/Done';
+
+import emailjs from '@emailjs/browser';
 
 const filter = createFilterOptions();
 
@@ -39,9 +40,27 @@ function PendingAdminPage({ pendingUser }) {
     setOpenApproval(false);
   };
 
+  const templateParams = {
+    from_name: pendingUser.user_name,
+    from_email: pendingUser.email,
+  };
+
   // conditonally sends approval dispatch
   const approveUser = (companyInput) => {
     setOpenApproval(false);
+
+    // emailjs
+    //   .send('service_596xcui', 'template_79hnsdn', templateParams, {
+    //     publicKey: 'AHgPPyj4SiCZqSRfw',
+    //   })
+    //   .then(
+    //     () => {
+    //       console.log('SUCCESS!');
+    //     },
+    //     (error) => {
+    //       console.log('FAILED...', error.text);
+    //     },
+    //   );
 
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
@@ -113,7 +132,7 @@ function PendingAdminPage({ pendingUser }) {
           variant="contained"
           onClick={handleApprovalClickOpen}
         >
-          <CheckCircleIcon /> <DoneIcon /> Approve
+          <CheckCircleIcon /> Approve
         </Button>
       </TableCell>
       <TableCell align="center">
