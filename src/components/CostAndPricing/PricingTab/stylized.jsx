@@ -6,6 +6,8 @@ export const PricingTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   [`& > .${tableCellClasses.head}`]: {
+    // I really want to reduce the width of the head cells when they have
+    // inputs in them, but I have no idea how to do that.
     borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
