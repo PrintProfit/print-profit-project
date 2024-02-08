@@ -1,26 +1,10 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import SvgIcon from '@mui/material/SvgIcon';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import './LandingPage.css';
-
-/**
- * 
- * 
- <Grid
-  container
-  spacing={0}
-  direction="column"
-  alignItems="center"
-  justifyContent="center"
-  sx={{ minHeight: '100vh' }}
->
-  <Grid item xs={3}>
-    <LoginForm />
-  </Grid>
-</Grid>
- */
 
 import RegisterForm from '../RegisterForm/RegisterForm';
 
@@ -32,28 +16,32 @@ function LandingPage() {
   };
 
   return (
-    <Grid
-      container
-      spacing={0}
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: '100vh' }}
-    >
-      <Grid container justifyContent="flex-end">
-        <Button>hey there Square</Button>
-      </Grid>
-      <h2>Print Profit</h2>
-
-      <RegisterForm />
-
-      <div>
-        <h4>Already a Member?</h4>
-        <Button type="button" onClick={onLogin}>
-          Login
-        </Button>
-      </div>
-    </Grid>
+    <>
+      <Box
+        sx={{
+          backgroundImage: "url('public/images/printProfitBg.png')",
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          height: '100vh',
+          display: 'flex',
+          margin: 0,
+        }}
+      >
+        <Box
+          direction="column"
+          alignItems="center"
+          sx={{
+            minHeight: '100vh',
+            marginLeft: 'auto',
+            marginRight: 17,
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <RegisterForm />
+        </Box>
+      </Box>
+    </>
   );
 }
 
