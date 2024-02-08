@@ -212,7 +212,6 @@ function SimpleTotalsTableRow({ table, column, title }) {
       <TableCell variant="head">{title}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
-      {/* <TableCell>{context && flexRender(footer, context)}</TableCell> */}
     </TotalsTableRow>
   );
 }
