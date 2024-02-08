@@ -78,6 +78,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
     <TableTextField
       size="small"
       inputMode="decimal"
+      fullWidth
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
@@ -145,6 +146,7 @@ export function DynamicCostHeader({ column, table }) {
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
       <TableTextField
         size="small"
+        fullWidth
         value={costName}
         onChange={(e) => setCostName(e.target.value)}
         onBlur={onBlur}
@@ -203,16 +205,11 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   return (
     <TableTextField
       size="small"
-      // startAdornment={
-      //   adornment && (
-      //     <InputAdornment position="start">{adornment}</InputAdornment>
-      //   )
-      // }
+      fullWidth
       inputMode={inputMode}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
-      // inputComponent={/** @type {any} */ (NumericInput)}
       InputProps={{
         startAdornment: adornment && (
           <InputAdornment position="start">{adornment}</InputAdornment>
@@ -266,6 +263,7 @@ export function ProductNameCell({ getValue, table, row }) {
     <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
       <TextField
         size="small"
+        fullWidth
         value={value}
         onChange={(e) => setValue(e.target.value)}
         onBlur={onBlur}
@@ -277,6 +275,7 @@ export function ProductNameCell({ getValue, table, row }) {
             size="small"
             disabled={updateMode}
             onClick={deleteProduct}
+            sx={{ mr: 1, my: 0.5 }}
           >
             <Delete fontSize="small" />
           </IconButton>
