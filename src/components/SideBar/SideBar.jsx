@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -47,7 +48,19 @@ export default function SideBar({ children }) {
         </div>
 
         <List sx={{ height: '100%', textAlign: 'center' }}>
-          <h3>User tools</h3>
+          <ListItem disablePadding>
+            <ListItemButton component={Link} to="/user">
+              <ListItemText
+                disableTypography
+                primary={
+                  <Typography sx={{ fontWeight: 'bold' }}>
+                    User Tools
+                  </Typography>
+                }
+                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
+              />
+            </ListItemButton>
+          </ListItem>
           <Divider />
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/cost-and-pricing">
