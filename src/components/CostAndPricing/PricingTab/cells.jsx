@@ -336,6 +336,13 @@ export function AddCostHeader({ table }) {
     closeDialog();
   };
 
+  // We need to ensure that the cost name is unique.
+  const costNameExists = table
+    .getAllFlatColumns()
+    .map((c) => c.columnDef.meta?.costName)
+    .filter(Boolean)
+    .includes(costName);
+
   return (
     <>
       <Button
@@ -371,6 +378,8 @@ export function AddCostHeader({ table }) {
             fullWidth
             value={costName}
             onChange={(e) => setCostName(e.target.value)}
+            error={costNameExists}
+            helperText={costNameExists && 'Cost name already exists'}
           />
         </DialogContent>
         <DialogActions>
@@ -378,7 +387,9 @@ export function AddCostHeader({ table }) {
             <Button color="secondary" onClick={closeDialog}>
               Cancel
             </Button>
-            <Button type="submit">Add Cost</Button>
+            <Button type="submit" disabled={costNameExists}>
+              Add Cost
+            </Button>
           </ButtonGroup>
         </DialogActions>
       </Dialog>
