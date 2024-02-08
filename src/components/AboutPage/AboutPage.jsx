@@ -10,7 +10,7 @@ function AboutPage() {
   return (
     <div className="container">
       <Typography
-        fontFamily={'Orpheus'}
+        fontFamily="Cormorant Variable"
         sx={{
           flexGrow: 1,
           fontSize: 26,
@@ -35,7 +35,7 @@ function AboutPage() {
           }}
         >
           <Typography
-            fontFamily={'Orpheus'}
+            fontFamily="Cormorant Variable"
             sx={{
               fontSize: 20,
               mb: 2,

@@ -64,7 +64,8 @@ export default function AppBarHeader() {
               color: 'white',
               textDecoration: 'none',
             }}
-            fontFamily={'Orpheus'}
+            fontFamily="Cormorant Variable"
+            fontWeight="semibold"
             component={Link}
             to="/user"
           >
