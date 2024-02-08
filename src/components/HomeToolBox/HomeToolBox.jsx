@@ -1,21 +1,26 @@
 import { Box } from '@mui/material';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 export default function HomeToolBox() {
+  const history = useHistory();
+  const navigateToCostPricingTool = () => {
+    history.push('/cost-and-pricing');
+  };
+
   return (
     <>
       <Box>
-        <Box border={3}>
+        <Box border={3} onClick={navigateToCostPricingTool}>
           <h2>Cost & Pricing Tool</h2>
         </Box>
-        <Box marginTop={1} border={2}>
+        <Box marginTop={1} border={2} padding={1}>
           <p>
-            This tool is a multi purpose tool to help printers to up their game.
-            Print shop gives customer a quote for the order and feels confident
-            knowing the true costs and how much profit there is.
+            Keep track of multi-product order labor and material costs and
+            calculate profit margins, all in one place.
           </p>
         </Box>
-        <h3>Tutorial</h3>
+        <h3>Video demo</h3>
       </Box>
     </>
   );

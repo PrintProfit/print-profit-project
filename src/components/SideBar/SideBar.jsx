@@ -74,7 +74,7 @@ export default function SideBar({ children }) {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/tool-two">
               <ListItemText
-                primary="Tool 2"
+                primary="Profit metrics"
                 sx={{ textAlign: 'center', color: 'primary.contrastText' }}
               />
             </ListItemButton>
@@ -84,7 +84,7 @@ export default function SideBar({ children }) {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/tool-three">
               <ListItemText
-                primary="Tool 3"
+                primary="Decision making"
                 sx={{ textAlign: 'center', color: 'primary.contrastText' }}
               />
             </ListItemButton>

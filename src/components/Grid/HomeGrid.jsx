@@ -1,7 +1,4 @@
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
+import { Box, Grid, Paper, styled } from '@mui/material';
 import * as React from 'react';
 import HomeToolBox from '../HomeToolBox/HomeToolBox';
 
@@ -24,12 +21,33 @@ export default function HomeGrid() {
         </Grid>
         <Grid item xs>
           <Item>
-            <HomeToolBox />
+            <Box>
+              <Box border={3}>
+                <h2>Profit metrics</h2>
+              </Box>
+              <Box marginTop={1} border={2} padding={1}>
+                <p>
+                  See shop labor and material costs over time in this data
+                  visualizer.
+                </p>
+              </Box>
+              <h3>Video demo</h3>
+            </Box>
           </Item>
         </Grid>
         <Grid item xs>
           <Item>
-            <HomeToolBox />
+            <Box>
+              <Box border={3}>
+                <h2>Decision making</h2>
+              </Box>
+              <Box marginTop={1} border={2} padding={1}>
+                <p>
+                  Simplify complex decision-making with this customizable tool.
+                </p>
+              </Box>
+              <h3>Video demo</h3>
+            </Box>
           </Item>
         </Grid>
       </Grid>
