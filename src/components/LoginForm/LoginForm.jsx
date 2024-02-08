@@ -1,5 +1,7 @@
+import { Paper } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -33,14 +35,10 @@ function LoginForm() {
    */
 
   return (
-    <>
+    <Box className="formPanel">
       <Box
-        alignItems="center"
         sx={{
           flexDirection: 'column',
-          minHeight: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
         }}
         paddingTop={5}
       >
@@ -53,8 +51,9 @@ function LoginForm() {
               {errors.loginMessage}
             </h3>
           )}
-          <Box sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}>
+          <Box>
             <TextField
+              sx={{ pb: 2 }}
               id="email"
               type="text"
               label="e-mail"
@@ -64,6 +63,7 @@ function LoginForm() {
               onChange={(event) => setEmail(event.target.value)}
             />
             <TextField
+              sx={{ pb: 2 }}
               id="password"
               type="password"
               label="password"
@@ -85,7 +85,7 @@ function LoginForm() {
           Register
         </Button>
       </Box>
-    </>
+    </Box>
   );
 }
 
