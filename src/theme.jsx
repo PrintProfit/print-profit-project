@@ -17,19 +17,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: 'Source Sans Pro, sans-serif',
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: `@font-face{
-          font-family: 'Source Sans Pro';
-          font-style: normal;
-          font-display: swap;
-          font-weight: 100;
-        }
-      }
-        `,
-    },
+    fontFamily: '"Source Sans 3 Variable", sans-serif',
   },
 });
 
