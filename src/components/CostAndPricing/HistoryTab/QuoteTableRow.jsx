@@ -69,7 +69,9 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell> </TableCell>
+                    <TableCell>
+                      <Typography fontWeight="bold">Products:</Typography>
+                    </TableCell>
                     {/* TO-DO: loop through quote object and insert TableCell for each cost input name */}
                     {row.products?.map((product) => (
                       <TableCell>{product.name}</TableCell>
