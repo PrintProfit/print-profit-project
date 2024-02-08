@@ -18,6 +18,7 @@ import {
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import * as fmt from './formats';
+import { NumericInput } from './inputs';
 import { unique } from './utils';
 
 /**
@@ -80,6 +81,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       value={value}
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
+      inputComponent={/** @type {any} */ (NumericInput)}
     />
   );
 }

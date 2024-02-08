@@ -94,3 +94,8 @@ export interface PricingTabProps {
   readonly quote: Quote;
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }
+
+export interface InputExtraProps {
+  onChange: (event: { target: { name: string; value: string } }) => void;
+  name: string;
+}
