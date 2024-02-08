@@ -160,7 +160,7 @@ export const contributionColumns = [
   },
   {
     accessorFn: calc.contributionPerHour,
-    header: 'Contribution / Hr',
+    header: 'Contribution / Hour',
     cell: DollarCell,
     footer: ({ table }) => {
       const totalContribution = aggregate(table, 'contributionDollars') ?? 0;

@@ -51,14 +51,14 @@ export function TotalsTable({ quote, setQuote, table }) {
         <TableHead>
           <TableRow>
             <TableCell>{/* Padding for correct layout */}</TableCell>
-            <TableCell>Price on target CM%</TableCell>
+            <TableCell>Price on target contribution %</TableCell>
             <TableCell>Price on manual entry</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* Total Variable Costs Row */}
+          {/* Total Selling Price Row */}
           <TableRow>
-            <TableCell variant="head">Total Variable Costs</TableCell>
+            <TableCell variant="head">Total Selling Price</TableCell>
             <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
             <TableCell>
               <Input
@@ -183,7 +183,7 @@ function ContributionRows({
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
-        <TableCell variant="head">Contribution / Hr</TableCell>
+        <TableCell variant="head">Contribution / Hour</TableCell>
         <TableCell>
           {fmt.currency(targetContrib / estimatedTotalHours)}
         </TableCell>
