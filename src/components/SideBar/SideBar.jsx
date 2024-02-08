@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Typography, styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
@@ -6,7 +6,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -50,53 +49,40 @@ export default function SideBar({ children }) {
         <List sx={{ height: '100%', textAlign: 'center' }}>
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/user">
-              <ListItemText
+              <SidebarListItemText
                 disableTypography
                 primary={
                   <Typography sx={{ fontWeight: 'bold' }}>
                     User Tools
                   </Typography>
                 }
-                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
               />
             </ListItemButton>
           </ListItem>
           <Divider />
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/cost-and-pricing">
-              <ListItemText
-                primary="Cost and pricing"
-                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
-              />
+              <SidebarListItemText primary="Cost and pricing" />
             </ListItemButton>
           </ListItem>
           <Divider />
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/tool-two">
-              <ListItemText
-                primary="Profit metrics"
-                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
-              />
+              <SidebarListItemText primary="Profit metrics" />
             </ListItemButton>
           </ListItem>
           <Divider />
 
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/tool-three">
-              <ListItemText
-                primary="Decision making"
-                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
-              />
+              <SidebarListItemText primary="Decision making" />
             </ListItemButton>
           </ListItem>
           <Divider />
 
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/about">
-              <ListItemText
-                primary="About"
-                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
-              />
+              <SidebarListItemText primary="About" />
             </ListItemButton>
           </ListItem>
           <Divider />
@@ -114,10 +100,7 @@ export default function SideBar({ children }) {
               <Divider />
               <ListItem disablePadding>
                 <ListItemButton component={Link} to="/admin">
-                  <ListItemText
-                    primary="Admin"
-                    sx={{ textAlign: 'center', color: 'primary.contrastText' }}
-                  />
+                  <SidebarListItemText primary="Admin" />
                 </ListItemButton>
               </ListItem>
             </>
@@ -126,10 +109,7 @@ export default function SideBar({ children }) {
           <Divider />
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/contact">
-              <ListItemText
-                primary="Contact"
-                sx={{ textAlign: 'center', color: 'primary.contrastText' }}
-              />
+              <SidebarListItemText primary="Contact" />
             </ListItemButton>
           </ListItem>
         </List>
@@ -148,3 +128,8 @@ export default function SideBar({ children }) {
     </Box>
   );
 }
+
+const SidebarListItemText = styled(ListItemText)(({ theme }) => ({
+  textAlign: 'center',
+  color: '#646765',
+}));
