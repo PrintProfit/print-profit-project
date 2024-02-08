@@ -16,8 +16,9 @@ function LandingPage() {
   };
 
   return (
-    <>
+    <div>
       <Box
+        classname="landingPageBox"
         sx={{
           backgroundImage: "url('public/images/printProfitBg.png')",
           backgroundSize: 'cover',
@@ -33,7 +34,6 @@ function LandingPage() {
           sx={{
             minHeight: '100vh',
             marginLeft: 'auto',
-            marginRight: 17,
             display: 'flex',
             justifyContent: 'center',
           }}
@@ -41,7 +41,7 @@ function LandingPage() {
           <RegisterForm />
         </Box>
       </Box>
-    </>
+    </div>
   );
 }
 

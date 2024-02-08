@@ -8,26 +8,27 @@ function LoginPage() {
   const history = useHistory();
 
   return (
-    <Box
-      component="form"
-      direction="column"
-      alignItems="center"
-      sx={{
-        '& > :not(style)': { m: 1, width: '25ch' },
-        display: 'flex',
-        justifyContent: 'center',
-      }}
-    >
-      <LoginForm />
-      {/* <Button
+    <div>
+      <Box
+        component="form"
+        direction="column"
+        alignItems="center"
+        sx={{
+          '& > :not(style)': { m: 1, width: '25ch' },
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <LoginForm />
+        {/* <Button
           onClick={() => {
             history.push('/registration');
           }}
-        >
+          >
           Register
         </Button> */}
-      <center></center>
-    </Box>
+      </Box>
+    </div>
   );
 }
 
