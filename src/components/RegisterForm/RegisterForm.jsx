@@ -26,18 +26,18 @@ function RegisterForm() {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
     }
 
-    emailjs
-      .send('service_596xcui', 'template_98dektt', templateParams, {
-        publicKey: 'AHgPPyj4SiCZqSRfw',
-      })
-      .then(
-        () => {
-          console.log('SUCCESS!');
-        },
-        (error) => {
-          console.log('FAILED...', error.text);
-        },
-      );
+    // emailjs
+    //   .send('service_596xcui', 'template_98dektt', templateParams, {
+    //     publicKey: 'AHgPPyj4SiCZqSRfw',
+    //   })
+    //   .then(
+    //     () => {
+    //       console.log('SUCCESS!');
+    //     },
+    //     (error) => {
+    //       console.log('FAILED...', error.text);
+    //     },
+    //   );
 
     dispatch({
       type: 'REGISTER',
