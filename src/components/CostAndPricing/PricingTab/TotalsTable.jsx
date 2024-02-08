@@ -16,6 +16,7 @@ import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
+import { TotalsTableRow } from './stylized';
 import { unique } from './utils';
 
 /**
@@ -57,7 +58,7 @@ export function TotalsTable({ quote, setQuote, table }) {
         </TableHead>
         <TableBody>
           {/* Total Variable Costs Row */}
-          <TableRow>
+          <TotalsTableRow>
             <TableCell variant="head">Total Variable Costs</TableCell>
             <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
             <TableCell>
@@ -81,26 +82,26 @@ export function TotalsTable({ quote, setQuote, table }) {
                 inputComponent={/** @type {any} */ (NumericInput)}
               />
             </TableCell>
-          </TableRow>
+          </TotalsTableRow>
           {dynamicCostNames.map((name) => (
-            <TotalsTableRow
+            <SimpleTotalsTableRow
               key={name}
               table={table}
               column={`dynamic-cost-${name}`}
               title={name}
             />
           ))}
-          <TotalsTableRow
+          <SimpleTotalsTableRow
             table={table}
             column="creditCardFee"
             title="Credit Card Fee"
           />
-          <TotalsTableRow
+          <SimpleTotalsTableRow
             table={table}
             column="totalVariableCosts"
             title="Total Variable Costs"
           />
-          <TotalsTableRow
+          <SimpleTotalsTableRow
             table={table}
             column="estimated_hours"
             title="Estimated Hours"
@@ -170,19 +171,19 @@ function ContributionRows({
   return (
     <>
       {/* Contribution Row */}
-      <TableRow>
+      <TotalsTableRow>
         <TableCell variant="head">Contribution</TableCell>
         <TableCell>{fmt.currency(targetContrib)}</TableCell>
         <TableCell>{fmt.currency(manualContrib)}</TableCell>
-      </TableRow>
+      </TotalsTableRow>
       {/* Contribution Margin Row */}
-      <TableRow>
+      <TotalsTableRow>
         <TableCell variant="head">Contribution %</TableCell>
         <TableCell>{marginInput}</TableCell>
         <TableCell>{fmt.percent(manualContrib / manualPrice)}</TableCell>
-      </TableRow>
+      </TotalsTableRow>
       {/* Contribution Per Hour Row */}
-      <TableRow>
+      <TotalsTableRow>
         <TableCell variant="head">Contribution / Hr</TableCell>
         <TableCell>
           {fmt.currency(targetContrib / estimatedTotalHours)}
@@ -190,16 +191,16 @@ function ContributionRows({
         <TableCell>
           {fmt.currency(manualContrib / estimatedTotalHours)}
         </TableCell>
-      </TableRow>
+      </TotalsTableRow>
     </>
   );
 }
 
 /**
  * Used for rows which have three columns that have the same value
- * @param {import('./prop-types').TotalsTableRowProps} props
+ * @param {import('./prop-types').SimpleTotalsTableRowProps} props
  */
-function TotalsTableRow({ table, column, title }) {
+function SimpleTotalsTableRow({ table, column, title }) {
   // Attempt to cache the footer & context
   const [footer, context] = useMemo(
     () => getFooter(table, column),
@@ -207,12 +208,12 @@ function TotalsTableRow({ table, column, title }) {
   );
 
   return (
-    <TableRow>
+    <TotalsTableRow>
       <TableCell variant="head">{title}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
       <TableCell>{context && flexRender(footer, context)}</TableCell>
       {/* <TableCell>{context && flexRender(footer, context)}</TableCell> */}
-    </TableRow>
+    </TotalsTableRow>
   );
 }
 

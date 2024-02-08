@@ -11,3 +11,9 @@ export const PricingTableRow = styled(TableRow)(({ theme }) => ({
     borderRight: `1px solid ${theme.palette.divider}`,
   },
 }));
+
+export const TotalsTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(even)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));

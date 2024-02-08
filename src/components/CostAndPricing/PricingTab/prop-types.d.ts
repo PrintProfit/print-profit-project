@@ -22,7 +22,7 @@ export interface TotalsTableProps {
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }
 
-export interface TotalsTableRowProps {
+export interface SimpleTotalsTableRowProps {
   readonly table: Table<Product>;
   readonly column: string;
   readonly title: string;
