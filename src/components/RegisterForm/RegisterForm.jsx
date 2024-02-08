@@ -31,9 +31,13 @@ function RegisterForm() {
     history.push('/waiting-page');
   }; // end registerUser
 
+  const onLogin = (event) => {
+    history.push('/login');
+  };
+
   return (
     <Box className="formPanel">
-      <h2>Enter your information to become a member!</h2>
+      <h2>Print Profit </h2>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
           {errors.registrationMessage}
@@ -100,12 +104,24 @@ function RegisterForm() {
           height="50%"
         >
           <Button
+            sx={{ mb: 10 }}
             variant="contained"
             type="submit"
             name="submit"
             value="Register"
           >
             Register
+          </Button>
+        </Box>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ color: '#646765' }}
+        >
+          Already a member?
+          <Button type="button" onClick={onLogin}>
+            Login
           </Button>
         </Box>
       </Box>
