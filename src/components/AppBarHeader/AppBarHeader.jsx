@@ -1,3 +1,4 @@
+import '@fontsource-variable/cormorant';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
@@ -63,7 +64,8 @@ export default function AppBarHeader() {
               color: 'white',
               textDecoration: 'none',
             }}
-            fontFamily={'Orpheus'}
+            fontFamily="Cormorant Variable"
+            fontWeight="semibold"
             component={Link}
             to="/user"
           >

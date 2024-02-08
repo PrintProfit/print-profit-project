@@ -1,5 +1,5 @@
+import '@fontsource-variable/cormorant';
 import { Box, Button, Typography } from '@mui/material';
-import React from 'react';
 
 // This is one of our simplest components
 // It doesn't have local state,
@@ -10,7 +10,7 @@ function AboutPage() {
   return (
     <div className="container">
       <Typography
-        fontFamily={'Orpheus'}
+        fontFamily="Cormorant Variable"
         sx={{
           flexGrow: 1,
           fontSize: 26,
@@ -35,7 +35,7 @@ function AboutPage() {
           }}
         >
           <Typography
-            fontFamily={'Orpheus'}
+            fontFamily="Cormorant Variable"
             sx={{
               fontSize: 20,
               mb: 2,

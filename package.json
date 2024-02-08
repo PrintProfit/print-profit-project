@@ -21,6 +21,7 @@
     "@emailjs/browser": "^4.1.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@fontsource-variable/cormorant": "^5.0.9",
     "@fontsource-variable/source-sans-3": "^5.0.19",
     "@fontsource/roboto": "^5.0.8",
     "@hookform/resolvers": "^3.3.4",
