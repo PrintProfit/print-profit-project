@@ -144,7 +144,7 @@ export function PricingTable({ quote, setQuote }) {
                     </TableCell>
                   ))}
                   <TableCell>
-                    {index === 0 ? <AddProductCell table={table} /> : null}
+                    {index === 0 && <AddProductCell table={table} />}
                   </TableCell>
                   <TableCell variant="footer">
                     {safeFlexRender(
