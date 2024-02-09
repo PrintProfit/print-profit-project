@@ -8,6 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import printProfitLogo from '../../assets/printProfitLogoV2.svg';
 
 const drawerWidth = 200;
 /**
@@ -41,7 +42,7 @@ export default function SideBar({ children }) {
             width={200}
             height={150}
             onClick={handleNavigationHome}
-            src="public/images/printProfitLogoV2.svg"
+            src={printProfitLogo}
             alt="printProfitLogo"
           />
         </div>
