@@ -128,7 +128,7 @@ export default function MyAccountPageForm({ setIsForm }) {
   };
 
   return (
-    <div className="">
+    <div className="accountPageForm">
       <h3 className="invalidHeader">{invalidText}</h3>
       <form marginTop={2}>
         <section>
@@ -144,18 +144,24 @@ export default function MyAccountPageForm({ setIsForm }) {
             required
             label="New Name"
             color={userName.name === '' ? 'error' : ''}
+            helperText={
+              userName.name === '' ? 'you must enter a valid name' : ''
+            }
             sx={{
               mt: 5,
               width: '20ch',
             }}
           />
-          <h5 className="nameErrorText">
-            {userName.name === '' ? 'you must enter a valid name' : ''}
-          </h5>
         </section>
 
         <section>
-          <FormLabel>Email:</FormLabel>
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            Email:
+          </FormLabel>
           <TextField
             variant="outlined"
             type="email"
@@ -164,19 +170,26 @@ export default function MyAccountPageForm({ setIsForm }) {
             value={userEmail.email}
             onChange={(e) => handleEmailChange(e.target.value)}
             color={userEmail.email === '' ? 'error' : ''}
+            helperText={
+              userEmail.email === '' ? 'you must enter a valid email' : ''
+            }
             required
             label="New Email"
             sx={{
+              mt: 2,
               width: '20ch',
             }}
           />
-          <h5 className="emailErrorText">
-            {userEmail.email === '' ? 'you must enter a valid email' : ''}
-          </h5>
         </section>
 
         <section>
-          <FormLabel>New Password:</FormLabel>
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            New Password:
+          </FormLabel>
 
           <TextField
             variant="outlined"
@@ -190,22 +203,31 @@ export default function MyAccountPageForm({ setIsForm }) {
                   ? 'error'
                   : ''
             }
-            // onClick={() => setNewPasswordInput('')}
+            helperText={
+              newPasswordInput.length < 8 && newPasswordInput !== ''
+                ? 'password must be 8 or more characters'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'passwords do not match'
+                  : ''
+            }
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
             label="Enter new password"
+            sx={{
+              mt: 2,
+              width: '16ch',
+            }}
           />
         </section>
-        <h5 className="passwordErrorText">
-          {' '}
-          {newPasswordInput.length < 8 && newPasswordInput !== ''
-            ? 'password must be 8 or more characters'
-            : newPasswordInput !== newVerifyPasswordInput
-              ? 'passwords do not match'
-              : ''}
-        </h5>
+
         <section>
-          <FormLabel>Verify New Password:</FormLabel>
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            Verify New Password:
+          </FormLabel>
 
           <TextField
             variant="outlined"
@@ -219,10 +241,20 @@ export default function MyAccountPageForm({ setIsForm }) {
                   ? 'error'
                   : ''
             }
-            // onClick={() => setNewVerifyPasswordInput('')}
+            helperText={
+              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
+                ? 'password must be 8 or more characters'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'passwords do not match'
+                  : ''
+            }
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
             label="Verify new password"
+            sx={{
+              mt: 2,
+              width: '16ch',
+            }}
           />
         </section>
 
@@ -232,6 +264,7 @@ export default function MyAccountPageForm({ setIsForm }) {
           type="button"
           color="button"
           sx={{
+            mt: 2,
             mb: 5,
             mr: 2,
           }}
@@ -244,6 +277,7 @@ export default function MyAccountPageForm({ setIsForm }) {
           variant="outlined"
           type="button"
           sx={{
+            mt: 2,
             mb: 5,
             ml: 2,
           }}
