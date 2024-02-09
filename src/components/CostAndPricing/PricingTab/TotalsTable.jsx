@@ -46,7 +46,7 @@ export function TotalsTable({ quote, setQuote, table }) {
     .filter(unique);
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} variant="outlined">
       <Table size="small">
         <TableHead>
           <TableRow>
