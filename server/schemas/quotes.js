@@ -32,7 +32,7 @@ const BaseProduct = z.object({
 });
 
 const BaseQuote = z.object({
-  name: z.string().trim().max(100).min(1),
+  name: z.string().trim().min(1).max(100),
   manual_contribution_percent: z.coerce
     .number()
     .int()
