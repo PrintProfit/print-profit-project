@@ -11,6 +11,7 @@ import {
   DialogTitle,
   IconButton,
   Snackbar,
+  Stack,
   TextField,
 } from '@mui/material';
 import { produce } from 'immer';
@@ -26,11 +27,11 @@ export function QuoteActions({ quote, setQuote }) {
   // @ts-ignore
   const updateMode = useSelector((state) => state.quote.updateMode);
   return (
-    <ButtonGroup>
+    <Stack direction="row" spacing={2}>
       <SaveQuote quote={quote} setQuote={setQuote} />
       {updateMode && <UpdateQuote quote={quote} />}
       <NewQuote setQuote={setQuote} />
-    </ButtonGroup>
+    </Stack>
   );
 }
 
