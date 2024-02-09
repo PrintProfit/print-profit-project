@@ -1,19 +1,13 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import React from 'react';
-
-import { useHistory } from 'react-router-dom';
+import { Box, Container } from '@mui/material';
+import backgroundImage from '../../assets/printProfitBgFULL.png?h=768&format=webp';
 import RegisterForm from '../RegisterForm/RegisterForm';
 
 function RegisterPage() {
-  const history = useHistory();
-
   return (
     <Box
-      classname="landingPageBox"
+      // classname="landingPageBox"
       sx={{
-        backgroundImage: "url('public/images/printProfitBgFull.png')",
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         height: '100vh',
