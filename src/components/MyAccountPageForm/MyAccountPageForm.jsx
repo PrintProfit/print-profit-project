@@ -29,7 +29,6 @@ export default function MyAccountPageForm({ setIsForm }) {
   const dispatch = useDispatch();
 
   const profileUser = useSelector((store) => store.user.profileUserReducer);
-
   const userEmail = useSelector((store) => store.user.editUserEmail);
   const userName = useSelector((store) => store.user.editUserName);
   const [invalidText, setInvalidText] = useState('');
@@ -40,7 +39,6 @@ export default function MyAccountPageForm({ setIsForm }) {
 
   const [newPasswordInput, setNewPasswordInput] = useState('');
   const [newVerifyPasswordInput, setNewVerifyPasswordInput] = useState('');
-
   const [openComfirmation, setOpenComfirmation] = useState(false);
   const [openDiscard, setOpenDiscard] = useState(false);
 
@@ -128,9 +126,9 @@ export default function MyAccountPageForm({ setIsForm }) {
   };
 
   return (
-    <div className="">
+    <div className="accountPageForm">
+      <h3 className="invalidHeader">{invalidText}</h3>
       <form marginTop={2}>
-        <h3 className="invalidHeader">{invalidText}</h3>
         <section>
           <FormLabel sx={{ mt: 5 }}>Name:</FormLabel>
 
@@ -143,6 +141,10 @@ export default function MyAccountPageForm({ setIsForm }) {
             onChange={(e) => handleNameChange(e.target.value)}
             required
             label="New Name"
+            color={userName.name === '' ? 'error' : ''}
+            helperText={
+              userName.name === '' ? 'you must enter a valid name' : ''
+            }
             sx={{
               mt: 5,
               width: '20ch',
@@ -151,7 +153,13 @@ export default function MyAccountPageForm({ setIsForm }) {
         </section>
 
         <section>
-          <FormLabel>Email:</FormLabel>
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            Email:
+          </FormLabel>
           <TextField
             variant="outlined"
             type="email"
@@ -159,41 +167,92 @@ export default function MyAccountPageForm({ setIsForm }) {
             placeholder={profileUser.email}
             value={userEmail.email}
             onChange={(e) => handleEmailChange(e.target.value)}
+            color={userEmail.email === '' ? 'error' : ''}
+            helperText={
+              userEmail.email === '' ? 'you must enter a valid email' : ''
+            }
             required
             label="New Email"
             sx={{
+              mt: 2,
               width: '20ch',
             }}
           />
         </section>
 
         <section>
-          <FormLabel>New Password:</FormLabel>
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            New Password:
+          </FormLabel>
 
           <TextField
             variant="outlined"
             type="password"
             name="password"
             placeholder={'password'}
-            // onClick={() => setNewPasswordInput('')}
+            color={
+              newPasswordInput.length < 8 && newPasswordInput !== ''
+                ? 'error'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'error'
+                  : ''
+            }
+            helperText={
+              newPasswordInput.length < 8 && newPasswordInput !== ''
+                ? 'password must be 8 or more characters'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'passwords do not match'
+                  : ''
+            }
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
             label="Enter new password"
+            sx={{
+              mt: 2,
+              width: '16ch',
+            }}
           />
         </section>
 
         <section>
-          <FormLabel>Verify New Password:</FormLabel>
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            Verify New Password:
+          </FormLabel>
 
           <TextField
             variant="outlined"
             type="password"
             name="Verify New Password"
             placeholder={'verify new password'}
-            // onClick={() => setNewVerifyPasswordInput('')}
+            color={
+              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
+                ? 'error'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'error'
+                  : ''
+            }
+            helperText={
+              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
+                ? 'password must be 8 or more characters'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'passwords do not match'
+                  : ''
+            }
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
             label="Verify new password"
+            sx={{
+              mt: 2,
+              width: '16ch',
+            }}
           />
         </section>
 
@@ -203,6 +262,7 @@ export default function MyAccountPageForm({ setIsForm }) {
           type="button"
           color="button"
           sx={{
+            mt: 3,
             mb: 5,
             mr: 2,
           }}
@@ -215,28 +275,13 @@ export default function MyAccountPageForm({ setIsForm }) {
           variant="outlined"
           type="button"
           sx={{
+            mt: 3,
             mb: 5,
             ml: 2,
           }}
         >
           <DeleteIcon /> Discard Changes
         </Button>
-        <h5 className="nameErrorText">
-          {userName.name === '' ? 'you must enter a valid name' : ''}
-        </h5>
-
-        <h5 className="emailErrorText">
-          {userEmail.email === '' ? 'you must enter a valid email' : ''}
-        </h5>
-
-        <h5 className="passwordErrorText">
-          {' '}
-          {newPasswordInput.length < 8 && newPasswordInput !== ''
-            ? 'password must be 8 or more characters'
-            : newPasswordInput !== newVerifyPasswordInput
-              ? 'passwords do not match'
-              : ''}
-        </h5>
       </form>
 
       {/* Discard Dialog */}

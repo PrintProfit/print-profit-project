@@ -45,31 +45,37 @@ export default function MyAccountPage() {
         <>
           <TableContainer>
             <Table>
-              <TableRow>
-                <TableCell>Name:</TableCell>
-                <TableCell>{currentUser.name}</TableCell>
-              </TableRow>
+              <TableBody>
+                <TableRow>
+                  <TableCell>Name:</TableCell>
+                  <TableCell>{currentUser.name}</TableCell>
+                </TableRow>
 
-              <TableRow>
-                <TableCell>Email:</TableCell>
-                <TableCell>{currentUser.email}</TableCell>
-              </TableRow>
+                <TableRow>
+                  <TableCell>Email:</TableCell>
+                  <TableCell>{currentUser.email}</TableCell>
+                </TableRow>
 
-              <TableRow>
-                <TableCell>Company:</TableCell>
-                <TableCell>{currentUser.company_name}</TableCell>
-              </TableRow>
+                <TableRow>
+                  <TableCell>Company:</TableCell>
+                  <TableCell>{currentUser.company_name}</TableCell>
+                </TableRow>
 
-              <Button
-                aria-label="edit info"
-                className="editInfoButton"
-                onClick={toggleForm}
-                type="button"
-              >
-                <Typography> Edit info</Typography>
+                <TableRow>
+                  <TableCell>
+                    <Button
+                      aria-label="edit info"
+                      className="editInfoButton"
+                      onClick={toggleForm}
+                      type="button"
+                    >
+                      <Typography> Edit info</Typography>
 
-                <EditIcon sx={{ color: 'black' }} />
-              </Button>
+                      <EditIcon sx={{ color: 'black' }} />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
             </Table>
           </TableContainer>
         </>

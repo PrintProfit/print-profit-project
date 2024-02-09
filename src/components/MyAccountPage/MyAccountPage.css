@@ -29,7 +29,15 @@
   flex-wrap: wrap;
   justify-content: center;
   column-gap: 15px;
-  margin-bottom: 30px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.accountPageForm p {
+  font-size: 13.5px;
+  margin: 0px;
+  margin-bottom: -22.5px;
+  color: #d3302f;
 }
 
 .editInfoButton {
@@ -39,29 +47,9 @@
 }
 
 .invalidHeader {
-  position: absolute;
-  top: 17%;
-  right: 25%;
-  color: #d3302f;
-}
-
-.nameErrorText {
-  position: absolute;
-  top: 21.5%;
-  right: 31.7%;
-  color: #d3302f;
-}
-
-.emailErrorText {
-  position: absolute;
-  top: 31.5%;
-  right: 31.7%;
-  color: #d3302f;
-}
-
-.passwordErrorText {
-  position: absolute;
-  top: 51.4%;
-  right: 27%;
+  padding: 0px;
+  margin: 0px;
+  margin-top: -9%;
+  margin-bottom: -7.3%;
   color: #d3302f;
 }
