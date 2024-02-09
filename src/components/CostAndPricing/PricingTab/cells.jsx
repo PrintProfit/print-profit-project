@@ -18,7 +18,7 @@ import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
-import { AddProductFab, TableTextField } from './stylized';
+import { AddCostButton, AddProductFab, TableTextField } from './stylized';
 import { toCostNames, unique } from './utils';
 
 /**
@@ -313,7 +313,7 @@ export function AddCostHeader({ table }) {
 
   return (
     <>
-      <Button
+      <AddCostButton
         size="small"
         // Everything kinda looks bad here
         variant="contained"
@@ -322,7 +322,7 @@ export function AddCostHeader({ table }) {
         onClick={() => setOpen(true)}
       >
         Add Cost
-      </Button>
+      </AddCostButton>
       <Dialog
         open={open}
         onClose={closeDialog}
