@@ -124,7 +124,7 @@ export function PricingTable({ quote, setQuote }) {
             <TableBody>
               {table.getAllFlatColumns().map((col, index) => (
                 <TableRow key={col.id}>
-                  <TableCell variant="head" sx={{ minWidth: 170 }}>
+                  <TableCell variant="head" sx={{ minWidth: 170 }} scope="row">
                     {safeFlexRender(
                       col.columnDef.header,
                       table
