@@ -14,6 +14,7 @@ import {
   CreateCompanyBody,
   CreateCompanyUserBody,
   CreateUserBody,
+  DeletePendingCompanyBody,
   DeleteUserBody,
   RecoverUserBody,
 } from '../schemas/admin.js';
@@ -204,7 +205,7 @@ router.put(
 router.delete(
   '/delete/pending/company',
   rejectNonAdmin,
-  // validate(z.object({ body: DeleteUserBody })),
+  validate(z.object({ body: DeletePendingCompanyBody })),
   (req, res) => {
     const sqlText = `
   DELETE FROM "pending_user_company"

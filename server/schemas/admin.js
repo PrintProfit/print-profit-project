@@ -10,6 +10,10 @@ export const DeleteUserBody = z.object({
   aboutToBeDeletedUser: z.coerce.number().positive().int(),
 });
 
+export const DeletePendingCompanyBody = z.object({
+  pendingUserId: z.coerce.number().positive().int(),
+});
+
 export const RecoverUserBody = z.object({
   aboutToBeRecoveredUser: z.coerce.number().positive().int(),
 });
