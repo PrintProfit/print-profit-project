@@ -2,7 +2,6 @@
 
 import { Add, Cancel, Delete } from '@mui/icons-material';
 import {
-  Box,
   Button,
   ButtonGroup,
   Dialog,
@@ -125,29 +124,27 @@ export function DynamicCostHeader({ column, table }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-      <TableTextField
-        size="small"
-        fullWidth
-        value={costName}
-        onChange={(e) => setCostName(e.target.value)}
-        onBlur={onBlur}
-        InputProps={{
-          endAdornment: updateMode || (
-            <Tooltip title="Remove Cost" arrow>
-              <IconButton
-                aria-label="Remove Cost"
-                size="small"
-                disabled={updateMode}
-                onClick={deleteCost}
-              >
-                <Delete fontSize="inherit" />
-              </IconButton>
-            </Tooltip>
-          ),
-        }}
-      />
-    </Box>
+    <TableTextField
+      size="small"
+      fullWidth
+      value={costName}
+      onChange={(e) => setCostName(e.target.value)}
+      onBlur={onBlur}
+      InputProps={{
+        endAdornment: updateMode || (
+          <Tooltip title="Remove Cost" arrow>
+            <IconButton
+              aria-label="Remove Cost"
+              size="small"
+              disabled={updateMode}
+              onClick={deleteCost}
+            >
+              <Delete fontSize="inherit" />
+            </IconButton>
+          </Tooltip>
+        ),
+      }}
+    />
   );
 }
 
@@ -235,29 +232,27 @@ export function ProductNameCell({ getValue, table, row }) {
   }, [initialValue]);
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-      <TextField
-        size="small"
-        fullWidth
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onBlur={onBlur}
-        InputProps={{
-          endAdornment: updateMode || (
-            <Tooltip title="Remove Product" arrow>
-              <IconButton
-                size="small"
-                aria-label="Remove Product"
-                disabled={updateMode}
-                onClick={deleteProduct}
-              >
-                <Delete fontSize="small" />
-              </IconButton>
-            </Tooltip>
-          ),
-        }}
-      />
-    </Box>
+    <TextField
+      size="small"
+      fullWidth
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={onBlur}
+      InputProps={{
+        endAdornment: updateMode || (
+          <Tooltip title="Remove Product" arrow>
+            <IconButton
+              size="small"
+              aria-label="Remove Product"
+              disabled={updateMode}
+              onClick={deleteProduct}
+            >
+              <Delete fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        ),
+      }}
+    />
   );
 }
 
