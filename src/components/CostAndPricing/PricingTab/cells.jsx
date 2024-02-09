@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Fab,
   IconButton,
   InputAdornment,
   TextField,
@@ -19,7 +18,7 @@ import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
-import { TableTextField } from './stylized';
+import { AddProductFab, TableTextField } from './stylized';
 import { toCostNames, unique } from './utils';
 
 /**
@@ -418,14 +417,14 @@ export function AddProductCell({ table }) {
   return (
     <>
       <Tooltip title="Add Product" arrow>
-        <Fab
+        <AddProductFab
           size="small"
-          color="secondary"
+          color="primary"
           aria-label="Add Product"
           onClick={() => setOpen(true)}
         >
           <Add />
-        </Fab>
+        </AddProductFab>
       </Tooltip>
       <Dialog
         open={open}

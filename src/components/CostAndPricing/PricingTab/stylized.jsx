@@ -1,5 +1,6 @@
 // @ts-check
 import {
+  Fab,
   TableRow,
   TextField,
   inputBaseClasses,
@@ -51,5 +52,17 @@ export const TableTextField = styled(TextField)(({ theme }) => ({
   [`& .${inputBaseClasses.input}`]: {
     paddingTop: '4px',
     paddingBottom: '4px',
+  },
+}));
+
+export const AddProductFab = styled(Fab)(({ theme }) => ({
+  color: 'white', // Radix says jade9 & jade10 pair with white
+  backgroundColor: jade.jade9,
+  '&:hover': {
+    backgroundColor: jade.jade10,
+    // Reset on touch devices, it doesn't add specificity
+    '@media (hover: none)': {
+      backgroundColor: jade.jade9,
+    },
   },
 }));
