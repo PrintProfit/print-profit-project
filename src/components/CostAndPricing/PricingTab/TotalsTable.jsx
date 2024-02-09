@@ -65,7 +65,6 @@ export function TotalsTable({ quote, setQuote, table }) {
                 fullWidth
                 value={quote.manual_total_selling_price ?? 0}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setQuote(
                     produce(
                       (/** @type {import('./data-types').Quote} */ draft) => {
