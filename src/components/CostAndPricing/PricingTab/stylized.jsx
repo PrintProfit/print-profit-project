@@ -3,27 +3,26 @@ import {
   TableRow,
   TextField,
   inputBaseClasses,
-  lighten,
   styled,
   tableCellClasses,
 } from '@mui/material';
-import { indigo } from '@mui/material/colors';
+import { indigo, jade } from '@radix-ui/colors';
 
 export const PricingTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
     backgroundColor: theme.palette.action.hover,
   },
   '&:has(input)': {
-    backgroundColor: lighten(theme.palette.primary.main, 0.8),
+    backgroundColor: jade.jade3,
   },
   '&:nth-of-type(even):has(input)': {
-    backgroundColor: lighten(theme.palette.primary.main, 0.9),
+    backgroundColor: jade.jade2,
   },
   [`& > .${tableCellClasses.head}`]: {
     // I really want to reduce the width of the head cells when they have
     // inputs in them, but I have no idea how to do that.
     borderRight: `1px solid ${theme.palette.divider}`,
-    backgroundColor: lighten(indigo[100], 0.7),
+    backgroundColor: indigo.indigo3,
   },
 }));
 
