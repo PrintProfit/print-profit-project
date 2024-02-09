@@ -39,7 +39,9 @@ passport.use(
   'local',
   new LocalStrategy((email, password, done) => {
     pool
-      .query(`SELECT * FROM "user" WHERE email = $1`, [email])
+      .query(`SELECT * FROM "user" WHERE email = $1 AND is_removed = FALSE`, [
+        email,
+      ])
       .then((result) => {
         const user = result?.rows?.[0];
         if (user && comparePassword(password, user.password)) {
