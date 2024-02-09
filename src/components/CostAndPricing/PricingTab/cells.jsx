@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
 import { TableTextField } from './stylized';
-import { unique } from './utils';
+import { toCostNames, unique } from './utils';
 
 /**
  * A component that renders editable cells with dynamic costs
@@ -386,9 +386,7 @@ export function AddProductCell({ table }) {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
         // This is probably the safest way to get a unique list of cost names.
-        const costNames = draft.products
-          .flatMap((product) => product.costs.map((c) => c.name))
-          .filter(unique);
+        const costNames = draft.products.flatMap(toCostNames).filter(unique);
 
         // This *should* also work, but it might not order things correctly,
         // and we need to update the tsconfig/jsconfig to iterate through the
