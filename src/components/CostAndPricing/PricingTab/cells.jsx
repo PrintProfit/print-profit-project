@@ -207,7 +207,7 @@ export function TotalSellingPriceCell({ getValue, table, row, column }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  const isCustom = row.original.total_selling_price === undefined;
+  const isCustom = row.original.total_selling_price !== undefined;
 
   /**
    * onBlur is called when the input loses focus.
