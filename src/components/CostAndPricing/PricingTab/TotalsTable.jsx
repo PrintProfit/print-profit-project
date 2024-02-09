@@ -16,7 +16,7 @@ import { useCallback, useMemo } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
 import { PricingTableRow as TableRow } from './stylized';
-import { unique } from './utils';
+import { toCostNames, unique } from './utils';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -41,9 +41,7 @@ export function TotalsTable({ quote, setQuote, table }) {
     [aggregate, quote.manual_contribution_percent],
   );
 
-  const dynamicCostNames = (quote.products ?? [])
-    .flatMap((product) => (product.costs ?? []).map((cost) => cost.name))
-    .filter(unique);
+  const dynamicCostNames = quote.products.flatMap(toCostNames).filter(unique);
 
   return (
     <TableContainer component={Paper} variant="outlined">
