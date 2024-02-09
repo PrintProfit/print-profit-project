@@ -9,6 +9,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Fab,
   IconButton,
   InputAdornment,
   TextField,
@@ -419,14 +420,14 @@ export function AddProductCell({ table }) {
   return (
     <>
       <Tooltip title="Add Product" arrow>
-        <IconButton
-          // size="small"
-          color="primary"
+        <Fab
+          size="small"
+          color="secondary"
           aria-label="Add Product"
           onClick={() => setOpen(true)}
         >
-          <Add fontSize="small" />
-        </IconButton>
+          <Add />
+        </Fab>
       </Tooltip>
       <Dialog
         open={open}
