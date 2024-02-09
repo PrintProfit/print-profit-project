@@ -14,7 +14,7 @@
     "lint:biome": "biome check .",
     "lint:prettier": "prettier --check .",
     "server": "nodemon --watch server server/server.js",
-    "start": "node server/server.js | vite",
+    "start": "node server/server.js",
     "test": "vitest"
   },
   "dependencies": {
