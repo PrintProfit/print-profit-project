@@ -199,6 +199,59 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
 }
 
 /**
+ * A component for the total selling price cell
+ * @param {import('./prop-types').CellProps<unknown>} props
+ * @returns {JSX.Element}
+ */
+export function TotalSellingPriceCell({ getValue, table, row, column }) {
+  const initialValue = getValue();
+  const [value, setValue] = useState(initialValue);
+
+  const isCustom = row.original.total_selling_price === undefined;
+
+  /**
+   * onBlur is called when the input loses focus.
+   * It updates the quote with the new value, using an immer produce function
+   * to simplify state updates.
+   * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
+   */
+  const onBlur = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        const product = draft.products[row.index];
+        if (product) {
+          product.total_selling_price = Number(value);
+        }
+      }),
+    );
+  };
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return (
+    <Tooltip
+      title={isCustom ? 'Manually set value' : 'Automatically generated value'}
+      arrow
+    >
+      <TableTextField
+        size="small"
+        fullWidth
+        inputMode="decimal"
+        value={value}
+        onChange={(e) => setValue(Number(e.target.value))}
+        onBlur={onBlur}
+        InputProps={{
+          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          inputComponent: /** @type {any} */ (NumericInput),
+        }}
+      />
+    </Tooltip>
+  );
+}
+
+/**
  * @param {import('./prop-types').ProductNameCellProps} props
  */
 export function ProductNameCell({ getValue, table, row }) {
