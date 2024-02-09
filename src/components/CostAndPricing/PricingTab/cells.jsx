@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Add, Cancel, Delete } from '@mui/icons-material';
+import { Add, Cancel, Clear, Delete } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
@@ -226,6 +226,17 @@ export function TotalSellingPriceCell({ getValue, table, row, column }) {
     );
   };
 
+  const clearCustomValue = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        const product = draft.products[row.index];
+        if (product) {
+          product.total_selling_price = undefined;
+        }
+      }),
+    );
+  };
+
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
@@ -244,6 +255,20 @@ export function TotalSellingPriceCell({ getValue, table, row, column }) {
         onBlur={onBlur}
         InputProps={{
           startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          endAdornment: isCustom && (
+            <InputAdornment position="end">
+              <Tooltip title="Remove Custom Value" arrow>
+                <IconButton
+                  aria-label="Remove Custom Value"
+                  size="small"
+                  onClick={clearCustomValue}
+                  edge="end"
+                >
+                  <Clear fontSize="inherit" />
+                </IconButton>
+              </Tooltip>
+            </InputAdornment>
+          ),
           inputComponent: /** @type {any} */ (NumericInput),
         }}
       />
