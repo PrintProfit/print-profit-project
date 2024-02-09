@@ -53,9 +53,3 @@ export const TableTextField = styled(TextField)(({ theme }) => ({
     paddingBottom: '4px',
   },
 }));
-
-export const TotalsTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(even)': {
-    backgroundColor: theme.palette.action.hover,
-  },
-}));
