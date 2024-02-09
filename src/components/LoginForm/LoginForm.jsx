@@ -1,6 +1,4 @@
-import { Paper } from '@mui/material';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
@@ -44,9 +42,14 @@ function LoginForm() {
           justifyContent: 'center',
         }}
       >
+        <img
+          width={50}
+          height={50}
+          src="public/images/printProfitLogoV3.svg"
+          alt="printProfitLogo"
+        />
+        <Typography variant="h4">Login</Typography>
         <form onSubmit={login}>
-          <h2>Login</h2>
-
           {errors.loginMessage && (
             <h3 className="alert" role="alert">
               {errors.loginMessage}
@@ -73,7 +76,7 @@ function LoginForm() {
             />
             <TextField
               sx={{
-                marginBottom: 1,
+                marginBottom: 2,
               }}
               id="password"
               type="password"
@@ -83,18 +86,26 @@ function LoginForm() {
               required
               onChange={(event) => setPassword(event.target.value)}
             />
-            <Button onClick={login} variant="contained" type="submit">
+            <Button
+              sx={{ mb: 4 }}
+              onClick={login}
+              variant="contained"
+              type="submit"
+            >
               Login
             </Button>
           </Box>
         </form>
-        <Button
-          onClick={() => {
-            history.push('/registration');
-          }}
-        >
-          Register
-        </Button>
+        <Box>
+          <Typography variant="body1">New User?</Typography>
+          <Button
+            onClick={() => {
+              history.push('/registration');
+            }}
+          >
+            Register
+          </Button>
+        </Box>
       </Box>
     </>
   );
