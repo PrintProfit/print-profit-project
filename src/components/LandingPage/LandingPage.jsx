@@ -21,7 +21,7 @@ function LandingPage() {
           margin: 0,
         }}
       >
-        <Box sx={{ display: 'flex', paddingRight: '7%' }}>
+        <Box sx={{ display: 'flex', paddingRight: '9%' }}>
           <LoginForm />
         </Box>
       </Box>

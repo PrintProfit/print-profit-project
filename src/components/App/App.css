@@ -105,6 +105,11 @@ Form Treatment
   border-radius: 3px;
   box-shadow: 0 1px 2px rgb(0, 0, 0, 0.4);
 } */
+.landingPageLoginBox {
+  box-sizing: border-box;
+  width: 400px;
+  box-shadow: 0 1px 2px rgb(0, 0, 0, 0.4);
+}
 
 input {
   margin: 5px;

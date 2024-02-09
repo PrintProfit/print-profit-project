@@ -42,7 +42,6 @@ function LoginForm() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          paddingTop: 2,
         }}
       >
         <form onSubmit={login}>
