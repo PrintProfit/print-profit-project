@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Add, Cancel, Clear, Delete } from '@mui/icons-material';
+import { Add, Calculate, Cancel, Clear, Delete } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
@@ -243,37 +243,43 @@ export function TotalSellingPriceCell({ getValue, table, row, column }) {
   }, [initialValue]);
 
   return (
-    <Tooltip
-      title={isCustom ? 'Manually set value' : 'Automatically generated value'}
-      arrow
-    >
-      <TableTextField
-        size="small"
-        fullWidth
-        inputMode="decimal"
-        value={value}
-        onChange={(e) => setValue(Number(e.target.value))}
-        onBlur={onBlur}
-        InputProps={{
-          startAdornment: <InputAdornment position="start">$</InputAdornment>,
-          endAdornment: isCustom && (
-            <InputAdornment position="end">
-              <Tooltip title="Remove Custom Value" arrow>
+    <TableTextField
+      size="small"
+      fullWidth
+      inputMode="decimal"
+      value={value}
+      onChange={(e) => setValue(Number(e.target.value))}
+      onBlur={onBlur}
+      InputProps={{
+        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+        endAdornment: (
+          <InputAdornment position="end">
+            <Tooltip
+              title={
+                isCustom
+                  ? 'Remove Custom Value'
+                  : 'Automatically generated value'
+              }
+              arrow
+            >
+              {isCustom ? (
                 <IconButton
                   aria-label="Remove Custom Value"
                   size="small"
                   onClick={clearCustomValue}
                   edge="end"
                 >
-                  <Clear fontSize="inherit" />
+                  <Clear fontSize="small" />
                 </IconButton>
-              </Tooltip>
-            </InputAdornment>
-          ),
-          inputComponent: /** @type {any} */ (NumericInput),
-        }}
-      />
-    </Tooltip>
+              ) : (
+                <Calculate fontSize="small" />
+              )}
+            </Tooltip>
+          </InputAdornment>
+        ),
+        inputComponent: /** @type {any} */ (NumericInput),
+      }}
+    />
   );
 }
 
