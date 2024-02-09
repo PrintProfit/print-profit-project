@@ -1,6 +1,7 @@
 // @ts-check
 
 import {
+  Box,
   Paper,
   Stack,
   Table,
@@ -118,54 +119,72 @@ export function PricingTable({ quote, setQuote }) {
   // by data field, which is what our rows are.
   return (
     <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }} variant="outlined">
-        <TableContainer>
-          <Table size="small" stickyHeader>
-            <TableBody>
-              {table.getAllFlatColumns().map((col, index) => (
-                <TableRow key={col.id}>
-                  <TableCell variant="head" sx={{ minWidth: 170 }} scope="row">
-                    {safeFlexRender(
-                      col.columnDef.header,
-                      table
-                        .getFlatHeaders()
-                        .find((h) => h.id === col.id)
-                        ?.getContext(),
-                    )}
-                  </TableCell>
-                  {table.getCoreRowModel().rows.map((row) => (
-                    <TableCell key={row.id} sx={{ minWidth: 170 }}>
+      <Stack sx={{ width: '100%' }} direction="column" spacing={2}>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }} variant="outlined">
+          <TableContainer>
+            <Table size="small" stickyHeader>
+              <TableBody>
+                {table.getAllFlatColumns().map((col, index) => (
+                  <TableRow key={col.id}>
+                    <TableCell
+                      variant="head"
+                      sx={{ minWidth: 170 }}
+                      scope="row"
+                    >
                       {safeFlexRender(
-                        col.columnDef.cell,
-                        row
-                          .getAllCells()
-                          .find((cell) => cell.column.id === col.id)
+                        col.columnDef.header,
+                        table
+                          .getFlatHeaders()
+                          .find((h) => h.id === col.id)
                           ?.getContext(),
                       )}
                     </TableCell>
-                  ))}
-                  <TableCell>
-                    {index === 0 && <AddProductCell table={table} />}
-                  </TableCell>
-                  <TableCell variant="footer">
-                    {safeFlexRender(
-                      col.columnDef.footer,
-                      table
-                        .getFooterGroups()
-                        .flatMap((g) => g.headers)
-                        .find((h) => h.id === col.id)
-                        ?.getContext(),
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
+                    {table.getCoreRowModel().rows.map((row) => (
+                      <TableCell key={row.id} sx={{ minWidth: 170 }}>
+                        {safeFlexRender(
+                          col.columnDef.cell,
+                          row
+                            .getAllCells()
+                            .find((cell) => cell.column.id === col.id)
+                            ?.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                    <TableCell>
+                      {index === 0 && <AddProductCell table={table} />}
+                    </TableCell>
+                    <TableCell variant="footer">
+                      {safeFlexRender(
+                        col.columnDef.footer,
+                        table
+                          .getFooterGroups()
+                          .flatMap((g) => g.headers)
+                          .find((h) => h.id === col.id)
+                          ?.getContext(),
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <QuoteActions quote={quote} setQuote={setQuote} />
+        </Box>
+      </Stack>
+      {/*
+       This stack is only being kept because the totals table becomes really
+       big if we remove it. Probably a way to fix that though.
+       */}
       <Stack direction="column" spacing={2}>
         <TotalsTable quote={quote} setQuote={setQuote} table={table} />
-        <QuoteActions quote={quote} setQuote={setQuote} />
       </Stack>
     </Stack>
   );
