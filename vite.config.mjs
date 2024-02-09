@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import { imagetools } from 'vite-imagetools';
 
 export default defineConfig({
   build: {
@@ -10,5 +11,5 @@ export default defineConfig({
       '/api': 'http://localhost:5001',
     },
   },
-  plugins: [react()],
+  plugins: [react(), imagetools()],
 });
