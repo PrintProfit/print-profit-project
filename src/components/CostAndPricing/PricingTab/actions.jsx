@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Cancel, Close, Create, Save, Update } from '@mui/icons-material';
+import { Cancel, Clear, Close, Save, Update } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
@@ -30,7 +30,7 @@ export function QuoteActions({ quote, setQuote }) {
     <Stack direction="row" spacing={2}>
       <SaveQuote quote={quote} setQuote={setQuote} />
       {updateMode && <UpdateQuote quote={quote} />}
-      <NewQuote setQuote={setQuote} />
+      <ClearQuote setQuote={setQuote} />
     </Stack>
   );
 }
@@ -209,9 +209,9 @@ function UpdateQuote({ quote }) {
 }
 
 /**
- * @param {import('./prop-types').NewQuoteProps} props
+ * @param {import('./prop-types').ClearQuoteProps} props
  */
-function NewQuote({ setQuote }) {
+function ClearQuote({ setQuote }) {
   const dispatch = useDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -244,9 +244,9 @@ function NewQuote({ setQuote }) {
         variant="contained"
         color="warning"
         onClick={() => setDialogOpen(true)}
-        startIcon={<Create />}
+        startIcon={<Clear />}
       >
-        New Quote
+        Clear Quote
       </Button>
       <Dialog
         open={dialogOpen}
@@ -259,8 +259,8 @@ function NewQuote({ setQuote }) {
         <DialogTitle>Are you sure?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to create a new quote? This will discard any
-            unsaved changes.
+            Are you sure you want to clear the current quote? This will discard
+            any unsaved changes.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -273,8 +273,8 @@ function NewQuote({ setQuote }) {
             >
               Cancel
             </Button>
-            <Button type="submit" startIcon={<Create />}>
-              Create
+            <Button color="warning" type="submit" startIcon={<Clear />}>
+              Clear
             </Button>
           </ButtonGroup>
         </DialogActions>
