@@ -29,9 +29,9 @@ export function QuoteActions({ quote, setQuote }) {
   );
   return (
     <Stack direction="row" spacing={2}>
+      <ClearQuote setQuote={setQuote} />
       <SaveQuote quote={quote} setQuote={setQuote} />
       {updateMode && <UpdateQuote quote={quote} />}
-      <ClearQuote setQuote={setQuote} />
     </Stack>
   );
 }
