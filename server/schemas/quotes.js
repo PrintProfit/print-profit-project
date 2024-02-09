@@ -1,8 +1,9 @@
 // @ts-check
 import { z } from 'zod';
+import { Serial } from './base.js';
 
 const WithId = z.object({
-  id: z.coerce.number().positive().int(),
+  id: Serial,
 });
 
 // A lot more of this can be null than I would have thought.
