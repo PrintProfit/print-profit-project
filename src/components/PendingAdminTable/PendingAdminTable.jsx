@@ -41,8 +41,11 @@ function PendingAdminPage({ pendingUser }) {
   };
 
   const templateParams = {
-    from_name: pendingUser.user_name,
-    from_email: pendingUser.email,
+    from_name: 'Print Profit',
+    from_email: 'printprofitproject@gmail.com',
+    to_name: pendingUser.user_name,
+    to_email: pendingUser.email,
+    message: 'You have been accepted to use Print Profit',
   };
 
   // conditonally sends approval dispatch
@@ -50,7 +53,7 @@ function PendingAdminPage({ pendingUser }) {
     setOpenApproval(false);
 
     // emailjs
-    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_APPROVED_TEMPLATE_ID, templateParams, {
+    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID, templateParams, {
     //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
     //   })
     //   .then(

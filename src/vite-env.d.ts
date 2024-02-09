@@ -8,8 +8,8 @@ interface ImportMetaEnv {
   readonly VITE_EMAILJS_SERVICE_ID: string;
   /** The public key for EmailJS */
   readonly VITE_EMAILJS_PUBLIC_KEY: string;
-  /** The register template id for EmailJS */
-  readonly VITE_EMAILJS_REGISTERED_TEMPLATE_ID: string;
-  /** The approved template id for EmailJS */
-  readonly VITE_EMAILJS_APPROVED_TEMPLATE_ID: string;
+  /** The admin create a user template id for EmailJS */
+  readonly VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID: string;
+  /** The approved and registered template id for EmailJS */
+  readonly VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID: string;
 }

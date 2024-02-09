@@ -19,6 +19,9 @@ function RegisterForm() {
   const templateParams = {
     from_name: name,
     from_email: email,
+    to_name: 'Print Profit',
+    to_email: 'printprofitproject@gmail.com',
+    message: `${email} has registered to Print Profit! `,
   };
 
   const registerUser = (event) => {
@@ -28,7 +31,7 @@ function RegisterForm() {
     }
 
     // emailjs
-    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_TEMPLATE_ID, templateParams, {
+    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID, templateParams, {
     //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
     //   })
     //   .then(
