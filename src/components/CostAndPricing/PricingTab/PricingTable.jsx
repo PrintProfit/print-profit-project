@@ -3,11 +3,11 @@
 import {
   Box,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  Unstable_Grid2 as Grid,
 } from '@mui/material';
 import {
   flexRender,
@@ -118,8 +118,12 @@ export function PricingTable({ quote, setQuote }) {
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
   return (
-    <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
-      <Stack sx={{ width: '100%' }} direction="column" spacing={2}>
+    <Grid container columns={24} direction="row" spacing={2} marginTop={1}>
+      {/*
+        Grids have 12 columns by default, but the pricing tool looks best with
+        an xs of 8.5, so we double the values.
+        */}
+      <Grid direction="column" xs={17}>
         <Paper sx={{ width: '100%', overflow: 'hidden' }} variant="outlined">
           <TableContainer>
             <Table size="small" stickyHeader>
@@ -169,23 +173,21 @@ export function PricingTable({ quote, setQuote }) {
             </Table>
           </TableContainer>
         </Paper>
+
         <Box
           sx={{
             width: '100%',
             display: 'flex',
             justifyContent: 'center',
+            marginTop: 1,
           }}
         >
           <QuoteActions quote={quote} setQuote={setQuote} />
         </Box>
-      </Stack>
-      {/*
-       This stack is only being kept because the totals table becomes really
-       big if we remove it. Probably a way to fix that though.
-       */}
-      <Stack direction="column" spacing={2}>
+      </Grid>
+      <Grid xs>
         <TotalsTable quote={quote} setQuote={setQuote} table={table} />
-      </Stack>
-    </Stack>
+      </Grid>
+    </Grid>
   );
 }
