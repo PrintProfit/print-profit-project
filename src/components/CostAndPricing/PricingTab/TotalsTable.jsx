@@ -1,7 +1,6 @@
 // @ts-check
 
 import {
-  Input,
   InputAdornment,
   Paper,
   Table,
@@ -9,6 +8,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TextField,
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
@@ -61,10 +61,10 @@ export function TotalsTable({ quote, setQuote, table }) {
             <TableCell variant="head">Total Selling Price</TableCell>
             <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
             <TableCell>
-              <Input
-                startAdornment={
-                  <InputAdornment position="start">$</InputAdornment>
-                }
+              <TextField
+                size="small"
+                inputMode="decimal"
+                fullWidth
                 value={quote.manual_total_selling_price ?? 0}
                 onChange={(e) => {
                   console.log(e.target.value);
@@ -78,7 +78,12 @@ export function TotalsTable({ quote, setQuote, table }) {
                     ),
                   );
                 }}
-                inputComponent={/** @type {any} */ (NumericInput)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">$</InputAdornment>
+                  ),
+                  inputComponent: /** @type {any} */ (NumericInput),
+                }}
               />
             </TableCell>
           </TableRow>
@@ -115,11 +120,10 @@ export function TotalsTable({ quote, setQuote, table }) {
             }}
             slots={{
               marginInput: (
-                <Input
+                <TextField
                   type="number"
-                  endAdornment={
-                    <InputAdornment position="end">%</InputAdornment>
-                  }
+                  size="small"
+                  fullWidth
                   value={quote.manual_contribution_percent ?? 0}
                   onChange={(e) => {
                     setQuote(
@@ -132,15 +136,18 @@ export function TotalsTable({ quote, setQuote, table }) {
                       ),
                     );
                   }}
-                  inputComponent={/** @type {any} */ (NumericInput)}
-                  // @ts-ignore
-                  inputProps={
-                    /** @type {import('react-number-format').NumericFormatProps} */ ({
-                      allowNegative: false,
-                      min: 0,
-                      max: 100,
-                    })
-                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                    inputComponent: /** @type {any} */ (NumericInput),
+                    inputProps:
+                      /** @type {import('react-number-format').NumericFormatProps|any} */ ({
+                        allowNegative: false,
+                        min: 0,
+                        max: 100,
+                      }),
+                  }}
                 />
               ),
             }}
