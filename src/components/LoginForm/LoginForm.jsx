@@ -35,25 +35,35 @@ function LoginForm() {
    */
 
   return (
-    <Box className="formPanel">
+    <>
       <Box
         sx={{
+          display: 'flex',
           flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          paddingTop: 2,
         }}
-        paddingTop={5}
       >
         <form onSubmit={login}>
-          <Box justifyContent="center" textAlign="center">
-            <h2>Login</h2>
-          </Box>
+          <h2>Login</h2>
+
           {errors.loginMessage && (
             <h3 className="alert" role="alert">
               {errors.loginMessage}
             </h3>
           )}
-          <Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              paddingTop: 1,
+            }}
+          >
             <TextField
-              sx={{ pb: 2 }}
+              sx={{
+                marginBottom: 1,
+              }}
               id="email"
               type="text"
               label="e-mail"
@@ -63,7 +73,9 @@ function LoginForm() {
               onChange={(event) => setEmail(event.target.value)}
             />
             <TextField
-              sx={{ pb: 2 }}
+              sx={{
+                marginBottom: 1,
+              }}
               id="password"
               type="password"
               label="password"
@@ -72,10 +84,10 @@ function LoginForm() {
               required
               onChange={(event) => setPassword(event.target.value)}
             />
+            <Button onClick={login} variant="contained" type="submit">
+              Login
+            </Button>
           </Box>
-          <Button onClick={login} variant="contained" type="submit">
-            Login
-          </Button>
         </form>
         <Button
           onClick={() => {
@@ -85,7 +97,7 @@ function LoginForm() {
           Register
         </Button>
       </Box>
-    </Box>
+    </>
   );
 }
 
