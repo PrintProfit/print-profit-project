@@ -3,45 +3,30 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import SvgIcon from '@mui/material/SvgIcon';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import './LandingPage.css';
-
-import RegisterForm from '../RegisterForm/RegisterForm';
+import LoginForm from '../LoginForm/LoginForm.jsx';
 
 function LandingPage() {
-  const history = useHistory();
-
-  const onLogin = (event) => {
-    history.push('/login');
-  };
-
   return (
-    <div>
+    <>
       <Box
-        classname="landingPageBox"
         sx={{
           backgroundImage: "url('public/images/printProfitBg.png')",
+          backgroundPosition: 'center',
           backgroundSize: 'cover',
+          // minWidth: '70%',
+
           backgroundRepeat: 'no-repeat',
           height: '100vh',
           display: 'flex',
+          justifyContent: 'flex-end',
           margin: 0,
         }}
       >
-        <Box
-          direction="column"
-          alignItems="center"
-          sx={{
-            minHeight: '100vh',
-            marginLeft: 'auto',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          <RegisterForm />
+        <Box sx={{ display: 'flex', paddingRight: '7%' }}>
+          <LoginForm />
         </Box>
       </Box>
-    </div>
+    </>
   );
 }
 
