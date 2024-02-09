@@ -29,7 +29,6 @@ export default function MyAccountPageForm({ setIsForm }) {
   const dispatch = useDispatch();
 
   const profileUser = useSelector((store) => store.user.profileUserReducer);
-
   const userEmail = useSelector((store) => store.user.editUserEmail);
   const userName = useSelector((store) => store.user.editUserName);
   const [invalidText, setInvalidText] = useState('');
@@ -40,7 +39,6 @@ export default function MyAccountPageForm({ setIsForm }) {
 
   const [newPasswordInput, setNewPasswordInput] = useState('');
   const [newVerifyPasswordInput, setNewVerifyPasswordInput] = useState('');
-
   const [openComfirmation, setOpenComfirmation] = useState(false);
   const [openDiscard, setOpenDiscard] = useState(false);
 
@@ -264,7 +262,7 @@ export default function MyAccountPageForm({ setIsForm }) {
           type="button"
           color="button"
           sx={{
-            mt: 2,
+            mt: 3,
             mb: 5,
             mr: 2,
           }}
@@ -277,29 +275,13 @@ export default function MyAccountPageForm({ setIsForm }) {
           variant="outlined"
           type="button"
           sx={{
-            mt: 2,
+            mt: 3,
             mb: 5,
             ml: 2,
           }}
         >
           <DeleteIcon /> Discard Changes
         </Button>
-        {/* <h5 className="nameErrorText">
-          {userName.name === '' ? 'you must enter a valid name' : ''}
-        </h5> */}
-
-        {/* <h5 className="emailErrorText">
-          {userEmail.email === '' ? 'you must enter a valid email' : ''}
-        </h5> */}
-
-        {/* <h5 className="passwordErrorText">
-          {' '}
-          {newPasswordInput.length < 8 && newPasswordInput !== ''
-            ? 'password must be 8 or more characters'
-            : newPasswordInput !== newVerifyPasswordInput
-              ? 'passwords do not match'
-              : ''}
-        </h5> */}
       </form>
 
       {/* Discard Dialog */}
