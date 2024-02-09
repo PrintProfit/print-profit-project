@@ -15,7 +15,7 @@ import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
-import { TotalsTableRow as TableRow } from './stylized';
+import { PricingTableRow as TableRow } from './stylized';
 import { unique } from './utils';
 
 /**
