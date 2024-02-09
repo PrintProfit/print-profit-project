@@ -8,11 +8,14 @@ const theme = createTheme({
       main: '#5CCD8B',
     },
     secondary: {
-      main: '#FFC107',
+      main: '#3C2A80',
     },
     button: {
       main: '#3C2A80',
       contrastText: 'white',
+    },
+    warning: {
+      main: '#FFC107',
     },
   },
   typography: {

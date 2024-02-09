@@ -88,16 +88,24 @@ function* fetchAdminUsers() {
 function* approveUser(action) {
   // console.log('action.payload', action.payload);
   try {
-    const response = yield axios({
+    const approveResponse = yield axios({
       method: 'PUT',
       url: '/api/user/approve',
+      data: action.payload,
+    });
+    const deleteResponse = yield axios({
+      method: 'DELETE',
+      url: '/api/user/delete/pending/company',
       data: action.payload,
     });
     yield put({
       type: 'SAGA_FETCH_ADMIN_USERS_FOR_TABLE',
     });
   } catch (error) {
-    console.log('Unable to put approval to server', error);
+    console.log(
+      'Unable to put approval and deleting pending company to server',
+      error,
+    );
   }
 }
 

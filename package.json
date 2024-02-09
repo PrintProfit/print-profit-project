@@ -14,7 +14,7 @@
     "lint:biome": "biome check .",
     "lint:prettier": "prettier --check .",
     "server": "nodemon --watch server server/server.js",
-    "start": "node server/server.js | vite",
+    "start": "node server/server.js",
     "test": "vitest"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "@mui/icons-material": "^5.15.8",
     "@mui/material": "^5.15.7",
     "@mui/x-date-pickers": "^6.19.3",
+    "@radix-ui/colors": "^3.0.0",
     "@tanstack/react-table": "^8.11.8",
     "axios": "^1.6.7",
     "bcryptjs": "^2.4.3",

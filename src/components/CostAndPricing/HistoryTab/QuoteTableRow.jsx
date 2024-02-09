@@ -19,6 +19,8 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { totalSellingPrice } from '../PricingTab/calculations';
+import { unique } from '../PricingTab/utils';
 
 function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
   const dispatch = useDispatch();
@@ -44,6 +46,18 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
     handleClose();
     setTab(0);
   };
+
+  const costNames = row.products
+    .flatMap((p) => p.costs.map((c) => c.name))
+    .filter(unique);
+
+  const costNameArray = [];
+
+  let productQuantity = 0;
+  let totalSellingPriceDetail = 0;
+  let totalEstimatedHours = 0;
+  const totalVariableCosts = 0;
+  const contributionAmount = 0;
 
   return (
     <div>
@@ -85,9 +99,11 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
                 <TableBody>
                   <TableRow>
                     <TableCell>Quantity</TableCell>
-                    {row.products?.map((product) => (
-                      <TableCell>{product.quantity}</TableCell>
-                    ))}
+                    {row.products?.map((product) => {
+                      productQuantity += product.quantity;
+                      return <TableCell>{product.quantity}</TableCell>;
+                    })}
+                    <TableCell>{productQuantity}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Selling Price</TableCell>
@@ -96,41 +112,58 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
                     ))}
                   </TableRow>
                   <TableRow>
-                    <TableCell>Total Selling Price</TableCell>
-                    {row.products?.map((product) => (
-                      <TableCell>{product.total_selling_price}</TableCell>
-                    ))}
+                    <TableCell>
+                      <Typography>Total Selling Price</Typography>
+                    </TableCell>
+                    {row.products?.map((product) => {
+                      totalSellingPriceDetail += product.total_selling_price;
+                      return (
+                        <TableCell>{product.total_selling_price}</TableCell>
+                      );
+                    })}
+                    <TableCell>{totalSellingPriceDetail}</TableCell>
                   </TableRow>
                   {/* TO-DO: loop through quote object and insert new TableRow for each cost input; nested loop and add values from each product as TableCells? */}
-                  {row.products[0].costs?.map((cost) => (
-                    <>
-                      <TableRow>
-                        <TableCell>{cost.name}</TableCell>
-                        <TableCell>{cost.value}</TableCell>
+                  {costNames.map((name) => {
+                    return (
+                      <TableRow key="name">
+                        <TableCell>{name}</TableCell>
+                        {row.products.map((p) => (
+                          <TableCell key={p.id}>
+                            {p.costs.find((c) => c.name === name)?.value}
+                          </TableCell>
+                        ))}
+                        <TableCell>
+                          {row.products
+                            .flatMap(
+                              (p) =>
+                                p.costs.find((c) => c.name === name)?.value,
+                            )
+                            .reduce((a, b) => a + b, 0)}
+                        </TableCell>
                       </TableRow>
-                    </>
-                  ))}
-                  {/* {row.products?.map((product) => (
-                    <TableRow>
-                      <TableCell></TableCell>
-                    </TableRow>
-                  ))} */}
+                    );
+                  })}
 
                   <TableRow>
                     <TableCell>Estimated Hours</TableCell>
-                    {row.products?.map((product) => (
-                      <>
-                        <TableCell>{product.estimated_hours}</TableCell>
-                      </>
-                    ))}
-                    <TableCell>A number</TableCell>
+                    {row.products?.map((product) => {
+                      totalEstimatedHours += product.estimated_hours;
+                      return <TableCell>{product.estimated_hours}</TableCell>;
+                    })}
+                    <TableCell>{totalEstimatedHours}</TableCell>
                   </TableRow>
                   <TableRow>
-                    <TableCell>Total Variable Costs</TableCell>
+                    <TableCell>
+                      <Typography>Total Variable Costs</Typography>
+                    </TableCell>
+                    <TableCell>600</TableCell>
+                    <TableCell>850</TableCell>
+                    <TableCell>1450</TableCell>
                   </TableRow>
-                  <TableRow>
+                  {/* <TableRow>
                     <TableCell>Contribution $</TableCell>
-                  </TableRow>
+                  </TableRow> */}
                 </TableBody>
               </Table>
             </TableContainer>

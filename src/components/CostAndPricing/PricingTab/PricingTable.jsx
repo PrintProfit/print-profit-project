@@ -1,12 +1,13 @@
 // @ts-check
 
 import {
+  Box,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  Unstable_Grid2 as Grid,
 } from '@mui/material';
 import {
   flexRender,
@@ -26,7 +27,7 @@ import {
 } from './columns';
 import * as fmt from './formats';
 import { PricingTableRow as TableRow } from './stylized';
-import { aggregate, unique } from './utils';
+import { aggregate, toCostNames, unique } from './utils';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -36,12 +37,12 @@ export function PricingTable({ quote, setQuote }) {
   // what these objects are.
 
   /** @type {boolean} */
-  // @ts-ignore
-  const updateMode = useSelector((state) => state.quote.updateMode);
+  const updateMode = useSelector(
+    (/** @type {any} */ state) => state.quote.updateMode,
+  );
 
-  const costNames = quote.products
-    .flatMap((product) => product.costs.map((cost) => cost.name))
-    .filter(unique);
+  const costNames = quote.products.flatMap(toCostNames).filter(unique);
+
   /**
    * The dynamic columns that the table uses. They're generated from the frist
    * product's costs.
@@ -117,56 +118,76 @@ export function PricingTable({ quote, setQuote }) {
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
   return (
-    <Stack direction="row" spacing={2}>
-      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer>
-          <Table size="small" stickyHeader>
-            <TableBody>
-              {table.getAllFlatColumns().map((col, index) => (
-                <TableRow key={col.id}>
-                  <TableCell variant="head" sx={{ minWidth: 170 }}>
-                    {safeFlexRender(
-                      col.columnDef.header,
-                      table
-                        .getFlatHeaders()
-                        .find((h) => h.id === col.id)
-                        ?.getContext(),
-                    )}
-                  </TableCell>
-                  {table.getCoreRowModel().rows.map((row) => (
-                    <TableCell key={row.id} sx={{ minWidth: 170 }}>
+    <Grid container columns={24} direction="row" spacing={2} marginTop={1}>
+      {/*
+        Grids have 12 columns by default, but the pricing tool looks best with
+        an xs of 8.5, so we double the values.
+        */}
+      <Grid direction="column" xs={17}>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }} variant="outlined">
+          <TableContainer>
+            <Table size="small" stickyHeader>
+              <TableBody>
+                {table.getAllFlatColumns().map((col, index) => (
+                  <TableRow key={col.id}>
+                    <TableCell
+                      variant="head"
+                      sx={{ minWidth: 170 }}
+                      scope="row"
+                    >
                       {safeFlexRender(
-                        col.columnDef.cell,
-                        row
-                          .getAllCells()
-                          .find((cell) => cell.column.id === col.id)
+                        col.columnDef.header,
+                        table
+                          .getFlatHeaders()
+                          .find((h) => h.id === col.id)
                           ?.getContext(),
                       )}
                     </TableCell>
-                  ))}
-                  <TableCell>
-                    {index === 0 && <AddProductCell table={table} />}
-                  </TableCell>
-                  <TableCell variant="footer">
-                    {safeFlexRender(
-                      col.columnDef.footer,
-                      table
-                        .getFooterGroups()
-                        .flatMap((g) => g.headers)
-                        .find((h) => h.id === col.id)
-                        ?.getContext(),
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Paper>
-      <Stack direction="column" spacing={2}>
+                    {table.getCoreRowModel().rows.map((row) => (
+                      <TableCell key={row.id} sx={{ minWidth: 170 }}>
+                        {safeFlexRender(
+                          col.columnDef.cell,
+                          row
+                            .getAllCells()
+                            .find((cell) => cell.column.id === col.id)
+                            ?.getContext(),
+                        )}
+                      </TableCell>
+                    ))}
+                    <TableCell>
+                      {index === 0 && <AddProductCell table={table} />}
+                    </TableCell>
+                    <TableCell variant="footer">
+                      {safeFlexRender(
+                        col.columnDef.footer,
+                        table
+                          .getFooterGroups()
+                          .flatMap((g) => g.headers)
+                          .find((h) => h.id === col.id)
+                          ?.getContext(),
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Paper>
+
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            marginTop: 1,
+          }}
+        >
+          <QuoteActions quote={quote} setQuote={setQuote} />
+        </Box>
+      </Grid>
+      <Grid xs>
         <TotalsTable quote={quote} setQuote={setQuote} table={table} />
-        <QuoteActions quote={quote} setQuote={setQuote} />
-      </Stack>
-    </Stack>
+      </Grid>
+    </Grid>
   );
 }

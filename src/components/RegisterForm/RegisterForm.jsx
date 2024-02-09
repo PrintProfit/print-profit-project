@@ -28,8 +28,8 @@ function RegisterForm() {
     }
 
     // emailjs
-    //   .send('service_596xcui', 'template_98dektt', templateParams, {
-    //     publicKey: 'AHgPPyj4SiCZqSRfw',
+    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_TEMPLATE_ID, templateParams, {
+    //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
     //   })
     //   .then(
     //     () => {

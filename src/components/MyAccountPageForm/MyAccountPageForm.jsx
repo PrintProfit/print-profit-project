@@ -1,23 +1,34 @@
-import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControl,
+  FormLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 
 export default function MyAccountPageForm({ setIsForm }) {
   const dispatch = useDispatch();
 
   const profileUser = useSelector((store) => store.user.profileUserReducer);
-
   const userEmail = useSelector((store) => store.user.editUserEmail);
   const userName = useSelector((store) => store.user.editUserName);
   const [invalidText, setInvalidText] = useState('');
@@ -28,7 +39,6 @@ export default function MyAccountPageForm({ setIsForm }) {
 
   const [newPasswordInput, setNewPasswordInput] = useState('');
   const [newVerifyPasswordInput, setNewVerifyPasswordInput] = useState('');
-
   const [openComfirmation, setOpenComfirmation] = useState(false);
   const [openDiscard, setOpenDiscard] = useState(false);
 
@@ -116,13 +126,14 @@ export default function MyAccountPageForm({ setIsForm }) {
   };
 
   return (
-    <div className="">
-      <form>
-        <h3 className="invalidHeader">{invalidText}</h3>
+    <div className="accountPageForm">
+      <h3 className="invalidHeader">{invalidText}</h3>
+      <form marginTop={2}>
         <section>
-          Name:
+          <FormLabel sx={{ mt: 5 }}>Name:</FormLabel>
+
           <TextField
-            variant="standard"
+            variant="outlined"
             type="text"
             name="name"
             placeholder={profileUser.name}
@@ -130,48 +141,118 @@ export default function MyAccountPageForm({ setIsForm }) {
             onChange={(e) => handleNameChange(e.target.value)}
             required
             label="New Name"
+            color={userName.name === '' ? 'error' : ''}
+            helperText={
+              userName.name === '' ? 'you must enter a valid name' : ''
+            }
+            sx={{
+              mt: 5,
+              width: '20ch',
+            }}
           />
         </section>
 
         <section>
-          Email:
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            Email:
+          </FormLabel>
           <TextField
-            variant="standard"
+            variant="outlined"
             type="email"
             name="email"
             placeholder={profileUser.email}
             value={userEmail.email}
             onChange={(e) => handleEmailChange(e.target.value)}
+            color={userEmail.email === '' ? 'error' : ''}
+            helperText={
+              userEmail.email === '' ? 'you must enter a valid email' : ''
+            }
             required
             label="New Email"
+            sx={{
+              mt: 2,
+              width: '20ch',
+            }}
           />
         </section>
 
         <section>
-          New Password:
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            New Password:
+          </FormLabel>
+
           <TextField
-            variant="standard"
+            variant="outlined"
             type="password"
             name="password"
             placeholder={'password'}
-            onClick={() => setNewPasswordInput('')}
+            color={
+              newPasswordInput.length < 8 && newPasswordInput !== ''
+                ? 'error'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'error'
+                  : ''
+            }
+            helperText={
+              newPasswordInput.length < 8 && newPasswordInput !== ''
+                ? 'password must be 8 or more characters'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'passwords do not match'
+                  : ''
+            }
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
-            label="New Password"
+            label="Enter new password"
+            sx={{
+              mt: 2,
+              width: '16ch',
+            }}
           />
         </section>
 
         <section>
-          Verify New Password:
+          <FormLabel
+            sx={{
+              mt: 2,
+            }}
+          >
+            Verify New Password:
+          </FormLabel>
+
           <TextField
-            variant="standard"
+            variant="outlined"
             type="password"
             name="Verify New Password"
             placeholder={'verify new password'}
-            onClick={() => setNewVerifyPasswordInput('')}
+            color={
+              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
+                ? 'error'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'error'
+                  : ''
+            }
+            helperText={
+              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
+                ? 'password must be 8 or more characters'
+                : newPasswordInput !== newVerifyPasswordInput
+                  ? 'passwords do not match'
+                  : ''
+            }
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
-            label="Verify New Password"
+            label="Verify new password"
+            sx={{
+              mt: 2,
+              width: '16ch',
+            }}
           />
         </section>
 
@@ -179,6 +260,12 @@ export default function MyAccountPageForm({ setIsForm }) {
           onClick={handleComfirmationClickOpen}
           variant="contained"
           type="button"
+          color="button"
+          sx={{
+            mt: 3,
+            mb: 5,
+            mr: 2,
+          }}
         >
           <SaveIcon /> Save Changes
         </Button>
@@ -187,25 +274,14 @@ export default function MyAccountPageForm({ setIsForm }) {
           onClick={handleDiscardClickOpen}
           variant="outlined"
           type="button"
+          sx={{
+            mt: 3,
+            mb: 5,
+            ml: 2,
+          }}
         >
           <DeleteIcon /> Discard Changes
         </Button>
-        <h5 className="nameErrorText">
-          {userName.name === '' ? 'you must enter a valid name' : ''}
-        </h5>
-
-        <h5 className="emailErrorText">
-          {userEmail.email === '' ? 'you must enter a valid email' : ''}
-        </h5>
-
-        <h5 className="passwordErrorText">
-          {' '}
-          {newPasswordInput.length < 8 && newPasswordInput !== ''
-            ? 'password must be 8 or more characters'
-            : newPasswordInput !== newVerifyPasswordInput
-              ? 'passwords do not match'
-              : ''}
-        </h5>
       </form>
 
       {/* Discard Dialog */}

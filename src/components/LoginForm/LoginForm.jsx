@@ -68,7 +68,7 @@ function LoginForm() {
               }}
               id="email"
               type="text"
-              label="e-mail"
+              label="E-mail"
               variant="outlined"
               value={email}
               required
@@ -80,7 +80,7 @@ function LoginForm() {
               }}
               id="password"
               type="password"
-              label="password"
+              label="Password"
               variant="outlined"
               value={password}
               required
