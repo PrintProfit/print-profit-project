@@ -14,7 +14,6 @@ function LandingPage() {
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           // minWidth: '70%',
-
           backgroundRepeat: 'no-repeat',
           height: '100vh',
           display: 'flex',

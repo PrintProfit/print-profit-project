@@ -1,4 +1,5 @@
 import { Box, Button, TextField } from '@mui/material';
+import Paper from '@mui/material/Paper';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -56,95 +57,101 @@ function RegisterForm() {
   };
 
   return (
-    <Box className="formPanel">
-      <h2>Print Profit </h2>
-      {errors.registrationMessage && (
-        <h3 className="alert" role="alert">
-          {errors.registrationMessage}
-        </h3>
-      )}
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-        onSubmit={registerUser}
-      >
-        <TextField
-          id="email"
-          type="text"
-          label="e-mail"
-          variant="outlined"
-          value={email}
-          required
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <TextField
-          id="name"
-          type="text"
-          label="Full Name"
-          variant="outlined"
-          value={name}
-          required
-          onChange={(event) => setName(event.target.value)}
-        />
-        <TextField
-          id="companyName"
-          type="text"
-          label="Company Name"
-          variant="outlined"
-          value={companyName}
-          required
-          onChange={(event) => setCompanyName(event.target.value)}
-        />
-        <TextField
-          id="password"
-          type="password"
-          label="password"
-          variant="outlined"
-          value={password}
-          required
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        <TextField
-          id="confirmPassword"
-          type="password"
-          label="Confirm Password"
-          variant="outlined"
-          value={confirmedPassword}
-          required
-          onChange={(event) => setConfirmedPassword(event.target.value)}
-        />
+    <Box sx={{ width: '400px' }}>
+      <Paper>
+        <h2>Print Profit </h2>
+        {errors.registrationMessage && (
+          <h3 className="alert" role="alert">
+            {errors.registrationMessage}
+          </h3>
+        )}
         <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="50%"
+          // flexDirection={'column'}
+          component="form"
+          sx={{
+            '& > :not(style)': { m: 1, width: '25ch' },
+            flexDirection: 'column',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+          noValidate
+          autoComplete="off"
+          onSubmit={registerUser}
         >
-          <Button
-            sx={{ mb: 10 }}
-            variant="contained"
-            type="submit"
-            name="submit"
-            value="Register"
+          <TextField
+            id="email"
+            type="text"
+            label="e-mail"
+            variant="outlined"
+            value={email}
+            required
+            onChange={(event) => setEmail(event.target.value)}
+          />
+          <TextField
+            id="name"
+            type="text"
+            label="Full Name"
+            variant="outlined"
+            value={name}
+            required
+            onChange={(event) => setName(event.target.value)}
+          />
+          <TextField
+            id="companyName"
+            type="text"
+            label="Company Name"
+            variant="outlined"
+            value={companyName}
+            required
+            onChange={(event) => setCompanyName(event.target.value)}
+          />
+          <TextField
+            id="password"
+            type="password"
+            label="password"
+            variant="outlined"
+            value={password}
+            required
+            onChange={(event) => setPassword(event.target.value)}
+          />
+          <TextField
+            id="confirmPassword"
+            type="password"
+            label="Confirm Password"
+            variant="outlined"
+            value={confirmedPassword}
+            required
+            onChange={(event) => setConfirmedPassword(event.target.value)}
+          />
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="50%"
           >
-            Register
-          </Button>
+            <Button
+              sx={{ mb: 10 }}
+              variant="contained"
+              type="submit"
+              name="submit"
+              value="Register"
+            >
+              Register
+            </Button>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            sx={{ color: '#646765' }}
+          >
+            Already a member?
+            <Button type="button" onClick={onLogin}>
+              Login
+            </Button>
+          </Box>
         </Box>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ color: '#646765' }}
-        >
-          Already a member?
-          <Button type="button" onClick={onLogin}>
-            Login
-          </Button>
-        </Box>
-      </Box>
+      </Paper>
     </Box>
   );
 }
