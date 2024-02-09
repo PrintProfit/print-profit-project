@@ -73,7 +73,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       inputMode="decimal"
       fullWidth
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => setValue(Number(e.target.value))}
       onBlur={onBlur}
       InputProps={{
         startAdornment: <InputAdornment position="start">$</InputAdornment>,
@@ -186,7 +186,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
       fullWidth
       inputMode={inputMode}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => setValue(Number(e.target.value))}
       onBlur={onBlur}
       InputProps={{
         startAdornment: adornment && (
