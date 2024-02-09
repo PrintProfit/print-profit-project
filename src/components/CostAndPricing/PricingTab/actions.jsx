@@ -24,8 +24,9 @@ import { initialQuote } from './sample-data';
  */
 export function QuoteActions({ quote, setQuote }) {
   /** @type {boolean} */
-  // @ts-ignore
-  const updateMode = useSelector((state) => state.quote.updateMode);
+  const updateMode = useSelector(
+    (/** @type {any} */ state) => state.quote.updateMode,
+  );
   return (
     <Stack direction="row" spacing={2}>
       <SaveQuote quote={quote} setQuote={setQuote} />

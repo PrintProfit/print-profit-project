@@ -37,8 +37,9 @@ export function PricingTable({ quote, setQuote }) {
   // what these objects are.
 
   /** @type {boolean} */
-  // @ts-ignore
-  const updateMode = useSelector((state) => state.quote.updateMode);
+  const updateMode = useSelector(
+    (/** @type {any} */ state) => state.quote.updateMode,
+  );
 
   const costNames = quote.products.flatMap(toCostNames).filter(unique);
 

@@ -6,7 +6,9 @@ import { repairQuote } from './data-repair';
 
 export function PricingTab() {
   /** @type {import('./data-types').Quote} */
-  const currentQuote = useSelector((state) => repairQuote(state.quote.current));
+  const currentQuote = useSelector((/** @type {any} */ state) =>
+    repairQuote(state.quote.current),
+  );
   const [quote, setQuote] = useState(currentQuote);
 
   return <PricingTable quote={quote} setQuote={setQuote} />;
