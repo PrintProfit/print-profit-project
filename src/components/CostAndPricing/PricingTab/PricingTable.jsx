@@ -27,7 +27,7 @@ import {
 } from './columns';
 import * as fmt from './formats';
 import { PricingTableRow as TableRow } from './stylized';
-import { aggregate, unique } from './utils';
+import { aggregate, toCostNames, unique } from './utils';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -40,9 +40,8 @@ export function PricingTable({ quote, setQuote }) {
   // @ts-ignore
   const updateMode = useSelector((state) => state.quote.updateMode);
 
-  const costNames = quote.products
-    .flatMap((product) => product.costs.map((cost) => cost.name))
-    .filter(unique);
+  const costNames = quote.products.flatMap(toCostNames).filter(unique);
+
   /**
    * The dynamic columns that the table uses. They're generated from the frist
    * product's costs.
