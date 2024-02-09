@@ -138,6 +138,7 @@ export function DynamicCostHeader({ column, table }) {
               size="small"
               disabled={updateMode}
               onClick={deleteCost}
+              edge="end"
             >
               <Delete fontSize="inherit" />
             </IconButton>
@@ -324,6 +325,7 @@ export function ProductNameCell({ getValue, table, row }) {
               aria-label="Remove Product"
               disabled={updateMode}
               onClick={deleteProduct}
+              edge="end"
             >
               <Delete fontSize="small" />
             </IconButton>
