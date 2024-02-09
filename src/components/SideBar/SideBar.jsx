@@ -41,7 +41,7 @@ export default function SideBar({ children }) {
             width={200}
             height={150}
             onClick={handleNavigationHome}
-            src="public/images/printProfitLogoV2.svg"
+            src="public/images/printProfitLogoV3.svg"
             alt="printProfitLogo"
           />
         </div>
