@@ -15,6 +15,8 @@ import { useHistory } from 'react-router-dom';
 
 import CreateIcon from '@mui/icons-material/Create';
 
+import emailjs from '@emailjs/browser';
+
 const filter = createFilterOptions();
 
 function AdminCreateNewUser() {
@@ -29,12 +31,30 @@ function AdminCreateNewUser() {
 
   const companyList = useSelector((store) => store.user.companyList);
 
+  const templateParams = {
+    to_name: name,
+    to_email: email,
+    to_password: password,
+  };
+
   const adminCreateUser = (event) => {
     event.preventDefault();
     if (password !== confirmedPassword) {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
     }
-    console.log('creating user');
+
+    // emailjs
+    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID, templateParams, {
+    //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+    //   })
+    //   .then(
+    //     () => {
+    //       console.log('SUCCESS!');
+    //     },
+    //     (error) => {
+    //       console.log('FAILED...', error.text);
+    //     },
+    //   );
 
     // This should do what that for loop was trying to do
     // findIndex returns -1 when the item is not found
