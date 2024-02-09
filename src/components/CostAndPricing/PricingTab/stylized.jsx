@@ -6,7 +6,7 @@ import {
   styled,
   tableCellClasses,
 } from '@mui/material';
-import { indigo, jade } from '@radix-ui/colors';
+import { indigo, jade, jadeA } from '@radix-ui/colors';
 
 export const PricingTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
@@ -27,6 +27,16 @@ export const PricingTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export const TableTextField = styled(TextField)(({ theme }) => ({
+  borderRadius: theme.shape.borderRadius,
+  transition: theme.transitions.create([
+    'border-color',
+    'background-color',
+    'box-shadow',
+  ]),
+  '&.Mui-focused': {
+    borderColor: jade.jade8,
+    boxShadow: `${jadeA.jadeA8} 0 0 0 2px`,
+  },
   [`& .${inputBaseClasses.input}`]: {
     paddingTop: '4px',
     paddingBottom: '4px',
