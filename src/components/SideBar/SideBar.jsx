@@ -7,15 +7,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 const drawerWidth = 200;
-/**
- * TODO: Create map for sidebar items
- */
 
 export default function SideBar({ children }) {
   const history = useHistory();
+  const location = useLocation();
   const user = useSelector((store) => store.user.currentUser);
 
   const handleNavigationHome = () => {
@@ -47,8 +45,21 @@ export default function SideBar({ children }) {
         </div>
 
         <List sx={{ height: '100%', textAlign: 'center' }}>
+          <Divider />
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/user">
+            <ListItemButton
+              selected={location.pathname === '/user'}
+              component={Link}
+              to={'/user'}
+              sx={{
+                textAlign: 'center',
+                // textDecoration:
+                //   location.pathname === '/user' ? 'underline' : 'none',
+                '&.Mui-selected': {
+                  color: 'black',
+                },
+              }}
+            >
               <SidebarListItemText
                 disableTypography
                 primary={
@@ -60,31 +71,98 @@ export default function SideBar({ children }) {
             </ListItemButton>
           </ListItem>
           <Divider />
+
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/cost-and-pricing">
-              <SidebarListItemText primary="Cost and pricing" />
+            <ListItemButton
+              selected={location.pathname === '/cost-and-pricing'}
+              component={Link}
+              to={'/cost-and-pricing'}
+              sx={{
+                textAlign: 'center',
+                // textDecoration:
+                //   location.pathname === '/cost-and-pricing'
+                //     ? 'underline'
+                //     : 'none',
+                '&.Mui-selected': {
+                  color: 'black',
+                },
+              }}
+            >
+              <SidebarListItemText
+                disableTypography
+                primary={<Typography>Cost and Pricing</Typography>}
+              />
             </ListItemButton>
           </ListItem>
+
           <Divider />
+
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/tool-two">
-              <SidebarListItemText primary="Profit metrics" />
+            <ListItemButton
+              selected={location.pathname === '/tool-two'}
+              component={Link}
+              to={'/tool-two'}
+              sx={{
+                textAlign: 'center',
+                // textDecoration:
+                //   location.pathname === '/tool-two' ? 'underline' : 'none',
+                '&.Mui-selected': {
+                  color: 'black',
+                },
+              }}
+            >
+              <SidebarListItemText
+                disableTypography
+                primary={<Typography>Profit Metrics</Typography>}
+              />
             </ListItemButton>
           </ListItem>
           <Divider />
 
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/tool-three">
-              <SidebarListItemText primary="Decision making" />
+            <ListItemButton
+              selected={location.pathname === '/tool-three'}
+              component={Link}
+              to={'/tool-three'}
+              sx={{
+                textAlign: 'center',
+                // textDecoration:
+                //   location.pathname === '/tool-three' ? 'underline' : 'none',
+                '&.Mui-selected': {
+                  color: 'black',
+                },
+              }}
+            >
+              <SidebarListItemText
+                disableTypography
+                primary={<Typography>Decision Making</Typography>}
+              />
             </ListItemButton>
           </ListItem>
           <Divider />
 
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/about">
-              <SidebarListItemText primary="About" />
+            <ListItemButton
+              selected={location.pathname === '/about'}
+              component={Link}
+              to={'/about'}
+              sx={{
+                textAlign: 'center',
+                // textDecoration:
+                //   location.pathname === '/about' ? 'underline' : 'none',
+                '&.Mui-selected': {
+                  color: 'black',
+                },
+              }}
+            >
+              <SidebarListItemText
+                disableTypography
+                primary={<Typography>About</Typography>}
+              />
             </ListItemButton>
           </ListItem>
+          <Divider />
+
           <Divider />
         </List>
         <List
@@ -114,6 +192,7 @@ export default function SideBar({ children }) {
           </ListItem>
         </List>
       </Drawer>
+
       <Box
         component="main"
         sx={{
