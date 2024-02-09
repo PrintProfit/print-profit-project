@@ -13,3 +13,16 @@ interface ImportMetaEnv {
   /** The approved template id for EmailJS */
   readonly VITE_EMAILJS_APPROVED_TEMPLATE_ID: string;
 }
+
+// Some module declarations related to vite-imagetools
+declare module '*&as=srcset' {
+  const srcset: string;
+  // biome-ignore lint/correctness/noUndeclaredVariables: it's declared
+  export default srcset;
+}
+
+declare module '*&format=webp' {
+  const src: string;
+  // biome-ignore lint/correctness/noUndeclaredVariables: it's declared
+  export default src;
+}
