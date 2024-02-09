@@ -97,7 +97,7 @@ function AdminCreateNewUser() {
         <TextField
           id="email"
           type="text"
-          label="e-mail"
+          label="E-mail"
           variant="filled"
           value={email}
           required
@@ -181,7 +181,7 @@ function AdminCreateNewUser() {
         <TextField
           id="password"
           type="password"
-          label="password"
+          label="Password"
           variant="filled"
           value={password}
           required
