@@ -132,19 +132,21 @@ export function DynamicCostHeader({ column, table }) {
         value={costName}
         onChange={(e) => setCostName(e.target.value)}
         onBlur={onBlur}
+        InputProps={{
+          endAdornment: updateMode || (
+            <Tooltip title="Remove Cost" arrow>
+              <IconButton
+                aria-label="Remove Cost"
+                size="small"
+                disabled={updateMode}
+                onClick={deleteCost}
+              >
+                <Delete fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
+          ),
+        }}
       />
-      {updateMode || (
-        <Tooltip title="Remove Cost" arrow>
-          <IconButton
-            aria-label="Remove Cost"
-            size="small"
-            disabled={updateMode}
-            onClick={deleteCost}
-          >
-            <Delete fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      )}
     </Box>
   );
 }
