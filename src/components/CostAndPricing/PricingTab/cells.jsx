@@ -1,6 +1,6 @@
 // @ts-check
 
-import { Add, Delete } from '@mui/icons-material';
+import { Add, Cancel, Delete } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -388,10 +388,14 @@ export function AddCostHeader({ table }) {
         </DialogContent>
         <DialogActions>
           <ButtonGroup variant="contained">
-            <Button color="secondary" onClick={closeDialog}>
+            <Button
+              color="secondary"
+              onClick={closeDialog}
+              startIcon={<Cancel />}
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={costNameExists}>
+            <Button type="submit" disabled={costNameExists} startIcon={<Add />}>
               Add Cost
             </Button>
           </ButtonGroup>
@@ -492,10 +496,16 @@ export function AddProductCell({ table }) {
         </DialogContent>
         <DialogActions>
           <ButtonGroup variant="contained">
-            <Button color="secondary" onClick={closeDialog}>
+            <Button
+              color="secondary"
+              onClick={closeDialog}
+              startIcon={<Cancel />}
+            >
               Cancel
             </Button>
-            <Button type="submit">Add Product</Button>
+            <Button type="submit" startIcon={<Add />}>
+              Add Product
+            </Button>
           </ButtonGroup>
         </DialogActions>
       </Dialog>
