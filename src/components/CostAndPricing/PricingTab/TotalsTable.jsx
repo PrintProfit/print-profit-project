@@ -1,7 +1,6 @@
 // @ts-check
 
 import {
-  Input,
   InputAdornment,
   Paper,
   Table,
@@ -9,14 +8,15 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TextField,
 } from '@mui/material';
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
-import { TotalsTableRow as TableRow } from './stylized';
-import { unique } from './utils';
+import { PricingTableRow as TableRow } from './stylized';
+import { toCostNames, unique } from './utils';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -41,33 +41,30 @@ export function TotalsTable({ quote, setQuote, table }) {
     [aggregate, quote.manual_contribution_percent],
   );
 
-  const dynamicCostNames = (quote.products ?? [])
-    .flatMap((product) => (product.costs ?? []).map((cost) => cost.name))
-    .filter(unique);
+  const dynamicCostNames = quote.products.flatMap(toCostNames).filter(unique);
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} variant="outlined">
       <Table size="small">
         <TableHead>
           <TableRow>
             <TableCell>{/* Padding for correct layout */}</TableCell>
-            <TableCell>Price on target CM%</TableCell>
+            <TableCell>Price on target contribution %</TableCell>
             <TableCell>Price on manual entry</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {/* Total Variable Costs Row */}
+          {/* Total Selling Price Row */}
           <TableRow>
-            <TableCell variant="head">Total Variable Costs</TableCell>
+            <TableCell variant="head">Total Selling Price</TableCell>
             <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
             <TableCell>
-              <Input
-                startAdornment={
-                  <InputAdornment position="start">$</InputAdornment>
-                }
+              <TextField
+                size="small"
+                inputMode="decimal"
+                fullWidth
                 value={quote.manual_total_selling_price ?? 0}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setQuote(
                     produce(
                       (/** @type {import('./data-types').Quote} */ draft) => {
@@ -78,7 +75,12 @@ export function TotalsTable({ quote, setQuote, table }) {
                     ),
                   );
                 }}
-                inputComponent={/** @type {any} */ (NumericInput)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">$</InputAdornment>
+                  ),
+                  inputComponent: /** @type {any} */ (NumericInput),
+                }}
               />
             </TableCell>
           </TableRow>
@@ -115,11 +117,10 @@ export function TotalsTable({ quote, setQuote, table }) {
             }}
             slots={{
               marginInput: (
-                <Input
+                <TextField
                   type="number"
-                  endAdornment={
-                    <InputAdornment position="end">%</InputAdornment>
-                  }
+                  size="small"
+                  fullWidth
                   value={quote.manual_contribution_percent ?? 0}
                   onChange={(e) => {
                     setQuote(
@@ -132,15 +133,18 @@ export function TotalsTable({ quote, setQuote, table }) {
                       ),
                     );
                   }}
-                  inputComponent={/** @type {any} */ (NumericInput)}
-                  // @ts-ignore
-                  inputProps={
-                    /** @type {import('react-number-format').NumericFormatProps} */ ({
-                      allowNegative: false,
-                      min: 0,
-                      max: 100,
-                    })
-                  }
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">%</InputAdornment>
+                    ),
+                    inputComponent: /** @type {any} */ (NumericInput),
+                    inputProps:
+                      /** @type {import('react-number-format').NumericFormatProps|any} */ ({
+                        allowNegative: false,
+                        min: 0,
+                        max: 100,
+                      }),
+                  }}
                 />
               ),
             }}
@@ -183,7 +187,7 @@ function ContributionRows({
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
-        <TableCell variant="head">Contribution / Hr</TableCell>
+        <TableCell variant="head">Contribution / Hour</TableCell>
         <TableCell>
           {fmt.currency(targetContrib / estimatedTotalHours)}
         </TableCell>

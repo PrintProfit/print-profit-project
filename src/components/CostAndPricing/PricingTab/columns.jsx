@@ -7,6 +7,7 @@ import {
   DollarCell,
   PercentCell,
   ProductNameCell,
+  TotalSellingPriceCell,
 } from './cells';
 import * as fmt from './formats';
 import { aggregate } from './utils';
@@ -53,7 +54,7 @@ export const consistentColumns = [
     // it from the product.
     accessorFn: calc.totalSellingPrice,
     header: 'Total Selling Price',
-    cell: ConsistentNumericCell,
+    cell: TotalSellingPriceCell,
     aggregationFn: 'sum',
     footer: ({ table, column }) => {
       const aggregate = column.getAggregationFn();
@@ -160,7 +161,7 @@ export const contributionColumns = [
   },
   {
     accessorFn: calc.contributionPerHour,
-    header: 'Contribution / Hr',
+    header: 'Contribution / Hour',
     cell: DollarCell,
     footer: ({ table }) => {
       const totalContribution = aggregate(table, 'contributionDollars') ?? 0;

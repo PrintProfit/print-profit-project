@@ -79,7 +79,7 @@ export interface UpdateQuoteProps {
   readonly quote: Quote;
 }
 
-export interface NewQuoteProps {
+export interface ClearQuoteProps {
   readonly setQuote: Dispatch<SetStateAction<Quote>>;
 }
 

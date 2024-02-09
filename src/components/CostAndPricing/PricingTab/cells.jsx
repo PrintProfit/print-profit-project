@@ -1,8 +1,7 @@
 // @ts-check
 
-import { Add, Delete } from '@mui/icons-material';
+import { Add, Calculate, Cancel, Clear, Delete } from '@mui/icons-material';
 import {
-  Box,
   Button,
   ButtonGroup,
   Dialog,
@@ -11,7 +10,6 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  Input,
   InputAdornment,
   TextField,
   Tooltip,
@@ -20,7 +18,8 @@ import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
-import { unique } from './utils';
+import { AddCostButton, AddProductFab, TableTextField } from './stylized';
+import { toCostNames, unique } from './utils';
 
 /**
  * A component that renders editable cells with dynamic costs
@@ -45,15 +44,9 @@ export function DynamicCostCell({ getValue, table, row, column }) {
     }
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
-        }
         const product = draft.products[row.index];
         if (product === undefined) {
           throw new Error('Inpossible state reached: product is undefined');
-        }
-        if (product.costs === undefined) {
-          product.costs = [];
         }
         const cost = product.costs.find((c) => c.name === costName);
         if (cost) {
@@ -75,14 +68,17 @@ export function DynamicCostCell({ getValue, table, row, column }) {
   }, [initialValue]);
 
   return (
-    <Input
+    <TableTextField
       size="small"
-      startAdornment={<InputAdornment position="start">$</InputAdornment>}
       inputMode="decimal"
+      fullWidth
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => setValue(Number(e.target.value))}
       onBlur={onBlur}
-      inputComponent={/** @type {any} */ (NumericInput)}
+      InputProps={{
+        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+        inputComponent: /** @type {any} */ (NumericInput),
+      }}
     />
   );
 }
@@ -102,13 +98,7 @@ export function DynamicCostHeader({ column, table }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
-        }
         for (const product of draft.products) {
-          if (product.costs === undefined) {
-            product.costs = [];
-          }
           const cost = product.costs.find((c) => c.name === initialCostName);
           if (cost) {
             cost.name = costName;
@@ -121,13 +111,7 @@ export function DynamicCostHeader({ column, table }) {
   const deleteCost = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
-        }
         for (const product of draft.products) {
-          if (product.costs === undefined) {
-            product.costs = [];
-          }
           const index = product.costs.findIndex((c) => c.name === costName);
           if (index !== -1) {
             // If the cost doesn't exist on a product, then the product is
@@ -140,26 +124,28 @@ export function DynamicCostHeader({ column, table }) {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-      <Input
-        size="small"
-        value={costName}
-        onChange={(e) => setCostName(e.target.value)}
-        onBlur={onBlur}
-      />
-      {updateMode || (
-        <Tooltip title="Remove Cost" arrow>
-          <IconButton
-            aria-label="Remove Cost"
-            size="small"
-            disabled={updateMode}
-            onClick={deleteCost}
-          >
-            <Delete fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Box>
+    <TableTextField
+      size="small"
+      fullWidth
+      value={costName}
+      onChange={(e) => setCostName(e.target.value)}
+      onBlur={onBlur}
+      InputProps={{
+        endAdornment: updateMode || (
+          <Tooltip title="Remove Cost" arrow>
+            <IconButton
+              aria-label="Remove Cost"
+              size="small"
+              disabled={updateMode}
+              onClick={deleteCost}
+              edge="end"
+            >
+              <Delete fontSize="inherit" />
+            </IconButton>
+          </Tooltip>
+        ),
+      }}
+    />
   );
 }
 
@@ -183,9 +169,6 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
-        }
         const product = draft.products[row.index];
         if (product && productKey) {
           product[productKey] = Number(value);
@@ -199,18 +182,103 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   }, [initialValue]);
 
   return (
-    <Input
+    <TableTextField
       size="small"
-      startAdornment={
-        adornment && (
-          <InputAdornment position="start">{adornment}</InputAdornment>
-        )
-      }
+      fullWidth
       inputMode={inputMode}
       value={value}
-      onChange={(e) => setValue(e.target.value)}
+      onChange={(e) => setValue(Number(e.target.value))}
       onBlur={onBlur}
-      inputComponent={/** @type {any} */ (NumericInput)}
+      InputProps={{
+        startAdornment: adornment && (
+          <InputAdornment position="start">{adornment}</InputAdornment>
+        ),
+        inputComponent: /** @type {any} */ (NumericInput),
+      }}
+    />
+  );
+}
+
+/**
+ * A component for the total selling price cell
+ * @param {import('./prop-types').CellProps<unknown>} props
+ * @returns {JSX.Element}
+ */
+export function TotalSellingPriceCell({ getValue, table, row, column }) {
+  const initialValue = getValue();
+  const [value, setValue] = useState(initialValue);
+
+  const isCustom = row.original.total_selling_price !== undefined;
+
+  /**
+   * onBlur is called when the input loses focus.
+   * It updates the quote with the new value, using an immer produce function
+   * to simplify state updates.
+   * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
+   */
+  const onBlur = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        const product = draft.products[row.index];
+        if (product) {
+          product.total_selling_price = Number(value);
+        }
+      }),
+    );
+  };
+
+  const clearCustomValue = () => {
+    table.options.meta?.setQuote(
+      produce((/** @type {import('./data-types').Quote} */ draft) => {
+        const product = draft.products[row.index];
+        if (product) {
+          product.total_selling_price = undefined;
+        }
+      }),
+    );
+  };
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return (
+    <TableTextField
+      size="small"
+      fullWidth
+      inputMode="decimal"
+      value={value}
+      onChange={(e) => setValue(Number(e.target.value))}
+      onBlur={onBlur}
+      InputProps={{
+        startAdornment: <InputAdornment position="start">$</InputAdornment>,
+        endAdornment: (
+          <InputAdornment position="end">
+            <Tooltip
+              title={
+                isCustom
+                  ? 'Remove Custom Value'
+                  : 'Automatically generated value'
+              }
+              arrow
+            >
+              {isCustom ? (
+                <IconButton
+                  aria-label="Remove Custom Value"
+                  size="small"
+                  onClick={clearCustomValue}
+                  edge="end"
+                >
+                  <Clear fontSize="small" />
+                </IconButton>
+              ) : (
+                <Calculate fontSize="small" />
+              )}
+            </Tooltip>
+          </InputAdornment>
+        ),
+        inputComponent: /** @type {any} */ (NumericInput),
+      }}
     />
   );
 }
@@ -228,9 +296,6 @@ export function ProductNameCell({ getValue, table, row }) {
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
-        }
         const product = draft.products[row.index];
         if (product) {
           product.name = value;
@@ -242,9 +307,6 @@ export function ProductNameCell({ getValue, table, row }) {
   const deleteProduct = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        if (draft.products === undefined || draft.products === null) {
-          throw new Error('Malformed quote: products is undefined');
-        }
         draft.products.splice(row.index, 1);
       }),
     );
@@ -255,26 +317,28 @@ export function ProductNameCell({ getValue, table, row }) {
   }, [initialValue]);
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-      <Input
-        size="small"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        onBlur={onBlur}
-      />
-      {updateMode || (
-        <Tooltip title="Remove Product" arrow>
-          <IconButton
-            aria-label="Remove Product"
-            size="small"
-            disabled={updateMode}
-            onClick={deleteProduct}
-          >
-            <Delete fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Box>
+    <TextField
+      size="small"
+      fullWidth
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={onBlur}
+      InputProps={{
+        endAdornment: updateMode || (
+          <Tooltip title="Remove Product" arrow>
+            <IconButton
+              size="small"
+              aria-label="Remove Product"
+              disabled={updateMode}
+              onClick={deleteProduct}
+              edge="end"
+            >
+              <Delete fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        ),
+      }}
+    />
   );
 }
 
@@ -306,13 +370,7 @@ export function AddCostHeader({ table }) {
   const addCost = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        if (draft.products === undefined || draft.products === null) {
-          draft.products = [];
-        }
         for (const product of draft.products) {
-          if (product.costs === undefined) {
-            product.costs = [];
-          }
           product.costs.push({
             name: costName,
             value: 0,
@@ -341,7 +399,7 @@ export function AddCostHeader({ table }) {
 
   return (
     <>
-      <Button
+      <AddCostButton
         size="small"
         // Everything kinda looks bad here
         variant="contained"
@@ -350,7 +408,7 @@ export function AddCostHeader({ table }) {
         onClick={() => setOpen(true)}
       >
         Add Cost
-      </Button>
+      </AddCostButton>
       <Dialog
         open={open}
         onClose={closeDialog}
@@ -380,10 +438,14 @@ export function AddCostHeader({ table }) {
         </DialogContent>
         <DialogActions>
           <ButtonGroup variant="contained">
-            <Button color="secondary" onClick={closeDialog}>
+            <Button
+              color="secondary"
+              onClick={closeDialog}
+              startIcon={<Cancel />}
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={costNameExists}>
+            <Button type="submit" disabled={costNameExists} startIcon={<Add />}>
               Add Cost
             </Button>
           </ButtonGroup>
@@ -408,15 +470,8 @@ export function AddProductCell({ table }) {
   const addProduct = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('./data-types').Quote} */ draft) => {
-        // This code is now preventing what should be an impossible crash.
-        if (draft.products === undefined || draft.products === null) {
-          draft.products = [];
-        }
-
         // This is probably the safest way to get a unique list of cost names.
-        const costNames = draft.products
-          .flatMap((product) => product.costs.map((c) => c.name))
-          .filter(unique);
+        const costNames = draft.products.flatMap(toCostNames).filter(unique);
 
         // This *should* also work, but it might not order things correctly,
         // and we need to update the tsconfig/jsconfig to iterate through the
@@ -448,14 +503,14 @@ export function AddProductCell({ table }) {
   return (
     <>
       <Tooltip title="Add Product" arrow>
-        <IconButton
-          // size="small"
+        <AddProductFab
+          size="small"
           color="primary"
           aria-label="Add Product"
           onClick={() => setOpen(true)}
         >
-          <Add fontSize="small" />
-        </IconButton>
+          <Add />
+        </AddProductFab>
       </Tooltip>
       <Dialog
         open={open}
@@ -484,10 +539,16 @@ export function AddProductCell({ table }) {
         </DialogContent>
         <DialogActions>
           <ButtonGroup variant="contained">
-            <Button color="secondary" onClick={closeDialog}>
+            <Button
+              color="secondary"
+              onClick={closeDialog}
+              startIcon={<Cancel />}
+            >
               Cancel
             </Button>
-            <Button type="submit">Add Product</Button>
+            <Button type="submit" startIcon={<Add />}>
+              Add Product
+            </Button>
           </ButtonGroup>
         </DialogActions>
       </Dialog>

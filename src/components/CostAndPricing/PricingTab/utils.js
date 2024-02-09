@@ -20,3 +20,10 @@ export function aggregate(table, columnId) {
  * @returns {boolean}
  */
 export const unique = (value, index, self) => self.indexOf(value) === index;
+
+/**
+ * Callback to map a product to its cost names
+ * @param {import("./data-types").Product} product
+ * @returns {string[]}
+ */
+export const toCostNames = (product) => product.costs.map((cost) => cost.name);
