@@ -1,3 +1,5 @@
+import emailjs from '@emailjs/browser';
+import CreateIcon from '@mui/icons-material/Create';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -6,16 +8,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Snackbar from '@mui/material/Snackbar';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
-import CreateIcon from '@mui/icons-material/Create';
-
-import emailjs from '@emailjs/browser';
 
 const filter = createFilterOptions();
 
@@ -29,9 +28,23 @@ function AdminCreateNewUser() {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [openSnack, setOpenSnack] = useState(false);
+
   const companyList = useSelector((store) => store.user.companyList);
 
   // console.log(password.length);
+
+  const handleSnackClick = () => {
+    setOpenSnack(true);
+  };
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenSnack(false);
+  };
 
   const templateParams = {
     to_name: name,
@@ -41,52 +54,59 @@ function AdminCreateNewUser() {
 
   const adminCreateUser = (event) => {
     event.preventDefault();
-    if (password !== confirmedPassword) {
+    if (
+      password !== confirmedPassword ||
+      password === '' ||
+      password === null ||
+      password.length < 8
+    ) {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
-    }
-
-    // emailjs
-    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID, templateParams, {
-    //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-    //   })
-    //   .then(
-    //     () => {
-    //       console.log('SUCCESS!');
-    //     },
-    //     (error) => {
-    //       console.log('FAILED...', error.text);
-    //     },
-    //   );
-
-    // This should do what that for loop was trying to do
-    // findIndex returns -1 when the item is not found
-    const company = companyList.find(
-      (company) => company.name === companyName.name,
-    );
-    if (company) {
-      const companyId = company.id;
-
-      dispatch({
-        type: 'SAGA_ADMIN_POST_NEW_USER',
-        payload: {
-          companyId: companyId,
-          email: email,
-          name: name,
-          password: password,
-        },
-      });
     } else {
-      // console.log('company not found');
+      setOpenSnack(true);
 
-      dispatch({
-        type: 'SAGA_ADMIN_POST_NEW_COMPANY_AND_USER',
-        payload: {
-          email: email,
-          name: name,
-          companyName: companyName.name,
-          password: password,
-        },
-      });
+      // emailjs
+      //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID, templateParams, {
+      //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      //   })
+      //   .then(
+      //     () => {
+      //       console.log('SUCCESS!');
+      //     },
+      //     (error) => {
+      //       console.log('FAILED...', error.text);
+      //     },
+      //   );
+
+      // This should do what that for loop was trying to do
+      // findIndex returns -1 when the item is not found
+      const company = companyList.find(
+        (company) => company.name === companyName.name,
+      );
+      if (company) {
+        const companyId = company.id;
+
+        dispatch({
+          type: 'SAGA_ADMIN_POST_NEW_USER',
+          payload: {
+            companyId: companyId,
+            email: email,
+            name: name,
+            password: password,
+          },
+        });
+      } else {
+        // console.log('company not found');
+
+        dispatch({
+          type: 'SAGA_ADMIN_POST_NEW_COMPANY_AND_USER',
+          payload: {
+            email: email,
+            name: name,
+            companyName: companyName.name,
+            password: password,
+          },
+        });
+      }
     }
     setEmail('');
     setName('');
@@ -266,6 +286,13 @@ function AdminCreateNewUser() {
           </Button>
         </Box>
       </Box>
+      <Snackbar
+        open={openSnack}
+        autoHideDuration={4000}
+        onClose={handleSnackClose}
+        message="A New Account Has Been Made"
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      />
     </Box>
   );
 }
