@@ -3,10 +3,12 @@
 import {
   Box,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
+  Typography,
   Unstable_Grid2 as Grid,
 } from '@mui/material';
 import {
@@ -15,6 +17,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useSelector } from 'react-redux';
+import { PricingToolHelp } from '../../PricingToolHelp/PricingToolHelp';
 import { TotalsTable } from './TotalsTable';
 import { QuoteActions } from './actions';
 import { AddProductCell, DynamicCostCell, DynamicCostHeader } from './cells';
@@ -124,6 +127,14 @@ export function PricingTable({ quote, setQuote }) {
         an xs of 8.5, so we double the values.
         */}
       <Grid direction="column" xs={17}>
+        <Stack
+          direction="row"
+          sx={{ alignItems: 'center', marginBottom: 1 }}
+          spacing={1}
+        >
+          <Typography variant="h5">Pricing Tool</Typography>
+          <PricingToolHelp />
+        </Stack>
         <Paper sx={{ width: '100%', overflow: 'hidden' }} variant="outlined">
           <TableContainer>
             <Table size="small" stickyHeader>
