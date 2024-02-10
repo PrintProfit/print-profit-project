@@ -31,6 +31,8 @@ function AdminCreateNewUser() {
 
   const companyList = useSelector((store) => store.user.companyList);
 
+  // console.log(password.length);
+
   const templateParams = {
     to_name: name,
     to_email: email,
@@ -120,6 +122,7 @@ function AdminCreateNewUser() {
           label="E-mail"
           variant="filled"
           value={email}
+          color={email === '' ? 'error' : ''}
           required
           onChange={(event) => setEmail(event.target.value)}
         />
@@ -129,6 +132,7 @@ function AdminCreateNewUser() {
           label="Full Name"
           variant="filled"
           value={name}
+          color={name === '' ? 'error' : ''}
           required
           onChange={(event) => setName(event.target.value)}
         />
@@ -193,6 +197,7 @@ function AdminCreateNewUser() {
               type="text"
               label="Company Name Here"
               placeholder={'Company Name Here'}
+              color={companyName === '' || companyName === null ? 'error' : ''}
               fullWidth
               variant="filled"
             />
@@ -204,15 +209,44 @@ function AdminCreateNewUser() {
           label="Password"
           variant="filled"
           value={password}
+          color={
+            password.length < 8
+              ? 'error'
+              : confirmedPassword !== password
+                ? 'error'
+                : ''
+          }
+          helperText={
+            password.length < 8 && password !== ''
+              ? 'password must be 8 or more characters'
+              : confirmedPassword !== password
+                ? 'passwords do not match'
+                : ''
+          }
           required
           onChange={(event) => setPassword(event.target.value)}
         />
+
         <TextField
           id="confirmPassword"
           type="password"
           label="Confirm Password"
           variant="filled"
           value={confirmedPassword}
+          color={
+            confirmedPassword.length < 8
+              ? 'error'
+              : confirmedPassword !== password
+                ? 'error'
+                : ''
+          }
+          helperText={
+            confirmedPassword.length < 8 && confirmedPassword !== ''
+              ? 'password must be 8 or more characters'
+              : confirmedPassword !== password
+                ? 'passwords do not match'
+                : ''
+          }
           required
           onChange={(event) => setConfirmedPassword(event.target.value)}
         />

@@ -62,12 +62,13 @@ export default function MyAccountPage() {
                 </TableRow>
 
                 <TableRow>
-                  <TableCell>
+                  <TableCell align="right">
                     <Button
                       aria-label="edit info"
                       className="editInfoButton"
                       onClick={toggleForm}
                       type="button"
+                      variant="contained"
                     >
                       <Typography> Edit info</Typography>
 
