@@ -26,33 +26,38 @@ function RegisterForm() {
 
   const registerUser = (event) => {
     event.preventDefault();
-    if (password !== confirmedPassword) {
+    if (
+      password !== confirmedPassword ||
+      password === '' ||
+      password === null ||
+      password.length < 8
+    ) {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
+    } else {
+      // emailjs
+      //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID, templateParams, {
+      //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      //   })
+      //   .then(
+      //     () => {
+      //       console.log('SUCCESS!');
+      //     },
+      //     (error) => {
+      //       console.log('FAILED...', error.text);
+      //     },
+      //   );
+
+      dispatch({
+        type: 'REGISTER',
+        payload: {
+          email: email,
+          name: name,
+          companyName: companyName,
+          password: password,
+        },
+      });
+      history.push('/waiting-page');
     }
-
-    // emailjs
-    //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID, templateParams, {
-    //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-    //   })
-    //   .then(
-    //     () => {
-    //       console.log('SUCCESS!');
-    //     },
-    //     (error) => {
-    //       console.log('FAILED...', error.text);
-    //     },
-    //   );
-
-    dispatch({
-      type: 'REGISTER',
-      payload: {
-        email: email,
-        name: name,
-        companyName: companyName,
-        password: password,
-      },
-    });
-    history.push('/waiting-page');
   }; // end registerUser
 
   const onLogin = (event) => {
