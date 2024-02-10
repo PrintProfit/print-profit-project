@@ -17,12 +17,12 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  align-content: center;
   border-radius: 5px;
   margin-top: 50px;
 }
 
-.accountPageFormArea section,
-.accountPageFormArea p {
+.accountPageFormArea section {
   font-size: 28px;
   align-items: center;
   display: flex;
@@ -31,6 +31,13 @@
   column-gap: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+.accountPageFormArea p {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .accountPageForm p {
@@ -42,8 +49,7 @@
 
 .editInfoButton {
   position: relative;
-  top: -81%;
-  right: -45%;
+  right: 8%;
 }
 
 .invalidHeader {

@@ -24,9 +24,11 @@ function PendingAdminPage({ pendingUser }) {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  // console.log('company', companyList);
+  console.log('company', pendingUser);
 
-  const [newCompanyInput, setNewCompanyInput] = useState('');
+  const [newCompanyInput, setNewCompanyInput] = useState(
+    pendingUser.pending_company_name,
+  );
   const [openApproval, setOpenApproval] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
 
@@ -168,8 +170,8 @@ function PendingAdminPage({ pendingUser }) {
         <DialogTitle>Are you sure you want to approve this user?</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please select the correct company or add a new company it doesn't
-            already exsist.
+            Please select ADD button before the new company name if you are
+            entering a new company, or select the pre exsisting company.
           </DialogContentText>
           <Autocomplete
             value={newCompanyInput}
@@ -232,6 +234,11 @@ function PendingAdminPage({ pendingUser }) {
                 type="text"
                 label="Company Name Here"
                 placeholder={pendingUser.pending_company_name || ''}
+                color={
+                  newCompanyInput === '' || newCompanyInput === null
+                    ? 'error'
+                    : ''
+                }
                 fullWidth
                 variant="standard"
               />
