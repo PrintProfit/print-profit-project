@@ -121,17 +121,13 @@ export function PricingTable({ quote, setQuote }) {
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
   return (
-    <Grid container columns={24} direction="row" spacing={2} marginTop={1}>
+    <Grid container columns={24} direction="row" spacing={2} mt={1}>
       {/*
         Grids have 12 columns by default, but the pricing tool looks best with
         an xs of 8.5, so we double the values.
         */}
       <Grid direction="column" xs={17}>
-        <Stack
-          direction="row"
-          sx={{ alignItems: 'center', marginBottom: 1 }}
-          spacing={1}
-        >
+        <Stack direction="row" sx={{ alignItems: 'center', mb: 1 }} spacing={1}>
           <Typography variant="h5">Pricing Tool</Typography>
           <PricingToolHelp />
         </Stack>
