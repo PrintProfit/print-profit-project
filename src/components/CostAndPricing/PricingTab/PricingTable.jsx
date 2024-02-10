@@ -197,7 +197,7 @@ export function PricingTable({ quote, setQuote }) {
         </Box>
       </Grid>
       <Grid xs>
-        <Typography variant="h5" sx={{ mb: 1 }}>
+        <Typography variant="h5" sx={{ mb: 2 }}>
           Totals
         </Typography>
         <TotalsTable quote={quote} setQuote={setQuote} table={table} />
