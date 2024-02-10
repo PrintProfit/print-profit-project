@@ -12,6 +12,7 @@ import Snackbar from '@mui/material/Snackbar';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -116,7 +117,7 @@ function AdminCreateNewUser() {
   };
 
   return (
-    <Box className="formPanel" textAlign={'center'} marginTop={'3%'}>
+    <Box className="adminCreateUserCss" textAlign={'center'} marginTop={'3%'}>
       <h2>Enter new information to create a member!</h2>
       {errors.registrationMessage && (
         <h3 className="alert" role="alert">
@@ -124,13 +125,14 @@ function AdminCreateNewUser() {
         </h3>
       )}
       <Box
+        className="adminCreateNewUserForm"
         component="form"
         display="flex"
         justifyContent="center"
         alignItems="center"
         flexDirection={'column'}
         sx={{
-          '& > :not(style)': { m: 1, width: '25ch' },
+          '& > :not(style)': { m: 1, width: '30ch' },
         }}
         noValidate
         autoComplete="off"
@@ -142,7 +144,7 @@ function AdminCreateNewUser() {
           label="E-mail"
           variant="filled"
           value={email}
-          color={email === '' ? 'error' : ''}
+          // color={email === '' ? 'error' : ''}
           required
           onChange={(event) => setEmail(event.target.value)}
         />
@@ -152,77 +154,106 @@ function AdminCreateNewUser() {
           label="Full Name"
           variant="filled"
           value={name}
-          color={name === '' ? 'error' : ''}
+          // color={name === '' ? 'error' : ''}
           required
           onChange={(event) => setName(event.target.value)}
         />
 
-        <Autocomplete
-          value={companyName}
-          onChange={(event, newValue) => {
-            if (typeof newValue === 'string') {
-              setCompanyName({
-                name: newValue,
-              });
-            } else if (newValue?.inputValue) {
-              // Create a new value from the user input
-              setCompanyName({
-                name: newValue.inputValue,
-              });
-            } else {
-              setCompanyName(newValue);
-            }
+        <Tooltip
+          title='Click the "Add" button if you want to create a new company'
+          placement="top"
+          slotProps={{
+            popper: {
+              sx: {
+                [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginTop: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginBottom: '-2.5px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginLeft: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginRight: '0px',
+                  },
+              },
+            },
           }}
-          filterOptions={(options, params) => {
-            const filtered = filter(options, params);
+        >
+          <Autocomplete
+            value={companyName}
+            onChange={(event, newValue) => {
+              if (typeof newValue === 'string') {
+                setCompanyName({
+                  name: newValue,
+                });
+              } else if (newValue?.inputValue) {
+                // Create a new value from the user input
+                setCompanyName({
+                  name: newValue.inputValue,
+                });
+              } else {
+                setCompanyName(newValue);
+              }
+            }}
+            filterOptions={(options, params) => {
+              const filtered = filter(options, params);
 
-            const { inputValue } = params;
-            // Suggest the creation of a new value
-            const isExisting = options.some(
-              (option) => inputValue === option.name,
-            );
-            if (inputValue !== '' && !isExisting) {
-              filtered.push({
-                inputValue,
-                name: `Add "${inputValue}"`,
-              });
-            }
-            return filtered;
-          }}
-          selectOnFocus
-          clearOnBlur
-          handleHomeEndKeys
-          options={companyList}
-          getOptionLabel={(option) => {
-            // Value selected with enter, right from the input
-            if (typeof option === 'string') {
-              return option;
-            }
-            // Add "xxx" option created dynamically
-            if (option.inputValue) {
-              return option.inputValue;
-            }
-            // Regular option
-            return option.name;
-          }}
-          renderOption={(props, option) => <li {...props}>{option.name}</li>}
-          sx={{ width: 300 }}
-          freeSolo
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              required
-              margin="dense"
-              name="text"
-              type="text"
-              label="Company Name Here"
-              placeholder={'Company Name Here'}
-              color={companyName === '' || companyName === null ? 'error' : ''}
-              fullWidth
-              variant="filled"
-            />
-          )}
-        />
+              const { inputValue } = params;
+              // Suggest the creation of a new value
+              const isExisting = options.some(
+                (option) => inputValue === option.name,
+              );
+              if (inputValue !== '' && !isExisting) {
+                filtered.push({
+                  inputValue,
+                  name: `Add "${inputValue}"`,
+                });
+              }
+              return filtered;
+            }}
+            selectOnFocus
+            clearOnBlur
+            handleHomeEndKeys
+            options={companyList}
+            getOptionLabel={(option) => {
+              // Value selected with enter, right from the input
+              if (typeof option === 'string') {
+                return option;
+              }
+              // Add "xxx" option created dynamically
+              if (option.inputValue) {
+                return option.inputValue;
+              }
+              // Regular option
+              return option.name;
+            }}
+            renderOption={(props, option) => <li {...props}>{option.name}</li>}
+            sx={{ width: 300 }}
+            freeSolo
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                required
+                margin="dense"
+                name="text"
+                type="text"
+                label="Company Name Here"
+                placeholder={'Company Name Here'}
+                color={
+                  companyName === '' || companyName === null ? 'error' : ''
+                }
+                fullWidth
+                variant="filled"
+              />
+            )}
+          />
+        </Tooltip>
         <TextField
           id="password"
           type="password"
@@ -230,7 +261,7 @@ function AdminCreateNewUser() {
           variant="filled"
           value={password}
           color={
-            password.length < 8
+            password.length < 8 && password !== ''
               ? 'error'
               : confirmedPassword !== password
                 ? 'error'
@@ -254,7 +285,7 @@ function AdminCreateNewUser() {
           variant="filled"
           value={confirmedPassword}
           color={
-            confirmedPassword.length < 8
+            confirmedPassword.length < 8 && confirmedPassword !== ''
               ? 'error'
               : confirmedPassword !== password
                 ? 'error'
@@ -270,12 +301,7 @@ function AdminCreateNewUser() {
           required
           onChange={(event) => setConfirmedPassword(event.target.value)}
         />
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="50%"
-        >
+        <Box display="flex" justifyContent="center" alignItems="center">
           <Button
             variant="contained"
             type="submit"

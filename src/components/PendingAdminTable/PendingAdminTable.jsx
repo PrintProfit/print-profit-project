@@ -24,7 +24,7 @@ function PendingAdminPage({ pendingUser }) {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  console.log('company', pendingUser);
+  // console.log('company', pendingUser);
 
   const [newCompanyInput, setNewCompanyInput] = useState(
     pendingUser.pending_company_name,
