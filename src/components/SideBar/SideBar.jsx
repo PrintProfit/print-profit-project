@@ -33,7 +33,7 @@ export default function SideBar({ children }) {
         variant="permanent"
         anchor="left"
       >
-        <div style={{ cursor: 'pointer' }}>
+        <div style={{ cursor: 'pointer' }} id="logo">
           {/* biome-ignore lint/a11y/useKeyWithClickEvents: Will change to logo will deal with later */}
           <img
             width={200}
@@ -161,7 +161,6 @@ export default function SideBar({ children }) {
               />
             </ListItemButton>
           </ListItem>
-          <Divider />
 
           <Divider />
         </List>
