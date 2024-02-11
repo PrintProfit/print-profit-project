@@ -24,7 +24,7 @@ function PendingAdminPage({ pendingUser }) {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  console.log('company', pendingUser);
+  // console.log('company', pendingUser);
 
   const [newCompanyInput, setNewCompanyInput] = useState(
     pendingUser.pending_company_name,
@@ -171,7 +171,7 @@ function PendingAdminPage({ pendingUser }) {
         <DialogContent>
           <DialogContentText>
             Please select ADD button before the new company name if you are
-            entering a new company, or select the pre exsisting company.
+            entering a new company, or select a pre exsisting company.
           </DialogContentText>
           <Autocomplete
             value={newCompanyInput}

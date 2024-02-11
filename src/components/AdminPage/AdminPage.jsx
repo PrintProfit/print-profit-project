@@ -6,6 +6,7 @@ import AdminCreateNewUser from '../AdminCreateNewUser/AdminCreateNewUser';
 import AdminView from '../AdminView/AdminView';
 import ApprovedAdminTable from '../ApprovedAdminTable/ApprovedAdminTable';
 import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
+import './adminPage.css';
 
 function AdminPage() {
   const dispatch = useDispatch();
