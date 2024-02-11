@@ -171,7 +171,7 @@ function PendingAdminPage({ pendingUser }) {
         <DialogContent>
           <DialogContentText>
             Please select ADD button before the new company name if you are
-            entering a new company, or select a pre exsisting company.
+            entering a new company, or select a pre-existing company.
           </DialogContentText>
           <Autocomplete
             value={newCompanyInput}
