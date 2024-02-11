@@ -62,6 +62,15 @@ function AdminCreateNewUser() {
       password.length < 8
     ) {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
+    } else if (
+      email === '' ||
+      name === '' ||
+      email === null ||
+      name === null ||
+      companyName === '' ||
+      companyName === null
+    ) {
+      dispatch({ type: 'REGISTRATION_FAILED' });
     } else {
       setOpenSnack(true);
 
@@ -108,6 +117,7 @@ function AdminCreateNewUser() {
           },
         });
       }
+      dispatch({ type: 'CLEAR_REGISTRATION_ERROR' });
     }
     setEmail('');
     setName('');
@@ -118,9 +128,13 @@ function AdminCreateNewUser() {
 
   return (
     <Box className="adminCreateUserCss" textAlign={'center'} marginTop={'3%'}>
-      <h2>Enter new information to create a member!</h2>
+      <h2>
+        {errors.registrationMessage === ''
+          ? 'Enter new information to create a member!'
+          : ''}
+      </h2>
       {errors.registrationMessage && (
-        <h3 className="alert" role="alert">
+        <h3 id="createUserAlertId" className="alert" role="alert">
           {errors.registrationMessage}
         </h3>
       )}
@@ -138,26 +152,81 @@ function AdminCreateNewUser() {
         autoComplete="off"
         onSubmit={adminCreateUser}
       >
-        <TextField
-          id="email"
-          type="text"
-          label="E-mail"
-          variant="filled"
-          value={email}
-          // color={email === '' ? 'error' : ''}
-          required
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <TextField
-          id="name"
-          type="text"
-          label="Full Name"
-          variant="filled"
-          value={name}
-          // color={name === '' ? 'error' : ''}
-          required
-          onChange={(event) => setName(event.target.value)}
-        />
+        <Tooltip
+          title="enter a valid gmail here"
+          placement="top"
+          slotProps={{
+            popper: {
+              sx: {
+                [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginTop: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginBottom: '1px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginLeft: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginRight: '0px',
+                  },
+              },
+            },
+          }}
+        >
+          <TextField
+            id="email"
+            type="text"
+            label="E-mail"
+            variant="filled"
+            value={email}
+            // color={email === '' ? 'error' : ''}
+            required
+            onChange={(event) => setEmail(event.target.value)}
+          />
+        </Tooltip>
+
+        <Tooltip
+          title="enter first or full name here"
+          placement="top"
+          slotProps={{
+            popper: {
+              sx: {
+                [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginTop: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginBottom: '1px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginLeft: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginRight: '0px',
+                  },
+              },
+            },
+          }}
+        >
+          <TextField
+            id="name"
+            type="text"
+            label="Full Name"
+            variant="filled"
+            value={name}
+            // color={name === '' ? 'error' : ''}
+            required
+            onChange={(event) => setName(event.target.value)}
+          />
+        </Tooltip>
 
         <Tooltip
           title='Click the "Add" button if you want to create a new company'
@@ -254,53 +323,101 @@ function AdminCreateNewUser() {
             )}
           />
         </Tooltip>
-        <TextField
-          id="password"
-          type="password"
-          label="Password"
-          variant="filled"
-          value={password}
-          color={
-            password.length < 8 && password !== ''
-              ? 'error'
-              : confirmedPassword !== password
-                ? 'error'
-                : ''
-          }
-          helperText={
-            password.length < 8 && password !== ''
-              ? 'password must be 8 or more characters'
-              : confirmedPassword !== password
-                ? 'passwords do not match'
-                : ''
-          }
-          required
-          onChange={(event) => setPassword(event.target.value)}
-        />
 
-        <TextField
-          id="confirmPassword"
-          type="password"
-          label="Confirm Password"
-          variant="filled"
-          value={confirmedPassword}
-          color={
-            confirmedPassword.length < 8 && confirmedPassword !== ''
-              ? 'error'
-              : confirmedPassword !== password
+        <Tooltip
+          title="password must be 8 or more characters"
+          placement="top"
+          slotProps={{
+            popper: {
+              sx: {
+                [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginTop: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginBottom: '1px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginLeft: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginRight: '0px',
+                  },
+              },
+            },
+          }}
+        >
+          <TextField
+            id="password"
+            type="password"
+            label="Password"
+            variant="filled"
+            value={password}
+            color={
+              password.length < 8 && password !== ''
                 ? 'error'
-                : ''
-          }
-          helperText={
-            confirmedPassword.length < 8 && confirmedPassword !== ''
-              ? 'password must be 8 or more characters'
-              : confirmedPassword !== password
-                ? 'passwords do not match'
-                : ''
-          }
-          required
-          onChange={(event) => setConfirmedPassword(event.target.value)}
-        />
+                : confirmedPassword !== password
+                  ? 'error'
+                  : ''
+            }
+            helperText={
+              confirmedPassword !== password ? 'passwords do not match' : ''
+            }
+            required
+            onChange={(event) => setPassword(event.target.value)}
+          />
+        </Tooltip>
+
+        <Tooltip
+          title="password must be 8 or more characters"
+          placement="top"
+          slotProps={{
+            popper: {
+              sx: {
+                [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginTop: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginBottom: '-1px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginLeft: '0px',
+                  },
+                [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                  {
+                    marginRight: '0px',
+                  },
+              },
+            },
+          }}
+        >
+          <TextField
+            id="confirmPassword"
+            type="password"
+            label="Confirm Password"
+            variant="filled"
+            value={confirmedPassword}
+            color={
+              confirmedPassword.length < 8 && confirmedPassword !== ''
+                ? 'error'
+                : confirmedPassword !== password
+                  ? 'error'
+                  : ''
+            }
+            helperText={
+              confirmedPassword !== password ? 'passwords do not match' : ''
+            }
+            required
+            onChange={(event) => setConfirmedPassword(event.target.value)}
+          />
+        </Tooltip>
+
         <Box display="flex" justifyContent="center" alignItems="center">
           <Button
             variant="contained"
