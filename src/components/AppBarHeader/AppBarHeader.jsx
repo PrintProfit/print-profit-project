@@ -36,7 +36,7 @@ export default function AppBarHeader() {
   };
 
   const handleNavigationToTools = () => {
-    history.push('/user');
+    history.push('/home');
   };
   const handleLogOut = () => {
     dispatch({ type: 'LOGOUT' });
@@ -67,7 +67,7 @@ export default function AppBarHeader() {
             fontFamily="Cormorant Variable"
             fontWeight="semibold"
             component={Link}
-            to="/user"
+            to="/home"
           >
             Print Profit
           </Typography>

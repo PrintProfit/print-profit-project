@@ -15,11 +15,11 @@ import AdminPage from '../AdminPage/AdminPage';
 import AppBarHeader from '../AppBarHeader/AppBarHeader';
 import ContactPage from '../ContactPage/ContactPage';
 import CostAndPricing from '../CostAndPricing/CostAndPricing';
+import Homepage from '../Homepage/Homepage';
 import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import SideBar from '../SideBar/SideBar';
-import UserPage from '../UserPage/UserPage';
 import WaitingPage from '../WaitingPage/WaitingPage';
 
 import MyAccountPage from '../MyAccountPage/MyAccountPage';
@@ -68,16 +68,16 @@ function App() {
           </Route>
 
           {/* For protected routes, the view could show one of several things on the same route.
-            Visiting localhost:5173/user will show the UserPage if the user is logged in.
+            Visiting localhost:5173/home will show the Homepage if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
-            Even though it seems like they are different pages, the user is always on localhost:5173/user */}
+            Even though it seems like they are different pages, the user is always on localhost:5173/home */}
 
-          <ProtectedRoute exact path="/user">
+          <ProtectedRoute exact path="/home">
             {user.is_approved ? (
               <>
                 <AppBarHeader />
                 <SideBar>
-                  <UserPage />
+                  <Homepage />
                 </SideBar>
               </>
             ) : (
@@ -85,14 +85,14 @@ function App() {
             )}
           </ProtectedRoute>
 
-          {/* only admins can see Admin page; otherwise, user is redirected to /user */}
+          {/* only admins can see Admin page; otherwise, user is redirected to /home */}
           <ProtectedRoute exact path="/admin">
             <AppBarHeader />
             <SideBar>
               {/* 🔥🔥🔥🔥Need to un-comment this for final🔥🔥🔥🔥🔥 */}
               {/* {user.is_admin ?  */}
               <AdminPage />
-              {/* : <Redirect to="/user" />} */}
+              {/* : <Redirect to="/home" />} */}
             </SideBar>
           </ProtectedRoute>
 
@@ -142,8 +142,8 @@ function App() {
           <Route exact path="/login">
             {user.is_approved ? (
               // If the user is already logged in,
-              // redirect to the /user page
-              <Redirect to="/user" />
+              // redirect to the /home page
+              <Redirect to="/home" />
             ) : (
               // Otherwise, show the login page
               <LoginPage />
@@ -153,8 +153,8 @@ function App() {
           <Route exact path="/registration">
             {user.is_approved ? (
               // If the user is already logged in,
-              // redirect them to the /user page
-              <Redirect to="/user" />
+              // redirect them to the /home page
+              <Redirect to="/home" />
             ) : (
               // Otherwise, show the registration page
               <RegisterPage />
@@ -164,8 +164,8 @@ function App() {
           <Route exact path="/home">
             {user.id ? (
               // If the user is already logged in,
-              // redirect them to the /user page
-              <Redirect to="/user" />
+              // redirect them to the /home page
+              <Redirect to="/home" />
             ) : (
               // Otherwise, show the Landing page
               <LandingPage />

@@ -17,7 +17,7 @@ export default function SideBar({ children }) {
   const user = useSelector((store) => store.user.currentUser);
 
   const handleNavigationHome = () => {
-    history.push('/user');
+    history.push('/home');
   };
   return (
     <Box sx={{ display: 'flex' }}>
@@ -33,7 +33,7 @@ export default function SideBar({ children }) {
         variant="permanent"
         anchor="left"
       >
-        <div style={{ cursor: 'pointer' }}>
+        <div style={{ cursor: 'pointer' }} id="logo">
           {/* biome-ignore lint/a11y/useKeyWithClickEvents: Will change to logo will deal with later */}
           <img
             width={200}
@@ -48,13 +48,13 @@ export default function SideBar({ children }) {
           <Divider />
           <ListItem disablePadding>
             <ListItemButton
-              selected={location.pathname === '/user'}
+              selected={location.pathname === '/home'}
               component={Link}
-              to={'/user'}
+              to={'/home'}
               sx={{
                 textAlign: 'center',
                 // textDecoration:
-                //   location.pathname === '/user' ? 'underline' : 'none',
+                //   location.pathname === '/home' ? 'underline' : 'none',
                 '&.Mui-selected': {
                   color: 'black',
                 },
@@ -157,11 +157,12 @@ export default function SideBar({ children }) {
             >
               <SidebarListItemText
                 disableTypography
-                primary={<Typography>About</Typography>}
+                primary={
+                  <Typography sx={{ fontWeight: 'bold' }}>About</Typography>
+                }
               />
             </ListItemButton>
           </ListItem>
-          <Divider />
 
           <Divider />
         </List>
@@ -177,8 +178,26 @@ export default function SideBar({ children }) {
             <>
               <Divider />
               <ListItem disablePadding>
-                <ListItemButton component={Link} to="/admin">
-                  <SidebarListItemText primary="Admin" />
+                <ListItemButton
+                  component={Link}
+                  to="/admin"
+                  selected={location.pathname === '/admin'}
+                  sx={{
+                    textAlign: 'center',
+                    textDecoration: 'bold',
+                    // textDecoration:
+                    //   location.pathname === '/home' ? 'underline' : 'none',
+                    '&.selected': {
+                      color: 'black',
+                    },
+                  }}
+                >
+                  <SidebarListItemText
+                    disableTypography
+                    primary={
+                      <Typography sx={{ fontWeight: 'bold' }}>Admin</Typography>
+                    }
+                  />
                 </ListItemButton>
               </ListItem>
             </>
@@ -186,8 +205,17 @@ export default function SideBar({ children }) {
 
           <Divider />
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/contact">
-              <SidebarListItemText primary="Contact" />
+            <ListItemButton
+              component={Link}
+              to="/contact"
+              selected={location.pathname === '/contact'}
+            >
+              <SidebarListItemText
+                disableTypography
+                primary={
+                  <Typography sx={{ fontWeight: 'bold' }}>Contact</Typography>
+                }
+              />
             </ListItemButton>
           </ListItem>
         </List>

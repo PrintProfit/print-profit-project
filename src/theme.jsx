@@ -5,16 +5,20 @@ import { createTheme } from '@mui/material';
 const theme = createTheme({
   palette: {
     primary: {
+      // seafoam green
       main: '#5CCD8B',
     },
     secondary: {
+      // dark purple-blue
       main: '#3C2A80',
     },
     button: {
+      // dark purple-blue
       main: '#3C2A80',
       contrastText: 'white',
     },
     warning: {
+      // yellow
       main: '#FFC107',
     },
   },
