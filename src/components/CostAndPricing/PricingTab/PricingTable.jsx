@@ -18,6 +18,7 @@ import {
 } from '@tanstack/react-table';
 import { useSelector } from 'react-redux';
 import { PricingToolHelp } from '../../PricingToolHelp/PricingToolHelp';
+import { TotalsHelp } from '../../PricingToolHelp/TotalsHelp';
 import { TotalsTable } from './TotalsTable';
 import { QuoteActions } from './actions';
 import { AddProductCell, DynamicCostCell, DynamicCostHeader } from './cells';
@@ -193,9 +194,12 @@ export function PricingTable({ quote, setQuote }) {
         </Box>
       </Grid>
       <Grid xs>
-        <Typography variant="h5" sx={{ mb: 2 }}>
-          Totals
-        </Typography>
+        <Stack direction="row" sx={{ alignItems: 'center', mb: 1 }} spacing={1}>
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Totals
+          </Typography>
+          <TotalsHelp />
+        </Stack>
         <TotalsTable quote={quote} setQuote={setQuote} table={table} />
       </Grid>
     </Grid>
