@@ -4,6 +4,7 @@ import Grid from '@mui/material/Grid';
 import SvgIcon from '@mui/material/SvgIcon';
 import React, { useState } from 'react';
 import LoginForm from '../LoginForm/LoginForm.jsx';
+import Header from '../UnprotectedRoutesHeader/Header.jsx';
 
 function LandingPage() {
   return (
