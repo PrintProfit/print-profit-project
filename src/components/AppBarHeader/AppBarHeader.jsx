@@ -1,5 +1,6 @@
 import '@fontsource-variable/cormorant';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import AppBar from '@mui/material/AppBar';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -79,7 +80,7 @@ export default function AppBarHeader() {
             onClick={handleMenu}
             color="inherit"
           >
-            <AccountCircleIcon />
+            {user.is_admin ? <AdminPanelSettingsIcon /> : <AccountCircleIcon />}
           </IconButton>
           <Menu
             id="menu-appbar"
