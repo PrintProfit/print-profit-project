@@ -4,7 +4,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Grid from '../Grid/HomeGrid';
 
-function UserPage() {
+function Homepage() {
   const user = useSelector((store) => store.user.currentUser);
 
   return (
@@ -17,4 +17,4 @@ function UserPage() {
 }
 
 // this allows us to use <App /> in index.js
-export default UserPage;
+export default Homepage;

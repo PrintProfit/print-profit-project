@@ -17,7 +17,7 @@ export default function SideBar({ children }) {
   const user = useSelector((store) => store.user.currentUser);
 
   const handleNavigationHome = () => {
-    history.push('/user');
+    history.push('/home');
   };
   return (
     <Box sx={{ display: 'flex' }}>
@@ -48,13 +48,13 @@ export default function SideBar({ children }) {
           <Divider />
           <ListItem disablePadding>
             <ListItemButton
-              selected={location.pathname === '/user'}
+              selected={location.pathname === '/home'}
               component={Link}
-              to={'/user'}
+              to={'/home'}
               sx={{
                 textAlign: 'center',
                 // textDecoration:
-                //   location.pathname === '/user' ? 'underline' : 'none',
+                //   location.pathname === '/home' ? 'underline' : 'none',
                 '&.Mui-selected': {
                   color: 'black',
                 },
