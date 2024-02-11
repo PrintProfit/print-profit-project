@@ -161,7 +161,7 @@ function ArchivedAdminPage({ archivedUser }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This action cannot be undone. Please be careful!
+            This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
