@@ -157,7 +157,9 @@ export default function SideBar({ children }) {
             >
               <SidebarListItemText
                 disableTypography
-                primary={<Typography>About</Typography>}
+                primary={
+                  <Typography sx={{ fontWeight: 'bold' }}>About</Typography>
+                }
               />
             </ListItemButton>
           </ListItem>
@@ -176,8 +178,26 @@ export default function SideBar({ children }) {
             <>
               <Divider />
               <ListItem disablePadding>
-                <ListItemButton component={Link} to="/admin">
-                  <SidebarListItemText primary="Admin" />
+                <ListItemButton
+                  component={Link}
+                  to="/admin"
+                  selected={location.pathname === '/admin'}
+                  sx={{
+                    textAlign: 'center',
+                    textDecoration: 'bold',
+                    // textDecoration:
+                    //   location.pathname === '/home' ? 'underline' : 'none',
+                    '&.selected': {
+                      color: 'black',
+                    },
+                  }}
+                >
+                  <SidebarListItemText
+                    disableTypography
+                    primary={
+                      <Typography sx={{ fontWeight: 'bold' }}>Admin</Typography>
+                    }
+                  />
                 </ListItemButton>
               </ListItem>
             </>
@@ -185,8 +205,17 @@ export default function SideBar({ children }) {
 
           <Divider />
           <ListItem disablePadding>
-            <ListItemButton component={Link} to="/contact">
-              <SidebarListItemText primary="Contact" />
+            <ListItemButton
+              component={Link}
+              to="/contact"
+              selected={location.pathname === '/contact'}
+            >
+              <SidebarListItemText
+                disableTypography
+                primary={
+                  <Typography sx={{ fontWeight: 'bold' }}>Contact</Typography>
+                }
+              />
             </ListItemButton>
           </ListItem>
         </List>
