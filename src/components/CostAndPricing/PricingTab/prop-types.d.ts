@@ -1,3 +1,4 @@
+import { ButtonProps, DialogProps } from '@mui/material';
 import type {
   CellContext,
   Getter,
@@ -98,4 +99,17 @@ export interface PricingTabProps {
 export interface InputExtraProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
   name: string;
+}
+
+export interface ConfirmDlaogProps {
+  readonly open: boolean;
+  readonly title: ReactNode;
+  readonly text: ReactNode;
+  readonly cancelText?: ReactNode;
+  readonly confirmText?: ReactNode;
+  readonly CancelProps?: ButtonProps;
+  readonly ConfirmProps?: ButtonProps;
+  readonly onClose: Required<DialogProps>['onClose'];
+  readonly onSubmit: () => void;
+  readonly snackbarMessage?: ReactNode;
 }
