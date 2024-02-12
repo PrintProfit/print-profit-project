@@ -47,10 +47,28 @@ function* updateQuote(action) {
   }
 }
 
+function* removeQuote(action) {
+  try {
+    yield axios.put('/api/quote/remove', action.payload);
+  } catch (error) {
+    console.log('Error with removing quote: ', error);
+  }
+}
+
+function* deleteQuote(action) {
+  try {
+    yield axios.delete('/api/quote/', action.payload);
+  } catch (error) {
+    console.log('Error deleting quote: ', error);
+  }
+}
+
 function* quoteSaga() {
   yield takeLatest('SAGA/FETCH_QUOTE_HISTORY', getQuoteHistory);
   yield takeLatest('SAGA/SAVE_QUOTE', saveQuote);
   yield takeLatest('SAGA/UPDATE_QUOTE', updateQuote);
+  yield takeLatest('SAGA_SOFT_DELETE_QUOTE', removeQuote);
+  yield takeLatest('SAGA/DELETE_QUOTE', deleteQuote);
 }
 
 export default quoteSaga;
