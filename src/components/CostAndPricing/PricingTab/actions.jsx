@@ -121,15 +121,8 @@ function SaveQuote({ quote, setQuote }) {
 function UpdateQuote({ quote }) {
   const dispatch = useDispatch();
 
-  const [open, setOpen] = useState(false);
-
   const updateQuote = () => {
     dispatch({ type: 'SAGA/UPDATE_QUOTE', payload: quote });
-  };
-
-  const onConfirm = () => {
-    updateQuote();
-    setOpen(false);
   };
 
   return (
@@ -152,7 +145,7 @@ function UpdateQuote({ quote }) {
       ConfirmProps={{
         startIcon: <Update />,
       }}
-      onConfirm={onConfirm}
+      onConfirm={updateQuote}
       snackbarMessage="Updated quote"
     />
   );
