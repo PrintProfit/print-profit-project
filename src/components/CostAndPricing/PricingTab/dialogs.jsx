@@ -37,6 +37,7 @@ export function ConfirmDialog({
   const handleSubmit = (e) => {
     e.preventDefault();
     onConfirm();
+    setSnackbarOpen(true);
   };
 
   return (
