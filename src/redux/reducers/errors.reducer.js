@@ -31,6 +31,8 @@ const registrationMessage = (state = '', action) => {
       return "Oops! That didn't work. The email might already be taken. Try again!";
     case 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH':
       return `Oops! The passwords didn't match. Try again!`;
+    case 'REGISTRATION_FAILED_DUPLICATE_EMAIL':
+      return 'Oops! The email is already taken. Try again!';
     default:
       return state;
   }
