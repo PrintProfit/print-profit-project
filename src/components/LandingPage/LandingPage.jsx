@@ -9,6 +9,7 @@ import Header from '../UnprotectedRoutesHeader/Header.jsx';
 function LandingPage() {
   return (
     <>
+      <Header />
       <Box
         sx={{
           backgroundImage: "url('public/images/printProfitBg.png')",
