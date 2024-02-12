@@ -11,7 +11,7 @@ import {
 import { produce } from 'immer';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BaseDialog, ConfirmDialog } from './dialogs';
+import { BaseDialog } from './dialogs';
 import { ConfirmButtonDialog } from './dialogs-wrapped';
 import { initialQuote } from './sample-data';
 
@@ -133,34 +133,28 @@ function UpdateQuote({ quote }) {
   };
 
   return (
-    <>
-      <Button
-        type="button"
-        variant="contained"
-        startIcon={<Update />}
-        onClick={() => setOpen(true)}
-      >
-        Update
-      </Button>
-      <ConfirmDialog
-        open={open}
-        title="Update Quote"
-        text="Are you sure you want to update this quote?"
-        cancelText="Cancel"
-        confirmText="Update"
-        CancelProps={{
-          color: 'secondary',
-          startIcon: <Cancel />,
-        }}
-        ConfirmProps={{
-          startIcon: <Update />,
-        }}
-        onClose={() => setOpen(false)}
-        onCancel={() => setOpen(false)}
-        onConfirm={onConfirm}
-        snackbarMessage="Updated quote"
-      />
-    </>
+    <ConfirmButtonDialog
+      buttonType="button"
+      buttonText="Update"
+      ButtonProps={{
+        type: 'button',
+        variant: 'contained',
+        startIcon: <Update />,
+      }}
+      title="Update Quote"
+      text="Are you sure you want to update this quote?"
+      cancelText="Cancel"
+      confirmText="Update"
+      CancelProps={{
+        color: 'secondary',
+        startIcon: <Cancel />,
+      }}
+      ConfirmProps={{
+        startIcon: <Update />,
+      }}
+      onConfirm={onConfirm}
+      snackbarMessage="Updated quote"
+    />
   );
 }
 
