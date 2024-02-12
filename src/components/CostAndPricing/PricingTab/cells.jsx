@@ -329,17 +329,22 @@ export function ProductNameCell({ getValue, table, row }) {
       onBlur={onBlur}
       InputProps={{
         endAdornment: updateMode || (
-          <Tooltip title="Remove Product" arrow>
-            <IconButton
-              size="small"
-              aria-label="Remove Product"
-              disabled={updateMode}
-              onClick={deleteProduct}
-              edge="end"
-            >
-              <Delete fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          <ConfirmButtonDialog
+            buttonType="icon"
+            buttonText="Remove Product"
+            IconProps={{
+              'aria-label': 'Remove Product',
+              size: 'small',
+              disabled: updateMode,
+              edge: 'end',
+              children: <Delete fontSize="inherit" />,
+            }}
+            TooltipProps={{ title: 'Remove Product', arrow: true }}
+            onConfirm={deleteProduct}
+            title="Remove Product"
+            text="Are you sure you want to remove this product?"
+            confirmText="Remove"
+          />
         ),
       }}
     />
