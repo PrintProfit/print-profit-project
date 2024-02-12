@@ -16,5 +16,6 @@ declare module '@tanstack/react-table' {
     costName?: string;
     productKey?: keyof Omit<Product, 'costs' | 'name'>;
     cellVariant?: TableCellProps['variant'];
+    footerVariant?: TableCellProps['variant'];
   }
 }
