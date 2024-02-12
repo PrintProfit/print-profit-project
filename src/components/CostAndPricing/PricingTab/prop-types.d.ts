@@ -101,6 +101,17 @@ export interface InputExtraProps {
   name: string;
 }
 
+export interface BaseDialogProps {
+  readonly open: boolean;
+  readonly title: ReactNode;
+  readonly children: ReactNode;
+  readonly actions: ReactNode;
+  readonly onClose: Required<DialogProps>['onClose'];
+  readonly onSubmit: () => void;
+  readonly snackbarMessage?: ReactNode;
+  readonly SnackbarProps?: Omit<DialogSnackbarProps, 'open' | 'onClose'>;
+}
+
 export interface ConfirmDlaogProps {
   readonly open: boolean;
   readonly title: ReactNode;

@@ -30,6 +30,48 @@ export function ConfirmDialog({
   snackbarMessage,
   SnackbarProps,
 }) {
+  return (
+    <BaseDialog
+      open={open}
+      title={title}
+      actions={
+        <ButtonGroup variant="contained">
+          <Button
+            type="button"
+            color="secondary"
+            onClick={onCancel}
+            {...CancelProps}
+          >
+            {cancelText}
+          </Button>
+          <Button type="submit" {...ConfirmProps}>
+            {confirmText}
+          </Button>
+        </ButtonGroup>
+      }
+      onClose={onClose}
+      onSubmit={onConfirm}
+      snackbarMessage={snackbarMessage}
+      SnackbarProps={SnackbarProps}
+    >
+      <DialogContentText>{text}</DialogContentText>
+    </BaseDialog>
+  );
+}
+
+/**
+ * @param {import('./prop-types').BaseDialogProps} props
+ */
+export function BaseDialog({
+  open,
+  title,
+  actions,
+  snackbarMessage,
+  SnackbarProps,
+  onClose,
+  onSubmit,
+  children,
+}) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   /**
@@ -37,7 +79,7 @@ export function ConfirmDialog({
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    onConfirm();
+    onSubmit();
     setSnackbarOpen(true);
   };
 
@@ -52,24 +94,8 @@ export function ConfirmDialog({
         }}
       >
         <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{text}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <ButtonGroup variant="contained">
-            <Button
-              type="button"
-              color="secondary"
-              onClick={onCancel}
-              {...CancelProps}
-            >
-              {cancelText}
-            </Button>
-            <Button type="submit" {...ConfirmProps}>
-              {confirmText}
-            </Button>
-          </ButtonGroup>
-        </DialogActions>
+        <DialogContent>{children}</DialogContent>
+        <DialogActions>{actions}</DialogActions>
       </Dialog>
       {snackbarMessage && (
         <DialogSnackbar
