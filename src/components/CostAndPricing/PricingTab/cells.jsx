@@ -13,6 +13,7 @@ import {
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import { BaseDialog } from './dialogs';
+import { ConfirmButtonDialog } from './dialogs-wrapped';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
 import { PricingTableFab as Fab, TableTextField } from './stylized';
@@ -129,17 +130,23 @@ export function DynamicCostHeader({ column, table }) {
       onBlur={onBlur}
       InputProps={{
         endAdornment: updateMode || (
-          <Tooltip title="Remove Cost" arrow>
-            <IconButton
-              aria-label="Remove Cost"
-              size="small"
-              disabled={updateMode}
-              onClick={deleteCost}
-              edge="end"
-            >
-              <Delete fontSize="inherit" />
-            </IconButton>
-          </Tooltip>
+          <ConfirmButtonDialog
+            buttonType="icon"
+            buttonText="Remove Cost"
+            IconProps={{
+              'aria-label': 'Remove Cost',
+              size: 'small',
+              disabled: updateMode,
+              edge: 'end',
+              children: <Delete fontSize="inherit" />,
+            }}
+            TooltipProps={{ title: 'Remove Cost', arrow: true }}
+            onConfirm={deleteCost}
+            title="Remove Cost"
+            text="Are you sure you want to remove this cost?"
+            confirmText="Remove"
+            // snackbars can't work here
+          />
         ),
       }}
     />

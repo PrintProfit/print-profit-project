@@ -141,7 +141,7 @@ export interface ConfirmButtonDialogProps
   readonly buttonType: 'button' | 'icon' | 'fab';
   readonly buttonText: ReactNode;
   readonly ButtonProps?: Omit<ButtonProps, 'onClick'>;
-  readonly TooltipProps?: TooltipProps;
+  readonly TooltipProps?: Omit<TooltipProps, 'children'>;
   readonly IconProps?: Omit<IconButtonProps, 'onClick'>;
   readonly FabProps?: Omit<FabProps, 'onClick'>;
 }
