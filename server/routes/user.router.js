@@ -74,7 +74,11 @@ router.post(
       res.sendStatus(201);
     } catch (error) {
       await conn.query('ROLLBACK');
+      if (error?.constraint === 'user_email_key') {
+        return res.status(409).send('Email already exists');
+      }
       console.log('Error in user.router /register POST,', error);
+      res.sendStatus(500);
     } finally {
       conn.release();
     }
