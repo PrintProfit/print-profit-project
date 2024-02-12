@@ -85,7 +85,13 @@ export function ConfirmDialog({
 /**
  * @param {import('./prop-types').DialogSnackbarProps} props
  */
-function DialogSnackbar({ open, severity, onClose, children }) {
+function DialogSnackbar({
+  open,
+  severity,
+  onClose,
+  autoHideDuration = 6000,
+  children,
+}) {
   /**
    * @param {(React.SyntheticEvent | Event)} event
    * @param {string} [reason]
@@ -109,7 +115,11 @@ function DialogSnackbar({ open, severity, onClose, children }) {
   );
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar
+      open={open}
+      autoHideDuration={autoHideDuration}
+      onClose={handleClose}
+    >
       <Alert
         onClose={handleClose}
         severity={severity}

@@ -113,6 +113,7 @@ export interface ConfirmDlaogProps {
   readonly onCancel: () => void;
   readonly onConfirm: () => void;
   readonly snackbarMessage?: ReactNode;
+  readonly SnackbarProps?: Omit<DialogSnackbarProps, 'open' | 'onClose'>;
 }
 
 export interface DialogSnackbarProps {
@@ -120,7 +121,5 @@ export interface DialogSnackbarProps {
   readonly children: ReactNode;
   readonly severity?: AlertProps['severity'];
   readonly onClose: () => void;
-  // readonly message: ReactNode;
-  // readonly setOpen: Dispatch<SetStateAction<boolean>>;
-  // readonly autoHideDuration?: number;
+  readonly autoHideDuration?: number;
 }
