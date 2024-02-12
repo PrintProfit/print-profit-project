@@ -140,25 +140,15 @@ function SaveQuote({ quote, setQuote }) {
 function UpdateQuote({ quote }) {
   const dispatch = useDispatch();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const updateQuote = () => {
     dispatch({ type: 'SAGA/UPDATE_QUOTE', payload: quote });
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onConfirm = () => {
     updateQuote();
-    setDialogOpen(false);
-    setSnackbarOpen(true);
-  };
-
-  const closeDialog = () => {
-    setDialogOpen(false);
+    setOpen(false);
   };
 
   return (
@@ -167,44 +157,27 @@ function UpdateQuote({ quote }) {
         type="button"
         variant="contained"
         startIcon={<Update />}
-        onClick={() => setDialogOpen(true)}
+        onClick={() => setOpen(true)}
       >
         Update
       </Button>
-      <Dialog
-        open={dialogOpen}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
+      <ConfirmDialog
+        open={open}
+        title="Update Quote"
+        text="Are you sure you want to update this quote?"
+        cancelText="Cancel"
+        confirmText="Update"
+        CancelProps={{
+          color: 'secondary',
+          startIcon: <Cancel />,
         }}
-      >
-        <DialogTitle>Update Quote</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to update this quote?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <ButtonGroup variant="contained">
-            <Button
-              type="button"
-              onClick={closeDialog}
-              color="secondary"
-              startIcon={<Cancel />}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" startIcon={<Update />}>
-              Update
-            </Button>
-          </ButtonGroup>
-        </DialogActions>
-      </Dialog>
-      <QuoteSnackbar
-        message="Updated quote"
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
+        ConfirmProps={{
+          startIcon: <Update />,
+        }}
+        onClose={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        onConfirm={onConfirm}
+        snackbarMessage="Updated quote"
       />
     </>
   );
