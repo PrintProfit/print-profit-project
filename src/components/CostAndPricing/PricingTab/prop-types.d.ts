@@ -1,3 +1,4 @@
+import { AlertProps, ButtonProps, DialogProps } from '@mui/material';
 import type {
   CellContext,
   Getter,
@@ -98,4 +99,38 @@ export interface PricingTabProps {
 export interface InputExtraProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
   name: string;
+}
+
+export interface BaseDialogProps {
+  readonly open: boolean;
+  readonly title: ReactNode;
+  readonly children: ReactNode;
+  readonly actions: ReactNode;
+  readonly onClose: Required<DialogProps>['onClose'];
+  readonly onSubmit: () => void;
+  readonly snackbarMessage?: ReactNode;
+  readonly SnackbarProps?: Omit<DialogSnackbarProps, 'open' | 'onClose'>;
+}
+
+export interface ConfirmDlaogProps {
+  readonly open: boolean;
+  readonly title: ReactNode;
+  readonly text: ReactNode;
+  readonly cancelText?: ReactNode;
+  readonly confirmText?: ReactNode;
+  readonly CancelProps?: ButtonProps;
+  readonly ConfirmProps?: ButtonProps;
+  readonly onClose: Required<DialogProps>['onClose'];
+  readonly onCancel: () => void;
+  readonly onConfirm: () => void;
+  readonly snackbarMessage?: ReactNode;
+  readonly SnackbarProps?: Omit<DialogSnackbarProps, 'open' | 'onClose'>;
+}
+
+export interface DialogSnackbarProps {
+  readonly open: boolean;
+  readonly children: ReactNode;
+  readonly severity?: AlertProps['severity'];
+  readonly onClose: () => void;
+  readonly autoHideDuration?: number;
 }

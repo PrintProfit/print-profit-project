@@ -1,22 +1,17 @@
 // @ts-check
 
-import { Cancel, Clear, Close, Save, Update } from '@mui/icons-material';
+import { Cancel, Clear, Save, Update } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
-  DialogTitle,
-  IconButton,
-  Snackbar,
   Stack,
   TextField,
 } from '@mui/material';
 import { produce } from 'immer';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { BaseDialog, ConfirmDialog } from './dialogs';
 import { initialQuote } from './sample-data';
 
 /**
@@ -42,24 +37,19 @@ export function QuoteActions({ quote, setQuote }) {
 function SaveQuote({ quote, setQuote }) {
   const dispatch = useDispatch();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const saveQuote = () => {
     dispatch({ type: 'SAGA/SAVE_QUOTE', payload: quote });
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    saveQuote();
-    setDialogOpen(false);
-    setSnackbarOpen(true);
+  const onClose = () => {
+    setOpen(false);
   };
-  const closeDialog = () => {
-    setDialogOpen(false);
+
+  const onSubmit = () => {
+    saveQuote();
+    onClose();
   };
 
   /**
@@ -79,40 +69,18 @@ function SaveQuote({ quote, setQuote }) {
         type="button"
         variant="contained"
         startIcon={<Save />}
-        onClick={() => setDialogOpen(true)}
+        onClick={() => setOpen(true)}
       >
         Save as new quote
       </Button>
-      <Dialog
-        open={dialogOpen}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
-        }}
-      >
-        <DialogTitle>Save Quote</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please specify a name for the quote.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            fullWidth
-            id="quoteName"
-            name="quoteName"
-            label="Quote Name"
-            value={quote.name}
-            onChange={setQuoteName}
-          />
-        </DialogContent>
-        <DialogActions>
+      <BaseDialog
+        open={open}
+        title="Save Quote"
+        actions={
           <ButtonGroup variant="contained">
             <Button
               type="button"
-              onClick={closeDialog}
+              onClick={onClose}
               color="secondary"
               startIcon={<Cancel />}
             >
@@ -122,13 +90,26 @@ function SaveQuote({ quote, setQuote }) {
               Save
             </Button>
           </ButtonGroup>
-        </DialogActions>
-      </Dialog>
-      <QuoteSnackbar
-        message="Saved quote"
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
-      />
+        }
+        onClose={onClose}
+        onSubmit={onSubmit}
+        snackbarMessage="Saved quote"
+      >
+        <DialogContentText>
+          Please specify a name for the quote.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          required
+          margin="dense"
+          fullWidth
+          id="quoteName"
+          name="quoteName"
+          label="Quote Name"
+          value={quote.name}
+          onChange={setQuoteName}
+        />
+      </BaseDialog>
     </>
   );
 }
@@ -139,25 +120,15 @@ function SaveQuote({ quote, setQuote }) {
 function UpdateQuote({ quote }) {
   const dispatch = useDispatch();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const updateQuote = () => {
     dispatch({ type: 'SAGA/UPDATE_QUOTE', payload: quote });
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onConfirm = () => {
     updateQuote();
-    setDialogOpen(false);
-    setSnackbarOpen(true);
-  };
-
-  const closeDialog = () => {
-    setDialogOpen(false);
+    setOpen(false);
   };
 
   return (
@@ -166,44 +137,27 @@ function UpdateQuote({ quote }) {
         type="button"
         variant="contained"
         startIcon={<Update />}
-        onClick={() => setDialogOpen(true)}
+        onClick={() => setOpen(true)}
       >
         Update
       </Button>
-      <Dialog
-        open={dialogOpen}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
+      <ConfirmDialog
+        open={open}
+        title="Update Quote"
+        text="Are you sure you want to update this quote?"
+        cancelText="Cancel"
+        confirmText="Update"
+        CancelProps={{
+          color: 'secondary',
+          startIcon: <Cancel />,
         }}
-      >
-        <DialogTitle>Update Quote</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to update this quote?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <ButtonGroup variant="contained">
-            <Button
-              type="button"
-              onClick={closeDialog}
-              color="secondary"
-              startIcon={<Cancel />}
-            >
-              Cancel
-            </Button>
-            <Button type="submit" startIcon={<Update />}>
-              Update
-            </Button>
-          </ButtonGroup>
-        </DialogActions>
-      </Dialog>
-      <QuoteSnackbar
-        message="Updated quote"
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
+        ConfirmProps={{
+          startIcon: <Update />,
+        }}
+        onClose={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+        onConfirm={onConfirm}
+        snackbarMessage="Updated quote"
       />
     </>
   );
@@ -216,7 +170,6 @@ function ClearQuote({ setQuote }) {
   const dispatch = useDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const createQuote = () => {
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: false });
@@ -224,17 +177,8 @@ function ClearQuote({ setQuote }) {
     setQuote(initialQuote);
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onConfirm = () => {
     createQuote();
-    setDialogOpen(false);
-    setSnackbarOpen(true);
-  };
-
-  const closeDialog = () => {
     setDialogOpen(false);
   };
 
@@ -249,79 +193,25 @@ function ClearQuote({ setQuote }) {
       >
         Clear Quote
       </Button>
-      <Dialog
+      <ConfirmDialog
         open={dialogOpen}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
+        title="Are you sure?"
+        text="Are you sure you want to clear the current quote? This will discard any unsaved changes."
+        cancelText="Cancel"
+        confirmText="Clear"
+        CancelProps={{
+          color: 'secondary',
+          startIcon: <Cancel />,
         }}
-      >
-        <DialogTitle>Are you sure?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to clear the current quote? This will discard
-            any unsaved changes.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <ButtonGroup variant="contained">
-            <Button
-              type="button"
-              onClick={closeDialog}
-              color="secondary"
-              startIcon={<Cancel />}
-            >
-              Cancel
-            </Button>
-            <Button color="warning" type="submit" startIcon={<Clear />}>
-              Clear
-            </Button>
-          </ButtonGroup>
-        </DialogActions>
-      </Dialog>
-      <QuoteSnackbar
-        message="Created new quote"
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
+        ConfirmProps={{
+          color: 'warning',
+          startIcon: <Clear />,
+        }}
+        onClose={() => setDialogOpen(false)}
+        onCancel={() => setDialogOpen(false)}
+        onConfirm={onConfirm}
+        snackbarMessage="Created new quote"
       />
     </>
-  );
-}
-
-/**
- * @param {import('./prop-types').QuoteSnackbarProps} props
- */
-function QuoteSnackbar({ message, open, setOpen, autoHideDuration = 6000 }) {
-  /**
-   * @param {(React.SyntheticEvent | Event)} event
-   * @param {string} [reason]
-   */
-  const closeSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false);
-  };
-
-  const snackbarAction = (
-    <IconButton
-      size="small"
-      aria-label="close"
-      color="inherit"
-      onClick={closeSnackbar}
-    >
-      <Close fontSize="small" />
-    </IconButton>
-  );
-
-  return (
-    <Snackbar
-      open={open}
-      autoHideDuration={autoHideDuration}
-      message={message}
-      onClose={closeSnackbar}
-      action={snackbarAction}
-    />
   );
 }

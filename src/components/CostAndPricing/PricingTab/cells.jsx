@@ -4,11 +4,7 @@ import { Add, Calculate, Cancel, Clear, Delete } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
-  DialogTitle,
   IconButton,
   InputAdornment,
   TextField,
@@ -16,6 +12,7 @@ import {
 } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
+import { BaseDialog } from './dialogs';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
 import { AddCostButton, AddProductFab, TableTextField } from './stylized';
@@ -380,18 +377,14 @@ export function AddCostHeader({ table }) {
     );
   };
 
-  const closeDialog = () => {
+  const onClose = () => {
     setOpen(false);
     setCostName('');
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
     addCost();
-    closeDialog();
+    onClose();
   };
 
   // We need to ensure that the cost name is unique.
@@ -409,48 +402,39 @@ export function AddCostHeader({ table }) {
       >
         Add Cost
       </AddCostButton>
-      <Dialog
+      <BaseDialog
         open={open}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
-        }}
-      >
-        <DialogTitle>Cost Name</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please specify the name of the new cost.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="costName"
-            name="costName"
-            label="Cost Name"
-            fullWidth
-            value={costName}
-            onChange={(e) => setCostName(e.target.value)}
-            error={costNameExists}
-            helperText={costNameExists && 'Cost name already exists'}
-          />
-        </DialogContent>
-        <DialogActions>
+        onClose={onClose}
+        onSubmit={onSubmit}
+        title="Cost Name"
+        actions={
           <ButtonGroup variant="contained">
-            <Button
-              color="secondary"
-              onClick={closeDialog}
-              startIcon={<Cancel />}
-            >
+            <Button color="secondary" onClick={onClose} startIcon={<Cancel />}>
               Cancel
             </Button>
-            <Button type="submit" disabled={costNameExists} startIcon={<Add />}>
+            <Button type="submit" startIcon={<Add />}>
               Add Cost
             </Button>
           </ButtonGroup>
-        </DialogActions>
-      </Dialog>
+        }
+      >
+        <DialogContentText>
+          Please specify the name of the new cost.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          required
+          margin="dense"
+          id="costName"
+          name="costName"
+          label="Cost Name"
+          fullWidth
+          value={costName}
+          onChange={(e) => setCostName(e.target.value)}
+          error={costNameExists}
+          helperText={costNameExists && 'Cost name already exists'}
+        />
+      </BaseDialog>
     </>
   );
 }
@@ -462,7 +446,7 @@ export function AddProductCell({ table }) {
   const [open, setOpen] = useState(false);
   const [productName, setProductName] = useState('');
 
-  const closeDialog = () => {
+  const onClose = () => {
     setOpen(false);
     setProductName('');
   };
@@ -491,13 +475,9 @@ export function AddProductCell({ table }) {
     );
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
     addProduct();
-    closeDialog();
+    onClose();
   };
 
   return (
@@ -512,46 +492,37 @@ export function AddProductCell({ table }) {
           <Add />
         </AddProductFab>
       </Tooltip>
-      <Dialog
+      <BaseDialog
         open={open}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
-        }}
-      >
-        <DialogTitle>Product Name</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please specify the name of the new product.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="productName"
-            name="productName"
-            label="Product Name"
-            fullWidth
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
+        title="Product Name"
+        actions={
           <ButtonGroup variant="contained">
-            <Button
-              color="secondary"
-              onClick={closeDialog}
-              startIcon={<Cancel />}
-            >
+            <Button color="secondary" onClick={onClose} startIcon={<Cancel />}>
               Cancel
             </Button>
             <Button type="submit" startIcon={<Add />}>
               Add Product
             </Button>
           </ButtonGroup>
-        </DialogActions>
-      </Dialog>
+        }
+        onClose={onClose}
+        onSubmit={onSubmit}
+      >
+        <DialogContentText>
+          Please specify the name of the new product.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          required
+          margin="dense"
+          id="productName"
+          name="productName"
+          label="Product Name"
+          fullWidth
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
+        />
+      </BaseDialog>
     </>
   );
 }
