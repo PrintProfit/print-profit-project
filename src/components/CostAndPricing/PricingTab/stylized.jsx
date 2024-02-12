@@ -57,13 +57,13 @@ export const TableTextField = styled(TextField)(({ theme }) => ({
 }));
 
 export const AddProductFab = styled(Fab)(({ theme }) => ({
-  color: 'white', // Radix says jade9 & jade10 pair with white
-  backgroundColor: jade.jade9,
+  color: 'white', // Radix says indigo9 & indigo10 pair with white
+  backgroundColor: indigo.indigo9,
   '&:hover': {
-    backgroundColor: jade.jade10,
+    backgroundColor: indigo.indigo10,
     // Reset on touch devices, it doesn't add specificity
     '@media (hover: none)': {
-      backgroundColor: jade.jade9,
+      backgroundColor: indigo.indigo9,
     },
   },
 }));
