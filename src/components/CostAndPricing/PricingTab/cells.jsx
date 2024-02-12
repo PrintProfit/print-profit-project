@@ -480,7 +480,6 @@ export function AddProductCell({ table }) {
       <Tooltip title="Add Product" arrow>
         <Fab
           size="small"
-          color="primary"
           aria-label="Add Product"
           onClick={() => setOpen(true)}
         >
