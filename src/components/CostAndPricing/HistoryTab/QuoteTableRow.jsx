@@ -20,7 +20,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { totalSellingPrice } from '../PricingTab/calculations';
+import { contribution, totalSellingPrice } from '../PricingTab/calculations';
 import { unique } from '../PricingTab/utils';
 
 function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
@@ -63,7 +63,7 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
   let totalSellingPriceDetail = 0;
   let totalEstimatedHours = 0;
   let totalVariableCosts = 0;
-  const contributionAmount = 0;
+  const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
 
   return (
     <Modal
@@ -108,7 +108,7 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
                   {/* loops through product array in the given quote and adds a column for each quote */}
                   {row.products?.map((product) => (
                     <TableCell>
-                      <Typography>{product.name}</Typography>
+                      <Typography align="center">{product.name}</Typography>
                     </TableCell>
                   ))}
                   <TableCell>
@@ -164,7 +164,7 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
                   })}
                   {/* displays total selling price for the entire quote */}
                   <TableCell>
-                    <Typography fontSize="" fontWeight="bold">
+                    <Typography fontWeight="bold">
                       {USDollar.format(totalSellingPriceDetail)}
                     </Typography>
                   </TableCell>
@@ -190,40 +190,27 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
                           )}
                         </TableCell>
                       ))}
-                      {/*  */}
-                      <TableCell align="center">
-                        {USDollar.format(
-                          row.products
-                            .flatMap(
-                              (p) =>
-                                p.costs.find((c) => c.name === name)?.value ||
-                                0,
-                            )
-                            // sums all of the values for a given cost input for the given quote.
-                            // a is the accumulator, b is the new value being added, a + b is the
-                            // operation to carry out, 0 is the initial value of the accumulator
-                            .reduce((a, b) => a + b, 0),
-                        )}
+                      {/* calculates total variable costs for all products in the order */}
+                      <TableCell align="center" fontWeight="bold">
+                        <Typography fontSize="" fontWeight="bold">
+                          {USDollar.format(
+                            row.products
+                              .map(
+                                (p) =>
+                                  p.costs.find((c) => c.name === name)?.value ||
+                                  0,
+                              )
+                              // sums all of the values for a given cost input for the given quote.
+                              // a is the accumulator, b is the new value being added, a + b is the
+                              // operation to carry out, 0 is the initial value of the accumulator
+                              .reduce((a, b) => a + b, 0),
+                          )}
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   );
                 })}
 
-                <TableRow>
-                  {/* loops through product array and adds a table cell with the estimated hours spent on each product */}
-                  <TableCell>Estimated Hours</TableCell>
-                  {row.products?.map((product) => {
-                    // adds up estimated hours for all the products in the quote
-                    totalEstimatedHours += product.estimated_hours;
-                    return (
-                      <TableCell align="center">
-                        {product.estimated_hours || 0}
-                      </TableCell>
-                    );
-                  })}
-                  {/* display total estimated hours for all products in the quote */}
-                  <TableCell align="center">{totalEstimatedHours}</TableCell>
-                </TableRow>
                 <TableRow>
                   <TableCell>
                     <Typography fontSize="" fontWeight="bold">
@@ -242,13 +229,61 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
 
                   <TableCell align="center">
                     <Typography fontWeight="bold">
-                      {USDollar.format(totalVariableCosts)}
+                      {USDollar.format(totalVariableCosts / 2)}
                     </Typography>
                   </TableCell>
                 </TableRow>
-                {/* <TableRow>
-                    <TableCell>Contribution $</TableCell>
-                  </TableRow> */}
+                <TableRow>
+                  {/* loops through product array and adds a table cell with the estimated hours spent on each product */}
+                  <TableCell>Estimated Hours</TableCell>
+                  {row.products?.map((product) => {
+                    // adds up estimated hours for all the products in the quote
+                    totalEstimatedHours += product.estimated_hours;
+                    return (
+                      <TableCell align="center">
+                        {product.estimated_hours || 0}
+                      </TableCell>
+                    );
+                  })}
+                  {/* display total estimated hours for all products in the quote */}
+                  <TableCell align="center">{totalEstimatedHours}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Contribution $</TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell align="center">
+                    {USDollar.format(
+                      totalSellingPriceDetail - totalVariableCosts / 2,
+                    )}
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell>Contribution %</TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell align="center">
+                    {(
+                      ((totalSellingPriceDetail - totalVariableCosts / 2) *
+                        100) /
+                      totalSellingPriceDetail
+                    ).toFixed(2)}
+                    %
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell>Contribution / hr</TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell> </TableCell>
+                  <TableCell align="center">
+                    {USDollar.format(
+                      (totalSellingPriceDetail - totalVariableCosts / 2) /
+                        totalEstimatedHours,
+                    )}
+                  </TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>
