@@ -152,7 +152,11 @@ export function PricingTable({ quote, setQuote }) {
                       )}
                     </TableCell>
                     {table.getCoreRowModel().rows.map((row) => (
-                      <TableCell key={row.id} sx={{ minWidth: 170 }}>
+                      <TableCell
+                        key={row.id}
+                        sx={{ minWidth: 170 }}
+                        variant={col.columnDef.meta?.cellVariant}
+                      >
                         {safeFlexRender(
                           col.columnDef.cell,
                           row
@@ -162,10 +166,12 @@ export function PricingTable({ quote, setQuote }) {
                         )}
                       </TableCell>
                     ))}
-                    <TableCell>
+                    <TableCell variant={col.columnDef.meta?.cellVariant}>
                       {index === 0 && <AddProductCell table={table} />}
                     </TableCell>
-                    <TableCell variant="footer">
+                    <TableCell
+                      variant={col.columnDef.meta?.footerVariant ?? 'footer'}
+                    >
                       {safeFlexRender(
                         col.columnDef.footer,
                         table
