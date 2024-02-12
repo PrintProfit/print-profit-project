@@ -5,6 +5,11 @@ import {
   Backdrop,
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   Fade,
   IconButton,
@@ -25,7 +30,7 @@ import { unique } from '../PricingTab/utils';
 
 function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
   const dispatch = useDispatch();
-  console.log('row:', row);
+  // console.log('row:', row);
   const style = {
     position: 'absolute',
     top: '50%',
@@ -307,12 +312,24 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
  * @param {import('../PricingTab/data-types').Quote} props.row
  */
 function QuoteTableRow({ row, setTab, ...props }) {
+  const dispatch = useDispatch();
   console.log(row);
 
   // modal state
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  // Opens Delete Dialog
+  const handleDeleteClickOpen = () => {
+    setOpenDelete(true);
+  };
+
+  // Closes Delete Dialog
+  const handleDeleteClose = () => {
+    setOpenDelete(false);
+  };
 
   // formats inserted_at timestamp as readable string
   const stringifyDate = (timestamp) => {
@@ -324,6 +341,10 @@ function QuoteTableRow({ row, setTab, ...props }) {
 
   const deleteQuote = (rowId) => {
     console.log('You clicked delete! rowId is: ', rowId);
+    dispatch({
+      type: 'SAGA_SOFT_DELETE_QUOTE',
+      payload: rowId,
+    });
   };
 
   // formats number string as US currency
@@ -369,11 +390,36 @@ function QuoteTableRow({ row, setTab, ...props }) {
       </TableCell>
       <TableCell>
         <Tooltip title="Delete quote">
-          <IconButton onClick={() => deleteQuote(row.id)}>
+          <IconButton onClick={handleDeleteClickOpen}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
       </TableCell>
+
+      {/* Delete Dialog */}
+      <Dialog
+        open={openDelete}
+        onClose={handleDeleteClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {`Are you sure you want to permanently delete the ${row.name} quote?`}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button color="error" onClick={() => deleteQuote(row.id)} autoFocus>
+            <DeleteIcon /> Delete
+          </Button>
+          <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
+            <CloseIcon /> Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </TableRow>
   );
 }
