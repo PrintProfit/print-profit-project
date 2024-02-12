@@ -19,7 +19,7 @@ import { aggregate } from './utils';
 export const consistentColumns = [
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Product Name',
     cell: ProductNameCell,
     footer: 'Total',
   },
