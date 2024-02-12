@@ -41,6 +41,17 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
     overflow: 'auto',
   };
 
+  let productQuantity = 0;
+  let totalSellingPriceDetail = 0;
+  let totalEstimatedHours = 0;
+  let totalVariableCosts = 0;
+  const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
+
+  const costNames = row.products
+    .flatMap((p) => p.costs.map((c) => c.name))
+    .filter(unique);
+  console.log('costNames: ', costNames);
+
   const sendToPricingTool = () => {
     dispatch({ type: 'SET_CURRENT_QUOTE', payload: row });
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: true });
@@ -53,17 +64,6 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
     style: 'currency',
     currency: 'USD',
   });
-
-  const costNames = row.products
-    .flatMap((p) => p.costs.map((c) => c.name))
-    .filter(unique);
-  console.log('costNames: ', costNames);
-
-  let productQuantity = 0;
-  let totalSellingPriceDetail = 0;
-  let totalEstimatedHours = 0;
-  let totalVariableCosts = 0;
-  const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
 
   return (
     <Modal
@@ -322,6 +322,10 @@ function QuoteTableRow({ row, setTab, ...props }) {
     return stringifiedDate;
   };
 
+  const deleteQuote = (rowId) => {
+    console.log('You clicked delete! rowId is: ', rowId);
+  };
+
   // formats number string as US currency
   const USDollar = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -365,7 +369,7 @@ function QuoteTableRow({ row, setTab, ...props }) {
       </TableCell>
       <TableCell>
         <Tooltip title="Delete quote">
-          <IconButton>
+          <IconButton onClick={() => deleteQuote(row.id)}>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
