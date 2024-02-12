@@ -4,11 +4,7 @@ import { Add, Calculate, Cancel, Clear, Delete } from '@mui/icons-material';
 import {
   Button,
   ButtonGroup,
-  Dialog,
-  DialogActions,
-  DialogContent,
   DialogContentText,
-  DialogTitle,
   IconButton,
   InputAdornment,
   TextField,
@@ -450,7 +446,7 @@ export function AddProductCell({ table }) {
   const [open, setOpen] = useState(false);
   const [productName, setProductName] = useState('');
 
-  const closeDialog = () => {
+  const onClose = () => {
     setOpen(false);
     setProductName('');
   };
@@ -479,13 +475,9 @@ export function AddProductCell({ table }) {
     );
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
     addProduct();
-    closeDialog();
+    onClose();
   };
 
   return (
@@ -500,46 +492,37 @@ export function AddProductCell({ table }) {
           <Add />
         </AddProductFab>
       </Tooltip>
-      <Dialog
+      <BaseDialog
         open={open}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
-        }}
-      >
-        <DialogTitle>Product Name</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please specify the name of the new product.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="productName"
-            name="productName"
-            label="Product Name"
-            fullWidth
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
+        title="Product Name"
+        actions={
           <ButtonGroup variant="contained">
-            <Button
-              color="secondary"
-              onClick={closeDialog}
-              startIcon={<Cancel />}
-            >
+            <Button color="secondary" onClick={onClose} startIcon={<Cancel />}>
               Cancel
             </Button>
             <Button type="submit" startIcon={<Add />}>
               Add Product
             </Button>
           </ButtonGroup>
-        </DialogActions>
-      </Dialog>
+        }
+        onClose={onClose}
+        onSubmit={onSubmit}
+      >
+        <DialogContentText>
+          Please specify the name of the new product.
+        </DialogContentText>
+        <TextField
+          autoFocus
+          required
+          margin="dense"
+          id="productName"
+          name="productName"
+          label="Product Name"
+          fullWidth
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
+        />
+      </BaseDialog>
     </>
   );
 }
