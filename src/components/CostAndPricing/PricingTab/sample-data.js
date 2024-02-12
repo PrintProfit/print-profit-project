@@ -69,7 +69,7 @@ export const initialQuote = {
   name: '',
   products: [
     {
-      name: 'Item 1',
+      name: 'Product 1',
       quantity: 0,
       selling_price_per_unit: 0,
       estimated_hours: 0,
@@ -79,7 +79,7 @@ export const initialQuote = {
       ],
     },
     {
-      name: 'Item 2',
+      name: 'Product 2',
       quantity: 0,
       selling_price_per_unit: 0,
       estimated_hours: 0,
@@ -89,7 +89,7 @@ export const initialQuote = {
       ],
     },
     {
-      name: 'Item 3',
+      name: 'Product 3',
       quantity: 0,
       selling_price_per_unit: 0,
       estimated_hours: 0,
