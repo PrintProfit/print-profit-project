@@ -58,6 +58,7 @@ function* removeQuote(action) {
 function* deleteQuote(action) {
   try {
     yield axios.delete('/api/quote/', action.payload);
+    yield axios.put('SAGA/FETCH_QUOTE_HISTORY', 0);
   } catch (error) {
     console.log('Error deleting quote: ', error);
   }

@@ -87,11 +87,11 @@ function QuoteDetailsModal({
         quote_id: rowId,
         id: row.user_id,
         quote: row,
+        payload: 0,
       },
     });
     handleDeleteClose();
     handleClose();
-    put({ type: 'SAGA/FETCH_QUOTE_HISTORY' });
     // dispatch({
     //   type: 'SAGA/FETCH_QUOTE_HISTORY',
     //   payload: currentUser.company_id,
