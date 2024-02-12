@@ -43,7 +43,7 @@ function QuoteDetailsModal({
   const [openDelete, setOpenDelete] = useState(false);
   const currentUser = useSelector((store) => store.user.currentUser);
 
-  console.log('row:', row);
+  // console.log('row:', row);
   const style = {
     position: 'absolute',
     top: '50%',
@@ -76,10 +76,11 @@ function QuoteDetailsModal({
     setTab(0);
   };
 
+  // 🔥🔥🔥🔥🔥🔥 need some asynchronous requests here
   const deleteQuote = (rowId) => {
     console.log('You clicked delete! rowId is: ', rowId);
     dispatch({
-      type: 'SAGA_SOFT_DELETE_QUOTE',
+      type: 'SAGA/DELETE_QUOTE',
       payload: {
         remove_quote: true,
         quote_id: rowId,
@@ -88,11 +89,11 @@ function QuoteDetailsModal({
       },
     });
     handleDeleteClose();
-    handleClose();
-    dispatch({
-      type: 'SAGA/FETCH_QUOTE_HISTORY',
-      payload: currentUser.company_id,
-    });
+    // handleClose();
+    // dispatch({
+    //   type: 'SAGA/FETCH_QUOTE_HISTORY',
+    //   payload: currentUser.company_id,
+    // });
   };
 
   // formats number string as US currency
