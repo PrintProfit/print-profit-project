@@ -28,10 +28,27 @@ const registrationMessage = (state = '', action) => {
     case 'REGISTRATION_INPUT_ERROR':
       return 'Choose a email and password!';
     case 'REGISTRATION_FAILED':
-      return "Oops! That didn't work. The email might already be taken. Try again!";
+      return "Oops! That didn't work. Enter valid email, name and company!";
     case 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH':
       return `Oops! The passwords didn't match. Try again!`;
     case 'REGISTRATION_FAILED_DUPLICATE_EMAIL':
+      return 'Oops! The email is already taken. Try again!';
+    default:
+      return state;
+  }
+};
+
+const adminCreateUserMessage = (state = '', action) => {
+  switch (action.type) {
+    case 'CLEAR_CREATE_USER_ERROR':
+      return '';
+    case 'CREATE_USER_INPUT_ERROR':
+      return 'Choose a email and password!';
+    case 'CREATE_USER_FAILED':
+      return "Oops! That didn't work. Enter valid email, name and company!";
+    case 'CREATE_USER_FAILED_PASSWORDS_DONT_MATCH':
+      return `Oops! The passwords didn't match. Try again!`;
+    case 'CREATE_USER_FAILED_DUPLICATE_EMAIL':
       return 'Oops! The email is already taken. Try again!';
     default:
       return state;
@@ -44,4 +61,5 @@ const registrationMessage = (state = '', action) => {
 export default combineReducers({
   loginMessage,
   registrationMessage,
+  adminCreateUserMessage,
 });

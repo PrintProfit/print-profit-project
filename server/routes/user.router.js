@@ -496,6 +496,9 @@ router.post(
         res.sendStatus(201);
       })
       .catch((err) => {
+        if (err?.constraint === 'user_email_key') {
+          return res.status(409).send('Email already exists');
+        }
         console.log('err in admin user post route', err);
         res.sendStatus(500);
       });

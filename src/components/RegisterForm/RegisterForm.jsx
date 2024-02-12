@@ -1,10 +1,10 @@
+import emailjs from '@emailjs/browser';
 import { Box, Button, TextField } from '@mui/material';
 import Paper from '@mui/material/Paper';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
-import emailjs from '@emailjs/browser';
 
 function RegisterForm() {
   const [email, setEmail] = useState('');
@@ -33,6 +33,15 @@ function RegisterForm() {
       password.length < 8
     ) {
       dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
+    } else if (
+      email === '' ||
+      name === '' ||
+      email === null ||
+      name === null ||
+      companyName === '' ||
+      companyName === null
+    ) {
+      dispatch({ type: 'REGISTRATION_FAILED' });
     } else {
       // emailjs
       //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID, templateParams, {
@@ -56,6 +65,7 @@ function RegisterForm() {
           password: password,
         },
       });
+      dispatch({ type: 'CLEAR_REGISTRATION_ERROR' });
       history.push('/waiting-page');
     }
   }; // end registerUser
@@ -113,24 +123,95 @@ function RegisterForm() {
             required
             onChange={(event) => setCompanyName(event.target.value)}
           />
-          <TextField
-            id="password"
-            type="password"
-            label="password"
-            variant="outlined"
-            value={password}
-            required
-            onChange={(event) => setPassword(event.target.value)}
-          />
-          <TextField
-            id="confirmPassword"
-            type="password"
-            label="Confirm Password"
-            variant="outlined"
-            value={confirmedPassword}
-            required
-            onChange={(event) => setConfirmedPassword(event.target.value)}
-          />
+
+          <Tooltip
+            title={
+              password.length < 8 ? 'password must be 8 or more characters' : ''
+            }
+            placement="top"
+            slotProps={{
+              popper: {
+                sx: {
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginTop: '0px',
+                    },
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginBottom: '1px',
+                    },
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginLeft: '0px',
+                    },
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginRight: '0px',
+                    },
+                },
+              },
+            }}
+          >
+            <TextField
+              id="password"
+              type="password"
+              label="password"
+              variant="outlined"
+              value={password}
+              color={password.length < 8 && password !== '' ? 'error' : ''}
+              required
+              onChange={(event) => setPassword(event.target.value)}
+            />
+          </Tooltip>
+
+          <Tooltip
+            title={
+              confirmedPassword.length < 8
+                ? 'password must be 8 or more characters'
+                : ''
+            }
+            placement="top"
+            slotProps={{
+              popper: {
+                sx: {
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginTop: '0px',
+                    },
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginBottom: '1px',
+                    },
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginLeft: '0px',
+                    },
+                  [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
+                    {
+                      marginRight: '0px',
+                    },
+                },
+              },
+            }}
+          >
+            <TextField
+              id="confirmPassword"
+              type="password"
+              label="Confirm Password"
+              variant="outlined"
+              value={confirmedPassword}
+              color={
+                confirmedPassword.length < 8 && confirmedPassword !== ''
+                  ? 'error'
+                  : confirmedPassword !== password
+                    ? 'error'
+                    : ''
+              }
+              required
+              onChange={(event) => setConfirmedPassword(event.target.value)}
+            />
+          </Tooltip>
+
           <Box
             display="flex"
             justifyContent="center"
