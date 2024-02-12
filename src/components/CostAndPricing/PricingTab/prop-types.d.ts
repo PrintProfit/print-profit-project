@@ -1,4 +1,11 @@
-import { AlertProps, ButtonProps, DialogProps } from '@mui/material';
+import {
+  AlertProps,
+  ButtonProps,
+  DialogProps,
+  FabProps,
+  IconButtonProps,
+  TooltipProps,
+} from '@mui/material';
 import type {
   CellContext,
   Getter,
@@ -125,6 +132,18 @@ export interface ConfirmDlaogProps {
   readonly onConfirm: () => void;
   readonly snackbarMessage?: ReactNode;
   readonly SnackbarProps?: Omit<DialogSnackbarProps, 'open' | 'onClose'>;
+}
+
+export interface ConfirmButtonDialogProps
+  extends Omit<ConfirmDlaogProps, 'open' | 'onClose' | 'onCancel'> {
+  readonly onClose?: () => void;
+  readonly onCancel?: () => void;
+  readonly buttonType: 'button' | 'icon' | 'fab';
+  readonly buttonText: ReactNode;
+  readonly ButtonProps?: Omit<ButtonProps, 'onClick'>;
+  readonly TooltipProps?: Omit<TooltipProps, 'children'>;
+  readonly IconProps?: Omit<IconButtonProps, 'onClick'>;
+  readonly FabProps?: Omit<FabProps, 'onClick'>;
 }
 
 export interface DialogSnackbarProps {

@@ -13,6 +13,7 @@ import {
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import { BaseDialog } from './dialogs';
+import { ConfirmButtonDialog } from './dialogs-wrapped';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
 import { PricingTableFab as Fab, TableTextField } from './stylized';
@@ -129,17 +130,23 @@ export function DynamicCostHeader({ column, table }) {
       onBlur={onBlur}
       InputProps={{
         endAdornment: updateMode || (
-          <Tooltip title="Remove Cost" arrow>
-            <IconButton
-              aria-label="Remove Cost"
-              size="small"
-              disabled={updateMode}
-              onClick={deleteCost}
-              edge="end"
-            >
-              <Delete fontSize="inherit" />
-            </IconButton>
-          </Tooltip>
+          <ConfirmButtonDialog
+            buttonType="icon"
+            buttonText="Remove Cost"
+            IconProps={{
+              'aria-label': 'Remove Cost',
+              size: 'small',
+              disabled: updateMode,
+              edge: 'end',
+              children: <Delete fontSize="inherit" />,
+            }}
+            TooltipProps={{ title: 'Remove Cost', arrow: true }}
+            onConfirm={deleteCost}
+            title="Remove Cost"
+            text="Are you sure you want to remove this cost?"
+            confirmText="Remove"
+            // snackbars can't work here
+          />
         ),
       }}
     />
@@ -322,17 +329,22 @@ export function ProductNameCell({ getValue, table, row }) {
       onBlur={onBlur}
       InputProps={{
         endAdornment: updateMode || (
-          <Tooltip title="Remove Product" arrow>
-            <IconButton
-              size="small"
-              aria-label="Remove Product"
-              disabled={updateMode}
-              onClick={deleteProduct}
-              edge="end"
-            >
-              <Delete fontSize="small" />
-            </IconButton>
-          </Tooltip>
+          <ConfirmButtonDialog
+            buttonType="icon"
+            buttonText="Remove Product"
+            IconProps={{
+              'aria-label': 'Remove Product',
+              size: 'small',
+              disabled: updateMode,
+              edge: 'end',
+              children: <Delete fontSize="inherit" />,
+            }}
+            TooltipProps={{ title: 'Remove Product', arrow: true }}
+            onConfirm={deleteProduct}
+            title="Remove Product"
+            text="Are you sure you want to remove this product?"
+            confirmText="Remove"
+          />
         ),
       }}
     />
