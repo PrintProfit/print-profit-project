@@ -267,8 +267,8 @@ function PendingAdminPage({ pendingUser }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            This account will be available in the archive tab if you decide to
-            archive this user.
+            The user's account access will be revoked. You may recover archived
+            accounts in the "Archive" tab.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
