@@ -79,7 +79,7 @@ router.get('/:id', (req, res) => {
 	group by quote_id
 ) p on q.id = p.quote_id
   	INNER JOIN "user" u on q.user_id = u.id
-  		WHERE u.company_id = $1;`;
+  		WHERE u.company_id = $1 AND q.is_removed = false;`;
   const values = [req.user?.company_id];
   pool
     .query(query, values)
@@ -367,14 +367,15 @@ router.put('/remove', async (req, res) => {
     const removeProductQuery = `
       UPDATE "product"
       SET "is_removed" = $1, "updated_by" = $3
-      WHERE "id" = $2 and "user_id" = $3;
+      WHERE "id" = $2;
        `;
-    const quoteProductArray = req.body.quote;
-    console.log('quote post req.body.quote:', quoteProductArray);
+    const quoteProductArray = req.body.quote.products;
+    console.log('quote post req.body.quote.products:', quoteProductArray);
+    console.log('req.user?.id: ', req.user?.id);
 
     for (const product of quoteProductArray) {
       const removeProductValues = [
-        product.remove_product, // $1
+        req.body.remove_quote, // $1
         product.id, // $2
         req.user?.id, // $3 - gets used for both "updated_by" and WHERE "user_id" values
       ];
@@ -383,14 +384,14 @@ router.put('/remove', async (req, res) => {
       const removeCostQuery = `
     UPDATE "product"
     SET "is_removed" = $1, "updated_by" = $3
-    WHERE "id" = $2 and "user_id" = $3;
+    WHERE "id" = $2;
     `;
       for (const cost of product.costs) {
         const removeCostValues = [
-          cost.remove_cost, // $1
+          req.body.remove_quote, // $1
           cost.id, // $2
-          req.user?.id,
-        ]; // $3
+          req.user?.id, // $3
+        ];
         await connection.query(removeCostQuery, removeCostValues);
       } // END COST SOFT-DELETE
     } // END PRODUCT SOFT-DELETE
@@ -407,6 +408,27 @@ router.put('/remove', async (req, res) => {
     // Close the connection
     connection.release();
   }
+});
+
+// hard DELETE quote route
+router.delete('/', (req, res) => {
+  console.log('/api/quote/delete req.body: ', req.body);
+  //   const sqlText = `
+  // DELETE FROM "quote"
+  //   WHERE "id" = $1 AND "user_id" = $2;
+  //   `;
+
+  //   const sqlValues = [req.body.quote_id, req.user?.id];
+
+  //   pool
+  //     .query(sqlText, sqlValues)
+  //     .then(() => {
+  //       res.sendStatus(200);
+  //     })
+  //     .catch((err) => {
+  //       console.log('Error in quote.router DELETE: ', err);
+  //       res.sendStatus(500);
+  //     });
 });
 
 export default router;
