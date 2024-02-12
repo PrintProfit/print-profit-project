@@ -217,6 +217,11 @@ function* adminPostNewUser(action) {
     });
   } catch (error) {
     console.log('Unable to admin posting new user to server', error);
+    if (error?.response?.status === 409) {
+      yield put({ type: 'CREATE_USER_FAILED_DUPLICATE_EMAIL' });
+    } else {
+      yield put({ type: 'CREATE_USER_FAILED' });
+    }
   }
 }
 
