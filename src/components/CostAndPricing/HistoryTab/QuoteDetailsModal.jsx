@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { put, takeLatest } from 'redux-saga/effects';
 import { contribution, totalSellingPrice } from '../PricingTab/calculations';
 import { unique } from '../PricingTab/utils';
 
@@ -89,7 +90,8 @@ function QuoteDetailsModal({
       },
     });
     handleDeleteClose();
-    // handleClose();
+    handleClose();
+    put({ type: 'SAGA/FETCH_QUOTE_HISTORY' });
     // dispatch({
     //   type: 'SAGA/FETCH_QUOTE_HISTORY',
     //   payload: currentUser.company_id,
