@@ -53,12 +53,12 @@ export default function MyAccountPage() {
 
                 <TableRow>
                   <TableCell>Email:</TableCell>
-                  <TableCell>{currentUser.email}</TableCell>
+                  <TableCell>{profileUser.email}</TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>Company:</TableCell>
-                  <TableCell>{currentUser.company_name}</TableCell>
+                  <TableCell>{profileUser.company_name}</TableCell>
                 </TableRow>
 
                 <TableRow>
