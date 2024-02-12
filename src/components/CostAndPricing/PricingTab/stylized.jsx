@@ -1,6 +1,5 @@
 // @ts-check
 import {
-  Button,
   Fab,
   TableRow,
   TextField,
@@ -56,20 +55,8 @@ export const TableTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-export const AddProductFab = styled(Fab)(({ theme }) => ({
+export const PricingTableFab = styled(Fab)(({ theme }) => ({
   color: 'white', // Radix says indigo9 & indigo10 pair with white
-  backgroundColor: indigo.indigo9,
-  '&:hover': {
-    backgroundColor: indigo.indigo10,
-    // Reset on touch devices, it doesn't add specificity
-    '@media (hover: none)': {
-      backgroundColor: indigo.indigo9,
-    },
-  },
-}));
-
-export const AddCostButton = styled(Button)(({ theme }) => ({
-  color: 'white',
   backgroundColor: indigo.indigo9,
   '&:hover': {
     backgroundColor: indigo.indigo10,
