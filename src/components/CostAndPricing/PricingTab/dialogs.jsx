@@ -85,7 +85,7 @@ export function ConfirmDialog({
 /**
  * @param {import('./prop-types').DialogSnackbarProps} props
  */
-function DialogSnackbar({ open, severity = 'warning', onClose, children }) {
+function DialogSnackbar({ open, severity, onClose, children }) {
   /**
    * @param {(React.SyntheticEvent | Event)} event
    * @param {string} [reason]
