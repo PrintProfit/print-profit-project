@@ -15,7 +15,7 @@ function* getQuoteHistory(action) {
     });
     console.log(
       'response.data[0].quotes from getQuoteHistory sagaaa: ',
-      response.data[0].quotes,
+      response.data.quotes,
     );
     console.log('action.payload in Set Quote History call: ', action.payload);
   } catch (error) {
