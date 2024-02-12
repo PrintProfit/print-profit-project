@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { BaseDialog } from './dialogs';
 import * as fmt from './formats';
 import { NumericInput } from './inputs';
-import { AddCostButton, AddProductFab, TableTextField } from './stylized';
+import { PricingTableFab as Fab, TableTextField } from './stylized';
 import { toCostNames, unique } from './utils';
 
 /**
@@ -392,16 +392,17 @@ export function AddCostHeader({ table }) {
 
   return (
     <>
-      <AddCostButton
-        size="small"
-        // Everything kinda looks bad here
-        variant="contained"
-        // color="primary"
-        endIcon={<Add fontSize="small" />}
-        onClick={() => setOpen(true)}
-      >
-        Add Cost
-      </AddCostButton>
+      <Tooltip title="Add Cost" arrow>
+        <Fab
+          variant="extended"
+          size="small"
+          aria-label="Add Cost"
+          onClick={() => setOpen(true)}
+        >
+          <Add sx={{ mr: 1 }} />
+          Add Cost
+        </Fab>
+      </Tooltip>
       <BaseDialog
         open={open}
         onClose={onClose}
@@ -483,14 +484,13 @@ export function AddProductCell({ table }) {
   return (
     <>
       <Tooltip title="Add Product" arrow>
-        <AddProductFab
+        <Fab
           size="small"
-          color="primary"
           aria-label="Add Product"
           onClick={() => setOpen(true)}
         >
           <Add />
-        </AddProductFab>
+        </Fab>
       </Tooltip>
       <BaseDialog
         open={open}

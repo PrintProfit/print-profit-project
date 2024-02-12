@@ -22,6 +22,10 @@ export const consistentColumns = [
     header: 'Product Name',
     cell: ProductNameCell,
     footer: 'Total',
+    meta: {
+      cellVariant: 'head',
+      footerVariant: 'head',
+    },
   },
   {
     accessorKey: 'quantity',

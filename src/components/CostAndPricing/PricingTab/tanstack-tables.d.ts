@@ -1,4 +1,4 @@
-import { InputProps } from '@mui/material';
+import { InputProps, TableCellProps } from '@mui/material';
 import { RowData } from '@tanstack/table-core';
 import { Dispatch, SetStateAction } from 'react';
 import { Product, Quote } from './data-types';
@@ -15,5 +15,7 @@ declare module '@tanstack/react-table' {
     adornment?: string;
     costName?: string;
     productKey?: keyof Omit<Product, 'costs' | 'name'>;
+    cellVariant?: TableCellProps['variant'];
+    footerVariant?: TableCellProps['variant'];
   }
 }
