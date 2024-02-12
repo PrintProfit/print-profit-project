@@ -231,10 +231,12 @@ function QuoteDetailsModal({ open, row, handleClose, setTab, ...props }) {
                     </Typography>
                   </TableCell>
                   {row.products.map((product) => (
-                    <TableCell key={product.name}>
-                      {product.costs
-                        .map((c) => c.value ?? 0)
-                        .reduce((a, b) => a + b, 0)}
+                    <TableCell key={product.name} align="center">
+                      {USDollar.format(
+                        product.costs
+                          .map((c) => c.value ?? 0)
+                          .reduce((a, b) => a + b, 0),
+                      )}
                     </TableCell>
                   ))}
 
