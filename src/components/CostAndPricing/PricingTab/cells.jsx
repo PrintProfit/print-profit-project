@@ -393,8 +393,14 @@ export function AddCostHeader({ table }) {
   return (
     <>
       <Tooltip title="Add Cost" arrow>
-        <Fab size="small" aria-label="Add Cost" onClick={() => setOpen(true)}>
-          <Add />
+        <Fab
+          variant="extended"
+          size="small"
+          aria-label="Add Cost"
+          onClick={() => setOpen(true)}
+        >
+          <Add sx={{ mr: 1 }} />
+          Add Cost
         </Fab>
       </Tooltip>
       <BaseDialog
