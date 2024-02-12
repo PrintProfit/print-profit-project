@@ -410,14 +410,14 @@ export function AddCostHeader({ table }) {
         open={open}
         onClose={onClose}
         onSubmit={onSubmit}
-        title="Product Name"
+        title="Cost Name"
         actions={
           <ButtonGroup variant="contained">
             <Button color="secondary" onClick={onClose} startIcon={<Cancel />}>
               Cancel
             </Button>
             <Button type="submit" startIcon={<Add />}>
-              Add Product
+              Add Cost
             </Button>
           </ButtonGroup>
         }
