@@ -1,4 +1,6 @@
+import { Close } from '@mui/icons-material';
 import {
+  Alert,
   Button,
   ButtonGroup,
   Dialog,
@@ -6,6 +8,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
   Snackbar,
 } from '@mui/material';
 import { useState } from 'react';
@@ -67,12 +70,54 @@ export function ConfirmDialog({
         </DialogActions>
       </Dialog>
       {snackbarMessage && (
-        <Snackbar
+        <DialogSnackbar
           open={snackbarOpen}
-          autoHideDuration={6000}
-          message={snackbarMessage}
-        />
+          onClose={() => setSnackbarOpen(false)}
+        >
+          {snackbarMessage}
+        </DialogSnackbar>
       )}
     </>
+  );
+}
+
+/**
+ * @param {import('./prop-types').DialogSnackbarProps} props
+ */
+function DialogSnackbar({ open, severity = 'warning', onClose, children }) {
+  /**
+   * @param {(React.SyntheticEvent | Event)} event
+   * @param {string} [reason]
+   */
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    onClose();
+  };
+
+  const action = (
+    <IconButton
+      size="small"
+      aria-label="close"
+      color="inherit"
+      onClick={handleClose}
+    >
+      <Close fontSize="small" />
+    </IconButton>
+  );
+
+  return (
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert
+        onClose={handleClose}
+        severity={severity}
+        variant="filled"
+        sx={{ width: '100%' }}
+        action={action}
+      >
+        {children}
+      </Alert>
+    </Snackbar>
   );
 }

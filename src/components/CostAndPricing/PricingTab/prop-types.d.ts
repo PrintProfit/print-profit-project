@@ -1,4 +1,4 @@
-import { ButtonProps, DialogProps } from '@mui/material';
+import { AlertProps, ButtonProps, DialogProps } from '@mui/material';
 import type {
   CellContext,
   Getter,
@@ -113,4 +113,14 @@ export interface ConfirmDlaogProps {
   readonly onCancel: () => void;
   readonly onConfirm: () => void;
   readonly snackbarMessage?: ReactNode;
+}
+
+export interface DialogSnackbarProps {
+  readonly open: boolean;
+  readonly children: ReactNode;
+  readonly severity?: AlertProps['severity'];
+  readonly onClose: () => void;
+  // readonly message: ReactNode;
+  // readonly setOpen: Dispatch<SetStateAction<boolean>>;
+  // readonly autoHideDuration?: number;
 }
