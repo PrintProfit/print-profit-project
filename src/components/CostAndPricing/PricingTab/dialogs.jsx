@@ -28,6 +28,7 @@ export function ConfirmDialog({
   onCancel,
   onConfirm,
   snackbarMessage,
+  SnackbarProps,
 }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -74,6 +75,7 @@ export function ConfirmDialog({
         <DialogSnackbar
           open={snackbarOpen}
           onClose={() => setSnackbarOpen(false)}
+          {...SnackbarProps}
         >
           {snackbarMessage}
         </DialogSnackbar>
