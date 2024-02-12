@@ -411,8 +411,8 @@ router.put('/remove', async (req, res) => {
 });
 
 // hard DELETE quote route
-router.delete('/', (req, res) => {
-  console.log('/api/quote/delete req.body: ', req.body);
+router.delete('/:id', (req, res) => {
+  console.log('/api/quote/delete req.body: ', req.params);
   //   const sqlText = `
   // DELETE FROM "quote"
   //   WHERE "id" = $1 AND "user_id" = $2;

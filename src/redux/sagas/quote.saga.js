@@ -57,7 +57,10 @@ function* removeQuote(action) {
 
 function* deleteQuote(action) {
   try {
-    yield axios.delete('/api/quote/', action.payload);
+    yield axios.delete(`/api/quote/${action.payload.quote_ID}`, {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    });
     yield put({
       type: 'SAGA/FETCH_QUOTE_HISTORY',
       payload: 0,
