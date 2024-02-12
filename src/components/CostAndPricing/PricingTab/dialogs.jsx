@@ -22,7 +22,8 @@ export function ConfirmDialog({
   CancelProps,
   ConfirmProps,
   onClose,
-  onSubmit,
+  onCancel,
+  onConfirm,
   snackbarMessage,
 }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
@@ -32,7 +33,7 @@ export function ConfirmDialog({
    */
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit();
+    onConfirm();
   };
 
   return (
@@ -51,7 +52,12 @@ export function ConfirmDialog({
         </DialogContent>
         <DialogActions>
           <ButtonGroup variant="contained">
-            <Button type="button" color="secondary" {...CancelProps}>
+            <Button
+              type="button"
+              color="secondary"
+              onClick={onCancel}
+              {...CancelProps}
+            >
               {cancelText}
             </Button>
             <Button type="submit" {...ConfirmProps}>

@@ -110,6 +110,7 @@ export interface ConfirmDlaogProps {
   readonly CancelProps?: ButtonProps;
   readonly ConfirmProps?: ButtonProps;
   readonly onClose: Required<DialogProps>['onClose'];
-  readonly onSubmit: () => void;
+  readonly onCancel: () => void;
+  readonly onConfirm: () => void;
   readonly snackbarMessage?: ReactNode;
 }
