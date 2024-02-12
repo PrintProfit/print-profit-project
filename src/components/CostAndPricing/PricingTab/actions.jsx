@@ -17,6 +17,7 @@ import {
 import { produce } from 'immer';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { ConfirmDialog } from './dialogs';
 import { initialQuote } from './sample-data';
 
 /**
@@ -216,7 +217,6 @@ function ClearQuote({ setQuote }) {
   const dispatch = useDispatch();
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const createQuote = () => {
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: false });
@@ -224,17 +224,8 @@ function ClearQuote({ setQuote }) {
     setQuote(initialQuote);
   };
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onConfirm = () => {
     createQuote();
-    setDialogOpen(false);
-    setSnackbarOpen(true);
-  };
-
-  const closeDialog = () => {
     setDialogOpen(false);
   };
 
@@ -249,41 +240,24 @@ function ClearQuote({ setQuote }) {
       >
         Clear Quote
       </Button>
-      <Dialog
+      <ConfirmDialog
         open={dialogOpen}
-        onClose={closeDialog}
-        PaperProps={{
-          component: 'form',
-          onSubmit: handleSubmit,
+        title="Are you sure?"
+        text="Are you sure you want to clear the current quote? This will discard any unsaved changes."
+        cancelText="Cancel"
+        confirmText="Clear"
+        CancelProps={{
+          color: 'secondary',
+          startIcon: <Cancel />,
         }}
-      >
-        <DialogTitle>Are you sure?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to clear the current quote? This will discard
-            any unsaved changes.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <ButtonGroup variant="contained">
-            <Button
-              type="button"
-              onClick={closeDialog}
-              color="secondary"
-              startIcon={<Cancel />}
-            >
-              Cancel
-            </Button>
-            <Button color="warning" type="submit" startIcon={<Clear />}>
-              Clear
-            </Button>
-          </ButtonGroup>
-        </DialogActions>
-      </Dialog>
-      <QuoteSnackbar
-        message="Created new quote"
-        open={snackbarOpen}
-        setOpen={setSnackbarOpen}
+        ConfirmProps={{
+          color: 'warning',
+          startIcon: <Clear />,
+        }}
+        onClose={() => setDialogOpen(false)}
+        onCancel={() => setDialogOpen(false)}
+        onConfirm={onConfirm}
+        snackbarMessage="Created new quote"
       />
     </>
   );
