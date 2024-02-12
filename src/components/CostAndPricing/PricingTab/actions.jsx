@@ -12,6 +12,7 @@ import { produce } from 'immer';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseDialog, ConfirmDialog } from './dialogs';
+import { ConfirmButtonDialog } from './dialogs-wrapped';
 import { initialQuote } from './sample-data';
 
 /**
@@ -169,49 +170,36 @@ function UpdateQuote({ quote }) {
 function ClearQuote({ setQuote }) {
   const dispatch = useDispatch();
 
-  const [dialogOpen, setDialogOpen] = useState(false);
-
   const createQuote = () => {
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: false });
     dispatch({ type: 'CLEAR_CURRENT_QUOTE' });
     setQuote(initialQuote);
   };
 
-  const onConfirm = () => {
-    createQuote();
-    setDialogOpen(false);
-  };
-
   return (
-    <>
-      <Button
-        type="button"
-        variant="contained"
-        color="warning"
-        onClick={() => setDialogOpen(true)}
-        startIcon={<Clear />}
-      >
-        Clear Quote
-      </Button>
-      <ConfirmDialog
-        open={dialogOpen}
-        title="Are you sure?"
-        text="Are you sure you want to clear the current quote? This will discard any unsaved changes."
-        cancelText="Cancel"
-        confirmText="Clear"
-        CancelProps={{
-          color: 'secondary',
-          startIcon: <Cancel />,
-        }}
-        ConfirmProps={{
-          color: 'warning',
-          startIcon: <Clear />,
-        }}
-        onClose={() => setDialogOpen(false)}
-        onCancel={() => setDialogOpen(false)}
-        onConfirm={onConfirm}
-        snackbarMessage="Created new quote"
-      />
-    </>
+    <ConfirmButtonDialog
+      buttonType="button"
+      buttonText="Clear Quote"
+      ButtonProps={{
+        type: 'button',
+        variant: 'contained',
+        color: 'warning',
+        startIcon: <Clear />,
+      }}
+      title="Are you sure?"
+      text="Are you sure you want to clear the current quote? This will discard any unsaved changes."
+      cancelText="Cancel"
+      confirmText="Clear"
+      CancelProps={{
+        color: 'secondary',
+        startIcon: <Cancel />,
+      }}
+      ConfirmProps={{
+        color: 'warning',
+        startIcon: <Clear />,
+      }}
+      onConfirm={createQuote}
+      snackbarMessage="Created new quote"
+    />
   );
 }
