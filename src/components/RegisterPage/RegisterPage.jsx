@@ -19,7 +19,14 @@ function RegisterPage() {
           margin: 0,
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            pb: 45,
+          }}
+        >
           <RegisterForm />
         </Box>
       </Box>
