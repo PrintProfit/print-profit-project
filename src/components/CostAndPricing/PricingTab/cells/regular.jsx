@@ -80,7 +80,9 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
-  const { adornment, inputMode, productKey } = column.columnDef.meta ?? {};
+  const meta = column.columnDef.meta ?? {};
+
+  const { adornment, inputMode, productKey, inputProps } = meta;
 
   /**
    * onBlur is called when the input loses focus.
@@ -116,6 +118,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
           <InputAdornment position="start">{adornment}</InputAdornment>
         ),
         inputComponent: /** @type {any} */ (NumericInput),
+        /** @type {any} */ inputProps,
       }}
     />
   );
