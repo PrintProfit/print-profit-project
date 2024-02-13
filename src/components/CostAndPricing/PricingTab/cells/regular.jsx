@@ -55,6 +55,13 @@ export function DynamicCostCell({ getValue, table, row, column }) {
     setValue(initialValue);
   }, [initialValue]);
 
+  /** @type {import('react-number-format').NumericFormatProps} */
+  const inputProps = {
+    allowNegative: false,
+    decimalScale: 2,
+    fixedDecimalScale: true,
+  };
+
   return (
     <TableTextField
       size="small"
@@ -66,6 +73,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       InputProps={{
         startAdornment: <InputAdornment position="start">$</InputAdornment>,
         inputComponent: /** @type {any} */ (NumericInput),
+        /** @type {any} */ inputProps,
       }}
     />
   );
