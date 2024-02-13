@@ -172,6 +172,7 @@ export function PricingTable({ quote, setQuote }) {
                     </TableCell>
                     <TableCell
                       variant={col.columnDef.meta?.footerVariant ?? 'footer'}
+                      sx={{ minWidth: 80 }}
                     >
                       {safeFlexRender(
                         col.columnDef.footer,

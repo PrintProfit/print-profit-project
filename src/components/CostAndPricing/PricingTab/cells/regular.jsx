@@ -5,9 +5,9 @@ import { IconButton, InputAdornment, TextField, Tooltip } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import { ConfirmButtonDialog } from '../dialogs-wrapped';
-import * as fmt from '../formats';
 import { NumericInput } from '../inputs';
 import { TableTextField } from '../stylized';
+import { NumberFormatter } from './internal';
 
 /**
  * A component that renders editable cells with dynamic costs
@@ -275,7 +275,7 @@ export function ProductNameCell({ getValue, table, row }) {
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
-  return fmt.currency(value);
+  return value ? <NumberFormatter value={value} variant="currency" /> : null;
 }
 
 /**
@@ -284,5 +284,5 @@ export function DollarCell({ getValue }) {
 export function PercentCell({ getValue }) {
   const value = getValue();
   const percent = Number(value);
-  return fmt.percent(percent);
+  return percent ? <NumberFormatter value={percent} variant="percent" /> : null;
 }

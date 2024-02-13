@@ -153,3 +153,8 @@ export interface DialogSnackbarProps {
   readonly onClose: () => void;
   readonly autoHideDuration?: number;
 }
+
+export interface NumberFormatterProps {
+  readonly value: number;
+  readonly variant?: 'currency' | 'accounting' | 'percent' | 'number';
+}
