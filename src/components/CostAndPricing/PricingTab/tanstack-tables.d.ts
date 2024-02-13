@@ -18,6 +18,6 @@ declare module '@tanstack/react-table' {
     cellVariant?: TableCellProps['variant'];
     footerVariant?: TableCellProps['variant'];
     footerContribDivisor?: keyof Omit<Product, 'id' | 'costs' | 'name'>;
-    footerContribFormat?: 'percent' | 'currency' | 'number';
+    footerContribFormat?: 'percent' | 'currency' | 'accounting' | 'number';
   }
 }

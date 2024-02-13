@@ -38,6 +38,8 @@ export function ContributionFooter({ table, column }) {
       return fmt.currency(result);
     case 'percent':
       return fmt.percent(result);
+    case 'accounting':
+      return fmt.accounting(result);
     default:
       return result;
   }
