@@ -4,11 +4,11 @@ export default function Header() {
   const history = useHistory();
 
   const handleNavigationToMyContactPage = () => {
-    history.push('/contact');
+    history.push('/public-contact');
   };
 
   const handleNavigationToMyAboutPage = () => {
-    history.push('/about');
+    history.push('/public-about');
   };
   return (
     <AppBar color="secondary" position="static">
@@ -30,14 +30,14 @@ export default function Header() {
           }}
         >
           <Button
-            onClick={handleNavigationToMyContactPage}
+            onClick={handleNavigationToMyAboutPage}
             disableRipple
             color="inherit"
           >
             About
           </Button>
           <Button
-            onClick={handleNavigationToMyAboutPage}
+            onClick={handleNavigationToMyContactPage}
             disableRipple
             color="inherit"
           >
