@@ -56,11 +56,21 @@ function App() {
             </SideBar>
           </Route>
 
+          {/* Created About route without sidebar and appbar for unauthorized use */}
+          <Route exact path="/public-about">
+            <AboutPage />
+          </Route>
+
           <Route exact path="/contact">
             <AppBarHeader />
             <SideBar>
               <ContactPage />
             </SideBar>
+          </Route>
+
+          {/* Created Contact route without sidebar and appbar for unauthorized use */}
+          <Route exact path="/public-contact">
+            <ContactPage />
           </Route>
 
           <Route exact path="/waiting-page">
@@ -173,6 +183,9 @@ function App() {
           </Route>
 
           {/* If none of the other routes matched, we will show a 404. */}
+          <Route exact path="/landing">
+            <LandingPage />
+          </Route>
           <Route>
             <h1>404</h1>
           </Route>
