@@ -30,7 +30,7 @@ export function ContributionFooter({ table, column }) {
   const format = column.columnDef.meta?.footerContribFormat ?? 'number';
 
   const contribution = aggregate(table, 'contributionDollars') ?? 0;
-  const divisor = divisorId ? aggregate(table, divisorId) ?? 0 : 0;
+  const divisor = (divisorId ? aggregate(table, divisorId) : null) ?? 0;
   const result = divisor === 0 ? 0 : contribution / divisor;
 
   switch (format) {
