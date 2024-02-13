@@ -77,7 +77,6 @@ function RegisterForm() {
   return (
     <Box sx={{ width: '400px' }}>
       <Paper>
-        <h2>Print Profit </h2>
         {errors.registrationMessage && (
           <h3 className="alert" role="alert">
             {errors.registrationMessage}
@@ -87,6 +86,7 @@ function RegisterForm() {
           // flexDirection={'column'}
           component="form"
           sx={{
+            pt: 5,
             '& > :not(style)': { m: 1, width: '25ch' },
             flexDirection: 'column',
             display: 'flex',
@@ -96,6 +96,21 @@ function RegisterForm() {
           autoComplete="off"
           onSubmit={registerUser}
         >
+          <Box
+            sx={{
+              pb: 10,
+              flexDirection: 'column',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <img
+              width={50}
+              height={50}
+              src="public/images/printProfitLogoV3.svg"
+              alt=""
+            />
+          </Box>
           <TextField
             id="email"
             type="text"
@@ -219,7 +234,7 @@ function RegisterForm() {
             height="50%"
           >
             <Button
-              sx={{ mb: 10 }}
+              sx={{ mt: 3, mb: 10 }}
               variant="contained"
               type="submit"
               name="submit"
