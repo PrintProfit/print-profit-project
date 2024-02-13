@@ -21,9 +21,12 @@ import { PricingToolHelp } from '../../PricingToolHelp/PricingToolHelp';
 import { TotalsHelp } from '../../PricingToolHelp/TotalsHelp';
 import { TotalsTable } from './TotalsTable';
 import { QuoteActions } from './actions';
-import { CurrencyFooter } from './cells/footers';
-import { DynamicCostHeader } from './cells/headers';
-import { AddProductCell, DynamicCostCell } from './cells/regular';
+import {
+  AddProductCell,
+  CurrencyFooter,
+  DynamicCostCell,
+  DynamicCostHeader,
+} from './cells';
 import {
   addDynamicCostColumn,
   calculatedCosts,
