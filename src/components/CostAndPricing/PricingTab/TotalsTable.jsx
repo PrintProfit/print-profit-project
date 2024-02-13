@@ -13,7 +13,7 @@ import {
 import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
-import * as fmt from './formats';
+import { NumberFormatter } from './cells/internal';
 import { NumericInput } from './inputs';
 import { PricingTableRow as TableRow } from './stylized';
 import { toCostNames, unique } from './utils';
@@ -57,7 +57,12 @@ export function TotalsTable({ quote, setQuote, table }) {
           {/* Total Selling Price Row */}
           <TableRow>
             <TableCell variant="head">Total Selling Price</TableCell>
-            <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
+            <TableCell>
+              <NumberFormatter
+                value={getCMTotalSellingPrice()}
+                variant="currency"
+              />
+            </TableCell>
             <TableCell>
               <TextField
                 size="small"
@@ -176,23 +181,38 @@ function ContributionRows({
       {/* Contribution Row */}
       <TableRow>
         <TableCell variant="head">Contribution</TableCell>
-        <TableCell>{fmt.currency(targetContrib)}</TableCell>
-        <TableCell>{fmt.currency(manualContrib)}</TableCell>
+        <TableCell>
+          <NumberFormatter value={targetContrib} variant="currency" />
+        </TableCell>
+        <TableCell>
+          <NumberFormatter value={manualContrib} variant="currency" />
+        </TableCell>
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
         <TableCell variant="head">Contribution %</TableCell>
         <TableCell>{marginInput}</TableCell>
-        <TableCell>{fmt.percent(manualContrib / manualPrice)}</TableCell>
+        <TableCell>
+          <NumberFormatter
+            value={manualContrib / manualPrice}
+            variant="percent"
+          />
+        </TableCell>
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
         <TableCell variant="head">Contribution / Hour</TableCell>
         <TableCell>
-          {fmt.currency(targetContrib / estimatedTotalHours)}
+          <NumberFormatter
+            value={targetContrib / estimatedTotalHours}
+            variant="currency"
+          />
         </TableCell>
         <TableCell>
-          {fmt.currency(manualContrib / estimatedTotalHours)}
+          <NumberFormatter
+            value={manualContrib / estimatedTotalHours}
+            variant="currency"
+          />
         </TableCell>
       </TableRow>
     </>
