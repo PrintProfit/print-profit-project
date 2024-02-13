@@ -72,20 +72,6 @@ function App() {
             If the user is not logged in, the ProtectedRoute will show the LoginPage (component).
             Even though it seems like they are different pages, the user is always on localhost:5173/home */}
 
-          <ProtectedRoute exact path="/home">
-            {user.is_approved ? (
-              <>
-                <AppBarHeader />
-                <SideBar>
-                  <Homepage />
-                  ``
-                </SideBar>
-              </>
-            ) : (
-              <LandingPage />
-            )}
-          </ProtectedRoute>
-
           {/* only admins can see Admin page; otherwise, user is redirected to /home */}
           <ProtectedRoute exact path="/admin">
             <AppBarHeader />
@@ -166,7 +152,7 @@ function App() {
             {user.id ? (
               // If the user is already logged in,
               // redirect them to the /home page
-              <Redirect to="/home" />
+              <Redirect to="/cost-and-pricing" />
             ) : (
               // Otherwise, show the Landing page
               <LandingPage />
