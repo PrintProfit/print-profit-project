@@ -107,13 +107,15 @@ function App() {
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/cost-and-pricing">
-            {user.is_approved && (
+            {user.is_approved ? (
               <>
                 <AppBarHeader />
                 <SideBar>
                   <CostAndPricing />
                 </SideBar>
               </>
+            ) : (
+              <Redirect to="/login" />
             )}
           </ProtectedRoute>
 
