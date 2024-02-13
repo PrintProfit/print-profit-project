@@ -8,6 +8,7 @@ import {
   ProductNameCell,
   TotalSellingPriceCell,
 } from './cells';
+import { CurrencyFooter, NumberFooter } from './footers';
 import * as fmt from './formats';
 import { AddCostHeader } from './headers';
 import { aggregate } from './utils';
@@ -32,11 +33,7 @@ export const consistentColumns = [
     header: 'Quantity',
     cell: ConsistentNumericCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      return aggregate?.('quantity', [], rows);
-    },
+    footer: NumberFooter,
     meta: {
       inputMode: 'numeric',
       productKey: 'quantity',
@@ -60,13 +57,7 @@ export const consistentColumns = [
     header: 'Total Selling Price',
     cell: TotalSellingPriceCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalSellingPrice = aggregate?.('total_selling_price', [], rows);
-      return fmt.currency(totalSellingPrice);
-    },
+    footer: CurrencyFooter,
     meta: {
       inputMode: 'decimal',
       adornment: '$',
@@ -91,13 +82,7 @@ export const calculatedCosts = [
     header: 'Credit Card Fee',
     cell: DollarCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalCreditCardFee = aggregate?.('creditCardFee', [], rows);
-      return fmt.currency(totalCreditCardFee);
-    },
+    footer: CurrencyFooter,
   },
   {
     id: 'totalVariableCosts',
@@ -105,13 +90,7 @@ export const calculatedCosts = [
     header: 'Total Variable Costs',
     cell: DollarCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalVariableCosts = aggregate?.('totalVariableCosts', [], rows);
-      return fmt.currency(totalVariableCosts);
-    },
+    footer: CurrencyFooter,
   },
 ];
 
@@ -125,11 +104,7 @@ export const estimatedHoursColumn = {
   header: 'Estimated Hours',
   cell: ConsistentNumericCell,
   aggregationFn: 'sum',
-  footer: ({ table, column }) => {
-    const aggregate = column.getAggregationFn();
-    const { rows } = table.getCoreRowModel();
-    return aggregate?.('estimated_hours', [], rows);
-  },
+  footer: NumberFooter,
   meta: {
     productKey: 'estimated_hours',
   },
@@ -144,13 +119,7 @@ export const contributionColumns = [
     cell: DollarCell,
     // This happens to work, but it's not how the spreadsheet calculates it.
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalContribution = aggregate?.('contributionDollars', [], rows);
-      return fmt.currency(totalContribution);
-    },
+    footer: CurrencyFooter,
   },
   {
     accessorFn: calc.contributionMargin,

@@ -29,10 +29,10 @@ import {
   contributionColumns,
   estimatedHoursColumn,
 } from './columns';
-import * as fmt from './formats';
+import { CurrencyFooter } from './footers';
 import { DynamicCostHeader } from './headers';
 import { PricingTableRow as TableRow } from './stylized';
-import { aggregate, toCostNames, unique } from './utils';
+import { toCostNames, unique } from './utils';
 
 /**
  * @param {import('./prop-types').PricingTableProps} props
@@ -71,10 +71,7 @@ export function PricingTable({ quote, setQuote }) {
     header: DynamicCostHeader,
     cell: DynamicCostCell,
     aggregationFn: 'sum',
-    footer: ({ table }) => {
-      const total = aggregate(table, `dynamic-cost-${name}`);
-      return fmt.currency(total);
-    },
+    footer: CurrencyFooter,
     meta: {
       costName: name,
     },
