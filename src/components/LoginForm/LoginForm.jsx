@@ -33,6 +33,11 @@ function LoginForm() {
     setPassword('randopawpaw');
   };
 
+  const loginRobin = () => {
+    setEmail('robin@northstar.com');
+    setPassword('randopawpaw');
+  };
+
   /**
    * TODO: Will need to handle what happens if a user tries to login but is not approved
    */
@@ -100,13 +105,16 @@ function LoginForm() {
               variant="contained"
               type="submit"
             >
-              Login
+              Log in
             </Button>
           </Box>
         </form>
         <Box>
-          <Typography variant="body1">New User?</Typography>
+          <Typography variant="body1" align="center" onClick={loginRobin}>
+            New User?
+          </Typography>
           <Button
+            align="center"
             onClick={() => {
               history.push('/registration');
             }}
