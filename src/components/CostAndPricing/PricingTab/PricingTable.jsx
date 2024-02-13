@@ -21,7 +21,7 @@ import { PricingToolHelp } from '../../PricingToolHelp/PricingToolHelp';
 import { TotalsHelp } from '../../PricingToolHelp/TotalsHelp';
 import { TotalsTable } from './TotalsTable';
 import { QuoteActions } from './actions';
-import { AddProductCell, DynamicCostCell, DynamicCostHeader } from './cells';
+import { AddProductCell, DynamicCostCell } from './cells';
 import {
   addDynamicCostColumn,
   calculatedCosts,
@@ -30,6 +30,7 @@ import {
   estimatedHoursColumn,
 } from './columns';
 import * as fmt from './formats';
+import { DynamicCostHeader } from './headers';
 import { PricingTableRow as TableRow } from './stylized';
 import { aggregate, toCostNames, unique } from './utils';
 

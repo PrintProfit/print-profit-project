@@ -2,7 +2,6 @@
 
 import * as calc from './calculations';
 import {
-  AddCostHeader,
   ConsistentNumericCell,
   DollarCell,
   PercentCell,
@@ -10,6 +9,7 @@ import {
   TotalSellingPriceCell,
 } from './cells';
 import * as fmt from './formats';
+import { AddCostHeader } from './headers';
 import { aggregate } from './utils';
 
 /**
