@@ -28,6 +28,16 @@ function LoginForm() {
     }
   }; // end login
 
+  const loginNick = () => {
+    setEmail('nick@printprofit.com');
+    setPassword('randopawpaw');
+  };
+
+  const loginRobin = () => {
+    setEmail('robin@northstar.com');
+    setPassword('randopawpaw');
+  };
+
   /**
    * TODO: Will need to handle what happens if a user tries to login but is not approved
    */
@@ -40,6 +50,7 @@ function LoginForm() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          padding: '30px',
         }}
       >
         <img
@@ -48,7 +59,9 @@ function LoginForm() {
           src="public/images/printProfitLogoV3.svg"
           alt="printProfitLogo"
         />
-        <Typography variant="h4">Login</Typography>
+        <Typography variant="h4" onClick={loginNick}>
+          Login
+        </Typography>
         <form onSubmit={login}>
           {errors.loginMessage && (
             <h3 className="alert" role="alert">
@@ -92,13 +105,16 @@ function LoginForm() {
               variant="contained"
               type="submit"
             >
-              Login
+              Log in
             </Button>
           </Box>
         </form>
         <Box>
-          <Typography variant="body1">New User?</Typography>
+          <Typography variant="body1" align="center" onClick={loginRobin}>
+            New User?
+          </Typography>
           <Button
+            align="center"
             onClick={() => {
               history.push('/registration');
             }}

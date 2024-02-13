@@ -1,5 +1,5 @@
 import emailjs from '@emailjs/browser';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { useState } from 'react';
@@ -75,8 +75,18 @@ function RegisterForm() {
   };
 
   return (
-    <Box sx={{ width: '400px' }}>
+    <Box sx={{ width: '500px', padding: '30px' }}>
       <Paper>
+        <Typography
+          align="center"
+          sx={{
+            fontSize: 20,
+            fontWeight: 'bold',
+            p: 3,
+          }}
+        >
+          Print Profit
+        </Typography>
         {errors.registrationMessage && (
           <h3 className="alert" role="alert">
             {errors.registrationMessage}
@@ -114,7 +124,7 @@ function RegisterForm() {
           <TextField
             id="email"
             type="text"
-            label="e-mail"
+            label="E-mail"
             variant="outlined"
             value={email}
             required
@@ -170,7 +180,7 @@ function RegisterForm() {
             <TextField
               id="password"
               type="password"
-              label="password"
+              label="Password"
               variant="outlined"
               value={password}
               color={password.length < 8 && password !== '' ? 'error' : ''}
@@ -251,7 +261,7 @@ function RegisterForm() {
           >
             Already a member?
             <Button type="button" onClick={onLogin}>
-              Login
+              Log in
             </Button>
           </Box>
         </Box>
