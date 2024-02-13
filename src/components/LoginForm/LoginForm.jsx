@@ -33,21 +33,16 @@ function LoginForm() {
    */
 
   return (
-    <>
+    <Box>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          pt: 6,
         }}
       >
-        <img
-          width={50}
-          height={50}
-          src="public/images/printProfitLogoV3.svg"
-          alt="printProfitLogo"
-        />
         <Typography variant="h4">Login</Typography>
         <form onSubmit={login}>
           {errors.loginMessage && (
@@ -59,12 +54,12 @@ function LoginForm() {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              paddingTop: 1,
+              paddingTop: 6,
             }}
           >
             <TextField
               sx={{
-                marginBottom: 1,
+                marginBottom: 2,
               }}
               id="email"
               type="text"
@@ -107,7 +102,7 @@ function LoginForm() {
           </Button>
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }
 

@@ -1,5 +1,15 @@
 import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { useHistory } from 'react-router-dom';
 export default function Header() {
+  const history = useHistory();
+
+  const handleNavigationToMyContactPage = () => {
+    history.push('/contact');
+  };
+
+  const handleNavigationToMyAboutPage = () => {
+    history.push('/about');
+  };
   return (
     <AppBar color="secondary" position="static">
       <Toolbar>
@@ -9,25 +19,30 @@ export default function Header() {
             display: 'flex',
             justifyContent: 'flex-end',
             pr: 10,
-            width: '40%', // adjust as needed
+            width: '40%',
           }}
-        >
-          <Button color="inherit">Something</Button>
-        </Box>
-        <Box sx={{ alignText: 'center' }}>
-          <Typography variant="h3" sx={{ flexGrow: 1, textAlign: 'center' }}>
-            Print Profit
-          </Typography>
-        </Box>
+        />
         <Box
           sx={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-around',
             width: '20%', // adjust as needed
           }}
         >
-          <Button color="inherit">About</Button>
-          <Button color="inherit">Contact</Button>
+          <Button
+            onClick={handleNavigationToMyContactPage}
+            disableRipple
+            color="inherit"
+          >
+            About
+          </Button>
+          <Button
+            onClick={handleNavigationToMyAboutPage}
+            disableRipple
+            color="inherit"
+          >
+            Contact
+          </Button>
         </Box>
       </Toolbar>
     </AppBar>

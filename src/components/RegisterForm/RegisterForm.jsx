@@ -68,6 +68,12 @@ function RegisterForm() {
     <Box sx={{ width: '400px' }}>
       <Paper>
         <h2>Print Profit </h2>
+        <img
+          width={50}
+          height={50}
+          src="public/images/printProfitLogoV3.svg"
+          alt="printProfitLogo"
+        />
         {errors.registrationMessage && (
           <h3 className="alert" role="alert">
             {errors.registrationMessage}
