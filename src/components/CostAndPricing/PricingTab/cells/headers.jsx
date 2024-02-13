@@ -1,18 +1,10 @@
 // @ts-check
 
-import { Add, Cancel, Delete } from '@mui/icons-material';
-import {
-  Button,
-  ButtonGroup,
-  DialogContentText,
-  TextField,
-  Tooltip,
-} from '@mui/material';
+import { Delete } from '@mui/icons-material';
 import { produce } from 'immer';
 import { useState } from 'react';
-import { BaseDialog } from '../dialogs';
 import { ConfirmButtonDialog } from '../dialogs-wrapped';
-import { PricingTableFab as Fab, TableTextField } from '../stylized';
+import { TableTextField } from '../stylized';
 
 /**
  * @param {import('../prop-types').HeaderProps<unknown>} props
@@ -83,88 +75,5 @@ export function DynamicCostHeader({ column, table }) {
         ),
       }}
     />
-  );
-}
-
-/**
- * @param {import('../prop-types').AddCostHeaderProps} props
- */
-export function AddCostHeader({ table }) {
-  const [open, setOpen] = useState(false);
-  const [costName, setCostName] = useState('');
-
-  const addCost = () => {
-    table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
-        for (const product of draft.products) {
-          product.costs.push({
-            name: costName,
-            value: 0,
-          });
-        }
-      }),
-    );
-  };
-
-  const onClose = () => {
-    setOpen(false);
-    setCostName('');
-  };
-
-  const onSubmit = () => {
-    addCost();
-    onClose();
-  };
-
-  // We need to ensure that the cost name is unique.
-  const costNameExists = table.options.meta?.costNames.includes(costName);
-
-  return (
-    <>
-      <Tooltip title="Add Cost" arrow>
-        <Fab
-          variant="extended"
-          size="small"
-          aria-label="Add Cost"
-          onClick={() => setOpen(true)}
-        >
-          <Add sx={{ mr: 1 }} />
-          Add Cost
-        </Fab>
-      </Tooltip>
-      <BaseDialog
-        open={open}
-        onClose={onClose}
-        onSubmit={onSubmit}
-        title="Cost Name"
-        actions={
-          <ButtonGroup variant="contained">
-            <Button color="secondary" onClick={onClose} startIcon={<Cancel />}>
-              Cancel
-            </Button>
-            <Button type="submit" startIcon={<Add />}>
-              Add Cost
-            </Button>
-          </ButtonGroup>
-        }
-      >
-        <DialogContentText>
-          Please specify the name of the new cost.
-        </DialogContentText>
-        <TextField
-          autoFocus
-          required
-          margin="dense"
-          id="costName"
-          name="costName"
-          label="Cost Name"
-          fullWidth
-          value={costName}
-          onChange={(e) => setCostName(e.target.value)}
-          error={costNameExists}
-          helperText={costNameExists && 'Cost name already exists'}
-        />
-      </BaseDialog>
-    </>
   );
 }
