@@ -1,6 +1,5 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import LoginPage from '../LoginPage/LoginPage';
 
 // A Custom Wrapper Component -- This will keep our code DRY.
@@ -27,7 +26,7 @@ function ProtectedRoute({ component, children, ...props }) {
       // are now passed along to the 'Route' Component
       {...props}
     >
-      {user.id ? (
+      {user.id && user.is_approved ? (
         // If the user is logged in, show the protected component
         <ProtectedComponent />
       ) : (
