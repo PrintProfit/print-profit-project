@@ -136,7 +136,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
  * @param {import('./prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
-export function TotalSellingPriceCell({ getValue, table, row, column }) {
+export function TotalSellingPriceCell({ getValue, table, row }) {
   const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
