@@ -131,6 +131,10 @@ export const contributionColumns = [
       const percent = totalContribution / totalSellingPrice;
       return fmt.percent(percent);
     },
+    meta: {
+      footerContribDivisor: 'total_selling_price',
+      footerContribFormat: 'percent',
+    },
   },
   {
     accessorFn: calc.contributionPerHour,
@@ -141,6 +145,10 @@ export const contributionColumns = [
       const totalHours = aggregate(table, 'estimated_hours') ?? 0;
       const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
       return fmt.currency(perHour);
+    },
+    meta: {
+      footerContribDivisor: 'estimated_hours',
+      footerContribFormat: 'currency',
     },
   },
 ];
