@@ -8,10 +8,8 @@ import {
   ProductNameCell,
   TotalSellingPriceCell,
 } from './cells';
-import { CurrencyFooter, NumberFooter } from './footers';
-import * as fmt from './formats';
+import { ContributionFooter, CurrencyFooter, NumberFooter } from './footers';
 import { AddCostHeader } from './headers';
-import { aggregate } from './utils';
 
 /**
  * Consistent columns that are always present.
@@ -125,12 +123,7 @@ export const contributionColumns = [
     accessorFn: calc.contributionMargin,
     header: 'Contribution %',
     cell: PercentCell,
-    footer: ({ table }) => {
-      const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
-      const totalSellingPrice = aggregate(table, 'total_selling_price') ?? 0;
-      const percent = totalContribution / totalSellingPrice;
-      return fmt.percent(percent);
-    },
+    footer: ContributionFooter,
     meta: {
       footerContribDivisor: 'total_selling_price',
       footerContribFormat: 'percent',
@@ -140,12 +133,7 @@ export const contributionColumns = [
     accessorFn: calc.contributionPerHour,
     header: 'Contribution / Hour',
     cell: DollarCell,
-    footer: ({ table }) => {
-      const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
-      const totalHours = aggregate(table, 'estimated_hours') ?? 0;
-      const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
-      return fmt.currency(perHour);
-    },
+    footer: ContributionFooter,
     meta: {
       footerContribDivisor: 'estimated_hours',
       footerContribFormat: 'currency',
