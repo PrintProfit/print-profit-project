@@ -152,7 +152,12 @@ function App() {
             {user.id ? (
               // If the user is already logged in,
               // redirect them to the /home page
-              <Redirect to="/cost-and-pricing" />
+              <>
+                <AppBarHeader />
+                <SideBar>
+                  <Homepage />
+                </SideBar>
+              </>
             ) : (
               // Otherwise, show the Landing page
               <LandingPage />
