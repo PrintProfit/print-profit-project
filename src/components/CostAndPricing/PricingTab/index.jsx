@@ -25,7 +25,7 @@ export function PricingTab() {
           product.total_selling_price = 3950;
           product.costs = costNames.map((name) => ({
             name,
-            value: Math.round(Math.random() * 1000),
+            value: Math.round((Math.random() * 1000) / costNames.length),
           }));
         }
       }),
