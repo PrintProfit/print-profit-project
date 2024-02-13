@@ -37,6 +37,10 @@ export const consistentColumns = [
     meta: {
       inputMode: 'numeric',
       productKey: 'quantity',
+      inputProps: {
+        allowNegative: false,
+        decimalScale: 0,
+      },
     },
   },
   {
@@ -47,6 +51,11 @@ export const consistentColumns = [
       inputMode: 'decimal',
       adornment: '$',
       productKey: 'selling_price_per_unit',
+      inputProps: {
+        allowNegative: false,
+        decimalScale: 2,
+        fixedDecimalScale: true,
+      },
     },
   },
   {
@@ -107,6 +116,10 @@ export const estimatedHoursColumn = {
   footer: NumberFooter,
   meta: {
     productKey: 'estimated_hours',
+    inputProps: {
+      allowNegative: false,
+      decimalScale: 0,
+    },
   },
 };
 
