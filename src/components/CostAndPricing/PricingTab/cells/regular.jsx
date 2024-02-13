@@ -175,6 +175,13 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
     setValue(initialValue);
   }, [initialValue]);
 
+  /** @type {import('react-number-format').NumericFormatProps} */
+  const inputProps = {
+    allowNegative: false,
+    decimalScale: 2,
+    fixedDecimalScale: true,
+  };
+
   return (
     <TableTextField
       size="small"
@@ -211,6 +218,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
           </InputAdornment>
         ),
         inputComponent: /** @type {any} */ (NumericInput),
+        /** @type {any} */ inputProps,
       }}
     />
   );
