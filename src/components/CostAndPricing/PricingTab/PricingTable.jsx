@@ -21,7 +21,9 @@ import { PricingToolHelp } from '../../PricingToolHelp/PricingToolHelp';
 import { TotalsHelp } from '../../PricingToolHelp/TotalsHelp';
 import { TotalsTable } from './TotalsTable';
 import { QuoteActions } from './actions';
-import { AddProductCell, DynamicCostCell } from './cells';
+import { CurrencyFooter } from './cells/footers';
+import { DynamicCostHeader } from './cells/headers';
+import { AddProductCell, DynamicCostCell } from './cells/regular';
 import {
   addDynamicCostColumn,
   calculatedCosts,
@@ -29,8 +31,6 @@ import {
   contributionColumns,
   estimatedHoursColumn,
 } from './columns';
-import { CurrencyFooter } from './footers';
-import { DynamicCostHeader } from './headers';
 import { PricingTableRow as TableRow } from './stylized';
 import { toCostNames, unique } from './utils';
 

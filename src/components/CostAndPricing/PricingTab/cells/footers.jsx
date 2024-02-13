@@ -1,8 +1,8 @@
-import * as fmt from './formats';
-import { aggregate } from './utils';
+import * as fmt from '../formats';
+import { aggregate } from '../utils';
 
 /**
- * @param {import("./prop-types").HeaderProps<unknown>} props
+ * @param {import("../prop-types").HeaderProps<unknown>} props
  */
 export function NumberFooter({ table, column }) {
   const aggregate = column.getAggregationFn();
@@ -12,7 +12,7 @@ export function NumberFooter({ table, column }) {
 }
 
 /**
- * @param {import("./prop-types").HeaderProps<unknown>} props
+ * @param {import("../prop-types").HeaderProps<unknown>} props
  */
 export function CurrencyFooter({ table, column }) {
   const aggregate = column.getAggregationFn();
@@ -23,7 +23,7 @@ export function CurrencyFooter({ table, column }) {
 }
 
 /**
- * @param {import("./prop-types").HeaderProps<unknown>} props
+ * @param {import("../prop-types").HeaderProps<unknown>} props
  */
 export function ContributionFooter({ table, column }) {
   const divisorId = column.columnDef.meta?.footerContribDivisor;

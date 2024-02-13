@@ -10,12 +10,12 @@ import {
 } from '@mui/material';
 import { produce } from 'immer';
 import { useState } from 'react';
-import { BaseDialog } from './dialogs';
-import { ConfirmButtonDialog } from './dialogs-wrapped';
-import { PricingTableFab as Fab, TableTextField } from './stylized';
+import { BaseDialog } from '../dialogs';
+import { ConfirmButtonDialog } from '../dialogs-wrapped';
+import { PricingTableFab as Fab, TableTextField } from '../stylized';
 
 /**
- * @param {import('./prop-types').HeaderProps<unknown>} props
+ * @param {import('../prop-types').HeaderProps<unknown>} props
  */
 export function DynamicCostHeader({ column, table }) {
   const initialCostName = column.columnDef.meta?.costName;
@@ -28,7 +28,7 @@ export function DynamicCostHeader({ column, table }) {
 
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         for (const product of draft.products) {
           const cost = product.costs.find((c) => c.name === initialCostName);
           if (cost) {
@@ -41,7 +41,7 @@ export function DynamicCostHeader({ column, table }) {
 
   const deleteCost = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         for (const product of draft.products) {
           const index = product.costs.findIndex((c) => c.name === costName);
           if (index !== -1) {
@@ -87,7 +87,7 @@ export function DynamicCostHeader({ column, table }) {
 }
 
 /**
- * @param {import('./prop-types').AddCostHeaderProps} props
+ * @param {import('../prop-types').AddCostHeaderProps} props
  */
 export function AddCostHeader({ table }) {
   const [open, setOpen] = useState(false);
@@ -95,7 +95,7 @@ export function AddCostHeader({ table }) {
 
   const addCost = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         for (const product of draft.products) {
           product.costs.push({
             name: costName,

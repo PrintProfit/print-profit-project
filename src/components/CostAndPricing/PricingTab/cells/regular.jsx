@@ -12,16 +12,16 @@ import {
 } from '@mui/material';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
-import { BaseDialog } from './dialogs';
-import { ConfirmButtonDialog } from './dialogs-wrapped';
-import * as fmt from './formats';
-import { NumericInput } from './inputs';
-import { PricingTableFab as Fab, TableTextField } from './stylized';
-import { toCostNames, unique } from './utils';
+import { BaseDialog } from '../dialogs';
+import { ConfirmButtonDialog } from '../dialogs-wrapped';
+import * as fmt from '../formats';
+import { NumericInput } from '../inputs';
+import { PricingTableFab as Fab, TableTextField } from '../stylized';
+import { toCostNames, unique } from '../utils';
 
 /**
  * A component that renders editable cells with dynamic costs
- * @param {import('./prop-types').CellProps<unknown>} props
+ * @param {import('../prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
 export function DynamicCostCell({ getValue, table, row, column }) {
@@ -41,7 +41,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       throw new Error('Malformed columnDef: costName is undefined');
     }
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         const product = draft.products[row.index];
         if (product === undefined) {
           throw new Error('Inpossible state reached: product is undefined');
@@ -83,7 +83,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
 
 /**
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
- * @param {import('./prop-types').CellProps<unknown>} props
+ * @param {import('../prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
 export function ConsistentNumericCell({ getValue, table, row, column }) {
@@ -100,7 +100,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
    */
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         const product = draft.products[row.index];
         if (product && productKey) {
           product[productKey] = Number(value);
@@ -133,7 +133,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
 
 /**
  * A component for the total selling price cell
- * @param {import('./prop-types').CellProps<unknown>} props
+ * @param {import('../prop-types').CellProps<unknown>} props
  * @returns {JSX.Element}
  */
 export function TotalSellingPriceCell({ getValue, table, row }) {
@@ -150,7 +150,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
    */
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         const product = draft.products[row.index];
         if (product) {
           product.total_selling_price = Number(value);
@@ -161,7 +161,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
 
   const clearCustomValue = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         const product = draft.products[row.index];
         if (product) {
           product.total_selling_price = undefined;
@@ -216,7 +216,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
 }
 
 /**
- * @param {import('./prop-types').ProductNameCellProps} props
+ * @param {import('../prop-types').ProductNameCellProps} props
  */
 export function ProductNameCell({ getValue, table, row }) {
   const initialValue = getValue();
@@ -227,7 +227,7 @@ export function ProductNameCell({ getValue, table, row }) {
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         const product = draft.products[row.index];
         if (product) {
           product.name = value;
@@ -238,7 +238,7 @@ export function ProductNameCell({ getValue, table, row }) {
 
   const deleteProduct = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         draft.products.splice(row.index, 1);
       }),
     );
@@ -281,7 +281,7 @@ export function ProductNameCell({ getValue, table, row }) {
 
 /**
  * Cell for non-editable values of money (ex. derived amounts)
- * @param {import('./prop-types').DollarCellProps} props
+ * @param {import('../prop-types').DollarCellProps} props
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
@@ -289,7 +289,7 @@ export function DollarCell({ getValue }) {
 }
 
 /**
- * @param {import('./prop-types').PercentCellProps} props
+ * @param {import('../prop-types').PercentCellProps} props
  */
 export function PercentCell({ getValue }) {
   const value = getValue();
@@ -298,7 +298,7 @@ export function PercentCell({ getValue }) {
 }
 
 /**
- * @param {import('./prop-types').AddProductCellProps} props
+ * @param {import('../prop-types').AddProductCellProps} props
  */
 export function AddProductCell({ table }) {
   const [open, setOpen] = useState(false);
@@ -311,7 +311,7 @@ export function AddProductCell({ table }) {
 
   const addProduct = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
+      produce((/** @type {import('../data-types').Quote} */ draft) => {
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products.flatMap(toCostNames).filter(unique);
 

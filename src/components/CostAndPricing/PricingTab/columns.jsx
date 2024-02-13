@@ -2,14 +2,18 @@
 
 import * as calc from './calculations';
 import {
+  ContributionFooter,
+  CurrencyFooter,
+  NumberFooter,
+} from './cells/footers';
+import { AddCostHeader } from './cells/headers';
+import {
   ConsistentNumericCell,
   DollarCell,
   PercentCell,
   ProductNameCell,
   TotalSellingPriceCell,
-} from './cells';
-import { ContributionFooter, CurrencyFooter, NumberFooter } from './footers';
-import { AddCostHeader } from './headers';
+} from './cells/regular';
 
 /**
  * Consistent columns that are always present.
