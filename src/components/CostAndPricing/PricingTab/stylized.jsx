@@ -22,13 +22,12 @@ export const PricingTableRow = styled(TableRow)({
   [`& > .${tableCellClasses.head}`]: {
     // I really want to reduce the width of the head cells when they have
     // inputs in them, but I have no idea how to do that.
-    // borderRight: `1px solid ${indigo.indigo7}`,
     borderBottom: `1px solid ${indigo.indigo5}`,
     backgroundColor: indigo.indigo3,
     fontWeight: 600,
-  },
-  [`& > .${tableCellClasses.head}:first-of-type`]: {
-    borderRight: `1px solid ${indigo.indigo7}`,
+    ':first-of-type': {
+      borderRight: `1px solid ${indigo.indigo7}`,
+    },
   },
   // Remove top & bottom borders from first & last rows
   '&:first-of-type > td': {
