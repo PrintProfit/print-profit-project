@@ -1,10 +1,12 @@
 import { Button, IconButton, Tooltip } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ConfirmDialog } from './dialogs';
 import { PricingTableFab as Fab } from './stylized';
 
 /**
+ * An abstraction of a confirm dialog that is triggered by a button.
  * @param {import('./prop-types').ConfirmButtonDialogProps} props
+ * @returns {JSX.Element}
  */
 export function ConfirmButtonDialog({
   buttonType,
@@ -20,31 +22,42 @@ export function ConfirmButtonDialog({
 }) {
   const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
+  /** Closes the dialog */
+  const handleClose = useCallback(() => {
     setOpen(false);
     onClose?.();
-  };
-  const handleCancel = () => {
+  }, [onClose]);
+
+  /** Cancels the action */
+  const handleCancel = useCallback(() => {
     setOpen(false);
     onCancel?.();
-  };
-  const handleConfirm = () => {
+  }, [onCancel]);
+
+  /** Confirms the action */
+  const handleConfirm = useCallback(() => {
     setOpen(false);
     onConfirm();
-  };
+  }, [onConfirm]);
 
+  /** Opens the dialog */
+  const handleOpen = useCallback(() => {
+    setOpen(true);
+  }, []);
+
+  // This code is messy, but it lets us support multiple types of buttons
   return (
     <>
       {buttonType === 'button' ? (
-        <Button onClick={() => setOpen(true)} {...ButtonProps}>
+        <Button onClick={handleOpen} {...ButtonProps}>
           {buttonText}
         </Button>
       ) : (
         <Tooltip title={buttonText} {...TooltipProps}>
           {buttonType === 'icon' ? (
-            <IconButton onClick={() => setOpen(true)} {...IconProps} />
+            <IconButton onClick={handleOpen} {...IconProps} />
           ) : (
-            <Fab onClick={() => setOpen(true)} {...FabProps} />
+            <Fab onClick={handleOpen} {...FabProps} />
           )}
         </Tooltip>
       )}
