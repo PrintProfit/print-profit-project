@@ -85,4 +85,4 @@ export type DamaagedQuote =
   | null;
 
 /** Helper type for JSDoc comments */
-export type ProductColumnDef = ColumnDef<Product>;
+export type ProductColumnDef<TValue = unknown> = ColumnDef<Product, TValue>;

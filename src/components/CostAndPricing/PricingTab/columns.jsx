@@ -13,13 +13,18 @@ import {
   TotalSellingPriceCell,
 } from './cells';
 
+/**
+ * @template T
+ * @typedef {import("./data-types").ProductColumnDef<T>} ProductColumnDef
+ */
+
 // Despite this module being naed "columns.jsx", and it being full of
 // ColumnDefs, these are in practice the rows of the pricing table. TanStack
 // tables' concept of columns are what we'd call rows in this table.
 
 /**
  * Consistent columns that are always present.
- * @type {import("./data-types").ProductColumnDef[]}
+ * @type {(ProductColumnDef<string>|ProductColumnDef<number>)[]}
  */
 export const consistentColumns = [
   {
@@ -83,7 +88,7 @@ export const consistentColumns = [
 
 /**
  * This column def contains a button to add a new cost, and nothing else.
- * @type {import("./data-types").ProductColumnDef}
+ * @type {ProductColumnDef<any>}
  */
 export const addDynamicCostColumn = {
   id: 'addDynamicCost',
@@ -92,7 +97,7 @@ export const addDynamicCostColumn = {
 
 /**
  * Column defs that are calculated based on other columns.
- * @type {import("./data-types").ProductColumnDef[]}
+ * @type {ProductColumnDef<number>[]}
  */
 export const calculatedCosts = [
   {
@@ -116,7 +121,7 @@ export const calculatedCosts = [
 /**
  * This has to be separated out from some other columns, since while it's
  * editable, it's below some calculated costs.
- * @type {import('./data-types').ProductColumnDef}
+ * @type {ProductColumnDef<number>}
  */
 export const estimatedHoursColumn = {
   accessorKey: 'estimated_hours',
@@ -136,7 +141,7 @@ export const estimatedHoursColumn = {
 
 /**
  * Column defs for the contribution section.
- * @type {import("./data-types").ProductColumnDef[]}
+ * @type {ProductColumnDef<number>[]}
  */
 export const contributionColumns = [
   {
