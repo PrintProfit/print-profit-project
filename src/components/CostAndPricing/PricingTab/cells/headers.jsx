@@ -2,7 +2,7 @@
 
 import { Delete } from '@mui/icons-material';
 import { produce } from 'immer';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ConfirmButtonDialog } from '../dialogs-wrapped';
 import { TableTextField } from '../stylized';
 
@@ -24,11 +24,12 @@ export function DynamicCostHeader({ column, table }) {
   // It's probably better to check if the cost has an ID instead, though that's
   // also a lot more complex.
   const updateMode = table.options.meta?.updateMode ?? false;
+  const setQuote = table.options.meta?.setQuote;
 
   // we have to use onBlur to update everything within the tanstack tables
   // context to avoid an early rerender of the table while the user is typing.
-  const onBlur = () => {
-    table.options.meta?.setQuote(
+  const onBlur = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
         // Loop through the products and update the cost names
         for (const product of draft.products) {
@@ -39,10 +40,10 @@ export function DynamicCostHeader({ column, table }) {
         }
       }),
     );
-  };
+  }, [costName, initialCostName, setQuote]);
 
-  const deleteCost = () => {
-    table.options.meta?.setQuote(
+  const deleteCost = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
         for (const product of draft.products) {
           const index = product.costs.findIndex((c) => c.name === costName);
@@ -54,7 +55,7 @@ export function DynamicCostHeader({ column, table }) {
         }
       }),
     );
-  };
+  }, [costName, setQuote]);
 
   return (
     <TableTextField
