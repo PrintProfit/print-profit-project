@@ -29,7 +29,7 @@ export function DynamicCostHeader({ column, table }) {
   // context to avoid an early rerender of the table while the user is typing.
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         // Loop through the products and update the cost names
         for (const product of draft.products) {
           const cost = product.costs.find((c) => c.name === initialCostName);
@@ -43,7 +43,7 @@ export function DynamicCostHeader({ column, table }) {
 
   const deleteCost = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         for (const product of draft.products) {
           const index = product.costs.findIndex((c) => c.name === costName);
           if (index !== -1) {

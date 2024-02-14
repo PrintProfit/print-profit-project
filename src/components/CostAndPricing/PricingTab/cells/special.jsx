@@ -25,7 +25,7 @@ export function AddCostHeader({ table }) {
 
   const addCost = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         for (const product of draft.products) {
           product.costs.push({
             name: costName,
@@ -113,7 +113,7 @@ export function AddProductCell({ table }) {
 
   const addProduct = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products.flatMap(toCostNames).filter(unique);
 

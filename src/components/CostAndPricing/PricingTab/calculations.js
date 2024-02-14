@@ -1,10 +1,15 @@
 // @ts-check
 
+/**
+ * type imports
+ * @typedef {import("./data-types").Product} Product
+ */
+
 const CREDIT_CARD_FEE = 0.03;
 
 /**
  * Calculate's the credit card fee for a product
- * @param {import("./data-types").Product} product
+ * @param {Product} product
  * @returns {number}
  */
 export function totalSellingPrice(product) {
@@ -16,7 +21,7 @@ export function totalSellingPrice(product) {
 
 /**
  * Calculate's the credit card fee for a product
- * @param {import("./data-types").Product} product
+ * @param {Product} product
  * @returns {number}
  */
 export function creditCardFee(product) {
@@ -33,7 +38,7 @@ function sumCosts(costs) {
 }
 
 /**
- * @param {import("./data-types").Product} product
+ * @param {Product} product
  * @returns {number}
  */
 export function totalVariableCosts(product) {
@@ -41,7 +46,7 @@ export function totalVariableCosts(product) {
 }
 
 /**
- * @param {import("./data-types").Product} product
+ * @param {Product} product
  * @returns {number}
  */
 export function contribution(product) {
@@ -49,7 +54,7 @@ export function contribution(product) {
 }
 
 /**
- * @param {import("./data-types").Product} product
+ * @param {Product} product
  * @returns {number}
  */
 export function contributionMargin(product) {
@@ -57,7 +62,7 @@ export function contributionMargin(product) {
 }
 
 /**
- * @param {import("./data-types").Product} product
+ * @param {Product} product
  * @returns {number}
  */
 export function contributionPerHour(product) {

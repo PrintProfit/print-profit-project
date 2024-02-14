@@ -69,7 +69,7 @@ function SaveQuote({ quote, setQuote }) {
   const setQuoteName = useCallback(
     (e) => {
       setQuote(
-        produce((/** @type {import('./data-types').Quote} */ draft) => {
+        produce((draft) => {
           draft.name = e.target.value;
         }),
       );

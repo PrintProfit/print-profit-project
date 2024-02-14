@@ -31,7 +31,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       throw new Error('Malformed columnDef: costName is undefined');
     }
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         const product = draft.products[row.index];
         if (product === undefined) {
           // This is basically just a type guard so VSCode knows product is
@@ -103,7 +103,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
    */
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         const product = draft.products[row.index];
         if (product && productKey) {
           product[productKey] = Number(value);
@@ -158,7 +158,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
    */
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         const product = draft.products[row.index];
         if (product) {
           product.total_selling_price = Number(value);
@@ -169,7 +169,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
 
   const clearCustomValue = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         const product = draft.products[row.index];
         if (product) {
           product.total_selling_price = undefined;
@@ -250,7 +250,7 @@ export function ProductNameCell({ getValue, table, row }) {
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
   const onBlur = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         const product = draft.products[row.index];
         if (product) {
           product.name = value;
@@ -261,7 +261,7 @@ export function ProductNameCell({ getValue, table, row }) {
 
   const deleteProduct = () => {
     table.options.meta?.setQuote(
-      produce((/** @type {import('../data-types').Quote} */ draft) => {
+      produce((draft) => {
         draft.products.splice(row.index, 1);
       }),
     );
