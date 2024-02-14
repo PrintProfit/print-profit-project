@@ -85,6 +85,9 @@ export default function MyAccountPage() {
               onClick={toggleForm}
               type="button"
               variant="contained"
+              sx={{
+                mt: 3,
+              }}
             >
               <Typography> Edit info</Typography>
 
