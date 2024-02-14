@@ -16,7 +16,7 @@ import { toCostNames, unique } from '../utils';
 
 /**
  * The header component for dynamic (user-editable) costs.
- * @param {import('../prop-types').AddCostHeaderProps} props
+ * @param {import('../prop-types').HeaderProps<unknown>} props
  * @returns {JSX.Element}
  */
 export function AddCostHeader({ table }) {

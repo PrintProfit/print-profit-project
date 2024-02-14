@@ -238,7 +238,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
 
 /**
  * A cell for product names
- * @param {import('../prop-types').ProductNameCellProps} props
+ * @param {import('../prop-types').CellProps<string>} props
  * @returns {React.ReactNode}
  */
 export function ProductNameCell({ getValue, table, row }) {
@@ -306,7 +306,7 @@ export function ProductNameCell({ getValue, table, row }) {
 
 /**
  * Cell for non-editable values of money (ex. derived amounts)
- * @param {import('../prop-types').DollarCellProps} props
+ * @param {import('../prop-types').CellProps<number>} props
  * @returns {React.ReactNode}
  */
 export function DollarCell({ getValue }) {
@@ -316,7 +316,7 @@ export function DollarCell({ getValue }) {
 
 /**
  * Cell for non-editable precentage values (ex. derived amounts)
- * @param {import('../prop-types').PercentCellProps} props
+ * @param {import('../prop-types').CellProps<number>} props
  * @returns {React.ReactNode}
  */
 export function PercentCell({ getValue }) {
