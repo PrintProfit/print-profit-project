@@ -15,10 +15,17 @@ import { useCallback, useMemo } from 'react';
 import { NumberFormatter } from './cells/internal';
 import { NumericInput } from './inputs';
 import { PricingTableRow as TableRow } from './stylized';
-import { safeFlexRender, toCostNames, unique } from './utils';
+import {
+  aggregate as aggregateUtil,
+  safeFlexRender,
+  toCostNames,
+  unique,
+} from './utils';
 
 /**
+ * The totals table.
  * @param {import("./prop-types").TotalsTableProps} props
+ * @returns {JSX.Element}
  */
 export function TotalsTable({ quote, setQuote, table }) {
   const aggregate = useCallback(
@@ -26,14 +33,12 @@ export function TotalsTable({ quote, setQuote, table }) {
      * @param {string} column
      * @returns {(number|undefined)}
      */
-    (column) => {
-      const aggregationFn = table.getColumn(column)?.getAggregationFn();
-      return aggregationFn?.(column, [], table.getCoreRowModel().rows);
-    },
-    [table.getColumn, table.getCoreRowModel],
+    (column) => aggregateUtil(table, column),
+    [table],
   );
 
   const getCMTotalSellingPrice = useCallback(
+    /** @returns {number} */
     () =>
       (aggregate('totalVariableCosts') ?? 0) /
       ((100 - (quote.manual_contribution_percent ?? 0)) / 100),
@@ -161,9 +166,12 @@ export function TotalsTable({ quote, setQuote, table }) {
 
 /**
  * All the contribution-related components.
+ *
  * Their calculations are very closely related, so this component calculates
  * them all.
+ *
  * @param {import('./prop-types').ContributionRowsProps} props
+ * @returns {JSX.Element}
  */
 function ContributionRows({
   slots: { marginInput },
@@ -229,6 +237,7 @@ function ContributionRows({
 /**
  * Used for rows which have three columns that have the same value
  * @param {import('./prop-types').SimpleTotalsTableRowProps} props
+ * @returns {JSX.Element}
  */
 function SimpleTotalsTableRow({ table, column, title }) {
   // Attempt to cache the footer & context
