@@ -10,13 +10,12 @@ import {
   TableHead,
   TextField,
 } from '@mui/material';
-import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
 import { NumberFormatter } from './cells/internal';
 import { NumericInput } from './inputs';
 import { PricingTableRow as TableRow } from './stylized';
-import { toCostNames, unique } from './utils';
+import { safeFlexRender, toCostNames, unique } from './utils';
 
 /**
  * @param {import("./prop-types").TotalsTableProps} props
@@ -241,8 +240,8 @@ function SimpleTotalsTableRow({ table, column, title }) {
   return (
     <TableRow>
       <TableCell variant="head">{title}</TableCell>
-      <TableCell>{context && flexRender(footer, context)}</TableCell>
-      <TableCell>{context && flexRender(footer, context)}</TableCell>
+      <TableCell>{safeFlexRender(footer, context)}</TableCell>
+      <TableCell>{safeFlexRender(footer, context)}</TableCell>
     </TableRow>
   );
 }
@@ -252,7 +251,7 @@ function SimpleTotalsTableRow({ table, column, title }) {
  * @template TData
  * @param {import('@tanstack/react-table').Table<TData>} table
  * @param {string} columnId
- * @returns {Parameters<typeof flexRender> | [undefined, undefined]}
+ * @returns {Parameters<typeof import('@tanstack/react-table').flexRender> | [undefined, undefined]}
  */
 function getFooter(table, columnId) {
   const column = table.getColumn(columnId);
