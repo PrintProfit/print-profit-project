@@ -61,23 +61,35 @@ export default function MyAccountPage() {
                   <TableCell>{profileUser.company_name}</TableCell>
                 </TableRow>
 
-                <TableRow>
-                  <TableCell align="right">
+                {/* <TableRow>
+                  <TableCell align="right" >
                     <Button
                       aria-label="edit info"
                       className="editInfoButton"
                       onClick={toggleForm}
                       type="button"
                       variant="contained"
+                      
                     >
                       <Typography> Edit info</Typography>
 
                       <EditIcon sx={{ color: 'black' }} />
                     </Button>
                   </TableCell>
-                </TableRow>
+                </TableRow> */}
               </TableBody>
             </Table>
+            <Button
+              aria-label="edit info"
+              className="editInfoButton"
+              onClick={toggleForm}
+              type="button"
+              variant="contained"
+            >
+              <Typography> Edit info</Typography>
+
+              <EditIcon sx={{ color: 'black' }} />
+            </Button>
           </TableContainer>
         </>
       );
