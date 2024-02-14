@@ -103,6 +103,10 @@ export function PricingTable({ quote, setQuote }) {
     },
   });
 
+  const headers = table.getFlatHeaders();
+  const { rows } = table.getCoreRowModel();
+  const footers = table.getFooterGroups().flatMap((g) => g.headers);
+
   // This is sorta awkward, but it's so far the best way I've found to get the
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
@@ -131,14 +135,11 @@ export function PricingTable({ quote, setQuote }) {
                     >
                       {safeFlexRender(
                         col.columnDef.header,
-                        table
-                          .getFlatHeaders()
-                          .find((h) => h.id === col.id)
-                          ?.getContext(),
+                        headers.find((h) => h.id === col.id)?.getContext(),
                       )}
                     </TableCell>
 
-                    {table.getCoreRowModel().rows.map((row) => (
+                    {rows.map((row) => (
                       <TableCell
                         key={row.id}
                         sx={{ minWidth: 170 }}
@@ -164,11 +165,7 @@ export function PricingTable({ quote, setQuote }) {
                     >
                       {safeFlexRender(
                         col.columnDef.footer,
-                        table
-                          .getFooterGroups()
-                          .flatMap((g) => g.headers)
-                          .find((h) => h.id === col.id)
-                          ?.getContext(),
+                        footers.find((h) => h.id === col.id)?.getContext(),
                       )}
                     </TableCell>
                   </TableRow>
