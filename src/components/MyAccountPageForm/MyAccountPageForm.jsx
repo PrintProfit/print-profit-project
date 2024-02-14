@@ -213,7 +213,7 @@ export default function MyAccountPageForm({ setIsForm }) {
             label="Enter new password"
             sx={{
               mt: 2,
-              width: '16ch',
+              width: '20ch',
             }}
           />
         </section>
@@ -251,7 +251,7 @@ export default function MyAccountPageForm({ setIsForm }) {
             label="Verify new password"
             sx={{
               mt: 2,
-              width: '16ch',
+              width: '20ch',
             }}
           />
         </section>
