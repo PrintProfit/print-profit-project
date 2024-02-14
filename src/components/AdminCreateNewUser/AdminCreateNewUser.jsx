@@ -1,19 +1,16 @@
-import emailjs from '@emailjs/browser';
-import CreateIcon from '@mui/icons-material/Create';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Snackbar from '@mui/material/Snackbar';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import TextField from '@mui/material/TextField';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import React, { useState } from 'react';
+// import emailjs from '@emailjs/browser';
+import { Create as CreateIcon } from '@mui/icons-material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Snackbar,
+  TextField,
+  Tooltip,
+  createFilterOptions,
+  tooltipClasses,
+} from '@mui/material';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 

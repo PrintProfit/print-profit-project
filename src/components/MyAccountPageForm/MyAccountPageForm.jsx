@@ -1,29 +1,20 @@
 import {
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+  Save as SaveIcon,
+} from '@mui/icons-material';
+import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
   FormLabel,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
-  Tooltip,
-  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
 
 export default function MyAccountPageForm({ setIsForm }) {
   const dispatch = useDispatch();

@@ -1,17 +1,20 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import React, { Fragment, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
-import ArchiveIcon from '@mui/icons-material/Archive';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CloseIcon from '@mui/icons-material/Close';
+import {
+  Archive as ArchiveIcon,
+  CheckBox as CheckBoxIcon,
+  Close as CloseIcon,
+} from '@mui/icons-material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TableCell,
+  TableRow,
+} from '@mui/material';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 function ApprovedAdminPage({ approvedUser }) {
   const dispatch = useDispatch();

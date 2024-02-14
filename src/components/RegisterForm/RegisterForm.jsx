@@ -1,10 +1,17 @@
-import emailjs from '@emailjs/browser';
-import { Box, Button, TextField, Typography } from '@mui/material';
-import Paper from '@mui/material/Paper';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+// import emailjs from '@emailjs/browser';
+import {
+  Box,
+  Button,
+  Paper,
+  TextField,
+  Tooltip,
+  Typography,
+  tooltipClasses,
+} from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import logo from '../../assets/printProfitLogoV3.svg';
 
 function RegisterForm() {
   const [email, setEmail] = useState('');
@@ -114,12 +121,7 @@ function RegisterForm() {
               alignItems: 'center',
             }}
           >
-            <img
-              width={50}
-              height={50}
-              src="public/images/printProfitLogoV3.svg"
-              alt=""
-            />
+            <img width={50} height={50} src={logo} alt="Print Profit Logo" />
           </Box>
           <TextField
             id="email"
