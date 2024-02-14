@@ -1,4 +1,9 @@
 import {
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+  Unarchive as UnarchiveIcon,
+} from '@mui/icons-material';
+import {
   Button,
   Dialog,
   DialogActions,
@@ -12,10 +17,6 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UnarchiveIcon from '@mui/icons-material/Unarchive';
 
 function ArchivedAdminPage({ archivedUser }) {
   const dispatch = useDispatch();
