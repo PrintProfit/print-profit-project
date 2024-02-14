@@ -26,7 +26,7 @@ export const PricingTableRow = styled(TableRow)(({ theme }) => ({
     borderBottom: `1px solid ${indigo.indigo5}`,
     backgroundColor: indigo.indigo3,
   },
-  [`& > .${tableCellClasses.head}:first-child`]: {
+  [`& > .${tableCellClasses.head}:first-of-type`]: {
     borderRight: `1px solid ${indigo.indigo7}`,
   },
   // [`&:last-child > .${tableCellClasses.head}`]: {
