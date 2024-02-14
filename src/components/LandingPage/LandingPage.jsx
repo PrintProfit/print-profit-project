@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import backgroundImage from '../../assets/printProfitBgLanding2.png';
 import LoginForm from '../LoginForm/LoginForm.jsx';
 
 function LandingPage() {
@@ -6,7 +7,7 @@ function LandingPage() {
     <>
       <Box
         sx={{
-          backgroundImage: "url('public/images/printProfitBg.png')",
+          backgroundImage: `url(${backgroundImage})`,
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           // minWidth: '70%',

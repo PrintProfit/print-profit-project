@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import backgroundImage from '../../assets/printProfitBgFULL.png';
 import RegisterForm from '../RegisterForm/RegisterForm';
 
 function RegisterPage() {
@@ -6,7 +7,7 @@ function RegisterPage() {
     <>
       <Box
         sx={{
-          backgroundImage: "url('public/images/printProfitBgFull.png')",
+          backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           height: '100vh',

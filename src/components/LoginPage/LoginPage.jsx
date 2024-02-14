@@ -1,11 +1,12 @@
 import { Box, Paper } from '@mui/material';
+import backgroundImage from '../../assets/printProfitBgLoginFULL.png';
 import LoginForm from '../LoginForm/LoginForm';
 
 function LoginPage() {
   return (
     <Box
       sx={{
-        backgroundImage: 'url(public/images/printProfitBgFULL.png)',
+        backgroundImage: `url(${backgroundImage})`,
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         height: '100vh',

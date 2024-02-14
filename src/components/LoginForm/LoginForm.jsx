@@ -2,6 +2,7 @@ import { Box, Button, TextField, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import logo from '../../assets/printProfitLogoV3.svg';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -51,12 +52,7 @@ function LoginForm() {
           padding: '30px',
         }}
       >
-        <img
-          width={50}
-          height={50}
-          src="public/images/printProfitLogoV3.svg"
-          alt="printProfitLogo"
-        />
+        <img width={50} height={50} src={logo} alt="Print Profit Logo" />
         <Typography variant="h4" onClick={loginNick}>
           Login
         </Typography>

@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import logo from '../../assets/printProfitLogoV3.svg';
 
 const drawerWidth = 200;
 
@@ -42,8 +43,8 @@ export default function SideBar({ children }) {
             width={200}
             height={150}
             onClick={handleNavigationHome}
-            src="public/images/printProfitLogoV3.svg"
-            alt="printProfitLogo"
+            src={logo}
+            alt="Print Profit Logo"
           />
         </div>
 

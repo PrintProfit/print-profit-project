@@ -11,6 +11,7 @@ import {
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import logo from '../../assets/printProfitLogoV3.svg';
 
 function RegisterForm() {
   const [email, setEmail] = useState('');
@@ -120,12 +121,7 @@ function RegisterForm() {
               alignItems: 'center',
             }}
           >
-            <img
-              width={50}
-              height={50}
-              src="public/images/printProfitLogoV3.svg"
-              alt=""
-            />
+            <img width={50} height={50} src={logo} alt="Print Profit Logo" />
           </Box>
           <TextField
             id="email"

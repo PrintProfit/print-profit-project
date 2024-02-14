@@ -1,6 +1,8 @@
 import { ArrowBackIos as ArrowBackIosIcon } from '@mui/icons-material';
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
+import backgroundImage from '../../assets/printProfitBgLoginFULLv2.png';
+
 export default function WaitingPage() {
   const history = useHistory();
 
@@ -8,7 +10,7 @@ export default function WaitingPage() {
     <>
       <Box
         sx={{
-          backgroundImage: "url('public/images/printProfitBgFull.png')",
+          backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           height: '100vh',
