@@ -43,7 +43,7 @@ const Text = styled('span')(() => ({}));
 const identity = (n) => n;
 
 const formatters = {
-  number: identity,
+  number: fmt.number,
   currency: fmt.currency,
   accounting: fmt.accounting,
   percent: fmt.percent,

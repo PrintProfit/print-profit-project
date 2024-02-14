@@ -86,3 +86,5 @@ export type DamaagedQuote =
 
 /** Helper type for JSDoc comments */
 export type ProductColumnDef<TValue = unknown> = ColumnDef<Product, TValue>;
+
+export type NumberFmtFn = (n?: number | null) => string | undefined;
