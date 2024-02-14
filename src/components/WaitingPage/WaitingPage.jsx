@@ -1,6 +1,5 @@
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Box, Paper, Typography } from '@mui/material';
-import Button from '@mui/material/Button';
+import { ArrowBackIos as ArrowBackIosIcon } from '@mui/icons-material';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import { useHistory } from 'react-router-dom';
 export default function WaitingPage() {
   const history = useHistory();
