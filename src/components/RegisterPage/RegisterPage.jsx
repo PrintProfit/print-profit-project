@@ -4,7 +4,7 @@ import RegisterForm from '../RegisterForm/RegisterForm';
 
 function RegisterPage() {
   return (
-    <>
+    <Box>
       <Box
         sx={{
           backgroundImage: `url(${backgroundImage})`,
@@ -27,7 +27,7 @@ function RegisterPage() {
           <RegisterForm />
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }
 
