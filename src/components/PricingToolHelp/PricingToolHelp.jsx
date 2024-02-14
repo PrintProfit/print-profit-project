@@ -38,7 +38,7 @@ export function PricingToolHelp() {
             <Divider />
             <Box sx={{ mt: 3 }}>
               <Typography variant="h6">Items</Typography>
-              <>
+              <Typography>
                 the left-hand side table, named "Pricing Tool," is a table for a
                 singular transaction, or "quote." A single quote might have
                 multiple items, such as T-shirts, hats etc. These items are
@@ -52,7 +52,9 @@ export function PricingToolHelp() {
                 button, which is located to the right of the item columnns.
                 <br />
                 <br />
-                <Typography variant="h6">Costs</Typography>
+              </Typography>
+              <Typography variant="h6">Costs</Typography>
+              <Typography>
                 The first column on the Pricing Tool table are all the values
                 that you will want to know about an item, or about working with
                 an item. This includes the name of the item, the selling price,
@@ -66,7 +68,9 @@ export function PricingToolHelp() {
                 first column.
                 <br />
                 <br />
-                <Typography variant="h6">Tips</Typography>
+              </Typography>
+              <Typography variant="h6">Tips</Typography>
+              <Typography>
                 <ul>
                   <li>
                     Easily find the fields that you can delete by locating the
@@ -91,7 +95,7 @@ export function PricingToolHelp() {
                     tool works!
                   </li>
                 </ul>
-              </>
+              </Typography>
             </Box>
           </Paper>
         </Fade>
