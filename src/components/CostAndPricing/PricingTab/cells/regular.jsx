@@ -3,7 +3,7 @@
 import { Calculate, Clear, Delete } from '@mui/icons-material';
 import { IconButton, InputAdornment, TextField, Tooltip } from '@mui/material';
 import { produce } from 'immer';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ConfirmButtonDialog } from '../dialogs-wrapped';
 import { NumericInput } from '../inputs';
 import { TableTextField } from '../stylized';
@@ -19,6 +19,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
   const [value, setValue] = useState(initialValue);
 
   const costName = column.columnDef.meta?.costName;
+  const setQuote = table.options.meta?.setQuote;
 
   /**
    * onBlur is called when the input loses focus.
@@ -26,13 +27,14 @@ export function DynamicCostCell({ getValue, table, row, column }) {
    * to simplify state updates.
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
-  const onBlur = () => {
+  const onBlur = useCallback(() => {
     if (costName === undefined) {
       throw new Error('Malformed columnDef: costName is undefined');
     }
-    table.options.meta?.setQuote(
+    setQuote?.(
       produce((draft) => {
-        const product = draft.products[row.index];
+        const productIndex = row.index;
+        const product = draft.products[productIndex];
         if (product === undefined) {
           // This is basically just a type guard so VSCode knows product is
           // defined. It should be completely impossible, since the cell would
@@ -51,14 +53,14 @@ export function DynamicCostCell({ getValue, table, row, column }) {
         }
       }),
     );
-  };
+  }, [costName, setQuote, row.index, value]);
 
   // This useEffect comes from tanstack table examples. I'm not 100% sure it's actually needed.
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  /** @type {import('react-number-format').NumericFormatProps} */
+  /** @satisfies {import('react-number-format').NumericFormatProps} */
   const inputProps = {
     allowNegative: false,
     decimalScale: 2,
@@ -76,7 +78,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       InputProps={{
         startAdornment: <InputAdornment position="start">$</InputAdornment>,
         inputComponent: /** @type {any} */ (NumericInput),
-        /** @type {any} */ inputProps,
+        inputProps,
       }}
     />
   );
@@ -95,22 +97,25 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
 
   const { adornment, inputMode, productKey, inputProps } = meta;
 
+  const setQuote = table.options.meta?.setQuote;
+
   /**
    * onBlur is called when the input loses focus.
    * It updates the quote with the new value, using an immer produce function
    * to simplify state updates.
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
-  const onBlur = () => {
-    table.options.meta?.setQuote(
+  const onBlur = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
-        const product = draft.products[row.index];
+        const productIndex = row.index;
+        const product = draft.products[productIndex];
         if (product && productKey) {
           product[productKey] = Number(value);
         }
       }),
     );
-  };
+  }, [productKey, row.index, setQuote, value]);
 
   useEffect(() => {
     setValue(initialValue);
@@ -150,39 +155,43 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
 
   const isCustom = row.original.total_selling_price !== undefined;
 
+  const setQuote = table.options.meta?.setQuote;
+
   /**
    * onBlur is called when the input loses focus.
    * It updates the quote with the new value, using an immer produce function
    * to simplify state updates.
    * @see {@link https://immerjs.github.io/immer/example-setstate#usestate--immer useState + Immer}
    */
-  const onBlur = () => {
-    table.options.meta?.setQuote(
+  const onBlur = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
-        const product = draft.products[row.index];
+        const index = row.index;
+        const product = draft.products[index];
         if (product) {
           product.total_selling_price = Number(value);
         }
       }),
     );
-  };
+  }, [row.index, setQuote, value]);
 
-  const clearCustomValue = () => {
-    table.options.meta?.setQuote(
+  const clearCustomValue = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
-        const product = draft.products[row.index];
+        const index = row.index;
+        const product = draft.products[index];
         if (product) {
           product.total_selling_price = undefined;
         }
       }),
     );
-  };
+  }, [row.index, setQuote]);
 
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);
 
-  /** @type {import('react-number-format').NumericFormatProps} */
+  /** @satisfies {import('react-number-format').NumericFormatProps} */
   const inputProps = {
     allowNegative: false,
     decimalScale: 2,
@@ -230,7 +239,7 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
           </InputAdornment>
         ),
         inputComponent: /** @type {any} */ (NumericInput),
-        /** @type {any} */ inputProps,
+        inputProps: inputProps,
       }}
     />
   );
@@ -246,26 +255,28 @@ export function ProductNameCell({ getValue, table, row }) {
   const [value, setValue] = useState(initialValue);
 
   const updateMode = table.options.meta?.updateMode ?? false;
+  const setQuote = table.options.meta?.setQuote;
 
   // We need to use an onBlur to update the quote to avoid an early rerender of the entire table.
-  const onBlur = () => {
-    table.options.meta?.setQuote(
+  const onBlur = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
-        const product = draft.products[row.index];
+        const index = row.index;
+        const product = draft.products[index];
         if (product) {
           product.name = value;
         }
       }),
     );
-  };
+  }, [row.index, setQuote, value]);
 
-  const deleteProduct = () => {
-    table.options.meta?.setQuote(
+  const deleteProduct = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
         draft.products.splice(row.index, 1);
       }),
     );
-  };
+  }, [row.index, setQuote]);
 
   useEffect(() => {
     setValue(initialValue);
