@@ -1,5 +1,6 @@
 import { Help } from '@mui/icons-material';
 import {
+  Box,
   Divider,
   Fade,
   IconButton,
@@ -35,9 +36,9 @@ export function PricingToolHelp() {
           >
             <Typography variant="h4">Pricing Tool Help</Typography>
             <Divider />
-            <Typography sx={{ mt: 3 }}>
+            <Box sx={{ mt: 3 }}>
               <Typography variant="h6">Items</Typography>
-              <p>
+              <>
                 the left-hand side table, named "Pricing Tool," is a table for a
                 singular transaction, or "quote." A single quote might have
                 multiple items, such as T-shirts, hats etc. These items are
@@ -90,8 +91,8 @@ export function PricingToolHelp() {
                     tool works!
                   </li>
                 </ul>
-              </p>
-            </Typography>
+              </>
+            </Box>
           </Paper>
         </Fade>
       </Modal>
