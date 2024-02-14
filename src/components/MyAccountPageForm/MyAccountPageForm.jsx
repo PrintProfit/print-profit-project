@@ -241,8 +241,9 @@ export default function MyAccountPageForm({ setIsForm }) {
             mb: 5,
             mr: 2,
           }}
+          startIcon={<SaveIcon />}
         >
-          <SaveIcon /> Save Changes
+          Save Changes
         </Button>
         <Button
           color="error"
@@ -254,8 +255,9 @@ export default function MyAccountPageForm({ setIsForm }) {
             mb: 5,
             ml: 2,
           }}
+          startIcon={<DeleteIcon />}
         >
-          <DeleteIcon /> Discard Changes
+          Discard Changes
         </Button>
       </form>
 
@@ -275,11 +277,20 @@ export default function MyAccountPageForm({ setIsForm }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="error" onClick={discardChanges} autoFocus>
-            <DeleteIcon /> Discard
+          <Button
+            color="error"
+            onClick={discardChanges}
+            startIcon={<DeleteIcon />}
+            autoFocus
+          >
+            Discard
           </Button>
-          <Button sx={{ color: 'black' }} onClick={handleDiscardClose}>
-            <CloseIcon /> Cancel
+          <Button
+            sx={{ color: 'black' }}
+            onClick={handleDiscardClose}
+            startIcon={<CloseIcon />}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -300,11 +311,15 @@ export default function MyAccountPageForm({ setIsForm }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={saveNewUserInfo} autoFocus>
-            <SaveIcon /> Save Changes
+          <Button onClick={saveNewUserInfo} startIcon={<SaveIcon />} autoFocus>
+            Save Changes
           </Button>
-          <Button sx={{ color: 'black' }} onClick={handleComfirmationClose}>
-            <CloseIcon /> Cancel
+          <Button
+            sx={{ color: 'black' }}
+            startIcon={<CloseIcon />}
+            onClick={handleComfirmationClose}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
