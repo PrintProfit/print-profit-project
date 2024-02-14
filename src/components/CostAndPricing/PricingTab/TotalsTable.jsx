@@ -10,16 +10,22 @@ import {
   TableHead,
   TextField,
 } from '@mui/material';
-import { flexRender } from '@tanstack/react-table';
 import { produce } from 'immer';
 import { useCallback, useMemo } from 'react';
-import * as fmt from './formats';
+import { NumberFormatter } from './cells/internal';
 import { NumericInput } from './inputs';
 import { PricingTableRow as TableRow } from './stylized';
-import { toCostNames, unique } from './utils';
+import {
+  aggregate as aggregateUtil,
+  safeFlexRender,
+  toCostNames,
+  unique,
+} from './utils';
 
 /**
+ * The totals table.
  * @param {import("./prop-types").TotalsTableProps} props
+ * @returns {JSX.Element}
  */
 export function TotalsTable({ quote, setQuote, table }) {
   const aggregate = useCallback(
@@ -27,14 +33,12 @@ export function TotalsTable({ quote, setQuote, table }) {
      * @param {string} column
      * @returns {(number|undefined)}
      */
-    (column) => {
-      const aggregationFn = table.getColumn(column)?.getAggregationFn();
-      return aggregationFn?.(column, [], table.getCoreRowModel().rows);
-    },
-    [table.getColumn, table.getCoreRowModel],
+    (column) => aggregateUtil(table, column),
+    [table],
   );
 
   const getCMTotalSellingPrice = useCallback(
+    /** @returns {number} */
     () =>
       (aggregate('totalVariableCosts') ?? 0) /
       ((100 - (quote.manual_contribution_percent ?? 0)) / 100),
@@ -57,7 +61,12 @@ export function TotalsTable({ quote, setQuote, table }) {
           {/* Total Selling Price Row */}
           <TableRow>
             <TableCell variant="head">Total Selling Price</TableCell>
-            <TableCell>{fmt.currency(getCMTotalSellingPrice())}</TableCell>
+            <TableCell>
+              <NumberFormatter
+                value={getCMTotalSellingPrice()}
+                variant="currency"
+              />
+            </TableCell>
             <TableCell>
               <TextField
                 size="small"
@@ -157,9 +166,12 @@ export function TotalsTable({ quote, setQuote, table }) {
 
 /**
  * All the contribution-related components.
+ *
  * Their calculations are very closely related, so this component calculates
  * them all.
+ *
  * @param {import('./prop-types').ContributionRowsProps} props
+ * @returns {JSX.Element}
  */
 function ContributionRows({
   slots: { marginInput },
@@ -176,23 +188,46 @@ function ContributionRows({
       {/* Contribution Row */}
       <TableRow>
         <TableCell variant="head">Contribution</TableCell>
-        <TableCell>{fmt.currency(targetContrib)}</TableCell>
-        <TableCell>{fmt.currency(manualContrib)}</TableCell>
+        <TableCell>
+          <NumberFormatter value={targetContrib} variant="currency" />
+        </TableCell>
+        <TableCell>
+          <NumberFormatter value={manualContrib} variant="currency" />
+        </TableCell>
       </TableRow>
       {/* Contribution Margin Row */}
       <TableRow>
         <TableCell variant="head">Contribution %</TableCell>
         <TableCell>{marginInput}</TableCell>
-        <TableCell>{fmt.percent(manualContrib / manualPrice)}</TableCell>
+        <TableCell>
+          <NumberFormatter
+            value={manualPrice === 0 ? undefined : manualContrib / manualPrice}
+            variant="percent"
+          />
+        </TableCell>
       </TableRow>
       {/* Contribution Per Hour Row */}
       <TableRow>
         <TableCell variant="head">Contribution / Hour</TableCell>
         <TableCell>
-          {fmt.currency(targetContrib / estimatedTotalHours)}
+          <NumberFormatter
+            value={
+              estimatedTotalHours === 0
+                ? undefined
+                : targetContrib / estimatedTotalHours
+            }
+            variant="currency"
+          />
         </TableCell>
         <TableCell>
-          {fmt.currency(manualContrib / estimatedTotalHours)}
+          <NumberFormatter
+            value={
+              estimatedTotalHours === 0
+                ? undefined
+                : manualContrib / estimatedTotalHours
+            }
+            variant="currency"
+          />
         </TableCell>
       </TableRow>
     </>
@@ -202,6 +237,7 @@ function ContributionRows({
 /**
  * Used for rows which have three columns that have the same value
  * @param {import('./prop-types').SimpleTotalsTableRowProps} props
+ * @returns {JSX.Element}
  */
 function SimpleTotalsTableRow({ table, column, title }) {
   // Attempt to cache the footer & context
@@ -213,8 +249,8 @@ function SimpleTotalsTableRow({ table, column, title }) {
   return (
     <TableRow>
       <TableCell variant="head">{title}</TableCell>
-      <TableCell>{context && flexRender(footer, context)}</TableCell>
-      <TableCell>{context && flexRender(footer, context)}</TableCell>
+      <TableCell>{safeFlexRender(footer, context)}</TableCell>
+      <TableCell>{safeFlexRender(footer, context)}</TableCell>
     </TableRow>
   );
 }
@@ -224,7 +260,7 @@ function SimpleTotalsTableRow({ table, column, title }) {
  * @template TData
  * @param {import('@tanstack/react-table').Table<TData>} table
  * @param {string} columnId
- * @returns {Parameters<typeof flexRender> | [undefined, undefined]}
+ * @returns {Parameters<typeof import('@tanstack/react-table').flexRender> | [undefined, undefined]}
  */
 function getFooter(table, columnId) {
   const column = table.getColumn(columnId);

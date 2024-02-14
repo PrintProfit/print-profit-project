@@ -11,10 +11,12 @@ import {
   IconButton,
   Snackbar,
 } from '@mui/material';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 /**
+ * Abstraction of a confirm dialog.
  * @param {import("./prop-types").ConfirmDlaogProps} props
+ * @returns {JSX.Element}
  */
 export function ConfirmDialog({
   open,
@@ -60,7 +62,9 @@ export function ConfirmDialog({
 }
 
 /**
+ * Abstraction of a dialog.
  * @param {import('./prop-types').BaseDialogProps} props
+ * @returns {JSX.Element}
  */
 export function BaseDialog({
   open,
@@ -74,14 +78,19 @@ export function BaseDialog({
 }) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
-  /**
-   * @param {import('react').FormEvent<HTMLFormElement>} e
-   */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit();
-    setSnackbarOpen(true);
-  };
+  /** Handles form submission */
+  const handleSubmit = useCallback(
+    /**
+     * @param {React.FormEvent<HTMLFormElement>} e
+     * @returns {void}
+     */
+    (e) => {
+      e.preventDefault();
+      onSubmit();
+      setSnackbarOpen(true);
+    },
+    [onSubmit],
+  );
 
   return (
     <>
@@ -111,7 +120,9 @@ export function BaseDialog({
 }
 
 /**
+ * Abstraction of a snackbar.
  * @param {import('./prop-types').DialogSnackbarProps} props
+ * @returns {JSX.Element}
  */
 function DialogSnackbar({
   open,
@@ -120,17 +131,23 @@ function DialogSnackbar({
   autoHideDuration = 6000,
   children,
 }) {
-  /**
-   * @param {(React.SyntheticEvent | Event)} event
-   * @param {string} [reason]
-   */
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    onClose();
-  };
+  /** Handles closing the snackbar */
+  const handleClose = useCallback(
+    /**
+     * @param {(React.SyntheticEvent | Event)} _event
+     * @param {string} [reason]
+     * @returns {void}
+     */
+    (_event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      onClose();
+    },
+    [onClose],
+  );
 
+  /** Actions for the snackbar */
   const action = (
     <IconButton
       size="small"
@@ -141,6 +158,10 @@ function DialogSnackbar({
       <Close fontSize="small" />
     </IconButton>
   );
+  // We're unable to add some features that would be nice to have to the
+  // snackbar - namely, an undo button. This is because the specific actions
+  // where an undo button would be wanted, are also the specific actions likely
+  // to cause a rerender of the table, destroying the snackbar early.
 
   return (
     <Snackbar

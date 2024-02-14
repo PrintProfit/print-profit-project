@@ -1,53 +1,33 @@
 // @ts-check
-import { produce } from 'immer';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { PricingTable } from './PricingTable';
 import { repairQuote } from './data-repair';
-import { toCostNames, unique } from './utils';
 
+/**
+ * The whole pricing tab.
+ *
+ * It has the pricing table, but it's also a good place for anything like
+ * shortcuts to be put.
+ *
+ * @returns {JSX.Element}
+ */
 export function PricingTab() {
-  /** @type {import('./data-types').Quote} */
-  const currentQuote = useSelector((/** @type {any} */ state) =>
-    repairQuote(state.quote.current),
+  /**
+   * The initial quote to load into the pricing table.
+   *
+   * The state ends up detached from the redux store, as once the quote is in
+   * the pricing table, we need near-constant access to it to perform any edits
+   * to it.
+   *
+   * @type {import('./data-types').DamaagedQuote}
+   */
+  const currentQuote = useSelector(
+    (/** @type {any} */ state) => state.quote.current,
   );
-  const [quote, setQuote] = useState(currentQuote);
 
-  const demoInput = useCallback(() => {
-    setQuote(
-      produce((draft) => {
-        const costNames = draft.products.flatMap(toCostNames).filter(unique);
-        if (draft.products[3]) {
-          const product = draft.products[3];
-          product.quantity = 100;
-          product.estimated_hours = 10;
-          product.selling_price_per_unit = 40;
-          product.total_selling_price = 3950;
-          product.costs = costNames.map((name) => ({
-            name,
-            value: Math.round((Math.random() * 1000) / costNames.length),
-          }));
-        }
-      }),
-    );
-  }, []);
-
-  useEffect(() => {
-    /**
-     * @param {KeyboardEvent} e
-     */
-    const onKeyDown = (e) => {
-      if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        demoInput();
-      }
-    };
-
-    document.addEventListener('keydown', onKeyDown);
-    return () => {
-      document.removeEventListener('keydown', onKeyDown);
-    };
-  }, [demoInput]);
+  /** Internal state for the quote */
+  const [quote, setQuote] = useState(repairQuote(currentQuote));
 
   return <PricingTable quote={quote} setQuote={setQuote} />;
 }

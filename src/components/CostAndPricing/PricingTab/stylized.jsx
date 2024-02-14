@@ -7,36 +7,40 @@ import {
   styled,
   tableCellClasses,
 } from '@mui/material';
-import { indigo, jade, jadeA } from '@radix-ui/colors';
+import { gray, indigo, jade, jadeA } from '@radix-ui/colors';
 
-export const PricingTableRow = styled(TableRow)(({ theme }) => ({
+export const PricingTableRow = styled(TableRow)({
   '&:nth-of-type(even)': {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: gray.gray2,
+    '&:has(input)': {
+      backgroundColor: jade.jade3,
+    },
   },
   '&:has(input)': {
-    backgroundColor: jade.jade3,
-  },
-  '&:nth-of-type(even):has(input)': {
     backgroundColor: jade.jade2,
   },
   [`& > .${tableCellClasses.head}`]: {
     // I really want to reduce the width of the head cells when they have
     // inputs in them, but I have no idea how to do that.
-    // borderRight: `1px solid ${indigo.indigo7}`,
     borderBottom: `1px solid ${indigo.indigo5}`,
     backgroundColor: indigo.indigo3,
+    fontWeight: 600,
+    ':first-of-type': {
+      borderRight: `1px solid ${indigo.indigo7}`,
+    },
   },
-  [`& > .${tableCellClasses.head}:first-child`]: {
-    borderRight: `1px solid ${indigo.indigo7}`,
+  // Remove top & bottom borders from first & last rows
+  '&:first-of-type > td': {
+    borderTopWidth: 0,
   },
-  // [`&:last-child > .${tableCellClasses.head}`]: {
-  //   borderBottomWidth: 0,
-  // },
-  // // Adds a border to the right of all the body cells except the last three.
-  // [`& > .${tableCellClasses.body}:not(:nth-last-child(-n + 3))`]: {
-  //   borderRight: `1px solid ${jade.jade7}`,
-  // },
-}));
+  '&:last-of-type > td': {
+    borderBottomWidth: 0,
+  },
+  // Boost font weight for footer cells
+  [`& > .${tableCellClasses.footer}`]: {
+    fontWeight: 500,
+  },
+});
 
 export const TableTextField = styled(TextField)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -55,7 +59,7 @@ export const TableTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-export const PricingTableFab = styled(Fab)(({ theme }) => ({
+export const PricingTableFab = styled(Fab)({
   color: 'white', // Radix says indigo9 & indigo10 pair with white
   backgroundColor: indigo.indigo9,
   '&:hover': {
@@ -65,4 +69,4 @@ export const PricingTableFab = styled(Fab)(({ theme }) => ({
       backgroundColor: indigo.indigo9,
     },
   },
-}));
+});

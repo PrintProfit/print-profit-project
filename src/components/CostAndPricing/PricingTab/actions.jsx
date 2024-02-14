@@ -9,20 +9,26 @@ import {
   TextField,
 } from '@mui/material';
 import { produce } from 'immer';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseDialog } from './dialogs';
 import { ConfirmButtonDialog } from './dialogs-wrapped';
 import { initialQuote } from './sample-data';
 
 /**
+ * The actions to display under a quote.
  * @param {import("./prop-types").QuoteActionGroupProps} props
+ * @returns {JSX.Element}
  */
 export function QuoteActions({ quote, setQuote }) {
+  // Tells VSCode to shut up about types.
+  // In a TS redux project, there's a typed version of useSelector that makes
+  // this irrelevant.
   /** @type {boolean} */
   const updateMode = useSelector(
     (/** @type {any} */ state) => state.quote.updateMode,
   );
+
   return (
     <Stack direction="row" spacing={2}>
       <ClearQuote setQuote={setQuote} />
@@ -33,36 +39,43 @@ export function QuoteActions({ quote, setQuote }) {
 }
 
 /**
+ * The save quote button & dialog.
  * @param {import("./prop-types").SaveQuoteProps} props
+ * @returns {JSX.Element}
  */
 function SaveQuote({ quote, setQuote }) {
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
 
-  const saveQuote = () => {
+  const saveQuote = useCallback(() => {
     dispatch({ type: 'SAGA/SAVE_QUOTE', payload: quote });
-  };
+  }, [dispatch, quote]);
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     setOpen(false);
-  };
+  }, []);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     saveQuote();
     onClose();
-  };
+  }, [onClose, saveQuote]);
 
   /**
-   * @type {import('react').ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>}
+   * We need to hook directly into the quote to ensure changes get to the
+   * server.
+   * @type {React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>}
    */
-  const setQuoteName = (e) => {
-    setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.name = e.target.value;
-      }),
-    );
-  };
+  const setQuoteName = useCallback(
+    (e) => {
+      setQuote(
+        produce((draft) => {
+          draft.name = e.target.value;
+        }),
+      );
+    },
+    [setQuote],
+  );
 
   return (
     <>
@@ -74,6 +87,7 @@ function SaveQuote({ quote, setQuote }) {
       >
         Save as new quote
       </Button>
+
       <BaseDialog
         open={open}
         title="Save Quote"
@@ -87,6 +101,7 @@ function SaveQuote({ quote, setQuote }) {
             >
               Cancel
             </Button>
+
             <Button type="submit" startIcon={<Save />}>
               Save
             </Button>
@@ -99,6 +114,7 @@ function SaveQuote({ quote, setQuote }) {
         <DialogContentText>
           Please specify a name for the quote.
         </DialogContentText>
+
         <TextField
           autoFocus
           required
@@ -116,15 +132,18 @@ function SaveQuote({ quote, setQuote }) {
 }
 
 /**
+ * The update quote button & dialog. Only should show up in update mode.
  * @param {import("./prop-types").UpdateQuoteProps} props
+ * @returns {JSX.Element}
  */
 function UpdateQuote({ quote }) {
   const dispatch = useDispatch();
 
-  const updateQuote = () => {
+  const updateQuote = useCallback(() => {
     dispatch({ type: 'SAGA/UPDATE_QUOTE', payload: quote });
-  };
+  }, [dispatch, quote]);
 
+  // ConfirmButtonDialog abstracts away all the dialog state management.
   return (
     <ConfirmButtonDialog
       buttonType="button"
@@ -152,16 +171,19 @@ function UpdateQuote({ quote }) {
 }
 
 /**
+ * The clear quote button & dialog. It resets the quote to its initial state.
  * @param {import('./prop-types').ClearQuoteProps} props
+ * @returns {JSX.Element}
  */
 function ClearQuote({ setQuote }) {
   const dispatch = useDispatch();
 
-  const createQuote = () => {
+  const createQuote = useCallback(() => {
+    // We're no longer updating a quote.
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: false });
     dispatch({ type: 'CLEAR_CURRENT_QUOTE' });
     setQuote(initialQuote);
-  };
+  }, [dispatch, setQuote]);
 
   return (
     <ConfirmButtonDialog
