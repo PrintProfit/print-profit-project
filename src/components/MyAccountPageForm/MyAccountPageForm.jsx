@@ -192,7 +192,7 @@ export default function MyAccountPageForm({ setIsForm }) {
             variant="outlined"
             type="password"
             name="password"
-            placeholder={'password'}
+            placeholder="password"
             color={passwordError ? 'error' : undefined}
             helperText={passwordMessage}
             value={newPasswordInput}
@@ -218,7 +218,7 @@ export default function MyAccountPageForm({ setIsForm }) {
             variant="outlined"
             type="password"
             name="Verify New Password"
-            placeholder={'verify new password'}
+            placeholder="verify new password"
             color={verifyPasswordError ? 'error' : undefined}
             helperText={verifyPasswordMessage}
             value={newVerifyPasswordInput}
@@ -265,14 +265,14 @@ export default function MyAccountPageForm({ setIsForm }) {
       <Dialog
         open={openDiscard}
         onClose={handleDiscardClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="discard-dialog-title"
+        aria-describedby="discard-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to discard these changes?'}
+        <DialogTitle id="discard-dialog-title">
+          Are you sure you want to discard these changes?
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="discard-dialog-description">
             You can change this information again if need be.
           </DialogContentText>
         </DialogContent>
@@ -299,14 +299,14 @@ export default function MyAccountPageForm({ setIsForm }) {
       <Dialog
         open={openComfirmation}
         onClose={handleComfirmationClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to save the new information?'}
+        <DialogTitle id="confirm-dialog-title">
+          Are you sure you want to save the new information?
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="confirm-dialog-description">
             You can change this information again if need be.
           </DialogContentText>
         </DialogContent>
