@@ -12,11 +12,11 @@ import { indigo, jade, jadeA } from '@radix-ui/colors';
 export const PricingTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
     backgroundColor: theme.palette.action.hover,
+    '&:has(input)': {
+      backgroundColor: jade.jade3,
+    },
   },
   '&:has(input)': {
-    backgroundColor: jade.jade3,
-  },
-  '&:nth-of-type(even):has(input)': {
     backgroundColor: jade.jade2,
   },
   [`& > .${tableCellClasses.head}`]: {
@@ -25,17 +25,22 @@ export const PricingTableRow = styled(TableRow)(({ theme }) => ({
     // borderRight: `1px solid ${indigo.indigo7}`,
     borderBottom: `1px solid ${indigo.indigo5}`,
     backgroundColor: indigo.indigo3,
+    fontWeight: 600,
   },
   [`& > .${tableCellClasses.head}:first-of-type`]: {
     borderRight: `1px solid ${indigo.indigo7}`,
   },
-  // [`&:last-child > .${tableCellClasses.head}`]: {
-  //   borderBottomWidth: 0,
-  // },
-  // // Adds a border to the right of all the body cells except the last three.
-  // [`& > .${tableCellClasses.body}:not(:nth-last-child(-n + 3))`]: {
-  //   borderRight: `1px solid ${jade.jade7}`,
-  // },
+  // Remove top & bottom borders from first & last rows
+  '&:first-of-type > td': {
+    borderTopWidth: 0,
+  },
+  '&:last-of-type > td': {
+    borderBottomWidth: 0,
+  },
+  // Boost font weight for footer cells
+  [`& > .${tableCellClasses.footer}`]: {
+    fontWeight: 500,
+  },
 }));
 
 export const TableTextField = styled(TextField)(({ theme }) => ({
