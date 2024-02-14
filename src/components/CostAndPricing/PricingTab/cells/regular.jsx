@@ -311,7 +311,7 @@ export function ProductNameCell({ getValue, table, row }) {
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
-  return value && <NumberFormatter value={value} variant="currency" />;
+  return value ? <NumberFormatter value={value} variant="currency" /> : null;
 }
 
 /**
@@ -321,6 +321,5 @@ export function DollarCell({ getValue }) {
  */
 export function PercentCell({ getValue }) {
   const value = getValue();
-  const percent = Number(value);
-  return percent && <NumberFormatter value={percent} variant="percent" />;
+  return value ? <NumberFormatter value={value} variant="percent" /> : null;
 }
