@@ -32,7 +32,7 @@ export function NumberFormatter({ value, variant = 'number' }) {
 
 // The typography component looks too big here, so a styled span is used to
 // get the sx prop.
-const Text = styled('span')();
+const Text = styled('span')(() => ({}));
 
 /**
  * Identity function
