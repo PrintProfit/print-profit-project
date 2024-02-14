@@ -11,11 +11,7 @@ import {
   Typography,
   Unstable_Grid2 as Grid,
 } from '@mui/material';
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useSelector } from 'react-redux';
 import { PricingToolHelp } from '../../PricingToolHelp/PricingToolHelp';
 import { TotalsHelp } from '../../PricingToolHelp/TotalsHelp';
@@ -35,9 +31,10 @@ import {
   estimatedHoursColumn,
 } from './columns';
 import { PricingTableRow as TableRow } from './stylized';
-import { toCostNames, unique } from './utils';
+import { safeFlexRender, toCostNames, unique } from './utils';
 
 /**
+ * The pricing table.
  * @param {import('./prop-types').PricingTableProps} props
  */
 export function PricingTable({ quote, setQuote }) {
@@ -49,6 +46,7 @@ export function PricingTable({ quote, setQuote }) {
     (/** @type {any} */ state) => state.quote.updateMode,
   );
 
+  /** The dynamic cost names, derived from the current quote */
   const costNames = quote.products.flatMap(toCostNames).filter(unique);
 
   /**
@@ -105,20 +103,6 @@ export function PricingTable({ quote, setQuote }) {
     },
   });
 
-  /**
-   * type-safe wrapper for flexRender
-   * @template {object} T
-   * @param {Parameters<typeof flexRender<T>>[0]} Comp
-   * @param {(Parameters<typeof flexRender<T>>[1]|undefined)} props
-   * @returns {ReturnType<typeof flexRender<T>>}
-   */
-  const safeFlexRender = (Comp, props) => {
-    if (Comp && props) {
-      return flexRender(Comp, props);
-    }
-    return null;
-  };
-
   // This is sorta awkward, but it's so far the best way I've found to get the
   // table to have the correct layout. Most libraries lack a way to get cells
   // by data field, which is what our rows are.
@@ -137,6 +121,7 @@ export function PricingTable({ quote, setQuote }) {
           <TableContainer>
             <Table size="small" stickyHeader>
               <TableBody>
+                {/* Somewhat hacky way to rotate the table */}
                 {table.getAllFlatColumns().map((col, index) => (
                   <TableRow key={col.id}>
                     <TableCell
@@ -152,6 +137,7 @@ export function PricingTable({ quote, setQuote }) {
                           ?.getContext(),
                       )}
                     </TableCell>
+
                     {table.getCoreRowModel().rows.map((row) => (
                       <TableCell
                         key={row.id}
@@ -167,9 +153,11 @@ export function PricingTable({ quote, setQuote }) {
                         )}
                       </TableCell>
                     ))}
+
                     <TableCell variant={col.columnDef.meta?.cellVariant}>
                       {index === 0 && <AddProductCell table={table} />}
                     </TableCell>
+
                     <TableCell
                       variant={col.columnDef.meta?.footerVariant ?? 'footer'}
                       sx={{ minWidth: 80 }}
