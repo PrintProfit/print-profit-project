@@ -1,39 +1,20 @@
-import { Box, Tab, Tabs, styled } from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  styled,
+  tableCellClasses,
+} from '@mui/material';
+import { useSelector } from 'react-redux';
 import ApprovedAdminTable from '../ApprovedAdminTable/ApprovedAdminTable';
 import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
 
 export default function AdminView() {
-  const user = useSelector((store) => store.user.currentUser);
   const pendingUsers = useSelector((store) => store.user.pendingUserReducer);
   const approvedUsers = useSelector((store) => store.user.approvedUserReducer);
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
 
   return (
     <div>
@@ -92,3 +73,23 @@ export default function AdminView() {
     </div>
   );
 }
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
