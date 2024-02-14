@@ -1,5 +1,5 @@
 import { Edit as EditIcon } from '@mui/icons-material';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import MyAccountPageForm from '../MyAccountPageForm/MyAccountPageForm';
@@ -28,13 +28,10 @@ export default function MyAccountPage() {
               onClick={() => setIsForm(true)}
               type="button"
               variant="contained"
-              sx={{
-                mt: 3,
-              }}
+              sx={{ mt: 3 }}
+              endIcon={<EditIcon />}
             >
-              <Typography> Edit info</Typography>
-
-              <EditIcon sx={{ color: 'black' }} />
+              Edit info
             </Button>
           </AccountInfo>
         )}
