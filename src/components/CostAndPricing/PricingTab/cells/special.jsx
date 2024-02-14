@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { produce } from 'immer';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { BaseDialog } from '../dialogs';
 import { PricingTableFab as Fab } from '../stylized';
 import { toCostNames, unique } from '../utils';
@@ -23,8 +23,13 @@ export function AddCostHeader({ table }) {
   const [open, setOpen] = useState(false);
   const [costName, setCostName] = useState('');
 
-  const addCost = () => {
-    table.options.meta?.setQuote(
+  const setQuote = table.options.meta?.setQuote;
+
+  // We need to ensure that the cost name is unique.
+  const costNameExists = table.options.meta?.costNames.includes(costName);
+
+  const addCost = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
         for (const product of draft.products) {
           product.costs.push({
@@ -34,20 +39,17 @@ export function AddCostHeader({ table }) {
         }
       }),
     );
-  };
+  }, [costName, setQuote]);
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     setOpen(false);
     setCostName('');
-  };
+  }, []);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     addCost();
     onClose();
-  };
-
-  // We need to ensure that the cost name is unique.
-  const costNameExists = table.options.meta?.costNames.includes(costName);
+  }, [addCost, onClose]);
 
   return (
     <>
@@ -100,19 +102,23 @@ export function AddCostHeader({ table }) {
 }
 
 /**
+ * The add product button cell.
  * @param {import('../prop-types').AddProductCellProps} props
+ * @returns {JSX.Element}
  */
 export function AddProductCell({ table }) {
   const [open, setOpen] = useState(false);
   const [productName, setProductName] = useState('');
 
-  const onClose = () => {
+  const setQuote = table.options.meta?.setQuote;
+
+  const onClose = useCallback(() => {
     setOpen(false);
     setProductName('');
-  };
+  }, []);
 
-  const addProduct = () => {
-    table.options.meta?.setQuote(
+  const addProduct = useCallback(() => {
+    setQuote?.(
       produce((draft) => {
         // This is probably the safest way to get a unique list of cost names.
         const costNames = draft.products.flatMap(toCostNames).filter(unique);
@@ -133,12 +139,12 @@ export function AddProductCell({ table }) {
         });
       }),
     );
-  };
+  }, [setQuote, productName]);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     addProduct();
     onClose();
-  };
+  }, [addProduct, onClose]);
 
   return (
     <>
