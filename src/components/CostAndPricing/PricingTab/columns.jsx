@@ -13,6 +13,10 @@ import {
   TotalSellingPriceCell,
 } from './cells';
 
+// Despite this module being naed "columns.jsx", and it being full of
+// ColumnDefs, these are in practice the rows of the pricing table. TanStack
+// tables' concept of columns are what we'd call rows in this table.
+
 /**
  * Consistent columns that are always present.
  * @type {import("./data-types").ProductColumnDef[]}
@@ -24,6 +28,7 @@ export const consistentColumns = [
     cell: ProductNameCell,
     footer: 'Total',
     meta: {
+      // these are used for the actual styling of the cells.
       cellVariant: 'head',
       footerVariant: 'head',
     },
@@ -37,6 +42,7 @@ export const consistentColumns = [
     meta: {
       inputMode: 'numeric',
       productKey: 'quantity',
+      // Limits column to positive integers.
       inputProps: {
         allowNegative: false,
         decimalScale: 0,
@@ -76,6 +82,7 @@ export const consistentColumns = [
 ];
 
 /**
+ * This column def contains a button to add a new cost, and nothing else.
  * @type {import("./data-types").ProductColumnDef}
  */
 export const addDynamicCostColumn = {
@@ -83,7 +90,10 @@ export const addDynamicCostColumn = {
   header: AddCostHeader,
 };
 
-/** @type {import("./data-types").ProductColumnDef[]} */
+/**
+ * Column defs that are calculated based on other columns.
+ * @type {import("./data-types").ProductColumnDef[]}
+ */
 export const calculatedCosts = [
   {
     id: 'creditCardFee',
@@ -116,6 +126,7 @@ export const estimatedHoursColumn = {
   footer: NumberFooter,
   meta: {
     productKey: 'estimated_hours',
+    // Limits column to positive integers.
     inputProps: {
       allowNegative: false,
       decimalScale: 0,
@@ -123,7 +134,10 @@ export const estimatedHoursColumn = {
   },
 };
 
-/** @type {import("./data-types").ProductColumnDef[]} */
+/**
+ * Column defs for the contribution section.
+ * @type {import("./data-types").ProductColumnDef[]}
+ */
 export const contributionColumns = [
   {
     id: 'contributionDollars',
