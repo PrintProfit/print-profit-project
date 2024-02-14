@@ -20,14 +20,14 @@ export function PricingTab() {
    * the pricing table, we need near-constant access to it to perform any edits
    * to it.
    *
-   * @type {import('./data-types').Quote}
+   * @type {import('./data-types').DamaagedQuote}
    */
-  const currentQuote = useSelector((/** @type {any} */ state) =>
-    repairQuote(state.quote.current),
+  const currentQuote = useSelector(
+    (/** @type {any} */ state) => state.quote.current,
   );
 
   /** Internal state for the quote */
-  const [quote, setQuote] = useState(currentQuote);
+  const [quote, setQuote] = useState(repairQuote(currentQuote));
 
   return <PricingTable quote={quote} setQuote={setQuote} />;
 }
