@@ -1,5 +1,6 @@
 import { styled } from '@mui/material';
 import { red } from '@radix-ui/colors';
+import { useMemo } from 'react';
 import * as fmt from '../formats';
 
 /**
@@ -8,7 +9,13 @@ import * as fmt from '../formats';
  * @returns {React.ReactNode}
  */
 export function NumberFormatter({ value, variant = 'number' }) {
-  const formatted = formatters[variant]?.(value);
+  const formatter = useMemo(
+    () => formatters[variant] ?? identity,
+    [formatters[variant]],
+  );
+
+  const formatted = formatter(value);
+
   return (
     value && (
       <Text
