@@ -7,11 +7,11 @@ import {
   styled,
   tableCellClasses,
 } from '@mui/material';
-import { indigo, jade, jadeA } from '@radix-ui/colors';
+import { gray, indigo, jade, jadeA } from '@radix-ui/colors';
 
-export const PricingTableRow = styled(TableRow)(({ theme }) => ({
+export const PricingTableRow = styled(TableRow)({
   '&:nth-of-type(even)': {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: gray.gray2,
     '&:has(input)': {
       backgroundColor: jade.jade3,
     },
@@ -41,7 +41,7 @@ export const PricingTableRow = styled(TableRow)(({ theme }) => ({
   [`& > .${tableCellClasses.footer}`]: {
     fontWeight: 500,
   },
-}));
+});
 
 export const TableTextField = styled(TextField)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
@@ -60,7 +60,7 @@ export const TableTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-export const PricingTableFab = styled(Fab)(({ theme }) => ({
+export const PricingTableFab = styled(Fab)({
   color: 'white', // Radix says indigo9 & indigo10 pair with white
   backgroundColor: indigo.indigo9,
   '&:hover': {
@@ -70,4 +70,4 @@ export const PricingTableFab = styled(Fab)(({ theme }) => ({
       backgroundColor: indigo.indigo9,
     },
   },
-}));
+});
