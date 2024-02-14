@@ -9,7 +9,7 @@ import {
   TextField,
 } from '@mui/material';
 import { produce } from 'immer';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BaseDialog } from './dialogs';
 import { ConfirmButtonDialog } from './dialogs-wrapped';
@@ -48,31 +48,34 @@ function SaveQuote({ quote, setQuote }) {
 
   const [open, setOpen] = useState(false);
 
-  const saveQuote = () => {
+  const saveQuote = useCallback(() => {
     dispatch({ type: 'SAGA/SAVE_QUOTE', payload: quote });
-  };
+  }, [dispatch, quote]);
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     setOpen(false);
-  };
+  }, []);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     saveQuote();
     onClose();
-  };
+  }, [onClose, saveQuote]);
 
   /**
    * We need to hook directly into the quote to ensure changes get to the
    * server.
    * @type {React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>}
    */
-  const setQuoteName = (e) => {
-    setQuote(
-      produce((/** @type {import('./data-types').Quote} */ draft) => {
-        draft.name = e.target.value;
-      }),
-    );
-  };
+  const setQuoteName = useCallback(
+    (e) => {
+      setQuote(
+        produce((/** @type {import('./data-types').Quote} */ draft) => {
+          draft.name = e.target.value;
+        }),
+      );
+    },
+    [setQuote],
+  );
 
   return (
     <>
@@ -136,9 +139,9 @@ function SaveQuote({ quote, setQuote }) {
 function UpdateQuote({ quote }) {
   const dispatch = useDispatch();
 
-  const updateQuote = () => {
+  const updateQuote = useCallback(() => {
     dispatch({ type: 'SAGA/UPDATE_QUOTE', payload: quote });
-  };
+  }, [dispatch, quote]);
 
   // ConfirmButtonDialog abstracts away all the dialog state management.
   return (
@@ -175,12 +178,12 @@ function UpdateQuote({ quote }) {
 function ClearQuote({ setQuote }) {
   const dispatch = useDispatch();
 
-  const createQuote = () => {
+  const createQuote = useCallback(() => {
     // We're no longer updating a quote.
     dispatch({ type: 'SET_QUOTE_UPDATE_MODE', payload: false });
     dispatch({ type: 'CLEAR_CURRENT_QUOTE' });
     setQuote(initialQuote);
-  };
+  }, [dispatch, setQuote]);
 
   return (
     <ConfirmButtonDialog
