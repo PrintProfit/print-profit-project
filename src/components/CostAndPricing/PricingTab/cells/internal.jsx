@@ -10,14 +10,16 @@ import * as fmt from '../formats';
 export function NumberFormatter({ value, variant = 'number' }) {
   const formatted = formatters[variant]?.(value);
   return (
-    <Text
-      sx={{
-        // Show negative numbers in red.
-        color: value < 0 ? red.red9 : undefined,
-      }}
-    >
-      {formatted}
-    </Text>
+    value && (
+      <Text
+        sx={{
+          // Show negative numbers in red.
+          color: value < 0 ? red.red9 : undefined,
+        }}
+      >
+        {formatted}
+      </Text>
+    )
   );
 }
 
