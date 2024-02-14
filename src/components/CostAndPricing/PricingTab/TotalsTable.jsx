@@ -194,7 +194,7 @@ function ContributionRows({
         <TableCell>{marginInput}</TableCell>
         <TableCell>
           <NumberFormatter
-            value={manualContrib / manualPrice}
+            value={manualPrice === 0 ? undefined : manualContrib / manualPrice}
             variant="percent"
           />
         </TableCell>
@@ -204,13 +204,21 @@ function ContributionRows({
         <TableCell variant="head">Contribution / Hour</TableCell>
         <TableCell>
           <NumberFormatter
-            value={targetContrib / estimatedTotalHours}
+            value={
+              estimatedTotalHours === 0
+                ? undefined
+                : targetContrib / estimatedTotalHours
+            }
             variant="currency"
           />
         </TableCell>
         <TableCell>
           <NumberFormatter
-            value={manualContrib / estimatedTotalHours}
+            value={
+              estimatedTotalHours === 0
+                ? undefined
+                : manualContrib / estimatedTotalHours
+            }
             variant="currency"
           />
         </TableCell>
