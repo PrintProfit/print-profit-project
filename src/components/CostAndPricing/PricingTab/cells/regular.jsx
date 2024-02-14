@@ -12,7 +12,7 @@ import { NumberFormatter } from './internal';
 /**
  * A component that renders editable cells with dynamic costs
  * @param {import('../prop-types').CellProps<unknown>} props
- * @returns {JSX.Element}
+ * @returns {React.ReactNode}
  */
 export function DynamicCostCell({ getValue, table, row, column }) {
   const initialValue = getValue();
@@ -34,6 +34,9 @@ export function DynamicCostCell({ getValue, table, row, column }) {
       produce((/** @type {import('../data-types').Quote} */ draft) => {
         const product = draft.products[row.index];
         if (product === undefined) {
+          // This is basically just a type guard so VSCode knows product is
+          // defined. It should be completely impossible, since the cell would
+          // never be rendered if the product didn't exist.
           throw new Error('Inpossible state reached: product is undefined');
         }
         const cost = product.costs.find((c) => c.name === costName);
@@ -82,7 +85,7 @@ export function DynamicCostCell({ getValue, table, row, column }) {
 /**
  * A component for the quantity, selling price, total selling price, and estimated hours cells.
  * @param {import('../prop-types').CellProps<unknown>} props
- * @returns {JSX.Element}
+ * @returns {React.ReactNode}
  */
 export function ConsistentNumericCell({ getValue, table, row, column }) {
   const initialValue = getValue();
@@ -119,14 +122,18 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
       fullWidth
       inputMode={inputMode}
       value={value}
+      // We don't have access to valueAsNumber, but we still want the be
+      // a number.
       onChange={(e) => setValue(Number(e.target.value))}
       onBlur={onBlur}
       InputProps={{
         startAdornment: adornment && (
           <InputAdornment position="start">{adornment}</InputAdornment>
         ),
+        // These props let us use a custom input component, so we can have an
+        // an improved number input.
         inputComponent: /** @type {any} */ (NumericInput),
-        /** @type {any} */ inputProps,
+        inputProps: /** @type {any} */ (inputProps),
       }}
     />
   );
@@ -135,7 +142,7 @@ export function ConsistentNumericCell({ getValue, table, row, column }) {
 /**
  * A component for the total selling price cell
  * @param {import('../prop-types').CellProps<unknown>} props
- * @returns {JSX.Element}
+ * @returns {React.ReactNode}
  */
 export function TotalSellingPriceCell({ getValue, table, row }) {
   const initialValue = getValue();
@@ -188,10 +195,15 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
       fullWidth
       inputMode="decimal"
       value={value}
+      // We don't have access to valueAsNumber, but we still want the be
+      // a number.
       onChange={(e) => setValue(Number(e.target.value))}
       onBlur={onBlur}
       InputProps={{
         startAdornment: <InputAdornment position="start">$</InputAdornment>,
+        // The end adornment here is an icon to indicate whether the value has
+        // been modified or not. If it has, then clicking the icon will reset
+        // it to the calculated value.
         endAdornment: (
           <InputAdornment position="end">
             <Tooltip
@@ -225,7 +237,9 @@ export function TotalSellingPriceCell({ getValue, table, row }) {
 }
 
 /**
+ * A cell for product names
  * @param {import('../prop-types').ProductNameCellProps} props
+ * @returns {React.ReactNode}
  */
 export function ProductNameCell({ getValue, table, row }) {
   const initialValue = getValue();
@@ -265,6 +279,8 @@ export function ProductNameCell({ getValue, table, row }) {
       onChange={(e) => setValue(e.target.value)}
       onBlur={onBlur}
       InputProps={{
+        // The end adornment is a button to delete the product.
+        // The component it's using abstracts away dialog management.
         endAdornment: updateMode || (
           <ConfirmButtonDialog
             buttonType="icon"
@@ -291,17 +307,20 @@ export function ProductNameCell({ getValue, table, row }) {
 /**
  * Cell for non-editable values of money (ex. derived amounts)
  * @param {import('../prop-types').DollarCellProps} props
+ * @returns {React.ReactNode}
  */
 export function DollarCell({ getValue }) {
   const value = getValue();
-  return value ? <NumberFormatter value={value} variant="currency" /> : null;
+  return value && <NumberFormatter value={value} variant="currency" />;
 }
 
 /**
+ * Cell for non-editable precentage values (ex. derived amounts)
  * @param {import('../prop-types').PercentCellProps} props
+ * @returns {React.ReactNode}
  */
 export function PercentCell({ getValue }) {
   const value = getValue();
   const percent = Number(value);
-  return percent ? <NumberFormatter value={percent} variant="percent" /> : null;
+  return percent && <NumberFormatter value={percent} variant="percent" />;
 }

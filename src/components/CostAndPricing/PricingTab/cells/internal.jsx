@@ -3,13 +3,16 @@ import { red } from '@radix-ui/colors';
 import * as fmt from '../formats';
 
 /**
+ * Formats a number number, and makes it red if it's negative.
  * @param {import("../prop-types").NumberFormatterProps} props
+ * @returns {React.ReactNode}
  */
 export function NumberFormatter({ value, variant = 'number' }) {
   const formatted = formatters[variant]?.(value);
   return (
     <Text
       sx={{
+        // Show negative numbers in red.
         color: value < 0 ? red.red9 : undefined,
       }}
     >
@@ -18,7 +21,9 @@ export function NumberFormatter({ value, variant = 'number' }) {
   );
 }
 
-const Text = styled('span')({});
+// The typography component looks too big here, so a styled span is used to
+// get the sx prop.
+const Text = styled('span')();
 
 /**
  * Identity function

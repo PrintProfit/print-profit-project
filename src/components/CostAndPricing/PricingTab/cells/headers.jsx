@@ -7,20 +7,30 @@ import { ConfirmButtonDialog } from '../dialogs-wrapped';
 import { TableTextField } from '../stylized';
 
 /**
+ * The header component for dynamic (user-editable) costs.
  * @param {import('../prop-types').HeaderProps<unknown>} props
+ * @returns {JSX.Element}
  */
 export function DynamicCostHeader({ column, table }) {
+  // We utilize the original cost name for products to find what to update.
   const initialCostName = column.columnDef.meta?.costName;
   if (initialCostName === undefined) {
+    // If you're seeing this error, something is very wrong.
     throw new Error('Malformed columnDef: costName is undefined');
   }
   const [costName, setCostName] = useState(initialCostName);
 
+  // If the table is in update mode, costs can't be deleted.
+  // It's probably better to check if the cost has an ID instead, though that's
+  // also a lot more complex.
   const updateMode = table.options.meta?.updateMode ?? false;
 
+  // we have to use onBlur to update everything within the tanstack tables
+  // context to avoid an early rerender of the table while the user is typing.
   const onBlur = () => {
     table.options.meta?.setQuote(
       produce((/** @type {import('../data-types').Quote} */ draft) => {
+        // Loop through the products and update the cost names
         for (const product of draft.products) {
           const cost = product.costs.find((c) => c.name === initialCostName);
           if (cost) {
@@ -54,6 +64,7 @@ export function DynamicCostHeader({ column, table }) {
       onChange={(e) => setCostName(e.target.value)}
       onBlur={onBlur}
       InputProps={{
+        // End adornment with a delete button for the cost
         endAdornment: updateMode || (
           <ConfirmButtonDialog
             buttonType="icon"

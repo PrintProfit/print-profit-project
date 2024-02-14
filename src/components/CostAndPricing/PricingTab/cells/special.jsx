@@ -15,7 +15,9 @@ import { PricingTableFab as Fab } from '../stylized';
 import { toCostNames, unique } from '../utils';
 
 /**
+ * The header component for dynamic (user-editable) costs.
  * @param {import('../prop-types').AddCostHeaderProps} props
+ * @returns {JSX.Element}
  */
 export function AddCostHeader({ table }) {
   const [open, setOpen] = useState(false);
