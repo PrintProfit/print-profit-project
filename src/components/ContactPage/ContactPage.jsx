@@ -1,16 +1,11 @@
 import {
   Box,
-  Button,
   Card,
-  CardActions,
   CardContent,
-  Divider,
-  Grid,
-  Paper,
+  CardHeader,
   Typography,
   styled,
 } from '@mui/material';
-import CardHeader from '@mui/material/CardHeader';
 
 // This is one of our simplest components
 // It doesn't have local state,
@@ -18,19 +13,6 @@ import CardHeader from '@mui/material/CardHeader';
 // or even care what the redux state is'
 
 export default function ContactPage() {
-  const ToolCard = styled(Card)(({ theme }) => ({
-    borderRadius: 10,
-    height: 'auto',
-    boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)',
-    transition: 'all 0.3s ease-in-out',
-    ':hover': {
-      boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.3)',
-      transform: 'scale(1.05)',
-    },
-    m: 4,
-    padding: 0,
-  }));
-
   return (
     <>
       <Box
@@ -71,3 +53,16 @@ export default function ContactPage() {
     </>
   );
 }
+
+const ToolCard = styled(Card)(({ theme }) => ({
+  borderRadius: 10,
+  height: 'auto',
+  boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.1)',
+  transition: 'all 0.3s ease-in-out',
+  ':hover': {
+    boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.3)',
+    transform: 'scale(1.05)',
+  },
+  m: 4,
+  padding: 0,
+}));
