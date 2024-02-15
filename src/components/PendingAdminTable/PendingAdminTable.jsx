@@ -47,7 +47,7 @@ function PendingAdminPage({ pendingUser }) {
 
   const templateParams = {
     from_name: 'Print Profit',
-    from_email: 'printprofitproject@gmail.com',
+    from_email: 'nick@printprofit.com',
     to_name: pendingUser.user_name,
     to_email: pendingUser.email,
     message: 'You have been accepted to use Print Profit',

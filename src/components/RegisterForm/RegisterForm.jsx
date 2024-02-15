@@ -26,8 +26,8 @@ function RegisterForm() {
   const templateParams = {
     from_name: name,
     from_email: email,
-    to_name: 'Print Profit',
-    to_email: 'printprofitproject@gmail.com',
+    to_name: 'Nick',
+    to_email: 'nick@printprofit.com',
     message: `${email} has registered to Print Profit! `,
   };
 
