@@ -64,7 +64,6 @@ function QuoteTableRow({ row, setTab, ...props }) {
     handleDeleteClose();
     dispatch({
       type: 'SAGA/FETCH_QUOTE_HISTORY',
-      payload: companyId,
     });
   };
 
@@ -136,11 +135,20 @@ function QuoteTableRow({ row, setTab, ...props }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="error" onClick={() => deleteQuote(row.id)} autoFocus>
-            <DeleteIcon /> Delete
+          <Button
+            color="error"
+            onClick={() => deleteQuote(row.id)}
+            autoFocus
+            startIcon={<DeleteIcon />}
+          >
+            Delete
           </Button>
-          <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
-            <CloseIcon /> Cancel
+          <Button
+            sx={{ color: 'black' }}
+            onClick={handleDeleteClose}
+            startIcon={<CloseIcon />}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
