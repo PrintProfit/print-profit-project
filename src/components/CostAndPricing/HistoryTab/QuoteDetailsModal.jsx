@@ -106,6 +106,16 @@ function QuoteDetailsModal({
     currency: 'USD',
   });
 
+  /**
+   * Callback for reducing two numbers into their sum.
+   *
+   * Use this with an array's `.reduce` method to add up all the numbers in the array.
+   * @param {number} acc
+   * @param {number} next
+   * @returns {number}
+   */
+  const sum = (acc, next) => acc + next;
+
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -177,7 +187,11 @@ function QuoteDetailsModal({
                   {/* displays total product quantity */}
                   <TableCell>
                     <Typography fontSize="" fontWeight="bold" align="center">
-                      {productQuantity}
+                      {/* 
+                        the .map converts the product list into just their quantities
+                        then the .reduce adds them all together.
+                       */}
+                      {quote.products.map((p) => p.quantity).reduce(sum, 0)}
                     </Typography>
                   </TableCell>
                 </TableRow>
