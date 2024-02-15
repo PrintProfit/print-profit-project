@@ -1,4 +1,4 @@
-// import emailjs from '@emailjs/browser';
+import emailjs from '@emailjs/browser';
 import { Create as CreateIcon } from '@mui/icons-material';
 import {
   Autocomplete,
@@ -71,18 +71,23 @@ function AdminCreateNewUser() {
     } else {
       setOpenSnack(true);
 
-      // emailjs
-      //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID, templateParams, {
-      //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      //   })
-      //   .then(
-      //     () => {
-      //       console.log('SUCCESS!');
-      //     },
-      //     (error) => {
-      //       console.log('FAILED...', error.text);
-      //     },
-      //   );
+      emailjs
+        .send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID,
+          templateParams,
+          {
+            publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+          },
+        )
+        .then(
+          () => {
+            console.log('SUCCESS!');
+          },
+          (error) => {
+            console.log('FAILED...', error.text);
+          },
+        );
 
       // This should do what that for loop was trying to do
       // findIndex returns -1 when the item is not found

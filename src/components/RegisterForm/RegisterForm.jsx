@@ -1,4 +1,4 @@
-// import emailjs from '@emailjs/browser';
+import emailjs from '@emailjs/browser';
 import {
   Box,
   Button,
@@ -50,18 +50,23 @@ function RegisterForm() {
     ) {
       dispatch({ type: 'REGISTRATION_FAILED' });
     } else {
-      // emailjs
-      //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID, templateParams, {
-      //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      //   })
-      //   .then(
-      //     () => {
-      //       console.log('SUCCESS!');
-      //     },
-      //     (error) => {
-      //       console.log('FAILED...', error.text);
-      //     },
-      //   );
+      emailjs
+        .send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_REGISTERED_AND_APPROVED_TEMPLATE_ID,
+          templateParams,
+          {
+            publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+          },
+        )
+        .then(
+          () => {
+            console.log('SUCCESS!');
+          },
+          (error) => {
+            console.log('FAILED...', error.text);
+          },
+        );
 
       dispatch({
         type: 'REGISTER',
