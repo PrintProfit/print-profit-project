@@ -358,9 +358,9 @@ function QuoteDetailsModal({
             variant="contained"
             color="warning"
             sx={{ mt: 3, ml: 3 }}
+            endIcon={<DeleteIcon />}
           >
             <Typography sx={{ mr: 1 }}>Delete quote</Typography>
-            <DeleteIcon />
           </Button>
 
           <Button
@@ -368,9 +368,9 @@ function QuoteDetailsModal({
             variant="contained"
             color="button"
             sx={{ mt: 3, ml: 10 }}
+            endIcon={<OpenInNewIcon />}
           >
             <Typography sx={{ mr: 1 }}>Open in Pricing Tool</Typography>
-            <OpenInNewIcon />
           </Button>
 
           {/* Delete quote dialog */}
@@ -393,11 +393,16 @@ function QuoteDetailsModal({
                 color="error"
                 onClick={() => deleteQuote(quote.id)}
                 autoFocus
+                startIcon={<DeleteIcon />}
               >
-                <DeleteIcon /> Delete
+                Delete
               </Button>
-              <Button sx={{ color: 'black' }} onClick={handleDeleteClose}>
-                <CloseIcon /> Cancel
+              <Button
+                sx={{ color: 'black' }}
+                onClick={handleDeleteClose}
+                startIcon={<CloseIcon />}
+              >
+                Cancel
               </Button>
             </DialogActions>
           </Dialog>
