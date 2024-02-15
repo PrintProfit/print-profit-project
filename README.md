@@ -1,13 +1,5 @@
 # Print Profit Project
 
-## Tech Stack
-
-[![Tech Stack](https://skillicons.dev/icons?i=js,react,css,express,heroku,materialui,postgres,redux,html)](https://skillicons.dev)
-
-This version uses React, Redux, Express, Passport, and PostgreSQL (a full list of dependencies can be found in `package.json`).
-
-We **STRONGLY** recommend following these instructions carefully. It's a lot, and will take some time to set up, but your life will be much easier this way in the long run.
-
 ## Getting Started
 
 ### Prerequisites
@@ -35,3 +27,15 @@ Before you get started, make sure you have the following software installed on y
    - `is_removed` should be `FALSE` (the default)
 
 10. Finally, log in on the website
+
+## Built With
+
+[![Frontend Stack](https://skillicons.dev/icons?i=css,html,js,materialui,react,redux)](https://skillicons.dev)
+
+[![Backend Stack](https://skillicons.dev/icons?i=nodejs,js,express,heroku,postgres)](https://skillicons.dev)
+
+[![Development Tooling](https://skillicons.dev/icons?i=figma,git,github,postman,vite,vscode)](https://skillicons.dev)
+
+## Acknowledgement
+
+Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped me to make this application a reality. (Thank your people)
