@@ -15,6 +15,7 @@ import {
   Fade,
   IconButton,
   Modal,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -353,25 +354,24 @@ function QuoteDetailsModal({
               </TableBody>
             </Table>
           </TableContainer>
-          <Button
-            onClick={handleDeleteClickOpen}
-            variant="contained"
-            color="warning"
-            sx={{ mt: 3, ml: 3 }}
-            endIcon={<DeleteIcon />}
-          >
-            <Typography sx={{ mr: 1 }}>Delete quote</Typography>
-          </Button>
-
-          <Button
-            onClick={sendToPricingTool}
-            variant="contained"
-            color="secondary"
-            sx={{ mt: 3, ml: 10 }}
-            endIcon={<OpenInNewIcon />}
-          >
-            <Typography sx={{ mr: 1 }}>Open in Pricing Tool</Typography>
-          </Button>
+          <Stack mt={3} justifyContent="center" spacing={10} direction="row">
+            <Button
+              onClick={handleDeleteClickOpen}
+              variant="contained"
+              color="warning"
+              endIcon={<DeleteIcon />}
+            >
+              Delete quote
+            </Button>
+            <Button
+              onClick={sendToPricingTool}
+              variant="contained"
+              color="secondary"
+              endIcon={<OpenInNewIcon />}
+            >
+              Open in Pricing Tool
+            </Button>
+          </Stack>
 
           {/* Delete quote dialog */}
           <Dialog
