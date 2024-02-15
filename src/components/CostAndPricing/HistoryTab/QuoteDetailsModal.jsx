@@ -366,7 +366,7 @@ function QuoteDetailsModal({
           <Button
             onClick={sendToPricingTool}
             variant="contained"
-            color="button"
+            color="secondary"
             sx={{ mt: 3, ml: 10 }}
             endIcon={<OpenInNewIcon />}
           >
