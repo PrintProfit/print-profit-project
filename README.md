@@ -1,5 +1,9 @@
 # Print Profit Project
 
+## Screen Shots
+
+![Home Page Screenshot](./documentation/images/homepage-screenshot.png)
+
 ## Getting Started
 
 ### Prerequisites
