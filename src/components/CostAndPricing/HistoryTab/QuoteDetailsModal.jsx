@@ -29,7 +29,9 @@ import {
   contribution,
   contributionMargin,
   contributionPerHour,
+  creditCardFee,
   totalSellingPrice,
+  totalVariableCosts,
 } from '../PricingTab/calculations';
 import { repairQuote } from '../PricingTab/data-repair';
 import { currency, percent } from '../PricingTab/formats';
@@ -266,6 +268,22 @@ function QuoteDetailsModal({
                 ))}
 
                 <TableRow>
+                  <TableCell>Credit Card Fee</TableCell>
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
+                      {currency(creditCardFee(product))}
+                    </TableCell>
+                  ))}
+                  <TableCell align="center">
+                    <Typography fontWeight="bold">
+                      {currency(
+                        quote.products.map(creditCardFee).reduce(sum, 0),
+                      )}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
                   <TableCell>
                     <Typography fontSize="" fontWeight="bold">
                       Total Variable Costs
@@ -273,9 +291,7 @@ function QuoteDetailsModal({
                   </TableCell>
                   {quote.products.map((product) => (
                     <TableCell key={product.name} align="center">
-                      {currency(
-                        product.costs.map((c) => c.value ?? 0).reduce(sum, 0),
-                      )}
+                      {currency(totalVariableCosts(product))}
                     </TableCell>
                   ))}
 
@@ -283,9 +299,7 @@ function QuoteDetailsModal({
                     <Typography fontWeight="bold">
                       {/* Creates an array of just the cost values for every product, and sums them up */}
                       {currency(
-                        quote.products
-                          .flatMap((p) => p.costs.map((c) => c.value ?? 0))
-                          .reduce(sum, 0),
+                        quote.products.map(totalVariableCosts).reduce(sum, 0),
                       )}
                     </Typography>
                   </TableCell>
