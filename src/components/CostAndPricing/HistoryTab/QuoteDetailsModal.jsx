@@ -28,6 +28,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   contribution,
   contributionMargin,
+  contributionPerHour,
   totalSellingPrice,
 } from '../PricingTab/calculations';
 import { repairQuote } from '../PricingTab/data-repair';
@@ -141,6 +142,7 @@ function QuoteDetailsModal({
 
   const aggContribution = quote.products.map(contribution).reduce(sum, 0);
   const aggSellingPrice = quote.products.map(totalSellingPrice).reduce(sum, 0);
+  const aggHours = quote.products.map((p) => p.estimated_hours).reduce(sum, 0);
 
   return (
     <Modal
@@ -310,11 +312,7 @@ function QuoteDetailsModal({
                     </TableCell>
                   ))}
                   {/* display total estimated hours for all products in the quote */}
-                  <TableCell align="center">
-                    {quote.products
-                      .map((p) => p.estimated_hours)
-                      .reduce(sum, 0)}
-                  </TableCell>
+                  <TableCell align="center">{aggHours}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Contribution $</TableCell>
@@ -342,13 +340,13 @@ function QuoteDetailsModal({
 
                 <TableRow>
                   <TableCell>Contribution / hr</TableCell>
-                  <TableCell> </TableCell>
-                  <TableCell> </TableCell>
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
+                      {USDollar.format(contributionPerHour(product))}
+                    </TableCell>
+                  ))}
                   <TableCell align="center">
-                    {USDollar.format(
-                      (totalSellingPriceDetail - totalVariableCosts / 2) /
-                        totalEstimatedHours,
-                    )}
+                    {USDollar.format(aggContribution / aggHours)}
                   </TableCell>
                 </TableRow>
               </TableBody>
