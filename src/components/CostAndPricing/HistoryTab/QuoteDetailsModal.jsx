@@ -25,7 +25,8 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { unique } from '../PricingTab/utils';
+import { repairQuote } from '../PricingTab/data-repair';
+import { toCostNames, unique } from '../PricingTab/utils';
 
 function QuoteDetailsModal({
   open,
@@ -58,15 +59,18 @@ function QuoteDetailsModal({
     overflow: 'auto',
   };
 
+  // repairQuote gets a version of the quote without null values
+  const quote = repairQuote(row);
+  console.log('quote:', quote);
+
   let productQuantity = 0;
   let totalSellingPriceDetail = 0;
   let totalEstimatedHours = 0;
   let totalVariableCosts = 0;
   const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
 
-  const costNames = row.products
-    .flatMap((p) => p.costs.map((c) => c.name))
-    .filter(unique);
+  // Gets a unique list of user-editable cost names
+  const costNames = quote.products.flatMap(toCostNames).filter(unique);
 
   const sendToPricingTool = () => {
     dispatch({ type: 'SET_CURRENT_QUOTE', payload: row });
