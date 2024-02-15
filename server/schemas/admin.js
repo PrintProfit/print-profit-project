@@ -32,7 +32,7 @@ export const CreateUserBody = z.object({
 
 export const CreateCompanyUserBody = z.object({
   companyName: CompanyName,
-  email: Serial,
+  email: Email,
   name: UserRealName,
   password: Password,
 });

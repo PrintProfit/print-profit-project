@@ -4,16 +4,12 @@ import {
   Card,
   CardActions,
   CardContent,
-  Divider,
-  Grid,
+  CardHeader,
   Paper,
   Typography,
   styled,
 } from '@mui/material';
-import CardHeader from '@mui/material/CardHeader';
-import * as React from 'react';
 import { useHistory } from 'react-router-dom';
-import HomeToolBox from '../HomeToolBox/HomeToolBox';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -83,7 +79,7 @@ export default function HomeGrid() {
                 m: 0,
               }}
             />
-            <CardContent marginTop={1} padding={1} sx={{ textAlign: 'center' }}>
+            <CardContent sx={{ textAlign: 'center' }}>
               <p>
                 Keep track of multi-product order labor and material costs and
                 calculate profit margins, all in one place.
@@ -109,7 +105,7 @@ export default function HomeGrid() {
                 m: 0,
               }}
             />
-            <CardContent marginTop={1} padding={1} sx={{ textAlign: 'center' }}>
+            <CardContent sx={{ textAlign: 'center' }}>
               <p>
                 See shop labor and material costs over time in this data
                 visualizer.
@@ -135,7 +131,7 @@ export default function HomeGrid() {
                 m: 0,
               }}
             />
-            <CardContent marginTop={1} padding={1} sx={{ textAlign: 'center' }}>
+            <CardContent sx={{ textAlign: 'center' }}>
               <p>
                 Simplify complex decision-making with this customizable tool.
               </p>

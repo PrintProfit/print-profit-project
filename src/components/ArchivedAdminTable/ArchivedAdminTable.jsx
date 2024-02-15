@@ -1,4 +1,9 @@
 import {
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+  Unarchive as UnarchiveIcon,
+} from '@mui/icons-material';
+import {
   Button,
   Dialog,
   DialogActions,
@@ -13,35 +18,10 @@ import {
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
-import UnarchiveIcon from '@mui/icons-material/Unarchive';
-
 function ArchivedAdminPage({ archivedUser }) {
   const dispatch = useDispatch();
 
   const [openRecover, setOpenRecover] = useState(false);
-
-  // Styles table head to be black
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
 
   // Opens Recover Dialog
   const handleRecoverClickOpen = () => {
@@ -176,5 +156,26 @@ function ArchivedAdminPage({ archivedUser }) {
     </TableRow>
   );
 }
+
+// Styles table head to be black
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 export default ArchivedAdminPage;

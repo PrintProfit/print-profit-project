@@ -24,7 +24,11 @@ function* registerUser(action) {
     yield put({ type: 'SET_TO_LOGIN_MODE' });
   } catch (error) {
     console.log('Error with user registration:', error);
-    yield put({ type: 'REGISTRATION_FAILED' });
+    if (error?.response?.status === 409) {
+      yield put({ type: 'REGISTRATION_FAILED_DUPLICATE_EMAIL' });
+    } else {
+      yield put({ type: 'REGISTRATION_FAILED' });
+    }
   }
 }
 

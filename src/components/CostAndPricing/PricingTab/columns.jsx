@@ -4,38 +4,54 @@ import * as calc from './calculations';
 import {
   AddCostHeader,
   ConsistentNumericCell,
+  ContributionFooter,
+  CurrencyFooter,
   DollarCell,
+  NumberFooter,
   PercentCell,
   ProductNameCell,
   TotalSellingPriceCell,
 } from './cells';
-import * as fmt from './formats';
-import { aggregate } from './utils';
+
+/**
+ * @template T
+ * @typedef {import("./data-types").ProductColumnDef<T>} ProductColumnDef
+ */
+
+// Despite this module being naed "columns.jsx", and it being full of
+// ColumnDefs, these are in practice the rows of the pricing table. TanStack
+// tables' concept of columns are what we'd call rows in this table.
 
 /**
  * Consistent columns that are always present.
- * @type {import("./data-types").ProductColumnDef[]}
+ * @type {(ProductColumnDef<string>|ProductColumnDef<number>)[]}
  */
 export const consistentColumns = [
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Product Name',
     cell: ProductNameCell,
     footer: 'Total',
+    meta: {
+      // these are used for the actual styling of the cells.
+      cellVariant: 'head',
+      footerVariant: 'head',
+    },
   },
   {
     accessorKey: 'quantity',
     header: 'Quantity',
     cell: ConsistentNumericCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      return aggregate?.('quantity', [], rows);
-    },
+    footer: NumberFooter,
     meta: {
       inputMode: 'numeric',
       productKey: 'quantity',
+      // Limits column to positive integers.
+      inputProps: {
+        allowNegative: false,
+        decimalScale: 0,
+      },
     },
   },
   {
@@ -46,6 +62,11 @@ export const consistentColumns = [
       inputMode: 'decimal',
       adornment: '$',
       productKey: 'selling_price_per_unit',
+      inputProps: {
+        allowNegative: false,
+        decimalScale: 2,
+        fixedDecimalScale: true,
+      },
     },
   },
   {
@@ -56,13 +77,7 @@ export const consistentColumns = [
     header: 'Total Selling Price',
     cell: TotalSellingPriceCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalSellingPrice = aggregate?.('total_selling_price', [], rows);
-      return fmt.currency(totalSellingPrice);
-    },
+    footer: CurrencyFooter,
     meta: {
       inputMode: 'decimal',
       adornment: '$',
@@ -72,14 +87,18 @@ export const consistentColumns = [
 ];
 
 /**
- * @type {import("./data-types").ProductColumnDef}
+ * This column def contains a button to add a new cost, and nothing else.
+ * @type {ProductColumnDef<any>}
  */
 export const addDynamicCostColumn = {
   id: 'addDynamicCost',
   header: AddCostHeader,
 };
 
-/** @type {import("./data-types").ProductColumnDef[]} */
+/**
+ * Column defs that are calculated based on other columns.
+ * @type {ProductColumnDef<number>[]}
+ */
 export const calculatedCosts = [
   {
     id: 'creditCardFee',
@@ -87,13 +106,7 @@ export const calculatedCosts = [
     header: 'Credit Card Fee',
     cell: DollarCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalCreditCardFee = aggregate?.('creditCardFee', [], rows);
-      return fmt.currency(totalCreditCardFee);
-    },
+    footer: CurrencyFooter,
   },
   {
     id: 'totalVariableCosts',
@@ -101,37 +114,35 @@ export const calculatedCosts = [
     header: 'Total Variable Costs',
     cell: DollarCell,
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalVariableCosts = aggregate?.('totalVariableCosts', [], rows);
-      return fmt.currency(totalVariableCosts);
-    },
+    footer: CurrencyFooter,
   },
 ];
 
 /**
  * This has to be separated out from some other columns, since while it's
  * editable, it's below some calculated costs.
- * @type {import('./data-types').ProductColumnDef}
+ * @type {ProductColumnDef<number>}
  */
 export const estimatedHoursColumn = {
   accessorKey: 'estimated_hours',
   header: 'Estimated Hours',
   cell: ConsistentNumericCell,
   aggregationFn: 'sum',
-  footer: ({ table, column }) => {
-    const aggregate = column.getAggregationFn();
-    const { rows } = table.getCoreRowModel();
-    return aggregate?.('estimated_hours', [], rows);
-  },
+  footer: NumberFooter,
   meta: {
     productKey: 'estimated_hours',
+    // Limits column to positive integers.
+    inputProps: {
+      allowNegative: false,
+      decimalScale: 0,
+    },
   },
 };
 
-/** @type {import("./data-types").ProductColumnDef[]} */
+/**
+ * Column defs for the contribution section.
+ * @type {ProductColumnDef<number>[]}
+ */
 export const contributionColumns = [
   {
     id: 'contributionDollars',
@@ -140,34 +151,26 @@ export const contributionColumns = [
     cell: DollarCell,
     // This happens to work, but it's not how the spreadsheet calculates it.
     aggregationFn: 'sum',
-    footer: ({ table, column }) => {
-      const aggregate = column.getAggregationFn();
-      const { rows } = table.getCoreRowModel();
-      /** @type {number?} */
-      const totalContribution = aggregate?.('contributionDollars', [], rows);
-      return fmt.currency(totalContribution);
-    },
+    footer: CurrencyFooter,
   },
   {
     accessorFn: calc.contributionMargin,
     header: 'Contribution %',
     cell: PercentCell,
-    footer: ({ table }) => {
-      const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
-      const totalSellingPrice = aggregate(table, 'total_selling_price') ?? 0;
-      const percent = totalContribution / totalSellingPrice;
-      return fmt.percent(percent);
+    footer: ContributionFooter,
+    meta: {
+      footerContribDivisor: 'total_selling_price',
+      footerContribFormat: 'percent',
     },
   },
   {
     accessorFn: calc.contributionPerHour,
     header: 'Contribution / Hour',
     cell: DollarCell,
-    footer: ({ table }) => {
-      const totalContribution = aggregate(table, 'contributionDollars') ?? 0;
-      const totalHours = aggregate(table, 'estimated_hours') ?? 0;
-      const perHour = totalHours === 0 ? 0 : totalContribution / totalHours;
-      return fmt.currency(perHour);
+    footer: ContributionFooter,
+    meta: {
+      footerContribDivisor: 'estimated_hours',
+      footerContribFormat: 'currency',
     },
   },
 ];

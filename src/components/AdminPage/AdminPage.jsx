@@ -4,8 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import AdminArchivedUsers from '../AdminArchivedUsers/AdminArchivedUsers';
 import AdminCreateNewUser from '../AdminCreateNewUser/AdminCreateNewUser';
 import AdminView from '../AdminView/AdminView';
-import ApprovedAdminTable from '../ApprovedAdminTable/ApprovedAdminTable';
-import PendingAdminTable from '../PendingAdminTable/PendingAdminTable';
 import './adminPage.css';
 
 function AdminPage() {

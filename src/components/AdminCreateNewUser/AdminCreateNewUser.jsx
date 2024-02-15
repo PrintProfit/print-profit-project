@@ -1,19 +1,16 @@
 import emailjs from '@emailjs/browser';
-import CreateIcon from '@mui/icons-material/Create';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Snackbar from '@mui/material/Snackbar';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import TextField from '@mui/material/TextField';
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import React, { useState } from 'react';
+import { Create as CreateIcon } from '@mui/icons-material';
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Snackbar,
+  TextField,
+  Tooltip,
+  createFilterOptions,
+  tooltipClasses,
+} from '@mui/material';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
@@ -61,7 +58,7 @@ function AdminCreateNewUser() {
       password === null ||
       password.length < 8
     ) {
-      dispatch({ type: 'REGISTRATION_FAILED_PASSWORDS_DONT_MATCH' });
+      dispatch({ type: 'CREATE_USER_FAILED_PASSWORDS_DONT_MATCH' });
     } else if (
       email === '' ||
       name === '' ||
@@ -70,22 +67,27 @@ function AdminCreateNewUser() {
       companyName === '' ||
       companyName === null
     ) {
-      dispatch({ type: 'REGISTRATION_FAILED' });
+      dispatch({ type: 'CREATE_USER_FAILED' });
     } else {
       setOpenSnack(true);
 
-      // emailjs
-      //   .send(import.meta.env.VITE_EMAILJS_SERVICE_ID, import.meta.env.VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID, templateParams, {
-      //     publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      //   })
-      //   .then(
-      //     () => {
-      //       console.log('SUCCESS!');
-      //     },
-      //     (error) => {
-      //       console.log('FAILED...', error.text);
-      //     },
-      //   );
+      emailjs
+        .send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_ADMIN_CREATE_TEMPLATE_ID,
+          templateParams,
+          {
+            publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+          },
+        )
+        .then(
+          () => {
+            console.log('SUCCESS!');
+          },
+          (error) => {
+            console.log('FAILED...', error.text);
+          },
+        );
 
       // This should do what that for loop was trying to do
       // findIndex returns -1 when the item is not found
@@ -117,25 +119,25 @@ function AdminCreateNewUser() {
           },
         });
       }
-      dispatch({ type: 'CLEAR_REGISTRATION_ERROR' });
+      dispatch({ type: 'CLEAR_CREATE_USER_ERROR' });
+      setEmail('');
+      setName('');
+      setCompanyName('');
+      setPassword('');
+      setConfirmedPassword('');
     }
-    setEmail('');
-    setName('');
-    setCompanyName('');
-    setPassword('');
-    setConfirmedPassword('');
   };
 
   return (
     <Box className="adminCreateUserCss" textAlign={'center'} marginTop={'3%'}>
       <h2>
-        {errors.registrationMessage === ''
+        {errors.adminCreateUserMessage === ''
           ? 'Enter new information to create a member!'
           : ''}
       </h2>
-      {errors.registrationMessage && (
+      {errors.adminCreateUserMessage && (
         <h3 id="createUserAlertId" className="alert" role="alert">
-          {errors.registrationMessage}
+          {errors.adminCreateUserMessage}
         </h3>
       )}
       <Box
@@ -152,81 +154,27 @@ function AdminCreateNewUser() {
         autoComplete="off"
         onSubmit={adminCreateUser}
       >
-        <Tooltip
-          title="enter a valid gmail here"
-          placement="top"
-          slotProps={{
-            popper: {
-              sx: {
-                [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginTop: '0px',
-                  },
-                [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginBottom: '1px',
-                  },
-                [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginLeft: '0px',
-                  },
-                [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginRight: '0px',
-                  },
-              },
-            },
-          }}
-        >
-          <TextField
-            id="email"
-            type="text"
-            label="E-mail"
-            variant="filled"
-            value={email}
-            // color={email === '' ? 'error' : ''}
-            required
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </Tooltip>
+        <TextField
+          id="email"
+          type="text"
+          label="E-mail"
+          variant="filled"
+          value={email}
+          // color={email === '' ? 'error' : ''}
+          required
+          onChange={(event) => setEmail(event.target.value)}
+        />
 
-        <Tooltip
-          title="enter first or full name here"
-          placement="top"
-          slotProps={{
-            popper: {
-              sx: {
-                [`&.${tooltipClasses.popper}[data-popper-placement*="bottom"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginTop: '0px',
-                  },
-                [`&.${tooltipClasses.popper}[data-popper-placement*="top"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginBottom: '1px',
-                  },
-                [`&.${tooltipClasses.popper}[data-popper-placement*="right"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginLeft: '0px',
-                  },
-                [`&.${tooltipClasses.popper}[data-popper-placement*="left"] .${tooltipClasses.tooltip}`]:
-                  {
-                    marginRight: '0px',
-                  },
-              },
-            },
-          }}
-        >
-          <TextField
-            id="name"
-            type="text"
-            label="Full Name"
-            variant="filled"
-            value={name}
-            // color={name === '' ? 'error' : ''}
-            required
-            onChange={(event) => setName(event.target.value)}
-          />
-        </Tooltip>
+        <TextField
+          id="name"
+          type="text"
+          label="Full Name"
+          variant="filled"
+          value={name}
+          // color={name === '' ? 'error' : ''}
+          required
+          onChange={(event) => setName(event.target.value)}
+        />
 
         <Tooltip
           title='Click the "Add" button if you want to create a new company'
@@ -325,7 +273,9 @@ function AdminCreateNewUser() {
         </Tooltip>
 
         <Tooltip
-          title="password must be 8 or more characters"
+          title={
+            password.length < 8 ? 'password must be 8 or more characters' : ''
+          }
           placement="top"
           slotProps={{
             popper: {
@@ -356,23 +306,21 @@ function AdminCreateNewUser() {
             label="Password"
             variant="filled"
             value={password}
-            color={
-              password.length < 8 && password !== ''
-                ? 'error'
-                : confirmedPassword !== password
-                  ? 'error'
-                  : ''
-            }
-            helperText={
-              confirmedPassword !== password ? 'passwords do not match' : ''
-            }
+            color={password.length < 8 && password !== '' ? 'error' : ''}
+            // helperText={
+            //   confirmedPassword !== password ? 'passwords do not match' : ''
+            // }
             required
             onChange={(event) => setPassword(event.target.value)}
           />
         </Tooltip>
 
         <Tooltip
-          title="password must be 8 or more characters"
+          title={
+            confirmedPassword.length < 8
+              ? 'password must be 8 or more characters'
+              : ''
+          }
           placement="top"
           slotProps={{
             popper: {

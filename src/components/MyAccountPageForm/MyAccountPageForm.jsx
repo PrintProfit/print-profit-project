@@ -1,36 +1,27 @@
 import {
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+  Save as SaveIcon,
+} from '@mui/icons-material';
+import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  FormControl,
   FormLabel,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
-  Tooltip,
-  Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
 
 export default function MyAccountPageForm({ setIsForm }) {
   const dispatch = useDispatch();
 
   const profileUser = useSelector((store) => store.user.profileUserReducer);
-  const userEmail = useSelector((store) => store.user.editUserEmail);
-  const userName = useSelector((store) => store.user.editUserName);
+  const userEmail = useSelector((store) => store.user.editUserEmail.email);
+  const userName = useSelector((store) => store.user.editUserName.name);
   const [invalidText, setInvalidText] = useState('');
 
   useEffect(() => {
@@ -55,8 +46,8 @@ export default function MyAccountPageForm({ setIsForm }) {
   // Opens Comfirmation Dialog
   const handleComfirmationClickOpen = () => {
     if (
-      userName.name &&
-      userEmail.email &&
+      userName &&
+      userEmail &&
       newPasswordInput === newVerifyPasswordInput &&
       (newPasswordInput.length >= 8 || newPasswordInput.length === 0)
     ) {
@@ -104,8 +95,8 @@ export default function MyAccountPageForm({ setIsForm }) {
       dispatch({
         type: 'SAGA_EDIT_USERS_INFO',
         payload: {
-          newEmailInput: userEmail.email,
-          newNameInput: userName.name,
+          newEmailInput: userEmail,
+          newNameInput: userName,
         },
       });
     } else {
@@ -113,8 +104,8 @@ export default function MyAccountPageForm({ setIsForm }) {
       dispatch({
         type: 'SAGA_EDIT_USERS_INFO',
         payload: {
-          newEmailInput: userEmail.email,
-          newNameInput: userName.name,
+          newEmailInput: userEmail,
+          newNameInput: userName,
           newPasswordInput: newPasswordInput,
         },
       });
@@ -125,10 +116,31 @@ export default function MyAccountPageForm({ setIsForm }) {
     setIsForm(false);
   };
 
+  // This useMemo hook is letting us recalculate these values only when the inputs change
+  const [passwordError, passwordMessage] = useMemo(() => {
+    if (newPasswordInput.length < 8 && newPasswordInput !== '') {
+      return [true, 'password must be 8 or more characters'];
+    }
+    if (newPasswordInput !== newVerifyPasswordInput) {
+      return [true, 'passwords do not match'];
+    }
+    return [false, undefined];
+  }, [newPasswordInput, newVerifyPasswordInput]);
+
+  const [verifyPasswordError, verifyPasswordMessage] = useMemo(() => {
+    if (newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== '') {
+      return [true, 'password must be 8 or more characters'];
+    }
+    if (newPasswordInput !== newVerifyPasswordInput) {
+      return [true, 'passwords do not match'];
+    }
+    return [false, undefined];
+  }, [newVerifyPasswordInput, newPasswordInput]);
+
   return (
     <div className="accountPageForm">
       <h3 className="invalidHeader">{invalidText}</h3>
-      <form marginTop={2}>
+      <form>
         <section>
           <FormLabel sx={{ mt: 5 }}>Name:</FormLabel>
 
@@ -137,13 +149,13 @@ export default function MyAccountPageForm({ setIsForm }) {
             type="text"
             name="name"
             placeholder={profileUser.name}
-            value={userName.name}
+            value={userName}
             onChange={(e) => handleNameChange(e.target.value)}
             required
             label="New Name"
-            color={userName.name === '' ? 'error' : ''}
+            color={userName === '' ? 'error' : undefined}
             helperText={
-              userName.name === '' ? 'you must enter a valid name' : ''
+              userName === '' ? 'you must enter a valid name' : undefined
             }
             sx={{
               mt: 5,
@@ -153,23 +165,17 @@ export default function MyAccountPageForm({ setIsForm }) {
         </section>
 
         <section>
-          <FormLabel
-            sx={{
-              mt: 2,
-            }}
-          >
-            Email:
-          </FormLabel>
+          <FormLabel sx={{ mt: 2 }}>Email:</FormLabel>
           <TextField
             variant="outlined"
             type="email"
             name="email"
             placeholder={profileUser.email}
-            value={userEmail.email}
+            value={userEmail}
             onChange={(e) => handleEmailChange(e.target.value)}
-            color={userEmail.email === '' ? 'error' : ''}
+            color={userEmail === '' ? 'error' : undefined}
             helperText={
-              userEmail.email === '' ? 'you must enter a valid email' : ''
+              userEmail === '' ? 'you must enter a valid email' : undefined
             }
             required
             label="New Email"
@@ -181,39 +187,20 @@ export default function MyAccountPageForm({ setIsForm }) {
         </section>
 
         <section>
-          <FormLabel
-            sx={{
-              mt: 2,
-            }}
-          >
-            New Password:
-          </FormLabel>
-
+          <FormLabel sx={{ mt: 2 }}>New Password:</FormLabel>
           <TextField
             variant="outlined"
             type="password"
             name="password"
-            placeholder={'password'}
-            color={
-              newPasswordInput.length < 8 && newPasswordInput !== ''
-                ? 'error'
-                : newPasswordInput !== newVerifyPasswordInput
-                  ? 'error'
-                  : ''
-            }
-            helperText={
-              newPasswordInput.length < 8 && newPasswordInput !== ''
-                ? 'password must be 8 or more characters'
-                : newPasswordInput !== newVerifyPasswordInput
-                  ? 'passwords do not match'
-                  : ''
-            }
+            placeholder="password"
+            color={passwordError ? 'error' : undefined}
+            helperText={passwordMessage}
             value={newPasswordInput}
             onChange={(e) => setNewPasswordInput(e.target.value)}
             label="Enter new password"
             sx={{
               mt: 2,
-              width: '16ch',
+              width: '20ch',
             }}
           />
         </section>
@@ -231,27 +218,15 @@ export default function MyAccountPageForm({ setIsForm }) {
             variant="outlined"
             type="password"
             name="Verify New Password"
-            placeholder={'verify new password'}
-            color={
-              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
-                ? 'error'
-                : newPasswordInput !== newVerifyPasswordInput
-                  ? 'error'
-                  : ''
-            }
-            helperText={
-              newVerifyPasswordInput.length < 8 && newVerifyPasswordInput !== ''
-                ? 'password must be 8 or more characters'
-                : newPasswordInput !== newVerifyPasswordInput
-                  ? 'passwords do not match'
-                  : ''
-            }
+            placeholder="verify new password"
+            color={verifyPasswordError ? 'error' : undefined}
+            helperText={verifyPasswordMessage}
             value={newVerifyPasswordInput}
             onChange={(e) => setNewVerifyPasswordInput(e.target.value)}
             label="Verify new password"
             sx={{
               mt: 2,
-              width: '16ch',
+              width: '20ch',
             }}
           />
         </section>
@@ -266,8 +241,9 @@ export default function MyAccountPageForm({ setIsForm }) {
             mb: 5,
             mr: 2,
           }}
+          startIcon={<SaveIcon />}
         >
-          <SaveIcon /> Save Changes
+          Save Changes
         </Button>
         <Button
           color="error"
@@ -279,8 +255,9 @@ export default function MyAccountPageForm({ setIsForm }) {
             mb: 5,
             ml: 2,
           }}
+          startIcon={<DeleteIcon />}
         >
-          <DeleteIcon /> Discard Changes
+          Discard Changes
         </Button>
       </form>
 
@@ -288,23 +265,32 @@ export default function MyAccountPageForm({ setIsForm }) {
       <Dialog
         open={openDiscard}
         onClose={handleDiscardClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="discard-dialog-title"
+        aria-describedby="discard-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to discard these changes?'}
+        <DialogTitle id="discard-dialog-title">
+          Are you sure you want to discard these changes?
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="discard-dialog-description">
             You can change this information again if need be.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="error" onClick={discardChanges} autoFocus>
-            <DeleteIcon /> Discard
+          <Button
+            color="error"
+            onClick={discardChanges}
+            startIcon={<DeleteIcon />}
+            autoFocus
+          >
+            Discard
           </Button>
-          <Button sx={{ color: 'black' }} onClick={handleDiscardClose}>
-            <CloseIcon /> Cancel
+          <Button
+            sx={{ color: 'black' }}
+            onClick={handleDiscardClose}
+            startIcon={<CloseIcon />}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
@@ -313,23 +299,27 @@ export default function MyAccountPageForm({ setIsForm }) {
       <Dialog
         open={openComfirmation}
         onClose={handleComfirmationClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="confirm-dialog-title"
+        aria-describedby="confirm-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {'Are you sure you want to save the new information?'}
+        <DialogTitle id="confirm-dialog-title">
+          Are you sure you want to save the new information?
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="confirm-dialog-description">
             You can change this information again if need be.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={saveNewUserInfo} autoFocus>
-            <SaveIcon /> Save Changes
+          <Button onClick={saveNewUserInfo} startIcon={<SaveIcon />} autoFocus>
+            Save Changes
           </Button>
-          <Button sx={{ color: 'black' }} onClick={handleComfirmationClose}>
-            <CloseIcon /> Cancel
+          <Button
+            sx={{ color: 'black' }}
+            startIcon={<CloseIcon />}
+            onClick={handleComfirmationClose}
+          >
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,13 +1,17 @@
-import { Typography, styled } from '@mui/material';
-import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
+import {
+  Box,
+  Divider,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Typography,
+  styled,
+} from '@mui/material';
 import { useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import logo from '../../assets/printProfitLogoV3.svg';
 
 const drawerWidth = 200;
 
@@ -39,8 +43,8 @@ export default function SideBar({ children }) {
             width={200}
             height={150}
             onClick={handleNavigationHome}
-            src="public/images/printProfitLogoV3.svg"
-            alt="printProfitLogo"
+            src={logo}
+            alt="Print Profit Logo"
           />
         </div>
 

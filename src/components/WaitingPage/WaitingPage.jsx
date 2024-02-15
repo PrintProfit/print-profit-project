@@ -1,45 +1,63 @@
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { Box } from '@mui/material';
-import Button from '@mui/material/Button';
-import { useHistory } from 'react-router-dom';
-export default function WaitingPage() {
-  const history = useHistory();
+import { ArrowBackIos } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Typography,
+} from '@mui/material';
+import { Link } from 'react-router-dom';
+import backgroundImage from '../../assets/printProfitBgLoginFULLv2.png';
 
+export default function WaitingPage() {
   return (
-    <div>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'start',
-          alignItems: 'center',
-          height: '100vh',
-          border: 2,
-          borderColor: 'green',
-        }}
-      >
-        <h1>Thank you for Registering!</h1>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'primary.light',
-          }}
-        >
-          <p>Your Account should be approved in 24-48 hours.</p>
-          <p>
-            If you have any questions or pressing concerns, please contact here
-            (Link)
-          </p>
-          <p>Thank you for your Patience.</p>
-        </Box>
-        <Button onClick={() => history.push('/home')}>
-          <ArrowBackIosIcon />
-          <p>Home</p>
-        </Button>
+    <Box
+      sx={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        height: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 0,
+      }}
+    >
+      <Box>
+        <Card raised>
+          <CardHeader
+            title="Thank you for Registering!"
+            titleTypographyProps={{
+              variant: 'h4',
+              fontWeight: 600,
+              textAlign: 'center',
+            }}
+          />
+          <CardContent sx={{ textAlign: 'center' }}>
+            <Typography>
+              Your account should be approved in 24-48 hours.
+            </Typography>
+            <Typography>
+              If you have any questions or pressing concerns, please contact
+              here.
+            </Typography>
+            <Typography>Thank you for your Patience.</Typography>
+          </CardContent>
+          <CardActions sx={{ justifyContent: 'center' }}>
+            <Button
+              variant="contained"
+              color="secondary"
+              component={Link}
+              to="/home"
+              startIcon={<ArrowBackIos />}
+            >
+              Home
+            </Button>
+          </CardActions>
+        </Card>
       </Box>
-    </div>
+    </Box>
   );
 }

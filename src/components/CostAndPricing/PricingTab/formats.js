@@ -2,35 +2,32 @@
 
 /**
  * Formats a number as a percent.
- * @param {number | undefined | null} [n]
- * @returns {string | undefined}
+ * @type {import("./data-types").NumberFmtFn}
  */
-export function percent(n) {
+export const percent = (n) => {
   return Number.isFinite(n)
     ? n?.toLocaleString(undefined, { style: 'percent' })
     : undefined;
-}
+};
 
 /**
  * Formats a number as a currency.
- * @param {number | undefined | null} [n]
- * @returns {string | undefined}
+ * @type {import("./data-types").NumberFmtFn}
  */
-export function currency(n) {
+export const currency = (n) => {
   return Number.isFinite(n)
     ? n?.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
       })
     : undefined;
-}
+};
 
 /**
  * Formats a number as a currency with accounting style.
- * @param {number | undefined | null} [n]
- * @returns {string | undefined}
+ * @type {import("./data-types").NumberFmtFn}
  */
-export function accounting(n) {
+export const accounting = (n) => {
   return Number.isFinite(n)
     ? n?.toLocaleString(undefined, {
         style: 'currency',
@@ -38,4 +35,12 @@ export function accounting(n) {
         currencySign: 'accounting',
       })
     : undefined;
-}
+};
+
+/**
+ * Formats a number as a number.
+ * @type {import("./data-types").NumberFmtFn}
+ */
+export const number = (n) => {
+  return Number.isFinite(n) ? n?.toLocaleString() : undefined;
+};

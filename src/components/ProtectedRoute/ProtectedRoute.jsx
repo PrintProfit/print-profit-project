@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route } from 'react-router-dom';
 import LoginPage from '../LoginPage/LoginPage';
@@ -28,10 +27,12 @@ function ProtectedRoute({ component, children, ...props }) {
       {...props}
     >
       {user.id ? (
-        // If the user is logged in, show the protected component
-        <ProtectedComponent />
+        user.is_approved ? (
+          <ProtectedComponent />
+        ) : (
+          <Redirect to="/waiting-page" />
+        )
       ) : (
-        // Otherwise, redirect to the Loginpage
         <LoginPage />
       )}
     </Route>

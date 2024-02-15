@@ -1,16 +1,13 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import React from 'react';
-
+import { Box } from '@mui/material';
+import backgroundImage from '../../assets/printProfitBgFULL.png';
 import RegisterForm from '../RegisterForm/RegisterForm';
 
 function RegisterPage() {
   return (
-    <>
+    <Box>
       <Box
         sx={{
-          backgroundImage: "url('public/images/printProfitBgFull.png')",
+          backgroundImage: `url(${backgroundImage})`,
           backgroundSize: 'cover',
           backgroundRepeat: 'no-repeat',
           height: '100vh',
@@ -19,11 +16,18 @@ function RegisterPage() {
           margin: 0,
         }}
       >
-        <Box>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            pb: 45,
+          }}
+        >
           <RegisterForm />
         </Box>
       </Box>
-    </>
+    </Box>
   );
 }
 

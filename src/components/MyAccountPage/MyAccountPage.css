@@ -11,7 +11,7 @@
 .accountPageFormArea {
   height: auto;
   width: 500px;
-  border: 1px solid black;
+  /* border: 1px solid black; */
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -25,12 +25,15 @@
 .accountPageFormArea section {
   font-size: 28px;
   align-items: center;
+  width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-content: center;
   column-gap: 15px;
   margin-top: 15px;
   margin-bottom: 15px;
+  margin-right: 35%;
 }
 
 .accountPageFormArea p {
@@ -47,10 +50,9 @@
   color: #d3302f;
 }
 
-.editInfoButton {
-  position: relative;
-  right: 8%;
-}
+/* .editInfoButton {
+  margin-top: 3;
+} */
 
 .invalidHeader {
   padding: 0px;

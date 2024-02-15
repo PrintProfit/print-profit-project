@@ -1,3 +1,5 @@
+import { flexRender } from '@tanstack/react-table';
+
 /**
  * Runs a selected column's aggregation function on an entire column
  * @template {unknown} TData
@@ -27,3 +29,13 @@ export const unique = (value, index, self) => self.indexOf(value) === index;
  * @returns {string[]}
  */
 export const toCostNames = (product) => product.costs.map((cost) => cost.name);
+
+/**
+ * type-safe wrapper for flexRender
+ * @template {object} T
+ * @param {Parameters<typeof flexRender<T>>[0]} Comp
+ * @param {(Parameters<typeof flexRender<T>>[1]|undefined)} props
+ * @returns {ReturnType<typeof flexRender<T>>}
+ */
+export const safeFlexRender = (Comp, props) =>
+  Comp && props ? flexRender(Comp, props) : null;

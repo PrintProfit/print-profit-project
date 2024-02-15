@@ -1,9 +1,8 @@
-import { Box, Button, Paper, Typography } from '@mui/material';
-import Container from '@mui/material/Container';
-import TextField from '@mui/material/TextField';
-import React, { useState } from 'react';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import logo from '../../assets/printProfitLogoV3.svg';
 
 function LoginForm() {
   const [email, setEmail] = useState('');
@@ -28,6 +27,16 @@ function LoginForm() {
     }
   }; // end login
 
+  const loginNick = () => {
+    setEmail('nick@printprofit.com');
+    setPassword('randopawpaw');
+  };
+
+  const loginRobin = () => {
+    setEmail('robin@northstar.com');
+    setPassword('randopawpaw');
+  };
+
   /**
    * TODO: Will need to handle what happens if a user tries to login but is not approved
    */
@@ -40,15 +49,13 @@ function LoginForm() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          padding: '30px',
         }}
       >
-        <img
-          width={50}
-          height={50}
-          src="public/images/printProfitLogoV3.svg"
-          alt="printProfitLogo"
-        />
-        <Typography variant="h4">Login</Typography>
+        <img width={50} height={50} src={logo} alt="Print Profit Logo" />
+        <Typography variant="h4" onClick={loginNick}>
+          Login
+        </Typography>
         <form onSubmit={login}>
           {errors.loginMessage && (
             <h3 className="alert" role="alert">
@@ -92,13 +99,16 @@ function LoginForm() {
               variant="contained"
               type="submit"
             >
-              Login
+              Log in
             </Button>
           </Box>
         </form>
         <Box>
-          <Typography variant="body1">New User?</Typography>
+          <Typography variant="body1" align="center" onClick={loginRobin}>
+            New User?
+          </Typography>
           <Button
+            align="center"
             onClick={() => {
               history.push('/registration');
             }}

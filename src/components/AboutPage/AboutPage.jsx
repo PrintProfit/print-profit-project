@@ -1,4 +1,3 @@
-import '@fontsource-variable/cormorant';
 import { Box, Button, Typography } from '@mui/material';
 
 // This is one of our simplest components
@@ -7,14 +6,9 @@ import { Box, Button, Typography } from '@mui/material';
 // or even care what the redux state is'
 
 function AboutPage() {
-  const pushToPrintProfit = () => {
-    window.open('https://calendly.com/printprofit/introductory-call');
-  };
-
   return (
-    <div className="container">
+    <Box sx={{ padding: 2.5 }}>
       <Typography
-        fontFamily="Cormorant Variable"
         sx={{
           flexGrow: 1,
           fontSize: 26,
@@ -39,7 +33,6 @@ function AboutPage() {
           }}
         >
           <Typography
-            fontFamily="Cormorant Variable"
             sx={{
               fontSize: 20,
               mb: 2,
@@ -51,6 +44,7 @@ function AboutPage() {
             drive financial performance. The way your company competes will
             never be the same.
           </Typography>
+
           <Button
             variant="contained"
             color="button"
@@ -59,13 +53,13 @@ function AboutPage() {
               fontWeight: 'bold',
               mt: 2,
             }}
-            onClick={pushToPrintProfit}
+            href="https://calendly.com/printprofit/introductory-call"
           >
             Book a call now
           </Button>
         </Box>
       </Box>
-    </div>
+    </Box>
   );
 }
 
