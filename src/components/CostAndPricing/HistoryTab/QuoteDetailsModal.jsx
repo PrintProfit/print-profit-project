@@ -63,7 +63,7 @@ function QuoteDetailsModal({
   const quote = repairQuote(row);
   console.log('quote:', quote);
 
-  let productQuantity = 0;
+  const productQuantity = 0;
   let totalSellingPriceDetail = 0;
   let totalEstimatedHours = 0;
   let totalVariableCosts = 0;
@@ -147,8 +147,8 @@ function QuoteDetailsModal({
                     <Typography fontWeight="bold">Products:</Typography>
                   </TableCell>
                   {/* loops through product array in the given quote and adds a column for each quote */}
-                  {row.products?.map((product) => (
-                    <TableCell>
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id}>
                       <Typography align="center">{product.name}</Typography>
                     </TableCell>
                   ))}
@@ -163,14 +163,17 @@ function QuoteDetailsModal({
               <TableBody>
                 <TableRow>
                   <TableCell>Quantity</TableCell>
-                  {/* loops through product array and adds a table cell for each product's quantity */}
-                  {row.products?.map((product) => {
-                    // adds up quantity of each product order to get total product quantity
-                    productQuantity += product.quantity;
-                    return (
-                      <TableCell align="center">{product.quantity}</TableCell>
-                    );
-                  })}
+                  {/*
+                    loops through product array and adds a table cell for each product's quantity.
+
+                    Because the function doesn't modify anything, it's considered a pure function.
+                    React works best with any functions run during the render being pure functions.
+                   */}
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
+                      {product.quantity}
+                    </TableCell>
+                  ))}
                   {/* displays total product quantity */}
                   <TableCell>
                     <Typography fontSize="" fontWeight="bold" align="center">
