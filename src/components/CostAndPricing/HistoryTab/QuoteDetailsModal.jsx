@@ -220,7 +220,9 @@ function QuoteDetailsModal({
                   {/* displays total selling price for the entire quote */}
                   <TableCell>
                     <Typography fontWeight="bold">
-                      {USDollar.format(totalSellingPriceDetail)}
+                      {USDollar.format(
+                        quote.products.map(totalSellingPrice).reduce(sum, 0),
+                      )}
                     </Typography>
                   </TableCell>
                 </TableRow>
