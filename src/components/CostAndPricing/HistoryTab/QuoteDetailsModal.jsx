@@ -25,7 +25,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { totalSellingPrice } from '../PricingTab/calculations';
+import { contribution, totalSellingPrice } from '../PricingTab/calculations';
 import { repairQuote } from '../PricingTab/data-repair';
 import { toCostNames, unique } from '../PricingTab/utils';
 
@@ -312,11 +312,14 @@ function QuoteDetailsModal({
                 </TableRow>
                 <TableRow>
                   <TableCell>Contribution $</TableCell>
-                  <TableCell> </TableCell>
-                  <TableCell> </TableCell>
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
+                      {USDollar.format(contribution(product))}
+                    </TableCell>
+                  ))}
                   <TableCell align="center">
                     {USDollar.format(
-                      totalSellingPriceDetail - totalVariableCosts / 2,
+                      quote.products.map(contribution).reduce(sum, 0),
                     )}
                   </TableCell>
                 </TableRow>
