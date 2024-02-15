@@ -1,4 +1,4 @@
-# Print Profit Project
+# Print Profit Project ![Repo Size] ![Top Language]
 
 ## Screen Shots
 
@@ -43,3 +43,6 @@ Before you get started, make sure you have the following software installed on y
 ## Acknowledgement
 
 Thanks to [Prime Digital Academy](www.primeacademy.io) who equipped and helped me to make this application a reality. (Thank your people)
+
+[Repo Size]: https://img.shields.io/github/repo-size/PrintProfit/print-profit-project.svg?style=flat-square
+[Top Language]: https://img.shields.io/github/languages/top/PrintProfit/print-profit-project.svg?style=flat-square
