@@ -66,7 +66,7 @@ function QuoteDetailsModal({
 
   const productQuantity = 0;
   const totalSellingPriceDetail = 0;
-  let totalEstimatedHours = 0;
+  const totalEstimatedHours = 0;
   const totalVariableCosts = 0;
   const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
 
@@ -298,17 +298,17 @@ function QuoteDetailsModal({
                 <TableRow>
                   {/* loops through product array and adds a table cell with the estimated hours spent on each product */}
                   <TableCell>Estimated Hours</TableCell>
-                  {row.products?.map((product) => {
-                    // adds up estimated hours for all the products in the quote
-                    totalEstimatedHours += product.estimated_hours;
-                    return (
-                      <TableCell align="center">
-                        {product.estimated_hours || 0}
-                      </TableCell>
-                    );
-                  })}
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
+                      {product.estimated_hours}
+                    </TableCell>
+                  ))}
                   {/* display total estimated hours for all products in the quote */}
-                  <TableCell align="center">{totalEstimatedHours}</TableCell>
+                  <TableCell align="center">
+                    {quote.products
+                      .map((p) => p.estimated_hours)
+                      .reduce(sum, 0)}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell>Contribution $</TableCell>
