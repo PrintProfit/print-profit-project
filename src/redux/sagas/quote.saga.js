@@ -7,7 +7,9 @@ function* getQuoteHistory(action) {
     console.log('action.payload: ', action.payload);
     const response = yield axios({
       method: 'GET',
-      url: `/api/quote/${action.payload}`,
+      url: '/api/quote',
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
     });
     yield put({
       type: 'SET_QUOTE_HISTORY',
@@ -15,7 +17,7 @@ function* getQuoteHistory(action) {
     });
     console.log(
       'response.data[0].quotes from getQuoteHistory sagaaa: ',
-      response.data[0].quotes,
+      response.data.quotes,
     );
     console.log('action.payload in Set Quote History call: ', action.payload);
   } catch (error) {
@@ -47,10 +49,34 @@ function* updateQuote(action) {
   }
 }
 
+function* removeQuote(action) {
+  try {
+    yield axios.put('/api/quote/remove', action.payload);
+  } catch (error) {
+    console.log('Error with removing quote: ', error);
+  }
+}
+
+function* deleteQuote(action) {
+  try {
+    yield axios.delete(`/api/quote/${action.payload.quote_id}`, {
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
+    });
+    yield put({
+      type: 'SAGA/FETCH_QUOTE_HISTORY',
+    });
+  } catch (error) {
+    console.log('Error deleting quote: ', error);
+  }
+}
+
 function* quoteSaga() {
   yield takeLatest('SAGA/FETCH_QUOTE_HISTORY', getQuoteHistory);
   yield takeLatest('SAGA/SAVE_QUOTE', saveQuote);
   yield takeLatest('SAGA/UPDATE_QUOTE', updateQuote);
+  yield takeLatest('SAGA_SOFT_DELETE_QUOTE', removeQuote);
+  yield takeLatest('SAGA/DELETE_QUOTE', deleteQuote);
 }
 
 export default quoteSaga;

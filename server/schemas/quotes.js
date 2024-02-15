@@ -56,3 +56,7 @@ export const UpdateQuoteBody = BaseQuote.merge(WithId).merge(
     ),
   }),
 );
+
+export const DeleteQuoteParams = z.object({
+  id: Serial,
+});
