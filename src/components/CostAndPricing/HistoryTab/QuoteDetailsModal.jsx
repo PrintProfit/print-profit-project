@@ -1,6 +1,8 @@
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import {
+  Close as CloseIcon,
+  Delete as DeleteIcon,
+  OpenInNew as OpenInNewIcon,
+} from '@mui/icons-material';
 import {
   Backdrop,
   Box,
@@ -10,7 +12,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
   Fade,
   IconButton,
   Modal,
@@ -20,13 +21,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { put, takeLatest } from 'redux-saga/effects';
-import { contribution, totalSellingPrice } from '../PricingTab/calculations';
 import { unique } from '../PricingTab/utils';
 
 function QuoteDetailsModal({
