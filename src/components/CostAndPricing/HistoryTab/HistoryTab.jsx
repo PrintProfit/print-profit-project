@@ -14,16 +14,13 @@ import QuoteTableRow from './QuoteTableRow';
 export default function HistoryTab({ setTab }) {
   const dispatch = useDispatch();
   const quoteHistory = useSelector((store) => store.quote.quoteHistory);
-  const user = useSelector((store) => store.user);
-  const companyId = user.currentUser.company_id;
 
   // fetches all the quotes for a given user's company
   useEffect(() => {
     dispatch({
       type: 'SAGA/FETCH_QUOTE_HISTORY',
-      payload: companyId,
     });
-  }, [dispatch, companyId]);
+  }, [dispatch]);
 
   return (
     <div>
