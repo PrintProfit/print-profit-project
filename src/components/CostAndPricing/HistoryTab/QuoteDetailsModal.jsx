@@ -32,7 +32,7 @@ import {
   totalSellingPrice,
 } from '../PricingTab/calculations';
 import { repairQuote } from '../PricingTab/data-repair';
-import { percent } from '../PricingTab/formats';
+import { currency, percent } from '../PricingTab/formats';
 import { toCostNames, unique } from '../PricingTab/utils';
 
 function QuoteDetailsModal({
@@ -106,12 +106,6 @@ function QuoteDetailsModal({
     //   payload: currentUser.company_id,
     // });
   };
-
-  // formats number string as US currency
-  const USDollar = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  });
 
   /**
    * Callback for reducing two numbers into their sum.
@@ -228,7 +222,7 @@ function QuoteDetailsModal({
                   {/* loops through product array and adds a table cell with the selling price per unit for each product */}
                   {quote.products.map((product) => (
                     <TableCell key={product.id} align="center">
-                      {USDollar.format(product.selling_price_per_unit || 0)}
+                      {currency(product.selling_price_per_unit || 0)}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -241,13 +235,13 @@ function QuoteDetailsModal({
                   {/* loops through product array and adds a table cell with the total selling price for each product */}
                   {quote.products.map((product) => (
                     <TableCell key={product.id} align="center">
-                      {USDollar.format(totalSellingPrice(product))}
+                      {currency(totalSellingPrice(product))}
                     </TableCell>
                   ))}
                   {/* displays total selling price for the entire quote */}
                   <TableCell>
                     <Typography fontWeight="bold">
-                      {USDollar.format(aggSellingPrice)}
+                      {currency(aggSellingPrice)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -259,7 +253,7 @@ function QuoteDetailsModal({
                     {/* map through the products, find the cost by name, and display the value. */}
                     {quote.products.map((product) => (
                       <TableCell key={product.id} align="center">
-                        {USDollar.format(
+                        {currency(
                           product.costs.find((c) => c.name === name)?.value ??
                             0,
                         )}
@@ -268,7 +262,7 @@ function QuoteDetailsModal({
                     {/* sums all the costs with a given name */}
                     <TableCell align="center">
                       <Typography fontSize="" fontWeight="bold">
-                        {USDollar.format(
+                        {currency(
                           quote.products
                             .flatMap(findCostsByName(name))
                             .reduce(sum, 0),
@@ -286,7 +280,7 @@ function QuoteDetailsModal({
                   </TableCell>
                   {quote.products.map((product) => (
                     <TableCell key={product.name} align="center">
-                      {USDollar.format(
+                      {currency(
                         product.costs.map((c) => c.value ?? 0).reduce(sum, 0),
                       )}
                     </TableCell>
@@ -295,7 +289,7 @@ function QuoteDetailsModal({
                   <TableCell align="center">
                     <Typography fontWeight="bold">
                       {/* Creates an array of just the cost values for every product, and sums them up */}
-                      {USDollar.format(
+                      {currency(
                         quote.products
                           .flatMap((p) => p.costs.map((c) => c.value ?? 0))
                           .reduce(sum, 0),
@@ -318,11 +312,11 @@ function QuoteDetailsModal({
                   <TableCell>Contribution $</TableCell>
                   {quote.products.map((product) => (
                     <TableCell key={product.id} align="center">
-                      {USDollar.format(contribution(product))}
+                      {currency(contribution(product))}
                     </TableCell>
                   ))}
                   <TableCell align="center">
-                    {USDollar.format(aggContribution)}
+                    {currency(aggContribution)}
                   </TableCell>
                 </TableRow>
 
@@ -342,11 +336,11 @@ function QuoteDetailsModal({
                   <TableCell>Contribution / Hour</TableCell>
                   {quote.products.map((product) => (
                     <TableCell key={product.id} align="center">
-                      {USDollar.format(contributionPerHour(product))}
+                      {currency(contributionPerHour(product))}
                     </TableCell>
                   ))}
                   <TableCell align="center">
-                    {USDollar.format(aggContribution / aggHours)}
+                    {currency(aggContribution / aggHours)}
                   </TableCell>
                 </TableRow>
               </TableBody>
