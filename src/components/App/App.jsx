@@ -16,7 +16,6 @@ import AppBarHeader from '../AppBarHeader/AppBarHeader';
 import ContactPage from '../ContactPage/ContactPage';
 import CostAndPricing from '../CostAndPricing/CostAndPricing';
 import Homepage from '../Homepage/Homepage';
-import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import SideBar from '../SideBar/SideBar';
@@ -74,95 +73,70 @@ function App() {
 
           {/* only admins can see Admin page; otherwise, user is redirected to /home */}
           <ProtectedRoute exact path="/admin">
-            <AppBarHeader />
-            <SideBar>
-              {/* 🔥🔥🔥🔥Need to un-comment this for final🔥🔥🔥🔥🔥 */}
-              {/* {user.is_admin ?  */}
-              <AdminPage />
-              {/* : <Redirect to="/home" />} */}
-            </SideBar>
+            {user.is_admin ? (
+              <>
+                <AppBarHeader />
+                <SideBar>
+                  <AdminPage />
+                </SideBar>
+              </>
+            ) : (
+              <Redirect to="/home" />
+            )}
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-two">
-            {user.is_approved && (
-              <>
-                <AppBarHeader />
-                <SideBar>
-                  <ToolTwo />
-                </SideBar>
-              </>
-            )}
+            <AppBarHeader />
+            <SideBar>
+              <ToolTwo />
+            </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-three">
-            {user.is_approved && (
-              <>
-                <AppBarHeader />
-
-                <SideBar>
-                  <ToolThree />
-                </SideBar>
-              </>
-            )}
+            <AppBarHeader />
+            <SideBar>
+              <ToolThree />
+            </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/cost-and-pricing">
-            {user.is_approved && (
-              <>
-                <AppBarHeader />
-                <SideBar>
-                  <CostAndPricing />
-                </SideBar>
-              </>
-            )}
+            <AppBarHeader />
+            <SideBar>
+              <CostAndPricing />
+            </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/my-account-page">
             <AppBarHeader />
-            {user.is_approved && (
-              <SideBar>
-                <MyAccountPage />
-              </SideBar>
-            )}
+            <SideBar>
+              <MyAccountPage />
+            </SideBar>
           </ProtectedRoute>
 
           <Route exact path="/login">
-            {user.is_approved ? (
-              // If the user is already logged in,
-              // redirect to the /home page
-              <Redirect to="/home" />
-            ) : (
-              // Otherwise, show the login page
-              <LoginPage />
-            )}
+            {/*
+            If the user is already logged in,
+            redirect to the /home page.
+            Otherwise, show the login page
+             */}
+            {user.is_approved ? <Redirect to="/home" /> : <LoginPage />}
           </Route>
 
           <Route exact path="/registration">
-            {user.is_approved ? (
-              // If the user is already logged in,
-              // redirect them to the /home page
-              <Redirect to="/home" />
-            ) : (
-              // Otherwise, show the registration page
-              <RegisterPage />
-            )}
+            {/*
+            If the user is already logged in,
+            redirect them to the /home page.
+            Otherwise, show the registration page
+             */}
+            {user.is_approved ? <Redirect to="/home" /> : <RegisterPage />}
           </Route>
 
-          <Route exact path="/home">
-            {user.id ? (
-              // If the user is already logged in,
-              // redirect them to the /home page
-              <>
-                <AppBarHeader />
-                <SideBar>
-                  <Homepage />
-                </SideBar>
-              </>
-            ) : (
-              // Otherwise, show the Landing page
-              <LandingPage />
-            )}
-          </Route>
+          <ProtectedRoute exact path="/home">
+            <AppBarHeader />
+            <SideBar>
+              <Homepage />
+            </SideBar>
+          </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
