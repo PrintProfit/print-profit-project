@@ -68,13 +68,6 @@ function QuoteDetailsModal({
 
   // repairQuote gets a version of the quote without null values
   const quote = repairQuote(row);
-  console.log('quote:', quote);
-
-  const productQuantity = 0;
-  const totalSellingPriceDetail = 0;
-  const totalEstimatedHours = 0;
-  const totalVariableCosts = 0;
-  const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
 
   // Gets a unique list of user-editable cost names
   const costNames = quote.products.flatMap(toCostNames).filter(unique);
