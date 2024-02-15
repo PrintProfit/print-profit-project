@@ -74,19 +74,17 @@ function RegisterForm() {
     history.push('/login');
   };
 
+  const registerRobin = () => {
+    setName('Robin Meyers');
+    setCompanyName('Norfth Star');
+    setEmail('robin@northstar.com');
+    setPassword('randopawpaw');
+    setConfirmedPassword('randopawpaw');
+  };
+
   return (
     <Box sx={{ width: '500px', padding: '30px' }}>
       <Paper>
-        <Typography
-          align="center"
-          sx={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            p: 3,
-          }}
-        >
-          Print Profit
-        </Typography>
         {errors.registrationMessage && (
           <h3 className="alert" role="alert">
             {errors.registrationMessage}
@@ -114,6 +112,18 @@ function RegisterForm() {
               alignItems: 'center',
             }}
           >
+            <Typography
+              align="center"
+              sx={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                p: 3,
+                mt: 3,
+              }}
+              onClick={registerRobin}
+            >
+              Print Profit
+            </Typography>
             <img
               width={50}
               height={50}

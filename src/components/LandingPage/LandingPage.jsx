@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
@@ -10,7 +11,7 @@ function LandingPage() {
     <>
       <Box
         sx={{
-          backgroundImage: "url('public/images/printProfitBg.png')",
+          backgroundImage: "url('images/PrintProfit.png')",
           backgroundPosition: 'center',
           backgroundSize: 'cover',
           // minWidth: '70%',
