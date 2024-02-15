@@ -339,7 +339,7 @@ function QuoteDetailsModal({
                 </TableRow>
 
                 <TableRow>
-                  <TableCell>Contribution / hr</TableCell>
+                  <TableCell>Contribution / Hour</TableCell>
                   {quote.products.map((product) => (
                     <TableCell key={product.id} align="center">
                       {USDollar.format(contributionPerHour(product))}
