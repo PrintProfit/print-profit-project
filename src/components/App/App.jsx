@@ -114,25 +114,21 @@ function App() {
           </ProtectedRoute>
 
           <Route exact path="/login">
-            {user.is_approved ? (
-              // If the user is already logged in,
-              // redirect to the /home page
-              <Redirect to="/home" />
-            ) : (
-              // Otherwise, show the login page
-              <LoginPage />
-            )}
+            {/*
+            If the user is already logged in,
+            redirect to the /home page.
+            Otherwise, show the login page
+             */}
+            {user.is_approved ? <Redirect to="/home" /> : <LoginPage />}
           </Route>
 
           <Route exact path="/registration">
-            {user.is_approved ? (
-              // If the user is already logged in,
-              // redirect them to the /home page
-              <Redirect to="/home" />
-            ) : (
-              // Otherwise, show the registration page
-              <RegisterPage />
-            )}
+            {/*
+            If the user is already logged in,
+            redirect them to the /home page.
+            Otherwise, show the registration page
+             */}
+            {user.is_approved ? <Redirect to="/home" /> : <RegisterPage />}
           </Route>
 
           <ProtectedRoute exact path="/home">
