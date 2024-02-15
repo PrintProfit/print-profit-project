@@ -4,7 +4,11 @@ import { z } from 'zod';
 import { rejectUnapproved } from '../middleware/auth.js';
 import { validate } from '../middleware/validator.js';
 import pool from '../modules/pool.js';
-import { SaveQuoteBody, UpdateQuoteBody } from '../schemas/quotes.js';
+import {
+  DeleteQuoteParams,
+  SaveQuoteBody,
+  UpdateQuoteBody,
+} from '../schemas/quotes.js';
 
 const router = Router();
 
@@ -411,24 +415,24 @@ router.put('/remove', async (req, res) => {
 });
 
 // hard DELETE quote route
-router.delete('/:id', (req, res) => {
-  console.log('/api/quote/delete req.body: ', req.params);
-  //   const sqlText = `
-  // DELETE FROM "quote"
-  //   WHERE "id" = $1 AND "user_id" = $2;
-  //   `;
-
-  //   const sqlValues = [req.body.quote_id, req.user?.id];
-
-  //   pool
-  //     .query(sqlText, sqlValues)
-  //     .then(() => {
-  //       res.sendStatus(200);
-  //     })
-  //     .catch((err) => {
-  //       console.log('Error in quote.router DELETE: ', err);
-  //       res.sendStatus(500);
-  //     });
-});
+router.delete(
+  '/:id',
+  validate(z.object({ params: DeleteQuoteParams })),
+  async (req, res) => {
+    try {
+      await pool.query(
+        `--sql
+          DELETE FROM "quote"
+          WHERE "id" = $1 AND "user_id" = $2;
+        `,
+        [req.params.id, req.user?.id],
+      );
+      res.sendStatus(200);
+    } catch (error) {
+      console.log('Error in quote.router DELETE: ', error);
+      res.sendStatus(500);
+    }
+  },
+);
 
 export default router;
