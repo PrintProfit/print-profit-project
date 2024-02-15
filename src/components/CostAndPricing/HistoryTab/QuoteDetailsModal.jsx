@@ -25,6 +25,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { totalSellingPrice } from '../PricingTab/calculations';
 import { repairQuote } from '../PricingTab/data-repair';
 import { toCostNames, unique } from '../PricingTab/utils';
 
@@ -64,7 +65,7 @@ function QuoteDetailsModal({
   console.log('quote:', quote);
 
   const productQuantity = 0;
-  let totalSellingPriceDetail = 0;
+  const totalSellingPriceDetail = 0;
   let totalEstimatedHours = 0;
   let totalVariableCosts = 0;
   const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
@@ -198,8 +199,8 @@ function QuoteDetailsModal({
                 <TableRow>
                   <TableCell>Selling Price Per Unit</TableCell>
                   {/* loops through product array and adds a table cell with the selling price per unit for each product */}
-                  {row.products?.map((product) => (
-                    <TableCell align="center">
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
                       {USDollar.format(product.selling_price_per_unit || 0)}
                     </TableCell>
                   ))}
@@ -211,15 +212,11 @@ function QuoteDetailsModal({
                     </Typography>
                   </TableCell>
                   {/* loops through product array and adds a table cell with the total selling price for each product */}
-                  {row.products?.map((product) => {
-                    // adds up the total selling price for each product to get the total selling price for the entire quote
-                    totalSellingPriceDetail += product.total_selling_price;
-                    return (
-                      <TableCell align="center">
-                        {USDollar.format(product.total_selling_price)}
-                      </TableCell>
-                    );
-                  })}
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
+                      {USDollar.format(totalSellingPrice(product))}
+                    </TableCell>
+                  ))}
                   {/* displays total selling price for the entire quote */}
                   <TableCell>
                     <Typography fontWeight="bold">
