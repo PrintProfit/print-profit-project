@@ -1,32 +1,18 @@
-import CloseIcon from '@mui/icons-material/Close';
-import DeleteIcon from '@mui/icons-material/Delete';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Close as CloseIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import {
-  Backdrop,
-  Box,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
-  Fade,
   IconButton,
-  Modal,
-  Table,
-  TableBody,
   TableCell,
-  TableContainer,
-  TableHead,
   TableRow,
   Tooltip,
-  Typography,
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { contribution, totalSellingPrice } from '../PricingTab/calculations';
-import { unique } from '../PricingTab/utils';
 import QuoteDetailsModal from './QuoteDetailsModal';
 
 /**
