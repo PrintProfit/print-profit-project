@@ -148,7 +148,7 @@ function QuoteDetailsModal({
       <Fade in={open}>
         <Box sx={style}>
           <Typography align="center" fontWeight="bold" fontSize="x-large">
-            {row.name}
+            {quote.name}
           </Typography>
           <IconButton
             onClick={handleClose}
@@ -367,7 +367,7 @@ function QuoteDetailsModal({
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {`Are you sure you want to permanently delete the ${row.name} quote?`}
+              {`Are you sure you want to permanently delete the ${quote.name} quote?`}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
@@ -377,7 +377,7 @@ function QuoteDetailsModal({
             <DialogActions>
               <Button
                 color="error"
-                onClick={() => deleteQuote(row.id)}
+                onClick={() => deleteQuote(quote.id)}
                 autoFocus
               >
                 <DeleteIcon /> Delete
