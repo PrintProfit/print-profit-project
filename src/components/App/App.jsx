@@ -87,46 +87,31 @@ function App() {
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-two">
-            {user.is_approved && (
-              <>
-                <AppBarHeader />
-                <SideBar>
-                  <ToolTwo />
-                </SideBar>
-              </>
-            )}
+            <AppBarHeader />
+            <SideBar>
+              <ToolTwo />
+            </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-three">
-            {user.is_approved && (
-              <>
-                <AppBarHeader />
-
-                <SideBar>
-                  <ToolThree />
-                </SideBar>
-              </>
-            )}
+            <AppBarHeader />
+            <SideBar>
+              <ToolThree />
+            </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/cost-and-pricing">
-            {user.is_approved && (
-              <>
-                <AppBarHeader />
-                <SideBar>
-                  <CostAndPricing />
-                </SideBar>
-              </>
-            )}
+            <AppBarHeader />
+            <SideBar>
+              <CostAndPricing />
+            </SideBar>
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/my-account-page">
             <AppBarHeader />
-            {user.is_approved && (
-              <SideBar>
-                <MyAccountPage />
-              </SideBar>
-            )}
+            <SideBar>
+              <MyAccountPage />
+            </SideBar>
           </ProtectedRoute>
 
           <Route exact path="/login">
