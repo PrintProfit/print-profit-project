@@ -25,8 +25,13 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { contribution, totalSellingPrice } from '../PricingTab/calculations';
+import {
+  contribution,
+  contributionMargin,
+  totalSellingPrice,
+} from '../PricingTab/calculations';
 import { repairQuote } from '../PricingTab/data-repair';
+import { percent } from '../PricingTab/formats';
 import { toCostNames, unique } from '../PricingTab/utils';
 
 function QuoteDetailsModal({
@@ -134,6 +139,9 @@ function QuoteDetailsModal({
     };
   };
 
+  const aggContribution = quote.products.map(contribution).reduce(sum, 0);
+  const aggSellingPrice = quote.products.map(totalSellingPrice).reduce(sum, 0);
+
   return (
     <Modal
       aria-labelledby="modal-title"
@@ -237,9 +245,7 @@ function QuoteDetailsModal({
                   {/* displays total selling price for the entire quote */}
                   <TableCell>
                     <Typography fontWeight="bold">
-                      {USDollar.format(
-                        quote.products.map(totalSellingPrice).reduce(sum, 0),
-                      )}
+                      {USDollar.format(aggSellingPrice)}
                     </Typography>
                   </TableCell>
                 </TableRow>
@@ -318,23 +324,19 @@ function QuoteDetailsModal({
                     </TableCell>
                   ))}
                   <TableCell align="center">
-                    {USDollar.format(
-                      quote.products.map(contribution).reduce(sum, 0),
-                    )}
+                    {USDollar.format(aggContribution)}
                   </TableCell>
                 </TableRow>
 
                 <TableRow>
                   <TableCell>Contribution %</TableCell>
-                  <TableCell> </TableCell>
-                  <TableCell> </TableCell>
+                  {quote.products.map((product) => (
+                    <TableCell key={product.id} align="center">
+                      {percent(contributionMargin(product))}
+                    </TableCell>
+                  ))}
                   <TableCell align="center">
-                    {(
-                      ((totalSellingPriceDetail - totalVariableCosts / 2) *
-                        100) /
-                      totalSellingPriceDetail
-                    ).toFixed(2)}
-                    %
+                    {percent(aggContribution / aggSellingPrice)}
                   </TableCell>
                 </TableRow>
 
