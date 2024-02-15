@@ -15,7 +15,7 @@ const router = Router();
 router.use(rejectUnapproved);
 
 // GET all quotes
-router.get('/:id', (req, res) => {
+router.get('/', (req, res) => {
   const query = /*sql*/ `
   SELECT
 	json_build_object(

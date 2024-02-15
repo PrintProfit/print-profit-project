@@ -7,7 +7,9 @@ function* getQuoteHistory(action) {
     console.log('action.payload: ', action.payload);
     const response = yield axios({
       method: 'GET',
-      url: `/api/quote/${action.payload}`,
+      url: '/api/quote',
+      headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
     });
     yield put({
       type: 'SET_QUOTE_HISTORY',
@@ -63,7 +65,6 @@ function* deleteQuote(action) {
     });
     yield put({
       type: 'SAGA/FETCH_QUOTE_HISTORY',
-      payload: 0,
     });
   } catch (error) {
     console.log('Error deleting quote: ', error);
