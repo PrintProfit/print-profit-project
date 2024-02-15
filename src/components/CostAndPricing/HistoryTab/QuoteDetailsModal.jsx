@@ -67,7 +67,7 @@ function QuoteDetailsModal({
   const productQuantity = 0;
   const totalSellingPriceDetail = 0;
   let totalEstimatedHours = 0;
-  let totalVariableCosts = 0;
+  const totalVariableCosts = 0;
   const contributionAmount = totalSellingPriceDetail - totalVariableCosts;
 
   // Gets a unique list of user-editable cost names
@@ -116,6 +116,23 @@ function QuoteDetailsModal({
    * @returns {number}
    */
   const sum = (acc, next) => acc + next;
+
+  /**
+   * @callback CostNameFinder
+   * @param {import('../PricingTab/data-types').Product} products
+   * @returns {number}
+   */
+
+  /**
+   * Finds costs by their name
+   * @param {string} name
+   * @returns {CostNameFinder}
+   */
+  const findCostsByName = (name) => {
+    return (products) => {
+      return products.costs.find((c) => c.name === name)?.value ?? 0;
+    };
+  };
 
   return (
     <Modal
@@ -228,45 +245,30 @@ function QuoteDetailsModal({
                 </TableRow>
                 {/* maps through costNames array:
                          for each cost input name in the array, returns a new table row with that name */}
-                {costNames.map((name) => {
-                  row.products.map((p) => {
-                    totalVariableCosts += row.products
-                      .flatMap(
-                        (p) => p.costs.find((c) => c.name === name)?.value || 0,
-                      )
-                      .reduce((a, b) => a + b, 0);
-                  });
-                  return (
-                    <TableRow key={name}>
-                      <TableCell>{name}</TableCell>
-                      {/* maps through the products array; finds cost name; and then the value for that cost name. If there is no value saved, it will display zero */}
-                      {row.products.map((p) => (
-                        <TableCell key={p.id} align="center">
-                          {USDollar.format(
-                            p.costs.find((c) => c.name === name)?.value || 0,
-                          )}
-                        </TableCell>
-                      ))}
-                      {/* calculates total variable costs for all products in the order */}
-                      <TableCell align="center" fontWeight="bold">
-                        <Typography fontSize="" fontWeight="bold">
-                          {USDollar.format(
-                            row.products
-                              .map(
-                                (p) =>
-                                  p.costs.find((c) => c.name === name)?.value ||
-                                  0,
-                              )
-                              // sums all of the values for a given cost input for the given quote.
-                              // a is the accumulator, b is the new value being added, a + b is the
-                              // operation to carry out, 0 is the initial value of the accumulator
-                              .reduce((a, b) => a + b, 0),
-                          )}
-                        </Typography>
+                {costNames.map((name) => (
+                  <TableRow key={name}>
+                    <TableCell>{name}</TableCell>
+                    {/* map through the products, find the cost by name, and display the value. */}
+                    {quote.products.map((product) => (
+                      <TableCell key={product.id} align="center">
+                        {USDollar.format(
+                          product.costs.find((c) => c.name === name)?.value ??
+                            0,
+                        )}
                       </TableCell>
-                    </TableRow>
-                  );
-                })}
+                    ))}
+                    {/* sums all the costs with a given name */}
+                    <TableCell align="center">
+                      <Typography fontSize="" fontWeight="bold">
+                        {USDollar.format(
+                          quote.products
+                            .flatMap(findCostsByName(name))
+                            .reduce(sum, 0),
+                        )}
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ))}
 
                 <TableRow>
                   <TableCell>
