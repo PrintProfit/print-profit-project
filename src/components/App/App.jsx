@@ -16,7 +16,6 @@ import AppBarHeader from '../AppBarHeader/AppBarHeader';
 import ContactPage from '../ContactPage/ContactPage';
 import CostAndPricing from '../CostAndPricing/CostAndPricing';
 import Homepage from '../Homepage/Homepage';
-import LandingPage from '../LandingPage/LandingPage';
 import LoginPage from '../LoginPage/LoginPage';
 import RegisterPage from '../RegisterPage/RegisterPage';
 import SideBar from '../SideBar/SideBar';
@@ -136,21 +135,12 @@ function App() {
             )}
           </Route>
 
-          <Route exact path="/home">
-            {user.id ? (
-              // If the user is already logged in,
-              // redirect them to the /home page
-              <>
-                <AppBarHeader />
-                <SideBar>
-                  <Homepage />
-                </SideBar>
-              </>
-            ) : (
-              // Otherwise, show the Landing page
-              <LandingPage />
-            )}
-          </Route>
+          <ProtectedRoute exact path="/home">
+            <AppBarHeader />
+            <SideBar>
+              <Homepage />
+            </SideBar>
+          </ProtectedRoute>
 
           {/* If none of the other routes matched, we will show a 404. */}
           <Route>
