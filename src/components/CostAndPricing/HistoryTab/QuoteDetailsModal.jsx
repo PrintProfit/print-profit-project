@@ -276,19 +276,22 @@ function QuoteDetailsModal({
                       Total Variable Costs
                     </Typography>
                   </TableCell>
-                  {row.products.map((product) => (
+                  {quote.products.map((product) => (
                     <TableCell key={product.name} align="center">
                       {USDollar.format(
-                        product.costs
-                          .map((c) => c.value ?? 0)
-                          .reduce((a, b) => a + b, 0),
+                        product.costs.map((c) => c.value ?? 0).reduce(sum, 0),
                       )}
                     </TableCell>
                   ))}
 
                   <TableCell align="center">
                     <Typography fontWeight="bold">
-                      {USDollar.format(totalVariableCosts / 2)}
+                      {/* Creates an array of just the cost values for every product, and sums them up */}
+                      {USDollar.format(
+                        quote.products
+                          .flatMap((p) => p.costs.map((c) => c.value ?? 0))
+                          .reduce(sum, 0),
+                      )}
                     </Typography>
                   </TableCell>
                 </TableRow>
