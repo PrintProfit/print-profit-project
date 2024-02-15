@@ -74,13 +74,16 @@ function App() {
 
           {/* only admins can see Admin page; otherwise, user is redirected to /home */}
           <ProtectedRoute exact path="/admin">
-            <AppBarHeader />
-            <SideBar>
-              {/* 🔥🔥🔥🔥Need to un-comment this for final🔥🔥🔥🔥🔥 */}
-              {/* {user.is_admin ?  */}
-              <AdminPage />
-              {/* : <Redirect to="/home" />} */}
-            </SideBar>
+            {user.is_admin ? (
+              <>
+                <AppBarHeader />
+                <SideBar>
+                  <AdminPage />
+                </SideBar>
+              </>
+            ) : (
+              <Redirect to="/home" />
+            )}
           </ProtectedRoute>
 
           <ProtectedRoute exact path="/tool-two">
