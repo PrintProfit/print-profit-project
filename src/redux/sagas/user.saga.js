@@ -26,7 +26,6 @@ function* fetchUser() {
 
 // Grabs current user that inner joins with company table
 function* fetchProfilePageUser() {
-  // console.log('action.payload', action.payload);
   try {
     const profilePageUserResponse = yield axios.get('/api/user/profile/page');
     yield put({
@@ -40,7 +39,6 @@ function* fetchProfilePageUser() {
 
 // user saving changes to users info
 function* userEditingInfo(action) {
-  // console.log('action.payload', action.payload);
   try {
     const response = yield axios({
       method: 'PUT',
@@ -57,7 +55,6 @@ function* userEditingInfo(action) {
 
 // This will grab all the users and company for admin page
 function* fetchAdminUsers() {
-  // console.log('action.payload', action.payload);
   try {
     const pendingUserResponse = yield axios.get('/api/user/pending');
     const approvedUseResponse = yield axios.get('/api/user/approved');
@@ -86,7 +83,6 @@ function* fetchAdminUsers() {
 
 // put route to approve user to /api/user/approve/user
 function* approveUser(action) {
-  // console.log('action.payload', action.payload);
   try {
     const approveResponse = yield axios({
       method: 'PUT',
@@ -111,7 +107,6 @@ function* approveUser(action) {
 
 // admin to soft delete user
 function* softDeleteUser(action) {
-  // console.log('action.payload', action.payload);
   try {
     const response = yield axios({
       method: 'PUT',
@@ -128,7 +123,6 @@ function* softDeleteUser(action) {
 
 // admin to recover user
 function* recoverUser(action) {
-  // console.log('action.payload', action.payload);
   try {
     const response = yield axios({
       method: 'PUT',
@@ -145,7 +139,6 @@ function* recoverUser(action) {
 
 // if admin has new company, this will post new company to table
 function* postNewCompany(action) {
-  // console.log('action', action.payloaad);
   try {
     const companyResponse = yield axios({
       method: 'POST',
@@ -170,7 +163,6 @@ function* postNewCompany(action) {
 
 // admin route to hard delete archived users
 function* hardDeleteUser(action) {
-  // console.log('action.payload', action.payload);
   try {
     const response = yield axios({
       method: 'DELETE',
@@ -185,8 +177,8 @@ function* hardDeleteUser(action) {
   }
 }
 
+// admin makes new user with a new company
 function* adminPostNewUserAndCompany(action) {
-  // console.log('action', action.payloaad);
   try {
     const companyResponse = yield axios({
       method: 'POST',
@@ -204,8 +196,8 @@ function* adminPostNewUserAndCompany(action) {
   }
 }
 
+// admin makes new user with an exsisting company
 function* adminPostNewUser(action) {
-  // console.log('action', action.payloaad);
   try {
     const response = yield axios({
       method: 'POST',
