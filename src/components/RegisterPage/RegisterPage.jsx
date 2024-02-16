@@ -14,6 +14,7 @@ function RegisterPage() {
           display: 'flex',
           justifyContent: 'center',
           margin: 0,
+          overflowY: 'scroll',
         }}
       >
         <Box
