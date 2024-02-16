@@ -27,20 +27,6 @@ function LoginForm() {
     }
   }; // end login
 
-  const loginNick = () => {
-    setEmail('nick@printprofit.com');
-    setPassword('randopawpaw');
-  };
-
-  const loginRobin = () => {
-    setEmail('robin@northstar.com');
-    setPassword('randopawpaw');
-  };
-
-  /**
-   * TODO: Will need to handle what happens if a user tries to login but is not approved
-   */
-
   return (
     <>
       <Box
@@ -53,9 +39,7 @@ function LoginForm() {
         }}
       >
         <img width={50} height={50} src={logo} alt="Print Profit Logo" />
-        <Typography variant="h4" onClick={loginNick}>
-          Login
-        </Typography>
+        <Typography variant="h4">Login</Typography>
         <form onSubmit={login}>
           {errors.loginMessage && (
             <h3 className="alert" role="alert">
@@ -104,7 +88,7 @@ function LoginForm() {
           </Box>
         </form>
         <Box>
-          <Typography variant="body1" align="center" onClick={loginRobin}>
+          <Typography variant="body1" align="center">
             New User?
           </Typography>
           <Button
