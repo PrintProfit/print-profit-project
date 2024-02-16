@@ -112,11 +112,13 @@ function QuoteTableRow({ row, setTab, ...props }) {
             )}
       </TableCell>
       <TableCell>
-        <Tooltip title="Delete quote">
-          <IconButton onClick={handleDeleteClickOpen}>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+        {row.user_id === currentUser.id && (
+          <Tooltip title="Delete quote">
+            <IconButton onClick={handleDeleteClickOpen}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        )}
       </TableCell>
 
       {/* Delete Dialog */}

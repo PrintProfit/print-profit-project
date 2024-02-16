@@ -355,14 +355,16 @@ function QuoteDetailsModal({
             </Table>
           </TableContainer>
           <Stack mt={3} justifyContent="center" spacing={10} direction="row">
-            <Button
-              onClick={handleDeleteClickOpen}
-              variant="contained"
-              color="warning"
-              endIcon={<DeleteIcon />}
-            >
-              Delete quote
-            </Button>
+            {row.user_id === currentUser.id && (
+              <Button
+                onClick={handleDeleteClickOpen}
+                variant="contained"
+                color="warning"
+                endIcon={<DeleteIcon />}
+              >
+                Delete quote
+              </Button>
+            )}
             <Button
               onClick={sendToPricingTool}
               variant="contained"
