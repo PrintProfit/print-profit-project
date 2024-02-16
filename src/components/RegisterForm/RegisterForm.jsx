@@ -87,47 +87,49 @@ function RegisterForm() {
   };
 
   return (
-    <Box sx={{ width: '500px', padding: '30px' }}>
+    <Box sx={{ width: '550px', height: 'auto' }}>
       <Paper>
-        <Typography
-          align="center"
-          sx={{
-            fontSize: 20,
-            fontWeight: 'bold',
-            p: 3,
-          }}
-        >
-          Print Profit
-        </Typography>
         {errors.registrationMessage && (
           <h3 className="alert" role="alert">
             {errors.registrationMessage}
           </h3>
         )}
         <Box
-          // flexDirection={'column'}
           component="form"
           sx={{
             pt: 5,
-            '& > :not(style)': { m: 1, width: '25ch' },
+            '& > :not(style)': { m: 1, width: '30ch' },
             flexDirection: 'column',
             display: 'flex',
             alignItems: 'center',
+            overflow: 'show',
           }}
           noValidate
           autoComplete="off"
           onSubmit={registerUser}
         >
+          <img width={75} height={75} src={logo} alt="Print Profit Logo" />
+          <Typography
+            align="center"
+            variant="h2"
+            sx={
+              {
+                // pt: 7s
+              }
+            }
+          >
+            Print Profit
+          </Typography>
+          <Typography variant="h5" align="center">
+            Transform how you do business.
+          </Typography>
           <Box
             sx={{
-              pb: 10,
               flexDirection: 'column',
               display: 'flex',
               alignItems: 'center',
             }}
-          >
-            <img width={50} height={50} src={logo} alt="Print Profit Logo" />
-          </Box>
+          ></Box>
           <TextField
             id="email"
             type="text"
@@ -251,7 +253,7 @@ function RegisterForm() {
             height="50%"
           >
             <Button
-              sx={{ mt: 3, mb: 10 }}
+              sx={{ mt: 3, mb: 3 }}
               variant="contained"
               type="submit"
               name="submit"
