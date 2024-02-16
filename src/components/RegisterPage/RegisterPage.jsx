@@ -21,7 +21,6 @@ function RegisterPage() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            pb: 45,
           }}
         >
           <RegisterForm />
