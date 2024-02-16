@@ -36,18 +36,16 @@ export function TotalsHelp() {
             <Divider />
             <Typography sx={{ mt: 2 }}>
               <>
-                This table is simply an extension of the main pricing tool
-                table. However, This table provides the benefit of having the
-                first column costs close together with the total values, and the
-                added feature to experiment with different values of
-                contribution %, and Total selling price.
+                This table displays the total values from the pricing table. It
+                also allows you to manually enter a target selling price or
+                target profit margin %, or contribution %.
                 <br />
                 <br />
-                This table allows you to see the effect that a specific
-                contribution %, or a manually input total selling price has on
-                the total profit.
+                This allows you to see the effect that a specific contribution %
+                or a manually input total selling price has on the total profit.
                 <br />
-                These rows have been highlighted green to indicate importance.
+                The editable fields are outline in black and the rows containing
+                them are highlighted in light green.
               </>
             </Typography>
           </Paper>
