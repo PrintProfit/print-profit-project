@@ -34,6 +34,7 @@ function AdminCreateNewUser() {
     setOpenSnack(true);
   };
 
+  // opens the snack bar when you make a new user
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -42,15 +43,18 @@ function AdminCreateNewUser() {
     setOpenSnack(false);
   };
 
+  // the template for email Js
   const templateParams = {
     to_name: name,
     to_email: email,
     to_password: password,
   };
 
+  // creates the new user if valid inputs
   const adminCreateUser = (event) => {
     event.preventDefault();
     if (
+      // must have a password thats longer than 8 and matching
       password !== confirmedPassword ||
       password === '' ||
       password === null ||
@@ -58,6 +62,7 @@ function AdminCreateNewUser() {
     ) {
       dispatch({ type: 'CREATE_USER_FAILED_PASSWORDS_DONT_MATCH' });
     } else if (
+      // must have email, name and company with valid input
       email === '' ||
       name === '' ||
       email === null ||
@@ -69,6 +74,7 @@ function AdminCreateNewUser() {
     } else {
       setOpenSnack(true);
 
+      // email js that send email to new user
       emailjs
         .send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -150,6 +156,7 @@ function AdminCreateNewUser() {
         autoComplete="off"
         onSubmit={adminCreateUser}
       >
+        {/* email text feild */}
         <TextField
           id="email"
           type="text"
@@ -160,6 +167,7 @@ function AdminCreateNewUser() {
           onChange={(event) => setEmail(event.target.value)}
         />
 
+        {/* name text feild */}
         <TextField
           id="name"
           type="text"
@@ -170,6 +178,7 @@ function AdminCreateNewUser() {
           onChange={(event) => setName(event.target.value)}
         />
 
+        {/* company text feild with tool tip */}
         <Tooltip
           title='Click the "Add" button if you want to create a new company'
           placement="top"
@@ -266,6 +275,7 @@ function AdminCreateNewUser() {
           />
         </Tooltip>
 
+        {/* password text feild with tool tip*/}
         <Tooltip
           title={
             password.length < 8 ? 'password must be 8 or more characters' : ''
@@ -306,6 +316,7 @@ function AdminCreateNewUser() {
           />
         </Tooltip>
 
+        {/* confirm password text feild with tool tip*/}
         <Tooltip
           title={
             confirmedPassword.length < 8
