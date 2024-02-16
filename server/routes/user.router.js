@@ -309,6 +309,7 @@ router.get('/profile/page', rejectUnapproved, (req, res) => {
     });
 });
 
+// creates a new company when admin selects "add"
 router.post(
   '/company',
   rejectNonAdmin,
@@ -430,6 +431,7 @@ router.put(
   },
 );
 
+// admin creates new user with a new company
 router.post(
   '/admin/create/company/user',
   rejectNonAdmin,
@@ -477,6 +479,7 @@ router.post(
   },
 );
 
+// admin creates new user with an exsiting company
 router.post(
   '/admin/create/user',
   rejectNonAdmin,
