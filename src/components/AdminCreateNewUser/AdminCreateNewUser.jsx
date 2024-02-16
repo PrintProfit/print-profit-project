@@ -30,8 +30,6 @@ function AdminCreateNewUser() {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  // console.log(password.length);
-
   const handleSnackClick = () => {
     setOpenSnack(true);
   };
@@ -107,8 +105,6 @@ function AdminCreateNewUser() {
           },
         });
       } else {
-        // console.log('company not found');
-
         dispatch({
           type: 'SAGA_ADMIN_POST_NEW_COMPANY_AND_USER',
           payload: {
@@ -160,7 +156,6 @@ function AdminCreateNewUser() {
           label="E-mail"
           variant="filled"
           value={email}
-          // color={email === '' ? 'error' : ''}
           required
           onChange={(event) => setEmail(event.target.value)}
         />
@@ -171,7 +166,6 @@ function AdminCreateNewUser() {
           label="Full Name"
           variant="filled"
           value={name}
-          // color={name === '' ? 'error' : ''}
           required
           onChange={(event) => setName(event.target.value)}
         />
@@ -307,9 +301,6 @@ function AdminCreateNewUser() {
             variant="filled"
             value={password}
             color={password.length < 8 && password !== '' ? 'error' : ''}
-            // helperText={
-            //   confirmedPassword !== password ? 'passwords do not match' : ''
-            // }
             required
             onChange={(event) => setPassword(event.target.value)}
           />
