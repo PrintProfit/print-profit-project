@@ -30,12 +30,11 @@ function AdminCreateNewUser() {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  // console.log(password.length);
-
   const handleSnackClick = () => {
     setOpenSnack(true);
   };
 
+  // opens the snack bar when you make a new user
   const handleSnackClose = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -44,15 +43,18 @@ function AdminCreateNewUser() {
     setOpenSnack(false);
   };
 
+  // the template for email Js
   const templateParams = {
     to_name: name,
     to_email: email,
     to_password: password,
   };
 
+  // creates the new user if valid inputs
   const adminCreateUser = (event) => {
     event.preventDefault();
     if (
+      // must have a password thats longer than 8 and matching
       password !== confirmedPassword ||
       password === '' ||
       password === null ||
@@ -60,6 +62,7 @@ function AdminCreateNewUser() {
     ) {
       dispatch({ type: 'CREATE_USER_FAILED_PASSWORDS_DONT_MATCH' });
     } else if (
+      // must have email, name and company with valid input
       email === '' ||
       name === '' ||
       email === null ||
@@ -71,6 +74,7 @@ function AdminCreateNewUser() {
     } else {
       setOpenSnack(true);
 
+      // email js that send email to new user
       emailjs
         .send(
           import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -107,8 +111,6 @@ function AdminCreateNewUser() {
           },
         });
       } else {
-        // console.log('company not found');
-
         dispatch({
           type: 'SAGA_ADMIN_POST_NEW_COMPANY_AND_USER',
           payload: {
@@ -154,28 +156,29 @@ function AdminCreateNewUser() {
         autoComplete="off"
         onSubmit={adminCreateUser}
       >
+        {/* email text feild */}
         <TextField
           id="email"
           type="text"
           label="E-mail"
           variant="filled"
           value={email}
-          // color={email === '' ? 'error' : ''}
           required
           onChange={(event) => setEmail(event.target.value)}
         />
 
+        {/* name text feild */}
         <TextField
           id="name"
           type="text"
           label="Full Name"
           variant="filled"
           value={name}
-          // color={name === '' ? 'error' : ''}
           required
           onChange={(event) => setName(event.target.value)}
         />
 
+        {/* company text feild with tool tip */}
         <Tooltip
           title='Click the "Add" button if you want to create a new company'
           placement="top"
@@ -272,6 +275,7 @@ function AdminCreateNewUser() {
           />
         </Tooltip>
 
+        {/* password text feild with tool tip*/}
         <Tooltip
           title={
             password.length < 8 ? 'password must be 8 or more characters' : ''
@@ -307,14 +311,12 @@ function AdminCreateNewUser() {
             variant="filled"
             value={password}
             color={password.length < 8 && password !== '' ? 'error' : ''}
-            // helperText={
-            //   confirmedPassword !== password ? 'passwords do not match' : ''
-            // }
             required
             onChange={(event) => setPassword(event.target.value)}
           />
         </Tooltip>
 
+        {/* confirm password text feild with tool tip*/}
         <Tooltip
           title={
             confirmedPassword.length < 8

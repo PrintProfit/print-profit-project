@@ -27,8 +27,6 @@ function PendingAdminPage({ pendingUser }) {
 
   const companyList = useSelector((store) => store.user.companyList);
 
-  // console.log('company', pendingUser);
-
   const [newCompanyInput, setNewCompanyInput] = useState(
     pendingUser.pending_company_name,
   );
@@ -45,6 +43,7 @@ function PendingAdminPage({ pendingUser }) {
     setOpenApproval(false);
   };
 
+  // template for email js auto emails
   const templateParams = {
     from_name: 'Print Profit',
     from_email: 'nick@printprofit.com',
@@ -57,6 +56,7 @@ function PendingAdminPage({ pendingUser }) {
   const approveUser = (companyInput) => {
     setOpenApproval(false);
 
+    // email js sending comfirmation email
     emailjs
       .send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -91,8 +91,6 @@ function PendingAdminPage({ pendingUser }) {
         },
       });
     } else {
-      // console.log('company not found');
-
       dispatch({
         type: 'SAGA_POST_NEW_COMPANY',
         payload: {
