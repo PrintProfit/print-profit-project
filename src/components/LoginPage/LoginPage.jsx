@@ -1,4 +1,4 @@
-import { Box, Paper } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import backgroundImage from '../../assets/printProfitBgLoginFULL.png';
 import LoginForm from '../LoginForm/LoginForm';
 
@@ -27,6 +27,20 @@ function LoginPage() {
         <Paper sx={{ width: 400 }}>
           <LoginForm />
         </Paper>
+      </Box>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 5,
+          width: '100%',
+          height: 'auto',
+          textAlign: 'center',
+        }}
+      >
+        <Typography variant="h1" align="center">
+          Print Profit
+        </Typography>
+        <Typography variant="h4">Transform how you do business.</Typography>
       </Box>
     </Box>
   );
