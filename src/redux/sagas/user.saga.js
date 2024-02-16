@@ -185,6 +185,7 @@ function* hardDeleteUser(action) {
   }
 }
 
+// admin makes new user with a new company
 function* adminPostNewUserAndCompany(action) {
   // console.log('action', action.payloaad);
   try {
@@ -204,6 +205,7 @@ function* adminPostNewUserAndCompany(action) {
   }
 }
 
+// admin makes new user with an exsisting company
 function* adminPostNewUser(action) {
   // console.log('action', action.payloaad);
   try {
